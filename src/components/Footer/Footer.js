@@ -39,11 +39,11 @@ return (
 		</Column>
 		</Row>
 	</Container>
-	<p>
+	{/* <p>
 			Copyright © Miruro All Rights Reserved.
 			<br></br>
 			This site does not store any files on its server. All contents are provided by non-affiliated third parties
-	</p>
+	</p> */}
 	</Box>
 );
 };
