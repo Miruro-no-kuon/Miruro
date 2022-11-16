@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.7.1"
+    "prettier": "2.7.1",
+    "nth-check": ">=2.0.1"
   }
 }
