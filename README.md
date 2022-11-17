@@ -16,7 +16,7 @@
 <a href="#"><img src="https://img.shields.io/badge/Crunchyroll-F47521?style=for-the-badge&logo=crunchyroll&logoColor=white"/></a>
 </p>
 
-> Miruro's api and backend dev will be available at **[Release v2.0](#)** and production website is already available on **[Miruro.vercel.app](https://miruro.vercel.app)**
+> Miruro's api and backend dev will be available at **[Release v2.0.0](#)** and production website is already available on **[Miruro.vercel.app](https://miruro.vercel.app)**
 
 ---
 ## **Introduction**
@@ -62,9 +62,9 @@ Read the **[Contributing Docs](.github/CONTRIBUTING.md)** before contributing. W
 
 ### **CLI Downloader**
 
- **```Work In Progress - 41%```**
+ **```Work In Progress - 11%```**
 
- <img src="public/assets/img/Del.gif" width=200>
+ <img src="https://i.pinimg.com/originals/2a/fa/b3/2afab331c7d9abc20eebd5e1bc4d10b8.gif" width=200>
 
 ---
 ## **LICENSE**
