@@ -1,5 +1,4 @@
 {
-  "homepage": "http://akionii.github.io/Miruro",
   "name": "miruro",
   "version": "0.1.0",
   "author": "akionii",
@@ -34,9 +33,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "check-format": "npx prettier --check",
-    "write-format": "npx prettier --write",
-    "predeploy": "npm build",
-    "deploy": "gh-pages -d build -b master"
+    "write-format": "npx prettier --write"
   },
   "eslintConfig": {
     "extends": [
@@ -57,7 +54,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0",
     "nth-check": ">=2.0.1",
     "prettier": "2.7.1"
   }
