@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Miruro/static/css/main.dc2ebb8a.css",
-    "main.js": "/Miruro/static/js/main.840d3ecc.js",
+    "main.css": "/Miruro/static/css/main.74b1be7f.css",
+    "main.js": "/Miruro/static/js/main.c37a8d66.js",
     "service-worker.js": "/Miruro/service-worker.js",
     "index.html": "/Miruro/index.html",
-    "main.dc2ebb8a.css.map": "/Miruro/static/css/main.dc2ebb8a.css.map",
-    "main.840d3ecc.js.map": "/Miruro/static/js/main.840d3ecc.js.map"
+    "main.74b1be7f.css.map": "/Miruro/static/css/main.74b1be7f.css.map",
+    "main.c37a8d66.js.map": "/Miruro/static/js/main.c37a8d66.js.map"
   },
   "entrypoints": [
-    "static/css/main.dc2ebb8a.css",
-    "static/js/main.840d3ecc.js"
+    "static/css/main.74b1be7f.css",
+    "static/js/main.c37a8d66.js"
   ]
 }
