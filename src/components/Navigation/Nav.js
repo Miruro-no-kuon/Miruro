@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { CgFormatSlash } from "react-icons/cg";
 import { FiSearch } from "react-icons/fi";
 import { IconContext } from "react-icons";
 import Search from "./Search";
@@ -41,7 +42,7 @@ function Nav() {
               }
             }}
           />
-          <FiSearch className="FiSearch" color="#fff" />
+          <CgFormatSlash className="CgFormatSlash" color="rgba(255, 255, 255, 0.3)" />
         </div>
 
         <div className="nav-links">
@@ -79,7 +80,7 @@ function Nav() {
           >
 
             {/* <Button onClick={(e) => setIsActive(!isActive)}>
-              <FiSearch />Search Anything
+              <CgFormatSlash />Search Anything
             </Button> */}
 
           </IconContext.Provider>
@@ -117,7 +118,7 @@ const Button = styled.button`
   overflow:hidden
   transition: 0.5s;
   
-  FiSearch {
+  CgFormatSlash {
     font-size: 1rem;
   }
   black-space: nowrap;
@@ -159,14 +160,15 @@ const NavBar = styled.nav`
     padding-right: 2%;
     border-radius: 10px;
     margin-left: 1rem;
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
 
-    .FiSearch {
+    .CgFormatSlash {
       font-size: 1rem;
-      color: #fff;
-      // transform: scale(2);
-      // padding: 4px;
-      // background: rgb(10, 10, 10);
-      // border-radius: 5px;
+      transform: scale(1.8);
+      padding: 1px;
+      vertical-align: text-top;
+      border: 0.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
     }
 
     @media only screen and (max-width: 600px) {
