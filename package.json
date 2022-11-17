@@ -36,7 +36,7 @@
     "check-format": "npx prettier --check",
     "write-format": "npx prettier --write",
     "predeploy": "npm build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build -b master"
   },
   "eslintConfig": {
     "extends": [

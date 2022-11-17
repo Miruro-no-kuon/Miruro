@@ -28,14 +28,14 @@ return (
 		<Column>
 			<Heading>  </Heading>
 			<FooterLink href="https://github.com/akionii">Staff</FooterLink>
-			<FooterLink href="https://akionii.github.io/Miruro/pages/ToS.html">Terms</FooterLink>
-			<FooterLink href="https://akionii.github.io/Miruro/pages/Privacy.html">Privacy</FooterLink>
+			<FooterLink href="https://akionii.github.io/Miruro/docs/pages/ToS.html">Terms</FooterLink>
+			<FooterLink href="https://akionii.github.io/Miruro/docs/pages/Privacy.html">Privacy</FooterLink>
 		</Column>
 		<Column>
 			<Heading>  </Heading>
 			<FooterLink href="https://discord.gg/muuZnh9y">Discord</FooterLink>
 			<FooterLink href="#">We're Hiring!</FooterLink>
-			<FooterLink href="">Support</FooterLink>
+			<FooterLink href="https://www.patreon.com/akionii">Support</FooterLink>
 		</Column>
 		</Row>
 	</Container>

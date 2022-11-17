@@ -210,15 +210,23 @@ const Wrapper = styled.div`
     border: none;
     color: #fff;
     padding: 0.5rem;
-    width: 100%;
+    width: 80px;
     border-bottom-right-radius: 0.5rem;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(10, 10, 10, 0.75);
+    transition: 0.3s;
+
+    :hover {
+      background-color: rgba(10, 10, 10, 1);
+    }
   }
   .removeButton {
     border-top-left-radius: 0.5rem;
     border-bottom-right-radius: 0rem;
     &.confirm {
-      background-color: rgba(150, 0, 0, .8);
+      background-color: rgba(200, 0, 0, 0.75);
+      :hover {
+        background-color: rgba(200, 0, 0, 1);
+      }
     }
   }
   img {

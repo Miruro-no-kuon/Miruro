@@ -41,7 +41,7 @@ function Nav() {
               }
             }}
           />
-          <FiSearch color="#fff" />
+          <FiSearch className="FiSearch" color="#fff" />
         </div>
 
         <div className="nav-links">
@@ -160,9 +160,13 @@ const NavBar = styled.nav`
     border-radius: 10px;
     margin-left: 1rem;
 
-    FiSearch {
+    .FiSearch {
       font-size: 1rem;
       color: #fff;
+      // transform: scale(2);
+      // padding: 4px;
+      // background: rgb(10, 10, 10);
+      // border-radius: 5px;
     }
 
     @media only screen and (max-width: 600px) {
