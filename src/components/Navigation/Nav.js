@@ -160,7 +160,6 @@ const NavBar = styled.nav`
     padding-right: 2%;
     border-radius: 10px;
     margin-left: 1rem;
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
 
     .CgFormatSlash {
       font-size: 1rem;
