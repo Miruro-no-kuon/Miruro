@@ -1,4 +1,4 @@
-import React, { useState, useRef, descRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CgFormatSlash } from "react-icons/cg";
@@ -20,7 +20,7 @@ function Nav() {
     }
   }
 
-  const onEscape = function (action) {
+  /* const onEscape = function (action) {
     window && window.addEventListener('keydown', (e) => {
       if (e.key === "Enter") {
         action();
@@ -33,7 +33,7 @@ function Nav() {
     onEscape(() => {
       descRef.blur();
     });
-  };
+  }; */
 
   return (
     <div>
@@ -43,7 +43,7 @@ function Nav() {
         </Link>
 
         <div className="searchBar">
-          <input ref={descRef}
+          <input /* ref={descRef} */
             marginLeft="0"
             type="text"
             required
@@ -58,9 +58,9 @@ function Nav() {
                 searchEnter();
               }
             }}
-            onEscape={() => {
+            /* onEscape={() => {
               descRef.current.blur();
-            }}
+            }} */
           />
           <CgFormatSlash className="CgFormatSlash" color="rgba(255, 255, 255, 0.3)" />
         </div>
