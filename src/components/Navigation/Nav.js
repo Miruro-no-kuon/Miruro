@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, descRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CgFormatSlash } from "react-icons/cg";
@@ -19,6 +19,22 @@ function Nav() {
       navigate("/search/" + title);
     }
   }
+
+  const onEscape = function (action) {
+    window && window.addEventListener('keydown', (e) => {
+      if (e.key === "Enter") {
+        action();
+      };
+    });
+  };
+
+  const MyComponent = () => {
+    const descRef = useRef();
+    onEscape(() => {
+      descRef.blur();
+    });
+  };
+
   return (
     <div>
       <NavBar>
@@ -27,7 +43,8 @@ function Nav() {
         </Link>
 
         <div className="searchBar">
-          <input marginLeft="0"
+          <input ref={descRef}
+            marginLeft="0"
             type="text"
             required
             placeholder={"Search Anime"}
@@ -40,6 +57,9 @@ function Nav() {
               if (event.key === "Enter") {
                 searchEnter();
               }
+            }}
+            onEscape={() => {
+              descRef.current.blur();
             }}
           />
           <CgFormatSlash className="CgFormatSlash" color="rgba(255, 255, 255, 0.3)" />
@@ -156,17 +176,18 @@ const NavBar = styled.nav`
   }
 
   .searchBar {
-    background: rgb(24, 26, 27);
+    background: rgb(15, 17, 17);
     padding-right: 2%;
     border-radius: 10px;
     margin-left: 1rem;
+    border: 0.5px solid rgba(48, 52, 54, 1);
 
     .CgFormatSlash {
       font-size: 1rem;
       transform: scale(1.8);
       padding: 1px;
       vertical-align: text-top;
-      border: 0.5px solid rgba(255, 255, 255, 0.3);
+      border: 0.5px solid rgba(48, 52, 54, 1);
       border-radius: 3px;
     }
 
@@ -178,6 +199,7 @@ const NavBar = styled.nav`
   input {
     background: transparent;
     color: rgb(200, 195, 188);
+    placeholder: rgb(200, 195, 188);
     outline: none;
     border: none;
     border-radius: 5px;
