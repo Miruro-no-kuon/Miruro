@@ -114,11 +114,21 @@ function Home({ changeMetaArr }) {
 }
 
 const Links = styled(Link)`
-  color: #ffffff;
+  color: rgba(158,162,164,1);
+  background: rgb(19, 21, 22);
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 0.5px solid rgba(48,52,54,1);
   font-size: 1.1rem;
   font-family: 'Gilroy-Medium', sans-serif;
+  text-decoration: none;
+  transition: 0.2s;
+
+  :hover {
+    transform: scale(1.08);
+  }
   @media screen and (max-width: 600px) {
-    color: #ffffff;
+    color: #ffffff; 
     font-size: 1rem;
     font-family: 'Gilroy-Medium', sans-serif;
   }

@@ -1,6 +1,11 @@
 /*=============== GOOGLE FONTS ===============*/
 @import url("https://fonts.googleapis.com/css2?family=Monsterrat");
 
+::selection {
+  color: #fff;
+  background-color: aqua; 
+}
+
 /*=============== VARIABLES CSS ===============*/
 :root {
   --header-height: 3.5rem;
@@ -17,7 +22,6 @@
   --normal-font-size: .938rem;
   --smaller-font-size: .75rem;
 }
-
 /* Responsive typography */
 @media screen and (min-width: 1024px) {
   :root {

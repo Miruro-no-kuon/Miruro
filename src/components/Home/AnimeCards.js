@@ -92,6 +92,12 @@ const Wrapper = styled.div`
     border-radius: 0.5rem;
     margin-bottom: 0.3rem;
     object-fit: cover;
+    transition: 0.2s;
+
+    :hover {
+      transform: scale(0.95);
+    }
+
     @media screen and (max-width: 600px) {
       width: 120px;
       height: 180px;
@@ -107,6 +113,7 @@ const Wrapper = styled.div`
     font-size: 1rem;
     font-family: "Gilroy-Medium", sans-serif;
   }
+
 `;
 
 export default AnimeCards;

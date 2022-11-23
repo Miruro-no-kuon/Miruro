@@ -77,7 +77,7 @@ const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
 
 const EpisodesWrapper = styled.div`
   margin-top: 1rem;
-  border: 1px solid #272639;
+  border: 1px solid #444;
   border-radius: 0.4rem;
   .header {
     display: flex;
@@ -95,7 +95,6 @@ const EpisodesWrapper = styled.div`
     color: white;
     font-family: 'Gilroy-Medium', sans-serif;
   }
-  box-shadow: 10px 10px 0px rgba(20, 20, 25, 1);
 `;
 
 const Episodes = styled.div`

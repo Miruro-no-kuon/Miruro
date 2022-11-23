@@ -291,7 +291,7 @@ const Button = styled(Link)`
 
   :hover {
     transform: scale(1.05);
-    background-color: rgb(255 0 79);
+    background-color: rgb(155 0 59);
     color: rgb(255 255 255);
   }
 

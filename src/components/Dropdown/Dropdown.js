@@ -73,12 +73,13 @@ const DropdownOptions = styled.ul`
   /* top: 100%; */
   min-width: 100%;
   display: flex;
-  border: 1px solid #272639;
+  border: 2px solid #555;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 5px;
   padding: 0.5rem 0;
-  border-radius: 0.4rem;
+  border-radius: 5px;
 `;
 const DropdownOption = styled.li`
   white-space: nowrap;

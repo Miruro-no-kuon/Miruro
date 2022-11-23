@@ -177,19 +177,19 @@ const Content = styled.div`
 
 const Button = styled(Link)`
   color: #ffffff;
-  background-color: rgb(24, 26, 27);
+  background-color: rgba( 15, 17, 17, 1);
   font-family: 'Gilroy-Bold', sans-serif;
   text-decoration: none;
   outline: none;
   border: none;
   padding: 0.75rem 1.3rem 0.75rem 1.3rem;
-  border-radius: 0.4rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: 0.5s;
+  transition: 0.3s;
 
   :hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
 
   @media screen and (max-width: 600px) {
