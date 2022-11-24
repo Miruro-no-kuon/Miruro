@@ -67,7 +67,7 @@ function Nav() {
 
         <div className="nav-links">
           <Links to="/popular">Popular</Links>
-          <Links to="/#">Forum</Links>
+          <Links to="/forum">Forum</Links>
           <Links to="/help">Help</Links>
         </div>
 

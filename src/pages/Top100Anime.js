@@ -8,7 +8,7 @@ function Top100Anime({ changeMetaArr }) {
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const title = 'Top 100 Anime';
-  const content = 'Miruro - Watch The Best Quality Anime Online';
+  const content = 'Miruro | Watch The Best Quality Anime Online';
   const image =
     'https://cdn.discordapp.com/attachments/985501610455224389/1041832015105884241/logo512.png';
 

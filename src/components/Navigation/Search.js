@@ -146,7 +146,7 @@ const Content = styled.div`
   }
 
   input {
-    background: rgb( 28, 32, 33 );
+    background: rgba(0, 0, 0, 0.1);
     color: #ccc;
     outline: none;
     border: none;
@@ -157,7 +157,7 @@ const Content = styled.div`
     margin-right: 10px;
     margin-left: 10px;
     width: 80%;
-    transition: .5s;
+    transition: 1s;
   }
 
   input:focus {

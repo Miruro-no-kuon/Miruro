@@ -14,7 +14,7 @@ function Home({ changeMetaArr }) {
   const [loading, setLoading] = useState(true);
   const [confirmRemove, setConfirmRemove] = useState([]);
   const { width } = useWindowDimensions();
-  const title = 'Miruro - Watch The Best Quality Anime Online';
+  const title = 'Miruro | Watch The Best Quality Anime Online';
   const content = `Miruro. An ad-free anime streaming site. Catch your favourite shows and movies right here! 
     Help us by contributing to the project on github.`;
   const image =
@@ -116,16 +116,16 @@ function Home({ changeMetaArr }) {
 const Links = styled(Link)`
   color: rgba(158,162,164,1);
   background: rgb(19, 21, 22);
-  padding: 0.5rem;
+  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
   border-radius: 5px;
-  border: 0.5px solid rgba(48,52,54,1);
+  border: 1px solid rgba(48,52,54, 0.3);
   font-size: 1.1rem;
   font-family: 'Gilroy-Medium', sans-serif;
   text-decoration: none;
   transition: 0.2s;
 
   :hover {
-    transform: scale(1.08);
+    transform: scale(0.95);
   }
   @media screen and (max-width: 600px) {
     color: #ffffff; 

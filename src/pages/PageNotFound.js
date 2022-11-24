@@ -7,16 +7,30 @@ function PageNotFound({ changeMetaArr }) {
   React.useEffect(() => {
     changeMetaArr('title', 'PageNotFound');
   });
+  document.addEventListener("DOMContentLoaded", () => {
+    const log = console.log,
+      array = [
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png", 
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095443853322/5.png", 
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663454363658/24.png", 
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663156584468/23.png",   
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095007629372/4.png"],
+      random = Math.floor(Math.random() * array.length),
+      target = document.getElementById("target");
+    target.src = `${array[random]}`;
+    log(target);
+  });  
   return (
     <NotFoundWrapper>
       <ErrorCTA>
         <img
-          src="https://cdn.discordapp.com/attachments/985501610455224389/1041882683166445699/logo2.png"
+          id="target"
+          src="https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png"
           width="320"
           alt="AkioNotFound"
           className="error-image"
         />
-        <HomeLink to="/">Go to Home</HomeLink>
+        <HomeLink to="/">{/*Go Home*/}</HomeLink>
       </ErrorCTA>
       <ErrorDetails>
         <h2 className="error-code">404</h2>
@@ -43,10 +57,19 @@ const NotFoundWrapper = styled.div`
 `;
 
 const ErrorCTA = styled.div`
-  position: relative;
+position: relative;
   margin-bottom: 3rem;
+  margin-top: 1rem;
   width: 350px;
   overflow: hidden;
+  border-radius: 10px;
+  opacity: 0.7;
+  transition: 0.5s;
+  :hover {
+    transform: scale(1.05);
+    color: rgba(255, 255, 255, 1);
+    opacity: 1;
+  }
   .error-image {
     width: 100%;
     object-fit: cover;
@@ -58,28 +81,25 @@ const ErrorCTA = styled.div`
 `;
 
 const HomeLink = styled(Link)`
-  background-color: #ddd;
-  color: #23272a;
+  color: rgba(255, 255, 255, 0.7);
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px 0%;
+  padding-bottom: 210px;
   border-radius: 10px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
   text-decoration: none;
+  font-size: 32px;
+  font-family: 'Acme', sans-serif;
   font-weight: bold;
-  font-size: 22px;
-  transition: 0.3s;
-
+  transition: 0.5s;
+  :hover {
+    transform: scale(1.05);
+    color: rgba(255, 255, 255, 1);
+  }
   @media screen and (max-width: 380px) {
     width: 100%;
     font-size: 16px;
-  }
-  
-  :hover {
-    background-color: #fff;
   }
 `;
 
@@ -91,13 +111,15 @@ const ErrorDetails = styled.div`
   gap: 1rem;
   white-space: pre-wrap;
   .error-code {
-    font-size: 120px;
-    letter-spacing: 10px;
+    font-size: 100px;
+    font-family: 'Acme', sans-serif;
+    letter-spacing: 0px;
     color: white;
   }
   .error-status {
-    font-size: 75px;
-    font-weight: bold;
+    font-size: 65px;
+    font-family: 'Acme', sans-serif;
+    letter-spacing: -5px;
     color: #ccc;
   }
   .error-message {
@@ -122,7 +144,7 @@ const ErrorDetails = styled.div`
       font-size: 40px;
     }
     .error-message {
-      font-size: 20px;
+      font-size: 17px;
     }
   }
   @media screen and (max-width: 380px) {
