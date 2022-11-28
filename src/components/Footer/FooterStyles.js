@@ -16,6 +16,15 @@ export const Container = styled.div`
   justify-content: center;
   max-width: 1000px;
   margin: 0 auto;
+
+  img {
+    border-radius: 5px;
+    transition: 0.5s;
+
+    :hover {
+      box-shadow: 0 0px 20px rgba(150, 150, 150, 1);
+    }
+  }
 `;
 
 export const Column = styled.div`
@@ -47,11 +56,13 @@ export const FooterLink = styled.a`
 `;
 
 export const Heading = styled.p`
-  font-size: 24px;
+  color: #CCC;
   width: 130px;
+  font-size: 24px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  letter-spacing: 6px;
   text-align: center;
-  color: #aaa;
   margin-top: 10px;
   margin-bottom: 20px;
-  font-weight: bold;
 `;

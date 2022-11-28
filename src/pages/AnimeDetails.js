@@ -94,7 +94,7 @@ function AnimeDetails() {
               />
               <ContentWrapper>
                 <Poster>
-                  <img src={animeDetails[0].gogoResponse.image} alt="" />
+                  <img className="card-img" src={animeDetails[0].gogoResponse.image} alt="" />
                   {localStorageDetails !== 0 &&
                   animeDetails[0].gogoResponse.numOfEpisodes > 1 ? (
                     <Button
@@ -287,10 +287,10 @@ const Button = styled(Link)`
   position: relative;
   top: -25%;
   white-space: nowrap;
-  transition: 0.5s;
+  transition: 0.2s;
 
   :hover {
-    transform: scale(1.05);
+    transform: scale(0.95);
     background-color: rgb(155 0 59);
     color: rgb(255 255 255);
   }

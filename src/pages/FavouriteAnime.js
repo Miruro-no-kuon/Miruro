@@ -38,7 +38,7 @@ function FavouriteAnime() {
                     : item.title.english)
                 }
               >
-                <img src={item.coverImage.large} alt="" />
+                <img className="card-img" src={item.coverImage.large} alt="" />
                 <p>
                   {item.title.english !== null
                     ? item.title.english

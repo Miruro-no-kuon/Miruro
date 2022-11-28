@@ -1,6 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+	::selection {
+		color: none;
+		background-color: none; 
+ 	}
 	* {
 		margin: 0;
 		padding: 0;
@@ -63,7 +67,7 @@ const GlobalStyle = createGlobalStyle`
 	}
 	.swiper-button-next,
 	.swiper-button-prev {
-    color: #FFFFFF !important;
+    	color: #FFFFFF !important;
 		padding-bottom: 20px;
 	}
 	.swiper-wrapper{
@@ -88,6 +92,14 @@ const GlobalStyle = createGlobalStyle`
 		-webkit-user-select: none;
 		-ms-user-select: none;
 	 }
+	
+	.card-img {
+		transition: 0.2s;
+		  
+		:hover {
+			transform: scale(0.95);
+		}
+	}
 	 
 	.skip-button {
 		padding: 0.3rem 1rem;

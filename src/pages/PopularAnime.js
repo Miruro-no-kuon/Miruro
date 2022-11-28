@@ -38,7 +38,7 @@ function PopularAnime() {
                     : item.title.english)
                 }
               >
-                <img src={item.coverImage.large} alt="" />
+                <img className="card-img" src={item.coverImage.large} alt="" />
                 <p>
                   {item.title.english !== null
                     ? item.title.english
@@ -93,6 +93,7 @@ const Links = styled(Link)`
     height: 235px;
     border-radius: 0.5rem;
     object-fit: cover;
+    
     @media screen and (max-width: 600px) {
       width: 120px;
       height: 180px;

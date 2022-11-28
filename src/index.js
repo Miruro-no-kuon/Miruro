@@ -10,13 +10,14 @@ root.render(
   </React.StrictMode>
 );
 
-window.addEventListener(
+//* Function to disable right click on website
+/* window.addEventListener(
   'contextmenu',
   function (e) {
     e.preventDefault();
   },
   false
-);
+); */
 
 // register the service worker
 serviceWorkerRegistration.register();

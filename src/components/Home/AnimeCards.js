@@ -69,7 +69,7 @@ function AnimeCards(props) {
                       : item.title.english)
                   }
                 >
-                  <img src={item.coverImage.large} alt="" />
+                  <img className="card-img" src={item.coverImage.large} alt="" />
                 </Link>
                 <p>
                   {item.title.english !== null
@@ -92,11 +92,6 @@ const Wrapper = styled.div`
     border-radius: 0.5rem;
     margin-bottom: 0.3rem;
     object-fit: cover;
-    transition: 0.2s;
-
-    :hover {
-      transform: scale(0.95);
-    }
 
     @media screen and (max-width: 600px) {
       width: 120px;
