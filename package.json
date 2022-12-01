@@ -15,7 +15,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.6.0",
     "react-loading-skeleton": "^3.1.0",
-    "react-router-dom": "^6.4.3",
+    "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
     "styled-components": "^5.3.6",
