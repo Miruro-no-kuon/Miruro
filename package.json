@@ -53,6 +53,6 @@
   },
   "devDependencies": {
     "nth-check": ">=2.0.1",
-    "prettier": "2.8.1"
+    "prettier": "2.8.2"
   }
 }
