@@ -19,7 +19,7 @@
     "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
     "styled-components": "^5.3.6",
-    "swiper": "^8.4.5",
+    "swiper": "^9.0.5",
     "web-vitals": "^3.0.4",
     "workbox-core": "^6.5.4",
     "workbox-expiration": "^6.5.4",
