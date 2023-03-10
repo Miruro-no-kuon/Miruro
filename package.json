@@ -20,7 +20,7 @@
     "scripts": "^0.1.0",
     "styled-components": "^5.3.6",
     "swiper": "^8.4.5",
-    "web-vitals": "^3.0.4",
+    "web-vitals": "^3.3.0",
     "workbox-core": "^6.5.4",
     "workbox-expiration": "^6.5.4",
     "workbox-precaching": "^6.5.4",
