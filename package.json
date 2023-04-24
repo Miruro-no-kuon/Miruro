@@ -18,7 +18,7 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
-    "styled-components": "^5.3.9",
+    "styled-components": "^5.3.10",
     "swiper": "^9.2.4",
     "web-vitals": "^3.3.1",
     "workbox-core": "^6.5.4",
