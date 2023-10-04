@@ -213,7 +213,7 @@ function WatchAnime() {
                         style: {
                           verticalAlign: 'middle',
                           marginBottom: '0.2rem',
-                          marginLeft: '0.3rem',
+                          marginleft: '0.3rem',
                         },
                       }}
                     >
@@ -403,7 +403,7 @@ function WatchAnime() {
                           style: {
                             verticalAlign: 'middle',
                             marginBottom: '0.2rem',
-                            marginLeft: '0.3rem',
+                            marginleft: '0.3rem',
                           },
                         }}
                       >

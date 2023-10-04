@@ -130,7 +130,7 @@ const Content = styled.div`
   .main {
     background-color: #111;
     padding: 0.5rem;
-   color: #fff;
+    color: #fff;
     padding-left: 1.2rem;
     padding-right: 0.8rem;
     border-radius: 0.4rem;
@@ -182,7 +182,7 @@ const Content = styled.div`
 
     div {
       background-color: #23272A;
-     color: #fff;
+      color: #fff;
       padding: 0.3rem 1rem;
       border-radius: 0.3rem;
       width: 100%;

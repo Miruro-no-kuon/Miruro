@@ -44,7 +44,7 @@ function Nav() {
 
         <div className="searchBar">
           <input /* ref={descRef} */
-            marginLeft="0"
+            marginleft="0"
             type="text"
             required
             placeholder={"Search Anime"}

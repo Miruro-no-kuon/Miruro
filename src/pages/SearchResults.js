@@ -128,7 +128,7 @@ const CheckboxWrapper = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  /* display: flex;
+  display: flex;
   justify-content: space-between;
   flex-flow: row wrap;
   row-gap: 2rem;
@@ -137,7 +137,7 @@ const CardWrapper = styled.div`
   ::after {
     content: "";
     flex: auto;
-  } */
+  }
 
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
