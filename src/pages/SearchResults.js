@@ -21,9 +21,9 @@ function SearchResults({ changeMetaArr }) {
   const image =
     'https://cdn.discordapp.com/attachments/985501610455224389/1041877819589927014/Miruro_Public_Preview.png';
 
-  // React.useEffect(()=>{
-  //   changeMetaArr("title", `Search results for: ${urlParams}`)
-  // })
+  React.useEffect(() => {
+    changeMetaArr("title", `Search results for: ${urlParams}`)
+  })
   useEffect(() => {
     async function getResults() {
       setLoading(true);

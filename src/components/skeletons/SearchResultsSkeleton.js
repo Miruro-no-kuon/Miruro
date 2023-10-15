@@ -13,7 +13,7 @@ function SearchResultsSkeleton({ name }) {
       </Heading>
       <CardWrapper>
         {[...Array(40)].map((x, i) => (
-          <div>
+          <div key={i}>
             <Skeleton
               width={width <= 600 ? "110px" : "160px"}
               height={width <= 600 ? "170px" : "235px"}
