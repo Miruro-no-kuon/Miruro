@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CgFormatSlash } from "react-icons/cg";
@@ -13,6 +13,21 @@ function Nav() {
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === '/') {
+        event.preventDefault(); // Prevent typing '/' in the input
+        document.getElementById('searchInput').focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   function searchEnter() {
     if (title !== "") {
       setIsActive(false);
@@ -20,31 +35,20 @@ function Nav() {
     }
   }
 
-  /* const onEscape = function (action) {
-    window && window.addEventListener('keydown', (e) => {
-      if (e.key === "Enter") {
-        action();
-      };
-    });
-  };
-
-  const MyComponent = () => {
-    const descRef = useRef();
-    onEscape(() => {
-      descRef.blur();
-    });
-  }; */
-
   return (
     <div>
       <NavBar>
         <Link to="/">
-          <img src="https://cdn.discordapp.com/attachments/985501610455224389/1041832015105884241/logo512.png" alt="Miruro" width="100" />
+          <img
+            src="https://cdn.discordapp.com/attachments/985501610455224389/1041832015105884241/logo512.png"
+            alt="Miruro"
+            width="100"
+          />
         </Link>
 
         <div className="searchBar">
-          <input /* ref={descRef} */
-            marginleft="0"
+          <input
+            id="searchInput" // added id for referencing
             type="text"
             required
             placeholder={"Search Anime"}
@@ -58,9 +62,6 @@ function Nav() {
                 searchEnter();
               }
             }}
-            /* onEscape={() => {
-              descRef.current.blur();
-            }} */
           />
           <CgFormatSlash className="CgFormatSlash" color="rgba(255, 255, 255, 0.3)" />
         </div>
@@ -98,11 +99,9 @@ function Nav() {
               },
             }}
           >
-
             {/* <Button onClick={(e) => setIsActive(!isActive)}>
               <CgFormatSlash />Search Anything
             </Button> */}
-
           </IconContext.Provider>
         )}
       </NavBar>
@@ -111,6 +110,7 @@ function Nav() {
     </div>
   );
 }
+
 const Shadow = styled.div`
   position: absolute;
   height:100vh;

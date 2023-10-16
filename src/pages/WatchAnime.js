@@ -232,14 +232,14 @@ function WatchAnime() {
 
               <div>
                 {internalPlayer && (
-                  <VideoPlayer
-                    sources={episodeLinks[0].sources}
-                    internalPlayer={internalPlayer}
-                    setInternalPlayer={setInternalPlayer}
-                    title={episodeLinks[0].titleName}
-                  />
-                )}
-                {!internalPlayer && (
+                //   <VideoPlayer
+                //     sources={episodeLinks[0].sources}
+                //     internalPlayer={internalPlayer}
+                //     setInternalPlayer={setInternalPlayer}
+                //     title={episodeLinks[0].titleName}
+                //   />
+                // )}
+                // {!internalPlayer && (
                   <div>
                     <PlayerContainer>
                       <IconContext.Provider

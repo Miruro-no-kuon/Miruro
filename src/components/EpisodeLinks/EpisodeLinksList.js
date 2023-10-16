@@ -66,7 +66,7 @@ const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
                                     : {}
                         }
                     >
-                        {width > 600 && `Episode ${currentRangeIndex * 100 + i + 1}`}
+                        {width > 600 && ` ${currentRangeIndex * 100 + i + 1}`}
                         {width <= 600 && currentRangeIndex * 100 + i + 1}
                     </EpisodeLink>
                 ))}
@@ -83,7 +83,7 @@ const EpisodesWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
-    width: 100%;
+    width: 50%;
     border-bottom: 1px solid #404040;
     padding: 0.6rem 1rem;
     justify-content: start;
@@ -99,7 +99,7 @@ const EpisodesWrapper = styled.div`
 
 const Episodes = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
   grid-gap: 1rem;
   grid-row-gap: 1rem;
   padding: 1rem;
