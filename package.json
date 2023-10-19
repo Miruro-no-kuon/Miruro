@@ -22,7 +22,7 @@
     "styled-components": "^5.3.11",
     "swiper": "^9.2.4",
     "web-vitals": "^3.3.1",
-    "workbox-core": "^6.5.4",
+    "workbox-core": "^7.0.0",
     "workbox-expiration": "^6.5.4",
     "workbox-precaching": "^6.5.4",
     "workbox-routing": "^6.5.4",
