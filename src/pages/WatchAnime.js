@@ -7,7 +7,7 @@ import { HiArrowSmLeft, HiArrowSmRight } from 'react-icons/hi';
 import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { IconContext } from 'react-icons';
 import { Helmet } from 'react-helmet';
-import WatchAnimeSkeleton from '../components/skeletons/WatchAnimeSkeleton';
+import WatchAnimeSkeleton from '../components/Skeletons/WatchAnimeSkeleton';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import VideoPlayer from '../components/VideoPlayer/VideoPlayer';
 import ServersList from '../components/WatchAnime/ServersList';
@@ -84,7 +84,7 @@ function WatchAnime() {
       setLoading(true);
       window.scrollTo(0, 0);
       let res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}api/getlinks?link=/${episodeSlug}`
+        `https://sakamoto-api.vercel.app/api/getlinks?link=/${episodeSlug}`
       );
       setLoading(false);
       setEpisodeLinks(res.data);
@@ -137,7 +137,7 @@ function WatchAnime() {
     async function getAnimeBanner() {
       let slug = episodeSlug.split('-episode')[0];
       let res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}api/getanime?link=/category/${slug}`
+        `https://sakamoto-api.vercel.app/api/getanime?link=/category/${slug}`
       );
       setContent((content) => {
         content = res.data[0].gogoResponse.description.replace(

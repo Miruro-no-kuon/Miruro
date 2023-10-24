@@ -64,7 +64,7 @@ position: relative;
   overflow: hidden;
   border-radius: 10px;
   opacity: 0.7;
-  transition: 0.5s;
+  transition: 0.3s;
   :hover {
     transform: scale(1.05);
     color: rgba(255, 255, 255, 1);
@@ -92,7 +92,7 @@ const HomeLink = styled(Link)`
   font-size: 32px;
   font-family: 'Acme', sans-serif;
   font-weight: bold;
-  transition: 0.5s;
+  transition: 0.3s;
   :hover {
     transform: scale(1.05);
     color: rgba(255, 255, 255, 1);

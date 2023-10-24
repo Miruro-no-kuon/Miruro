@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Scrollbar } from 'swiper';
-import AnimeCardsSkeleton from '../skeletons/AnimeCardsSkeleton';
+import AnimeCardsSkeleton from '../Skeletons/AnimeCardsSkeleton';
 import { IoClose } from 'react-icons/io5';
 import { IconContext } from 'react-icons';
 

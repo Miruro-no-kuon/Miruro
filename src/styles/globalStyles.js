@@ -1,9 +1,9 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 	::selection {
-		color: none;
-		background-color: none; 
+		color: #000000;
+		background-color: #ffffff; 
  	}
 	* {
 		margin: 0;
@@ -94,12 +94,11 @@ const GlobalStyle = createGlobalStyle`
 	 }
 	
 	.card-img {
-		transition: 0.2s;
-		  
-		:hover {
-			transform: scale(0.95);
-		}
+		transition: 0.3s;
 	}
+	.card-img:hover {
+		transform: scale(0.95);
+	  }
 	 
 	.skip-button {
 		padding: 0.3rem 1rem;
@@ -113,6 +112,23 @@ const GlobalStyle = createGlobalStyle`
 		background-color: rgba(0, 0, 0, 0.6);
 		color: #FFFFFF;
 	}
+	.carousel-button:hover {
+		text-decoration: none;
+		transform: scale(1.04);
+		background-color: rgba(0, 0, 0, 0.7);
+	  }
+	.category-button:hover {
+		transform: scale(0.95);
+		background-color: rgb(155, 0, 59);
+		color: rgb(255, 255, 255);
+	}
+	.nav-button-links:hover {
+		background-color: rgba(0, 0, 0);
+		color: #fffff;
+	  }
+	.button-episode-link:hover {
+		background-color: #202020;
+	  }
 	.margin {
 		margin-bottom: 2rem;
 	}

@@ -11,11 +11,13 @@
     "axios": "^1.4.0",
     "hls.js": "^1.4.0",
     "plyr": "^3.7.8",
+    "postcss": ">=8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.8.0",
     "react-loading-skeleton": "^3.3.1",
+    "react-player": "^2.13.0",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
@@ -26,8 +28,7 @@
     "workbox-expiration": "^7.0.0",
     "workbox-precaching": "^6.5.4",
     "workbox-routing": "^6.5.4",
-    "workbox-strategies": "^6.5.4",
-    "postcss": ">=8.4.31"
+    "workbox-strategies": "^6.5.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -55,7 +56,7 @@
   },
   "devDependencies": {
     "nth-check": ">=2.0.1",
-    "prettier": "3.0.3",
-    "postcss": ">=8.4.31"
+    "postcss": ">=8.4.31",
+    "prettier": "3.0.3"
   }
 }

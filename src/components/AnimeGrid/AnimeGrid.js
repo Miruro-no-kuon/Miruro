@@ -67,7 +67,7 @@ const Links = styled(Link)`
   img {
     width: 160px;
     height: 235px;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     object-fit: cover;
     @media screen and (max-width: 600px) {
       width: 120px;

@@ -19,7 +19,7 @@ export const Container = styled.div`
 
   img {
     border-radius: 5px;
-    transition: 0.5s;
+    transition: 0.3s;
 
     :hover {
       box-shadow: 0 0px 20px rgba(150, 150, 150, 1);

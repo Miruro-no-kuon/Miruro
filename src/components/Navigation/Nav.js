@@ -8,26 +8,32 @@ import Search from "./Search";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function Nav() {
+  // State variables
   const [isActive, setIsActive] = useState(false);
   const { height, width } = useWindowDimensions();
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
+  // Effect to listen for '/' key press and focus the search input
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === '/') {
+      if (event.key === "/") {
         event.preventDefault(); // Prevent typing '/' in the input
-        document.getElementById('searchInput').focus();
+        document.getElementById("searchInput").focus();
+      } else if (event.key === "Escape") {
+        // Handle "Esc" key press to blur the search input
+        document.getElementById("searchInput").blur();
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
+  // Function to handle search submission
   function searchEnter() {
     if (title !== "") {
       setIsActive(false);
@@ -40,6 +46,7 @@ function Nav() {
       <NavBar>
         <Link to="/">
           <img
+            className="logo-img"
             src="https://cdn.discordapp.com/attachments/985501610455224389/1041832015105884241/logo512.png"
             alt="Miruro"
             width="100"
@@ -48,7 +55,7 @@ function Nav() {
 
         <div className="searchBar">
           <input
-            id="searchInput" // added id for referencing
+            id="searchInput"
             type="text"
             required
             placeholder={"Search Anime"}
@@ -63,13 +70,25 @@ function Nav() {
               }
             }}
           />
-          <CgFormatSlash className="CgFormatSlash" color="rgba(255, 255, 255, 0.3)" />
+          <CgFormatSlash
+            className="CgFormatSlash"
+            color="rgba(255, 255, 255, 0.3)"
+          />
         </div>
 
         <div className="nav-links">
-          <Links to="/popular">Popular</Links>
-          <Links to="/forum">Forum</Links>
-          <Links to="/help">Help</Links>
+          <Links className="nav-button-links" to="/popular">
+            Popular
+          </Links>
+          <Links className="nav-button-links" to="/top100">
+            Top 100
+          </Links>
+          <Links className="nav-button-links" to="/forum">
+            Forum
+          </Links>
+          <Links className="nav-button-links" to="/help">
+            Help
+          </Links>
         </div>
 
         {width <= 600 && (
@@ -99,9 +118,6 @@ function Nav() {
               },
             }}
           >
-            {/* <Button onClick={(e) => setIsActive(!isActive)}>
-              <CgFormatSlash />Search Anything
-            </Button> */}
           </IconContext.Provider>
         )}
       </NavBar>
@@ -111,21 +127,22 @@ function Nav() {
   );
 }
 
+// Shadow component for overlay
 const Shadow = styled.div`
   position: absolute;
-  height:100vh;
-  min-height:100%;
-  max-height:100%;
-  background-size:cover;
-  color:#ddd;
-  text-shadow:3px 4px #333;
+  height: 100vh;
+  min-height: 100%;
+  max-height: 100%;
+  background-size: cover;
+  color: #ddd;
+  text-shadow: 3px 4px #333;
   background-color: rgba(0, 0, 0, 0.6);
   overflow: hidden;
   z-index: 9;
 `;
 
+// Button component for search button
 const Button = styled.button`
-  // display: none;
   color: #aaa;
   background-color: transparent;
   font-family: "Gilroy-Bold", sans-serif;
@@ -135,34 +152,32 @@ const Button = styled.button`
   border-radius: 0.3rem;
   padding: 0.7rem 1.6rem 0.7rem 1.6rem;
   cursor: pointer;
-  overflow:hidden
-  transition: 0.5s;
-  
-  CgFormatSlash {
-    font-size: 1rem;
-  }
+  overflow: hidden;
+  transition: 0.2s;
   black-space: nowrap;
 `;
 
-
+// Styled component for navigation links
 const Links = styled(Link)`
-  color: #fff;
+  color: rgba(158, 162, 164, 1);
+  background: rgb(19, 21, 22);
+  margin: 0.5rem;
+  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(48, 52, 54, 0.3);
+  font-size: 1.1rem;
   font-family: "Gilroy-Medium", sans-serif;
   text-decoration: none;
-  margin: 1.55rem 1.55rem 1.55rem 1.55rem;
-  padding: 0%;
-  transition: 0.7s;
+  transition: 0.3s;
 
-  :hover {
-    color: #ccc;
-  }
-
-  @media screen and (max-width: 1000px) {
-    padding: 0;
-    margin: 0rem 0.7rem 0rem 0.7rem;
+  @media screen and (max-width: 600px) {
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: "Gilroy-Medium", sans-serif;
   }
 `;
 
+// Styled component for the navigation bar
 const NavBar = styled.nav`
   background-color: transparent;
   display: flex;
@@ -172,23 +187,27 @@ const NavBar = styled.nav`
 
   img {
     margin-top: 10px;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
+    transition: 0.3s;
+  }
+
+  img.logo-img:hover {
+    transform: scale(0.9);
   }
 
   .searchBar {
     background: rgb(15, 17, 17);
     padding-right: 2%;
-    border-radius: 10px;
+    border-radius: 0.3rem;
     margin-left: 1rem;
     border: 0.5px solid rgba(48, 52, 54, 1);
 
     .CgFormatSlash {
-      font-size: 1rem;
-      transform: scale(1.8);
-      padding: 1px;
+      transform: scale(1.7);
       vertical-align: text-top;
       border: 0.5px solid rgba(48, 52, 54, 1);
       border-radius: 3px;
+      margin-right: 0rem;
     }
 
     @media only screen and (max-width: 600px) {
@@ -202,19 +221,18 @@ const NavBar = styled.nav`
     placeholder: rgb(200, 195, 188);
     outline: none;
     border: none;
-    border-radius: 5px;
-    padding: 14px;
+    border-radius: 1rem;
+    padding: 12px;
     font-size: 1.1rem;
     font-family: "Gilroy-Medium", sans-serif;
     margin-right: 10px;
     margin-left: 10px;
-    width: 18rem;
-    transition: .5s;
-    }
+    width: 15rem;
+    transition: 0.6s;
   }
-  
+
   input:focus {
-    width: 21rem;
+    width: 18rem;
   }
 
   @media screen and (max-width: 900px) {
