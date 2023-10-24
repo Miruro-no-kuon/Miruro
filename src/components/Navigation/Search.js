@@ -8,7 +8,7 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function Search({ isActive, setIsActive }) {
   const [title, setTitle] = useState("");
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const navigate = useNavigate();
 
   function searchEnter() {
@@ -37,7 +37,7 @@ function Search({ isActive, setIsActive }) {
         <IconContext.Provider
           value={{
             size: "1.5rem",
-            color: "#23272A",
+            color: "rgb(197, 197, 197)",
             style: {
               verticalAlign: "middle",
               marginBottom: "0.1rem",
@@ -87,7 +87,7 @@ function Search({ isActive, setIsActive }) {
             <input
               type="text"
               required
-              placeholder={"Search Anything"}
+              placeholder={"Search Anime"}
               value={title}
               autoFocus
               onChange={(e) => {
@@ -98,24 +98,19 @@ function Search({ isActive, setIsActive }) {
                   searchEnter();
                 }
 
-                if (event.key == "Escape") {
+                if (event.key === "Escape") {
                   closeEscape();
                 }
               }}
             />
 
           </div>
-          {title !== "" && (
-            <SearchButton
-              to={"/search/" + title}
-              onClick={(e) => {
-                setIsActive(false);
-              }}
-            >
-              <a>SEARCH</a>
-            </SearchButton>
-          )}
-          {title === "" && <button>SEARCH</button>}
+          <SearchButton
+            to={"/search/" + title}
+            onClick={(e) => {
+              setIsActive(false);
+            }}
+          >SEARCH</SearchButton>
         </div>
       </Content>
     </Wrapper>
@@ -125,7 +120,7 @@ function Search({ isActive, setIsActive }) {
 const Content = styled.div`
   background-color: #111;
   padding: 0rem 4rem 3.8rem 4rem;
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
 
   .main {
     background-color: #111;
@@ -154,14 +149,7 @@ const Content = styled.div`
     padding: 14px;
     font-size: 1.1rem;
     font-family: "Gilroy-Medium", sans-serif;
-    margin-right: 10px;
     margin-left: 10px;
-    width: 80%;
-    transition: 1s;
-  }
-
-  input:focus {
-    width: 95%;
   }
 
   ::placeholder {
@@ -202,7 +190,7 @@ const Content = styled.div`
     text-align: center;
     font-family: "Gilroy-Bold", sans-serif;
     cursor: pointer;
-    transform: scale(0.95);
+    transform: scale(1);
     transition: 0.3s;
 
     @media screen and (max-width: 600px) {
@@ -213,13 +201,40 @@ const Content = styled.div`
   }
 
   button:hover {
-    transform: scale(1);
+    transform: scale(0.97);
   }
+`;
+
+const SearchButton = styled(Link)`
+
+  outline: none;
+  border: none;
+  background-color: #23272A;
+  color: #aaa;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  border-radius: 0.3rem;
+  text-align: center;
+  font-family: "Gilroy-Bold", sans-serif;
+  cursor: pointer;
+  transform: scale(0.98);
+  transition: 0.3s;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    width: 100%;
+    font-size: 1.2rem;
+  }
+
+:hover {
+  transform: scale(1);
+  color: #fff;
+}
 `;
 
 const CloseButton = styled.div`
   display: flex;
-  color: #fff;
   background: #111;
   justify-content: flex-end;
 
@@ -232,28 +247,6 @@ const CloseButton = styled.div`
   }
 `;
 
-const SearchButton = styled(Link)`
-  background-color: #23272A;
-  color: #23272a;
-  padding: 0.9rem 2rem;
-  text-decoration: none;
-  border-radius: 0.3rem;
-  text-align: center;
-  font-family: "Gilroy-Bold", sans-serif;
-
-  @media screen and (max-width: 600px) {
-    display: block;
-    width: 100%;
-    font/search/ddddhttp://localhost:3000/search/dddd-size: 1.2rem;
-  }
-
-  a {
-    color: #aaa;
-    width: 100%;
-    transition: 0.3s;
-  }
-`;
-
 const Wrapper = styled.div`
   background-color: #111;
   position: absolute;
@@ -262,7 +255,7 @@ const Wrapper = styled.div`
   left: 50%;
   width: 80%;
   border: 1px solid rgb(35, 39, 42);
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
   transform: translate(-50%, -50%);
 
   @media screen and (max-width: 600px) {

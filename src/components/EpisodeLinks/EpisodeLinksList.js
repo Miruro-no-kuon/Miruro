@@ -55,9 +55,9 @@ const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
             </div>
             <Episodes>
                 {rangeFilters[currentRange]?.map((item, i) => (
-                    <EpisodeLink
+                    <EpisodeLink className='button-episode-link'
                         key={i}
-                        to={'/watch' + item}
+                        to={'/watch' + item.id}
                         style={
                             episodeNum === currentRangeIndex * 100 + i + 1
                                 ? { backgroundColor: '#FFFFFF', color: '#23272A' }
@@ -121,9 +121,6 @@ const EpisodeLink = styled(Link)`
   border-radius: 0.4rem;
   border: 1px solid #23272a;
   transition: 0.2s;
-  :hover {
-    background-color: #202020;
-  }
 `;
 
 export default EpisodeLinksList;

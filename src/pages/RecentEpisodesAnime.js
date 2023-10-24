@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 import axios from "axios";
 
-function TrendingAnime() {
+function RecentEpisodesAnime() {
 
   // State variables
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -70,7 +70,7 @@ function TrendingAnime() {
   async function getAnime(page) {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/trending?page=${page}&perPage=30`
+        `${process.env.REACT_APP_BACKEND_URL}anime/gogoanime/recent-episodes?page=${page}&perPage=30`
       );
 
       if (response.data && response.data.results) {
@@ -102,22 +102,23 @@ function TrendingAnime() {
   // JSX for rendering
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="Trending Anime" />}
+      {loading && <SearchResultsSkeleton name="Recent Episodes Anime" />}
       <Parent>
         <Heading>
-          <span>Trending Anime</span> Results
+          <span>Recent Episodes Anime</span> Results
         </Heading>
         <CardWrapper>
           {animeDetails.map((item, i) => (
-            <Wrapper to={`/search/${item.title.romaji}`} key={i}>
+            <Wrapper to={`/search/${item.title}`} key={i}>
               <img className="card-img" src={item.image} alt="" />
               <p>
                 {item.title.romaji ||
                   item.title.english ||
                   item.title.native ||
-                  item.title.userPreferred}
+                  item.title.userPreferred ||
+                  item.title}
               </p>
-              <p>{item.type || 'Unknown Type'}</p>
+              <p>{"Episode: " + item.episodeNumber || 'Unknown Type'}</p>
             </Wrapper>
           ))}
         </CardWrapper>
@@ -254,4 +255,4 @@ const Heading = styled.p`
   }
 `;
 
-export default TrendingAnime;
+export default RecentEpisodesAnime;

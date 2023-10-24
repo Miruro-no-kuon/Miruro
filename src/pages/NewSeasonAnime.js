@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 import axios from "axios";
 
-function TrendingAnime() {
+function NewSeasonAnime() {
 
   // State variables
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -70,7 +70,7 @@ function TrendingAnime() {
   async function getAnime(page) {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/trending?page=${page}&perPage=30`
+        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/new-season?page=${page}&perPage=30`
       );
 
       if (response.data && response.data.results) {
@@ -102,10 +102,10 @@ function TrendingAnime() {
   // JSX for rendering
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="Trending Anime" />}
+      {loading && <SearchResultsSkeleton name="New Seasons" />}
       <Parent>
         <Heading>
-          <span>Trending Anime</span> Results
+          <span>New Seasons</span> Results
         </Heading>
         <CardWrapper>
           {animeDetails.map((item, i) => (
@@ -254,4 +254,4 @@ const Heading = styled.p`
   }
 `;
 
-export default TrendingAnime;
+export default NewSeasonAnime;

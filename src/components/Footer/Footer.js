@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import {
 Box,
 Container,
@@ -21,9 +20,9 @@ return (
 		</Column>
 		<Column>
 			<Heading>  </Heading>
-			<FooterLink href="/trending">Trending</FooterLink>
 			<FooterLink href="/popular">Popular</FooterLink>
-			<FooterLink href="/favourites">Favourites</FooterLink>
+			<FooterLink href="/trending">Trending</FooterLink>
+			<FooterLink href="/new-season">New Seasons</FooterLink>
 		</Column>
 		<Column>
 			<Heading>  </Heading>
@@ -33,7 +32,7 @@ return (
 		</Column>
 		<Column>
 			<Heading>  </Heading>
-			<FooterLink href="https://discord.gg/muuZnh9y">Discord</FooterLink>
+			<FooterLink href="https://discord.gg">Discord</FooterLink> {/* //! Add Discord Server */}
 			<FooterLink href="#">We're Hiring!</FooterLink>
 			<FooterLink href="https://www.patreon.com/akionii">Support</FooterLink>
 		</Column>

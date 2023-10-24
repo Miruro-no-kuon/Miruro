@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 
 function FavouriteAnime() {
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -91,7 +91,7 @@ const Links = styled(Link)`
   img {
     width: 160px;
     height: 235px;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     object-fit: cover;
     @media screen and (max-width: 600px) {
       width: 120px;
