@@ -86,7 +86,7 @@ function Carousel({ images }) {
                         },
                       }}
                     >
-                      <Button to={"search/" + item.animeImg}>
+                      <Button to={"category/" + item.id}>
                         <BsFillPlayFill />
                       </Button>
                     </IconContext.Provider>

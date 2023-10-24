@@ -9,14 +9,10 @@
 <p align="center">
 <a href="#"><img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"/></a>
 <a href="#"><img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/></a>
-<a href="#"><img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white"/></a>
 <a href="#"><img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/></a>
-<a href="#"><img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white"/></a>
-<a href="#"><img src="https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white"/></a>
-<a href="#"><img src="https://img.shields.io/badge/Crunchyroll-F47521?style=for-the-badge&logo=crunchyroll&logoColor=white"/></a>
 </p>
 
-> Miruro's api and backend dev will be available at **[Release v2.0.0](#)** and production website is already available on **[Miruro.vercel.app](https://miruro.vercel.app)**
+> Miruro's api and backend dev is be available at **[Miruro's API]('https://miruro-api-c803a8062f4b.herokuapp.com/')** and production website is already available on **[Miruro.vercel.app](https://miruro.vercel.app)**
 
 ---
 ## **Introduction**
@@ -25,9 +21,10 @@ Miruro is an Anime Streaming Site with minimal UI and ad-free anime streaming ex
 
 Wanna know more about us? Check out our **[Docs](https://akionii.github.io/Miruro/docs)**!
 
-**Backend**: Will work on **[Miruro-api](https://miruro-api.vercel.app)** with /routes for trending, new-sean and popular.
+**Backend**:  **[miruro-api](https://miruro-api.vercel.app)** with /routes for trending, new-seanson and popular and more!
 
 <img src="public/assets/img/Web.png" style="border-radius: 5px">
+<img src="public/assets/img/Web-2.png" style="border-radius: 5px">
 
 ---
 ## **For Devs**
@@ -62,7 +59,7 @@ Read the **[Contributing Docs](.github/CONTRIBUTING.md)** before contributing. W
 
 ### **CLI Downloader**
 
- **```Work In Progress - 16%```**
+ **```Work In Progress - 32%```**
 
  <img src="https://i.pinimg.com/originals/2a/fa/b3/2afab331c7d9abc20eebd5e1bc4d10b8.gif" width=200>
 
