@@ -22,7 +22,7 @@
     "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
     "styled-components": "^6.1.0",
-    "swiper": "^9.2.4",
+    "swiper": "^11.0.1",
     "web-vitals": "^3.3.1",
     "workbox-core": "^7.0.0",
     "workbox-expiration": "^7.0.0",
