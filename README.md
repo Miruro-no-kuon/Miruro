@@ -1,3 +1,7 @@
+<div style="flex: 1; text-align: center;">
+  <img src="./public/assets/img/Del.gif" alt="Maintenance Image" width="100%">
+</div>
+
 <div style="display: flex; align-items: center;">
   <div style="flex: 1;">
   
@@ -13,13 +17,11 @@
     
     Thank you for your patience and understanding. I appreciate your continued support. 🙏
     
-  If you have any urgent questions or concerns, please reach out to our support team at [akionii-github@gmail.com](mailto:akionii-github.spruce010@aleeas.com).
+    If you have any urgent questions or concerns, please reach out to our support team at:
+<b>[akionii-github@gmail.com](mailto:akionii-github.spruce010@aleeas.com)</b>
     
-  I appreciate your continued support.
+  ```I appreciate your continued support. 🙌```
 
-  </div>
-  <div style="flex: 1; text-align: center;">
-    <img src="./public/assets/img/Del.gif" alt="Maintenance Image" width="50%">
   </div>
 </div>
 
