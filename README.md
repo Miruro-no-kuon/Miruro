@@ -1,3 +1,30 @@
+<div style="display: flex; align-items: center;">
+  <div style="flex: 1;">
+  
+  # 🚧 Miruro Will Be Under Maintenance, ❌ Not Operational
+
+  ### **Hello Everyone! @akionii here,**
+  
+    I regret to inform you that Miruro is currently experiencing technical difficulties and is not operational.
+    
+    I am actively working to resolve the issue, and I apologize for any inconvenience this may cause.
+    
+    Please stay tuned for updates, and I will notify you as soon as the app is back up and running.
+    
+    Thank you for your patience and understanding. I appreciate your continued support. 🙏
+    
+  If you have any urgent questions or concerns, please reach out to our support team at [akionii-github@gmail.com](mailto:akionii-github.spruce010@aleeas.com).
+    
+  I appreciate your continued support.
+
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="./public/assets/img/Del.gif" alt="Maintenance Image" width="50%">
+  </div>
+</div>
+
+---
+
 <h1 align="center">
   <p align="center"><strong>Miruro</strong></p>
   <a href="https://github.com/akionii/Miruro/blob/master/public/assets/img/Cover.png"><img src="./public/assets/img/Cover.png" alt="Cover" style="border-radius: 5px"></a>
