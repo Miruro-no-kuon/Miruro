@@ -1,0 +1,62 @@
+{
+  "name": "miruro",
+  "version": "0.1.0",
+  "author": "akionii",
+  "private": "false",
+  "dependencies": {
+    "@consumet/extensions": "^1.5.2",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "axios": "^1.4.0",
+    "hls.js": "^1.4.0",
+    "plyr": "^3.7.8",
+    "postcss": ">=8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.8.0",
+    "react-loading-skeleton": "^3.3.1",
+    "react-player": "^2.13.0",
+    "react-router-dom": "^6.17.0",
+    "react-scripts": "5.0.1",
+    "scripts": "^0.1.0",
+    "styled-components": "^6.1.0",
+    "swiper": "^9.2.4",
+    "web-vitals": "^3.3.1",
+    "workbox-core": "^7.0.0",
+    "workbox-expiration": "^7.0.0",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "nth-check": ">=2.0.1",
+    "postcss": ">=8.4.31",
+    "prettier": "3.0.3"
+  }
+}
