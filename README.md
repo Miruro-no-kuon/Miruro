@@ -41,7 +41,7 @@
 <a href="#"><img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/></a>
 </p>
 
-> Miruro's api and backend dev will be available at **[Miruro's API](https://github.com/akionii/Miruro)** and production website will be ready for prod on **[Miruro.live](https://miruro.vercel.app)**
+> Miruro's api and backend dev will be available at **[Miruro's API](https://github.com/akionii/Miruro)** and production website will be ready for prod on **[Miruro.live](#)**
 
 ---
 ## **Introduction**
