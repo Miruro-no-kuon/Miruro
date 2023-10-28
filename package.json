@@ -1,6 +1,6 @@
 {
   "name": "miruro",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "author": "akionii",
   "private": "false",
   "dependencies": {
@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@vitejs/plugin-react": "^4.1.0",
     "axios": "^1.4.0",
     "hls.js": "^1.4.0",
     "plyr": "^3.7.8",
@@ -19,10 +20,11 @@
     "react-loading-skeleton": "^3.3.1",
     "react-player": "^2.13.0",
     "react-router-dom": "^6.17.0",
-    "react-scripts": "5.0.1",
     "scripts": "^0.1.0",
     "styled-components": "^6.1.0",
     "swiper": "^9.2.4",
+    "vite": "^4.5.0",
+    "vite-plugin-svgr": "^4.1.0",
     "web-vitals": "^3.3.1",
     "workbox-core": "^7.0.0",
     "workbox-expiration": "^7.0.0",
@@ -31,10 +33,11 @@
     "workbox-strategies": "^6.5.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "test": "vite test"
   },
   "eslintConfig": {
     "extends": [

@@ -29,7 +29,7 @@ function AnimeDetails() {
       try {
         // Make a GET request to the provided API
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}meta/anilist/info/${slug}?provider=gogoanime`
+          `${import.meta.env.VITE_BACKEND_URL}meta/anilist/info/${slug}?provider=gogoanime`
         );
 
         setLoading(false);
@@ -63,7 +63,7 @@ function AnimeDetails() {
       lsData = JSON.parse(lsData);
 
       let index = lsData.Names.findIndex(
-        (i) => i.name === animeDetails.title.romaji
+        (i) => i.name === animeDetails.title.english
       );
 
       if (index !== -1) {
@@ -93,20 +93,20 @@ function AnimeDetails() {
                   {localStorageDetails !== 0 &&
                   animeDetails.episodes &&
                   animeDetails.episodes.length > 0 ? (
-                    <Button to={"/watch" + animeDetails.episodes[0].id}>
+                    <Button to={"/watch/" + animeDetails.episodes[0].id}>
                       EP - {localStorageDetails}
                     </Button>
                   ) : (
                     <Button
-                      className="category-button"
-                      to={"/watch" + animeDetails.episodes[0].id}
+                      className="details-button"
+                      to={"/watch/" + animeDetails.episodes[0].id}
                     >
                       Watch Now
                     </Button>
                   )}
                 </Poster>
                 <div>
-                  <h1>{animeDetails.title.romaji}</h1>
+                  <h1>{animeDetails.title.english}</h1>
                   <p>
                     <span>Type: </span>
                     {animeDetails.type}

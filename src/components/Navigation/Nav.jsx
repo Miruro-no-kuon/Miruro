@@ -83,12 +83,12 @@ function Nav() {
           <Links className="nav-button-links" to="/top100">
             Top 100
           </Links>
-          <Links className="nav-button-links" to="/forum">
-            Forum
-          </Links>
-          <Links className="nav-button-links" to="/help">
-            Help
-          </Links>
+          {/* <Links className="nav-button-links" to="/forum"> */}
+            {/* Forum */}
+          {/* </Links> */}
+          {/* <Links className="nav-button-links" to="/help"> */}
+            {/* Help */}
+          {/* </Links> */}
         </div>
 
         {width <= 600 && (
@@ -117,8 +117,7 @@ function Nav() {
                 marginRight: "0.3rem",
               },
             }}
-          >
-          </IconContext.Provider>
+          ></IconContext.Provider>
         )}
       </NavBar>
       {isActive && <Search isActive={isActive} setIsActive={setIsActive} />}

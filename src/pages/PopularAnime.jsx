@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components"; // Import 'css' from 'styled-components'
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 import axios from "axios";
 
-function Top100Anime() {
+function PopularAnime() {
   // State variables
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,20 +69,17 @@ function Top100Anime() {
   async function getAnime(page) {
     try {
       const response = await axios.get(
-        `https://api.jikan.moe/v4/top/anime`,
-        {
-          params: {
-            /* type: "tv", // You can change the type as needed */
-            page,
-            limit: 25,
-          },
-        }
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }meta/anilist/popular?page=${page}&perPage=30`
       );
 
-      if (response.data && response.data.data) {
+      if (response.data && response.data.results) {
         setAnimeDetails((prevData) => [
           ...prevData,
-          ...response.data.data,
+          ...response.data.results.filter((item) =>
+            prevData.every((prevItem) => prevItem.id !== item.id)
+          ),
         ]);
         setCurrentPage(page);
       } else {
@@ -106,16 +103,22 @@ function Top100Anime() {
   // JSX for rendering
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="Top 100 Anime" />}
+      {loading && <SearchResultsSkeleton name="Popular Anime" />}
       <Parent>
         <Heading>
-          <span>Top 100 Anime</span> Results
+          <span>Popular Anime</span> Results
         </Heading>
         <CardWrapper>
           {animeDetails.map((item, i) => (
-            <Wrapper to={`/search/${item.title}`} key={i}>
-              <img className="card-img" src={item.images.jpg.image_url} alt="" />
-              <p>{item.title}</p>
+            <Wrapper to={`/search/${item.title.romaji}`} key={i}>
+              <img className="card-img" src={item.image} alt="" />
+              <p>
+                {item.title.english ||
+                  item.title.romaji ||
+                  item.title.native ||
+                  item.title.userPreferred ||
+                  item.title}
+              </p>
               <p>{item.type || "Unknown Type"}</p>
             </Wrapper>
           ))}
@@ -131,15 +134,16 @@ function Top100Anime() {
 
 // Styled components
 
-// ... styles for Parent component
+// Styles for the Parent component
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
+
   @media screen and (max-width: 600px) {
-    margin: 1rem;
+    margin: 1rem; // Adjusted margin for smaller screens
   }
 `;
 
-// ... styles for CardWrapper component
+// Styles for the CardWrapper component
 const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
@@ -164,28 +168,37 @@ const CardWrapper = styled.div`
     grid-gap: 0rem;
     grid-row-gap: 1.5rem;
   }
-}`;
+`;
 
+// Common styles for image elements (used by Wrapper and Links components)
+const CommonImageStyles = css`
+  width: 160px;
+  height: 235px;
+  border-radius: 0.4rem;
+  object-fit: cover;
+
+  @media screen and (max-width: 600px) {
+    width: 120px;
+    height: 180px;
+    border-radius: 0.3rem;
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 110px;
+    height: 170px;
+  }
+
+  @media screen and (max-width: 380px) {
+    width: 100px;
+    height: 160px;
+  }
+`;
+
+// Styles for the Wrapper component
 const Wrapper = styled(Link)`
   text-decoration: none;
   img {
-    width: 160px;
-    height: 235px;
-    border-radius: 0.4rem;
-    object-fit: cover;
-    @media screen and (max-width: 600px) {
-      width: 120px;
-      height: 180px;
-      border-radius: 0.3rem;
-    }
-    @media screen and (max-width: 400px) {
-      width: 110px;
-      height: 170px;
-    }
-    @media screen and (max-width: 380px) {
-      width: 100px;
-      height: 160px;
-    }
+    ${CommonImageStyles}// Reuse common image styles
   }
 
   p {
@@ -194,34 +207,19 @@ const Wrapper = styled(Link)`
     font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
+
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;
     }
   }
-}`;
+`;
 
-// ... styles for Links component
+// Styles for the Links component (similar to Wrapper)
 const Links = styled(Link)`
   text-decoration: none;
   img {
-    width: 160px;
-    height: 235px;
-    border-radius: 0.4rem;
-    object-fit: cover;
-    @media screen and (max-width: 600px) {
-      width: 120px;
-      height: 180px;
-      border-radius: 0.3rem;
-    }
-    @media screen and (max-width: 400px) {
-      width: 110px;
-      height: 170px;
-    }
-    @media screen and (max-width: 380px) {
-      width: 100px;
-      height: 160px;
-    }
+    ${CommonImageStyles}// Reuse common image styles
   }
 
   p {
@@ -230,19 +228,21 @@ const Links = styled(Link)`
     font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
+
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;
     }
   }
-}`;
+`;
 
-// ... styles for Heading component
+// Styles for the Heading component
 const Heading = styled.p`
   font-size: 1.8rem;
   color: #fff;
   font-family: "Gilroy-Light", sans-serif;
   margin-bottom: 2rem;
+
   span {
     font-family: "Gilroy-Bold", sans-serif;
   }
@@ -251,6 +251,6 @@ const Heading = styled.p`
     font-size: 1.6rem;
     margin-bottom: 1rem;
   }
-}`;
+`;
 
-export default Top100Anime;
+export default PopularAnime;

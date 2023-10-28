@@ -15,7 +15,7 @@ function FavouriteAnime() {
   async function getAnime() {
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/favourite?page=1&count=50`
+      `${import.meta.env.VITE_BACKEND_URL}api/favourite?page=1&count=50`
     );
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);

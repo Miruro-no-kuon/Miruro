@@ -30,7 +30,7 @@ function Home({ changeMetaArr }) {
   async function getImages() {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/trending`
+        `${import.meta.env.VITE_BACKEND_URL}meta/anilist/trending`
       );
 
       if (res.data && res.data.results) {
@@ -156,9 +156,11 @@ const HomeDiv = styled.div`
   @media screen and (max-width: 600px) {
     margin: 1rem 1rem 0rem 1rem;
   }
-  .vall-button:hover {
-    transform: scale(1.05);
+  .vall-button {
     transition: 0.2s;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 `;
 

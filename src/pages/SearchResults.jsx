@@ -14,7 +14,7 @@ const fetchSearchResults = async (query, pages = [1, 2]) => {
     const responses = await Promise.all(
       pages.map((page) =>
         axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}meta/anilist/${query}?page=${page}`
+          `${import.meta.env.VITE_BACKEND_URL}meta/anilist/${query}?page=${page}`
         )
       )
     );
@@ -121,11 +121,11 @@ function SearchResults({ changeMetaArr }) {
           </CheckboxWrapper>
           <CardWrapper>
             {results.filter(filterResults).map((item, i) => (
-              <Wrapper to={`/category/${item.id}`} key={i}>
+              <Wrapper to={`/details/${item.id}`} key={i}>
                 <img className="card-img" src={item.image} alt="" />
                 <p>
-                  {item.title.romaji ||
-                    item.title.english ||
+                  {item.title.english ||
+                    item.title.romaji ||
                     item.title.native ||
                     item.title.userPreferred ||
                     item.title}

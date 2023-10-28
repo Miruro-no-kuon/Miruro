@@ -5,7 +5,6 @@ import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton
 import axios from "axios";
 
 function TrendingAnime() {
-
   // State variables
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +69,7 @@ function TrendingAnime() {
   async function getAnime(page) {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/trending?page=${page}&perPage=30`
+        `${import.meta.env.VITE_BACKEND_URL}meta/anilist/trending?page=${page}&perPage=30`
       );
 
       if (response.data && response.data.results) {
@@ -112,12 +111,12 @@ function TrendingAnime() {
             <Wrapper to={`/search/${item.title.romaji}`} key={i}>
               <img className="card-img" src={item.image} alt="" />
               <p>
-                {item.title.romaji ||
-                  item.title.english ||
+                {item.title.english ||
+                  item.title.romaji ||
                   item.title.native ||
                   item.title.userPreferred}
               </p>
-              <p>{item.type || 'Unknown Type'}</p>
+              <p>{item.type || "Unknown Type"}</p>
             </Wrapper>
           ))}
         </CardWrapper>
@@ -192,7 +191,7 @@ const Wrapper = styled(Link)`
   p {
     color: #ffffff;
     font-size: 1rem;
-    font-family: 'Gilroy-Medium', sans-serif;
+    font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
     @media screen and (max-width: 380px) {

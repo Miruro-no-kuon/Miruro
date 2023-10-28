@@ -51,7 +51,7 @@ function App() {
           element={<SearchResults changeMetaArr={changeMetaArr} />}
         /> {/* Search Results page */}
         <Route
-          path="/category/:slug"
+          path="/details/:slug"
           element={<AnimeDetails changeMetaArr={changeMetaArr} />}
         /> {/* Anime Details page */}
         <Route

@@ -21,7 +21,7 @@ function AnimeCards(props) {
   async function getData() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}${props.criteria}?page=1&perPage=20`
+        `${import.meta.env.VITE_BACKEND_URL}${props.criteria}?page=1&perPage=20`
       );
 
       if (response.data && response.data.results) {
@@ -86,8 +86,8 @@ function AnimeCards(props) {
               <Wrapper>
                 <Link
                   to={`/search/${
-                    item.title.romaji ||
                     item.title.english ||
+                    item.title.romaji ||
                     item.title.native ||
                     item.title.userPreferred ||
                     item.title
@@ -96,8 +96,8 @@ function AnimeCards(props) {
                   <img className="card-img" src={item.image} alt="" />
                 </Link>
                 <p>
-                  {item.title.romaji ||
-                    item.title.english ||
+                  {item.title.english ||
+                    item.title.romaji ||
                     item.title.native ||
                     item.title.userPreferred ||
                     item.title}

@@ -1,19 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="author" content="akionii">
+    <meta name="author" content="akionii" />
     <meta
       name="description"
       content="Miruro. An ad-free anime streaming site. Catch your favourite shows and movies right here! Help us by contributing to the project on github."
     />
-    <meta
-      name="keywords"
-      content="Miruro, anime"
-    />
+    <meta name="keywords" content="Miruro, anime" />
     <meta property="og:type" content="website" />
     <meta
       property="og:description"
@@ -28,18 +25,23 @@
     />
 
     <!------------------------------- Google tag (gtag.js) ------------------------------------>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YNF8PF4MCX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-YNF8PF4MCX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-  gtag('config', 'G-YNF8PF4MCX');
-</script>
+      gtag("config", "G-YNF8PF4MCX");
+    </script>
     <!------------------------------- Google tag (gtag.js) ------------------------------------>
-    
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link rel="apple-touch-icon" href="/public/logo192.png" />
+    <link rel="manifest" href="/public/manifest.json" />
     <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet" />
     <title>Miruro | Watch The Best Quality Anime Online</title>
     <base href="/" />
@@ -47,5 +49,6 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>

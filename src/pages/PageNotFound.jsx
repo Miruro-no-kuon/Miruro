@@ -1,36 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-// import logo from "./public/assets/img/logo512.png";
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 function PageNotFound({ changeMetaArr }) {
-  React.useEffect(() => {
-    changeMetaArr('title', 'PageNotFound');
-  });
-  document.addEventListener("DOMContentLoaded", () => {
-    const log = console.log,
-      array = [
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png", 
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095443853322/5.png", 
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663454363658/24.png", 
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663156584468/23.png",   
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095007629372/4.png"],
-      random = Math.floor(Math.random() * array.length),
-      target = document.getElementById("target");
-    target.src = `${array[random]}`;
-    log(target);
-  });  
+  const [randomImage, setRandomImage] = useState("");
+
+  useEffect(() => {
+    changeMetaArr("title", "PageNotFound");
+  }, [changeMetaArr]);
+
+  useEffect(() => {
+    const array = [
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png",
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095443853322/5.png",
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663454363658/24.png",
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663156584468/23.png",
+      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095007629372/4.png",
+    ];
+
+    // Preload all images
+    const preloadedImages = [];
+    for (const imageSrc of array) {
+      const img = new Image();
+      img.src = imageSrc;
+      preloadedImages.push(img);
+    }
+
+    // Choose a random image from the preloaded set
+    const randomIndex = Math.floor(Math.random() * preloadedImages.length);
+    setRandomImage(preloadedImages[randomIndex].src);
+  }, []);
+
   return (
     <NotFoundWrapper>
       <ErrorCTA>
         <img
-          id="target"
-          src="https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png"
+          src={randomImage}
           width="320"
           alt="AkioNotFound"
           className="error-image"
         />
-        <HomeLink to="/">{/*Go Home*/}</HomeLink>
+        <HomeLink to="/"></HomeLink>
       </ErrorCTA>
       <ErrorDetails>
         <h2 className="error-code">404</h2>
@@ -57,7 +67,7 @@ const NotFoundWrapper = styled.div`
 `;
 
 const ErrorCTA = styled.div`
-position: relative;
+  position: relative;
   margin-bottom: 3rem;
   margin-top: 1rem;
   width: 350px;
@@ -65,7 +75,7 @@ position: relative;
   border-radius: 10px;
   opacity: 0.7;
   transition: 0.3s;
-  :hover {
+  &:hover {
     transform: scale(1.05);
     color: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -90,10 +100,10 @@ const HomeLink = styled(Link)`
   border-radius: 10px;
   text-decoration: none;
   font-size: 32px;
-  font-family: 'Acme', sans-serif;
+  font-family: "Acme", sans-serif;
   font-weight: bold;
   transition: 0.3s;
-  :hover {
+  &:hover {
     transform: scale(1.05);
     color: rgba(255, 255, 255, 1);
   }
@@ -112,13 +122,13 @@ const ErrorDetails = styled.div`
   white-space: pre-wrap;
   .error-code {
     font-size: 100px;
-    font-family: 'Acme', sans-serif;
+    font-family: "Acme", sans-serif;
     letter-spacing: 0px;
     color: white;
   }
   .error-status {
     font-size: 65px;
-    font-family: 'Acme', sans-serif;
+    font-family: "Acme", sans-serif;
     letter-spacing: -5px;
     color: #ccc;
   }
