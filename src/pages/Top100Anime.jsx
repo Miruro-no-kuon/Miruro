@@ -68,16 +68,25 @@ function Top100Anime() {
   // Function to fetch anime data
   async function getAnime(page) {
     try {
-      const response = await axios.get(`https://api.jikan.moe/v4/top/anime`, {
-        params: {
-          /* type: "tv", // You can change the type as needed */
-          page,
-          limit: 25,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL_2}top/anime`,
+        {
+          params: {
+            /* type: "tv", // You can change the type as needed */
+            page,
+            limit: 25,
+          },
+        }
+      );
 
       if (response.data && response.data.data) {
-        setAnimeDetails((prevData) => [...prevData, ...response.data.data]);
+        // If it's the first page, replace the existing data
+        if (page === 1) {
+          setAnimeDetails(response.data.data);
+        } else {
+          // If it's not the first page, append new data to the existing animeDetails
+          setAnimeDetails((prevData) => [...prevData, ...response.data.data]);
+        }
         setCurrentPage(page);
       } else {
         console.error("Invalid response structure:", response.data);

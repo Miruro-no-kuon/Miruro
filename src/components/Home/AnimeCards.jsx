@@ -12,6 +12,7 @@ function AnimeCards(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [animeDetails, setAnimeDetails] = useState([]);
+  const [cardLimit, setCardLimit] = useState(20); // Set the desired card limit
 
   useEffect(() => {
     getData();
@@ -20,22 +21,61 @@ function AnimeCards(props) {
   // Function to fetch anime data
   async function getData() {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}${props.criteria}?page=1&perPage=20`
-      );
+      let response;
 
-      if (response.data && response.data.results) {
-        setAnimeDetails((prevData) => [
-          ...prevData,
-          ...response.data.results.filter((item) =>
-            prevData.every((prevItem) => prevItem.id !== item.id)
-          ),
-        ]);
+      if (props.criteria === "top/anime") {
+        response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL_2}${props.criteria}`,
+          {
+            params: {
+              /* type: "tv", // You can change the type as needed */
+              page: 1,
+              limit: 20,
+            },
+          }
+        );
       } else {
-        console.error("Invalid response structure:", response.data);
+        response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}${props.criteria}`,
+          {
+            params: {
+              /* type: "tv", // You can change the type as needed */
+              page: 1,
+              perPage: 20,
+            },
+          }
+        );
       }
 
-      setLoading(false);
+      if (response.data) {
+        let animeData = [];
+        if (response.data.results) {
+          animeData = response.data.results.map((item) => ({
+            id: item.id,
+            title:
+              item.title.english ||
+              item.title.romaji ||
+              item.title.native ||
+              item.title.userPreferred ||
+              item.title,
+            episodeNumber: item.episodeNumber,
+            image: item.image,
+          }));
+        } else if (Array.isArray(response.data.data)) {
+          animeData = response.data.data.map((item) => ({
+            id: item.mal_id,
+            title: item.title_english || item.title_japanese,
+            episodeNumber: item.episodes,
+            image: item.images && item.images.jpg && item.images.jpg.image_url,
+          }));
+        } else {
+          console.error("Invalid response structure:", response.data);
+        }
+
+        // Clear the existing animeDetails before setting it with new data
+        setAnimeDetails(animeData.slice(0, cardLimit)); // Slice the data to the desired card limit
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching anime:", error);
       setLoading(false);
@@ -82,27 +122,13 @@ function AnimeCards(props) {
           className="mySwiper"
         >
           {animeDetails.map((item, i) => (
-            <SwiperSlide>
+            <SwiperSlide key={item.id}>
               <Wrapper>
-                <Link
-                  to={`/search/${
-                    item.title.english ||
-                    item.title.romaji ||
-                    item.title.native ||
-                    item.title.userPreferred ||
-                    item.title
-                  }`}
-                >
+                <Links to={`/search/${item.title}`}>
                   <img className="card-img" src={item.image} alt="" />
-                </Link>
-                <p>
-                  {item.title.english ||
-                    item.title.romaji ||
-                    item.title.native ||
-                    item.title.userPreferred ||
-                    item.title}
-                </p>
-                <p>{item.episodeNumber && "Episode: " + item.episodeNumber}</p>
+                </Links>
+                <p>{item.title}</p>
+                {item.episodeNumber && <p>Episode: {item.episodeNumber}</p>}
               </Wrapper>
             </SwiperSlide>
           ))}
@@ -124,6 +150,7 @@ const Wrapper = styled.div`
       width: 120px;
       height: 180px;
     }
+
     @media screen and (max-width: 400px) {
       width: 100px;
       height: 160px;
@@ -135,24 +162,28 @@ const Wrapper = styled.div`
     font-size: 1rem;
     font-family: "Gilroy-Medium", sans-serif;
   }
-`;
+}`;
 
 const Links = styled(Link)`
   text-decoration: none;
+
   img {
     width: 160px;
     height: 235px;
     border-radius: 0.4rem;
     object-fit: cover;
+
     @media screen and (max-width: 600px) {
       width: 120px;
       height: 180px;
       border-radius: 0.3rem;
     }
+
     @media screen and (max-width: 400px) {
-      width: 110px;
-      height: 170px;
+      width: 100px;
+      height: 160px;
     }
+
     @media screen and (max-width: 380px) {
       width: 100px;
       height: 160px;
@@ -165,11 +196,12 @@ const Links = styled(Link)`
     font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
+
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;
     }
   }
-`;
+}`;
 
 export default AnimeCards;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
 import axios from "axios";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import AnimeCards from "../components/Home/AnimeCards";
 import HomeSkeleton from "../components/Skeletons/CarouselSkeleton";
 import WatchingEpisodes from "../components/Home/WatchingEpisodes";
@@ -57,79 +57,92 @@ function Home({ changeMetaArr }) {
   }
 
   return (
-    <div>
-      <Helmet>
-        <title>{title}</title>
-        <meta property="description" content={content} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={content} />
-        <meta property="og:image" content={image} />
-      </Helmet>
-      <HomeDiv>
-        <HomeHeading>
-          <span>Recommended</span> to you
-        </HomeHeading>
-        {loading && <HomeSkeleton />}
-        {!loading && <Carousel images={images} />}
-        {localStorage.getItem("Animes") && checkSize() && (
+    <HelmetProvider>
+      <div>
+        <Helmet>
+          <title>{title}</title>
+          <meta property="description" content={content} />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={content} />
+          <meta property="og:image" content={image} />
+        </Helmet>
+        <HomeDiv>
+          <HomeHeading>
+            <span>Recommended</span> to you
+          </HomeHeading>
+          {loading && <HomeSkeleton />}
+          {!loading && <Carousel images={images} />}
+          {localStorage.getItem("Animes") && checkSize() && (
+            <div className="margin">
+              <HeadingWrapper>
+                <Heading>
+                  <span>Continue</span> Watching
+                </Heading>
+              </HeadingWrapper>
+              <WatchingEpisodes
+                confirmRemove={confirmRemove}
+                setConfirmRemove={setConfirmRemove}
+              />
+            </div>
+          )}
           <div className="margin">
             <HeadingWrapper>
               <Heading>
-                <span>Continue</span> Watching
+                <span>All Time</span> Popular
               </Heading>
+              <div className="vall-button">
+                <Links to="popular">View All</Links>
+              </div>
             </HeadingWrapper>
-            <WatchingEpisodes
-              confirmRemove={confirmRemove}
-              setConfirmRemove={setConfirmRemove}
-            />
+            <AnimeCards criteria="meta/anilist/popular" />
           </div>
-        )}
-        <div className="margin">
-          <HeadingWrapper>
-            <Heading>
-              <span>All Time</span> Popular
-            </Heading>
-            <div className="vall-button">
-              <Links to="popular">View All</Links>
-            </div>
-          </HeadingWrapper>
-          <AnimeCards criteria="meta/anilist/popular" />
-        </div>
-        <div className="margin">
-          <HeadingWrapper>
-            <Heading>
-              <span>Trending</span> Now
-            </Heading>
-            <div className="vall-button">
-              <Links to="trending">View All</Links>
-            </div>
-          </HeadingWrapper>
-          <AnimeCards criteria="meta/anilist/trending" />
-        </div>
-        <div className="margin">
-          <HeadingWrapper>
-            <Heading>
-              <span>Anime New</span> Seasons
-            </Heading>
-            <div className="vall-button">
-              <Links to="new-season">View All</Links>
-            </div>
-          </HeadingWrapper>
-          <AnimeCards criteria="meta/anilist/new-season" />
-        </div>
-        <div className="margin">
-          <HeadingWrapper>
-            <Heading>
-              <span>Recent</span> Episodes
-            </Heading>
-            <div className="vall-button">
-              <Links to="recent-episodes">View All</Links>
-            </div>
-          </HeadingWrapper>
-          <AnimeCards criteria="anime/gogoanime/recent-episodes" />
-        </div>
-      </HomeDiv>
-    </div>
+          <div className="margin">
+            <HeadingWrapper>
+              <Heading>
+                <span>Trending</span> Now
+              </Heading>
+              <div className="vall-button">
+                <Links to="trending">View All</Links>
+              </div>
+            </HeadingWrapper>
+            <AnimeCards criteria="meta/anilist/trending" />
+          </div>
+          <div className="margin">
+            <HeadingWrapper>
+              <Heading>
+                <span>Top 100</span> Anime
+              </Heading>
+              <div className="vall-button">
+                <Links to="top100">View All</Links>
+              </div>
+            </HeadingWrapper>
+            <AnimeCards criteria="top/anime" />
+          </div>
+          <div className="margin">
+            <HeadingWrapper>
+              <Heading>
+                <span>Anime New</span> Seasons
+              </Heading>
+              <div className="vall-button">
+                <Links to="new-season">View All</Links>
+              </div>
+            </HeadingWrapper>
+            <AnimeCards criteria="meta/anilist/new-season" />
+          </div>
+          <div className="margin">
+            <HeadingWrapper>
+              <Heading>
+                <span>Recent</span> Episodes
+              </Heading>
+              <div className="vall-button">
+                <Links to="recent-episodes">View All</Links>
+              </div>
+            </HeadingWrapper>
+            <AnimeCards criteria="anime/gogoanime/recent-episodes" />
+          </div>
+        </HomeDiv>
+      </div>
+    </HelmetProvider>
   );
 }
 
