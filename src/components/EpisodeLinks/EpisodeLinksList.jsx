@@ -1,78 +1,79 @@
-import { useEffect } from 'react';
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import Dropdown from '../Dropdown/Dropdown';
+import { useEffect } from "react";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import Dropdown from "../Dropdown/Dropdown";
 
 const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
-    const { width } = useWindowDimensions();
-    const [rangeFilters, setRangeFilters] = useState({});
-    const [currentRange, setCurrentRange] = useState(null);
-    const currentRangeIndex = useMemo(
-        () => Object.keys(rangeFilters).indexOf(currentRange),
-        [currentRange, rangeFilters]
-    );
+  const { width } = useWindowDimensions();
+  const [rangeFilters, setRangeFilters] = useState({});
+  const [currentRange, setCurrentRange] = useState(null);
+  const currentRangeIndex = useMemo(
+    () => Object.keys(rangeFilters).indexOf(currentRange),
+    [currentRange, rangeFilters]
+  );
 
-    useEffect(() => {
-        const updateChunks = (array) => {
-            const rangeSize = 100;
-            const buffer = {};
-            for (let i = 0; i < array.length; i += rangeSize) {
-                const rangeValues = array.slice(i, i + rangeSize);
-                let key;
-                if (rangeValues.length === 1) {
-                    key = `${(i + rangeValues.length).toString().padStart(3, 0)}`;
-                } else {
-                    key = `${(i + 1).toString().padStart(3, 0)} - ${(
-                        i + rangeValues.length
-                    )
-                        .toString()
-                        .padStart(3, 0)}`;
-                }
-                buffer[key] = rangeValues;
-            }
-            setRangeFilters(buffer);
-            if (episodeNum === 0) {
-                setCurrentRange(Object.keys(buffer)[0]);
-                return;
-            }
-            const rangeIndex = Math.floor((episodeNum - 1) / 100);
-            setCurrentRange(Object.keys(buffer)[rangeIndex]);
-        };
-        updateChunks(episodeArray);
-    }, [episodeArray, episodeNum]);
+  useEffect(() => {
+    const updateChunks = (array) => {
+      const rangeSize = 100;
+      const buffer = {};
+      for (let i = 0; i < array.length; i += rangeSize) {
+        const rangeValues = array.slice(i, i + rangeSize);
+        let key;
+        if (rangeValues.length === 1) {
+          key = `${(i + rangeValues.length).toString().padStart(3, 0)}`;
+        } else {
+          key = `${(i + 1).toString().padStart(3, 0)} - ${(
+            i + rangeValues.length
+          )
+            .toString()
+            .padStart(3, 0)}`;
+        }
+        buffer[key] = rangeValues;
+      }
+      setRangeFilters(buffer);
+      if (episodeNum === 0) {
+        setCurrentRange(Object.keys(buffer)[0]);
+        return;
+      }
+      const rangeIndex = Math.floor((episodeNum - 1) / 100);
+      setCurrentRange(Object.keys(buffer)[rangeIndex]);
+    };
+    updateChunks(episodeArray);
+  }, [episodeArray, episodeNum]);
 
-    return (
-        <EpisodesWrapper>
-            <div className="header">
-                <p>Episodes</p>
-                <Dropdown
-                    setCurrentRange={setCurrentRange}
-                    options={Object.keys(rangeFilters)}
-                    selected={currentRange}
-                />
-            </div>
-            <Episodes>
-                {rangeFilters[currentRange]?.map((item, i) => (
-                    <EpisodeLink className='button-episode-link'
-                        key={i}
-                        to={'/watch' + item.id}
-                        style={
-                            episodeNum === currentRangeIndex * 100 + i + 1
-                                ? { backgroundColor: '#FFFFFF', color: '#23272A' }
-                                : episodeNum > currentRangeIndex * 100 + i
-                                    ? { backgroundColor: '#AFAFAF', color: '#23272A' }
-                                    : {}
-                        }
-                    >
-                        {width > 600 && ` ${currentRangeIndex * 100 + i + 1}`}
-                        {width <= 600 && currentRangeIndex * 100 + i + 1}
-                    </EpisodeLink>
-                ))}
-            </Episodes>
-        </EpisodesWrapper>
-    );
+  return (
+    <EpisodesWrapper>
+      <div className="header">
+        <p>Episodes</p>
+        <Dropdown
+          setCurrentRange={setCurrentRange}
+          options={Object.keys(rangeFilters)}
+          selected={currentRange}
+        />
+      </div>
+      <Episodes>
+        {rangeFilters[currentRange]?.map((item, i) => (
+          <EpisodeLink
+            className="button-episode-link"
+            key={i}
+            to={"/watch/" + item.id}
+            style={
+              episodeNum === currentRangeIndex * 100 + i + 1
+                ? { backgroundColor: "#FFFFFF", color: "#23272A" }
+                : episodeNum > currentRangeIndex * 100 + i
+                ? { backgroundColor: "#AFAFAF", color: "#23272A" }
+                : {}
+            }
+          >
+            {width > 600 && ` ${currentRangeIndex * 100 + i + 1}`}
+            {width <= 600 && currentRangeIndex * 100 + i + 1}
+          </EpisodeLink>
+        ))}
+      </Episodes>
+    </EpisodesWrapper>
+  );
 };
 
 const EpisodesWrapper = styled.div`
@@ -93,7 +94,7 @@ const EpisodesWrapper = styled.div`
     font-size: 1.3rem;
     text-decoration: underline;
     color: white;
-    font-family: 'Gilroy-Medium', sans-serif;
+    font-family: "Gilroy-Medium", sans-serif;
   }
 `;
 
@@ -117,7 +118,7 @@ const EpisodeLink = styled(Link)`
   text-decoration: none;
   background-color: #404040;
   padding: 0.9rem 0rem;
-  font-family: 'Gilroy-Medium', sans-serif;
+  font-family: "Gilroy-Medium", sans-serif;
   border-radius: 0.4rem;
   border: 1px solid #23272a;
   transition: 0.2s;

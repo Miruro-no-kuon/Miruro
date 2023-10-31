@@ -108,10 +108,11 @@ const GlobalStyle = createGlobalStyle`
   
   /* Apply hover effect to elements with the 'card-img' class */
   .card-img {
-	transition: 0.3s;
+	transform: scale(0.96);
+	transition: 0.2s;
   }
   .card-img:hover {
-	transform: scale(0.95);
+	transform: scale(1);
   }
   
   /* Apply hover effect to elements with the 'skip-button' class */
@@ -139,15 +140,12 @@ const GlobalStyle = createGlobalStyle`
   }
   
   /* Apply hover effect to elements with the 'details-button' class */
-  .details-button:hover {
-	transform: scale(0.95);
-	background-color: rgb(155, 0, 59);
-	color: #fff;
+  .details-button {
+	transform: scale(0.94);
   }
-  
-  /* Apply hover effect to elements with the 'nav-button-links' class */
-  .nav-button-links:hover {
-	background-color: rgba(0, 0, 0);
+  .details-button:hover {
+	transform: scale(0.98);
+	background-color: rgb(155, 0, 59);
 	color: #fff;
   }
   

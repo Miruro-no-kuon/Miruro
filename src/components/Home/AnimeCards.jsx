@@ -9,11 +9,13 @@ import "swiper/css";
 import "swiper/css/scrollbar";
 
 function AnimeCards(props) {
+  // State variables
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [animeDetails, setAnimeDetails] = useState([]);
   const [cardLimit, setCardLimit] = useState(20); // Set the desired card limit
 
+  // Fetch data when criteria prop changes
   useEffect(() => {
     getData();
   }, [props.criteria]);
@@ -23,12 +25,12 @@ function AnimeCards(props) {
     try {
       let response;
 
+      // Determine the URL based on the criteria prop
       if (props.criteria === "top/anime") {
         response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL_2}${props.criteria}`,
           {
             params: {
-              /* type: "tv", // You can change the type as needed */
               page: 1,
               limit: 20,
             },
@@ -39,7 +41,6 @@ function AnimeCards(props) {
           `${import.meta.env.VITE_BACKEND_URL}${props.criteria}`,
           {
             params: {
-              /* type: "tv", // You can change the type as needed */
               page: 1,
               perPage: 20,
             },
@@ -49,6 +50,8 @@ function AnimeCards(props) {
 
       if (response.data) {
         let animeData = [];
+
+        // Process the response data to create a consistent data structure
         if (response.data.results) {
           animeData = response.data.results.map((item) => ({
             id: item.id,
@@ -57,16 +60,17 @@ function AnimeCards(props) {
               item.title.romaji ||
               item.title.native ||
               item.title.userPreferred ||
-              item.title,
-            episodeNumber: item.episodeNumber,
+              item.title.split(":")[0],
+            episodeNumber: item.totalEpisodes,
             image: item.image,
+            type: item.type || null, // Add the "type" property to the item or set it as null if it doesn't exist
           }));
         } else if (Array.isArray(response.data.data)) {
           animeData = response.data.data.map((item) => ({
             id: item.mal_id,
             title: item.title_english || item.title_japanese,
-            episodeNumber: item.episodes,
             image: item.images && item.images.jpg && item.images.jpg.image_url,
+            type: "TV", // For this case, assuming the type is always "TV"
           }));
         } else {
           console.error("Invalid response structure:", response.data);
@@ -127,8 +131,14 @@ function AnimeCards(props) {
                 <Links to={`/search/${item.title}`}>
                   <img className="card-img" src={item.image} alt="" />
                 </Links>
-                <p>{item.title}</p>
-                {item.episodeNumber && <p>Episode: {item.episodeNumber}</p>}
+                <p>
+                  {item.title.length > 32
+                    ? `${item.title.slice(0, 32)} ...`
+                    : item.title}
+                </p>
+                {props.criteria ===
+                  "meta/anilist/advanced-search?sort[]=SCORE_DESC&status=RELEASING&year=2023" &&
+                  item.episodeNumber && <p>Episode: {item.episodeNumber}</p>}
               </Wrapper>
             </SwiperSlide>
           ))}
@@ -138,6 +148,7 @@ function AnimeCards(props) {
   );
 }
 
+// Styled component for the container
 const Wrapper = styled.div`
   img {
     width: 160px;
@@ -158,12 +169,25 @@ const Wrapper = styled.div`
   }
 
   p {
+    width: 155px;
     color: #fff;
     font-size: 1rem;
+    font-weight: bold;
     font-family: "Gilroy-Medium", sans-serif;
-  }
-}`;
 
+    @media screen and (max-width: 600px) {
+      width: 120px;
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 100px;
+    }
+  }
+
+  }
+`;
+
+// Styled component for links
 const Links = styled(Link)`
   text-decoration: none;
 

@@ -13,7 +13,7 @@ function Home({ changeMetaArr }) {
   const [loading, setLoading] = useState(true);
   const [confirmRemove, setConfirmRemove] = useState([]);
 
-  const title = "Miruro | Watch The Best Quality Anime Online";
+  const title = "Miruro";
   const content = `Miruro. An ad-free anime streaming site. Catch your favorite shows and movies right here! 
     Help us by contributing to the project on GitHub.`;
   const image =
@@ -121,13 +121,13 @@ function Home({ changeMetaArr }) {
           <div className="margin">
             <HeadingWrapper>
               <Heading>
-                <span>Anime New</span> Seasons
+                <span>Popular Anime</span> Movies
               </Heading>
               <div className="vall-button">
-                <Links to="new-season">View All</Links>
+                <Links to="movies">View All</Links>
               </div>
             </HeadingWrapper>
-            <AnimeCards criteria="meta/anilist/new-season" />
+            <AnimeCards criteria="meta/anilist/advanced-search?sort[]=POPULARITY&format=MOVIE" />
           </div>
           <div className="margin">
             <HeadingWrapper>
@@ -138,7 +138,7 @@ function Home({ changeMetaArr }) {
                 <Links to="recent-episodes">View All</Links>
               </div>
             </HeadingWrapper>
-            <AnimeCards criteria="anime/gogoanime/recent-episodes" />
+            <AnimeCards criteria="meta/anilist/advanced-search?sort[]=SCORE_DESC&status=RELEASING&year=2023" />
           </div>
         </HomeDiv>
       </div>
@@ -166,9 +166,11 @@ const Links = styled(Link)`
 
 const HomeDiv = styled.div`
   margin: 1.5rem 5rem 1rem 5rem;
+
   @media screen and (max-width: 600px) {
     margin: 1rem 1rem 0rem 1rem;
   }
+
   .vall-button {
     transition: 0.2s;
     &:hover {
@@ -181,7 +183,6 @@ const HomeHeading = styled.p`
   font-size: 2.3rem;
   color: #ffffff;
   font-family: "Gilroy-Light", sans-serif;
-
   span {
     font-family: "Gilroy-Bold", sans-serif;
   }
@@ -211,6 +212,7 @@ const HeadingWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+
   @media screen and (max-width: 600px) {
     margin-top: 1rem;
   }

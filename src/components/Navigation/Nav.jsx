@@ -91,7 +91,7 @@ function Nav() {
           {/* </Links> */}
         </div>
 
-        {width <= 600 && (
+        {width <= 900 && (
           <IconContext.Provider
             value={{
               size: "1.5rem",
@@ -107,7 +107,7 @@ function Nav() {
             </Button>
           </IconContext.Provider>
         )}
-        {width > 600 && (
+        {width > 900 && (
           <IconContext.Provider
             value={{
               size: "1rem",
@@ -209,7 +209,7 @@ const NavBar = styled.nav`
       margin-right: 0rem;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 900px) {
       display: none;
     }
   }
@@ -234,7 +234,7 @@ const NavBar = styled.nav`
     width: 18rem;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 600px) {
     margin: 1rem 2rem;
     margin-top: 1rem;
     img {

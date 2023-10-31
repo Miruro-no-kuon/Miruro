@@ -59,21 +59,15 @@ function Carousel({ images }) {
                 <Content>
                   {width <= 600 && (
                     <p>
-                      {item.title.english !== null
+                      {item.title.english
                         ? item.title.english.length > 35
                           ? item.title.english.substring(0, 35) + "..."
                           : item.title.english
-                        : item.title.english.length > 35
-                        ? item.title.english.substring(0, 35) + "..."
                         : item.title.english}
                     </p>
                   )}
                   {width > 600 && (
-                    <p>
-                      {item.title.english !== null
-                        ? item.title.english
-                        : item.title.english}
-                    </p>
+                    <p>{item.title.english ? item.title.english : ""}</p>
                   )}
 
                   {width <= 600 && (
@@ -102,7 +96,10 @@ function Carousel({ images }) {
                         },
                       }}
                     >
-                      <Button className="carousel-button" to={"details/" + item.id}>
+                      <Button
+                        className="carousel-button"
+                        to={"details/" + item.id}
+                      >
                         <BsFillPlayFill />
                         Watch Now
                       </Button>

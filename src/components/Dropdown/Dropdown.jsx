@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import styled from 'styled-components';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import React, { useEffect } from "react";
+import { useState } from "react";
+import styled from "styled-components";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 function Dropdown({ setCurrentRange, options, selected }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +56,7 @@ const DropdownButton = styled.button`
   color: #ffffff;
   background-color: #404040;
   padding: 0.8rem 2rem;
-  font-family: 'Gilroy-Medium', sans-serif;
+  font-family: "Gilroy-Medium", sans-serif;
   font-size: 0.9rem;
   border-radius: 0.4rem;
   transition: 0.2s;
@@ -86,10 +86,10 @@ const DropdownOption = styled.li`
   min-width: 100%;
   cursor: pointer;
   text-align: center;
-  background-color: ${({ active }) => (active ? '#585858' : 'transparent')};
+  background-color: ${({ active }) => (active ? "#585858" : "transparent")};
   padding: 0.4rem 0;
   transition: 0.2s;
-  :hover {
+  &:hover {
     background-color: #585858;
   }
 `;

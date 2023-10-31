@@ -43,7 +43,7 @@ const Footer = () => {
             <SectionHeading>Connect</SectionHeading>
             <FooterLink href="https://discord.gg">Discord</FooterLink>
             <FooterLink href="#">We're Hiring!</FooterLink>
-            <FooterLink href="https://www.patreon.com/akionii">
+            <FooterLink href="https://www.patreon.com/Miruro">
               Support
             </FooterLink>
           </Column>

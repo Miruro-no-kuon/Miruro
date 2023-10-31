@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import styled, { css } from "styled-components"; // Import 'css' from 'styled-components'
+import styled, { css } from "styled-components";
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 import axios from "axios";
 
@@ -12,31 +12,33 @@ function RecentEpisodesAnime() {
   const [isFetching, setIsFetching] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [loadedAllPages, setLoadedAllPages] = useState(false);
+
+  // Ref for intersection observer
   const bottomBoundaryRef = useRef(null);
+
+  // Scroll tracking state
   const [hasScrolled, setHasScrolled] = useState(false);
 
+  // Use effect to handle initial scroll
   useEffect(() => {
-    // Check if scrolling has not happened yet
     if (!hasScrolled) {
       window.scrollTo(0, 0);
-      // Mark that scrolling has occurred by updating the state
       setHasScrolled(true);
     }
   }, [hasScrolled]);
 
-  // Effect to fetch initial anime data
+  // Use effect to fetch initial anime data
   useEffect(() => {
     getAnime(1);
   }, []);
 
-  // Effect to fetch more anime data when scrolling
+  // Use effect to fetch more anime data when scrolling
   useEffect(() => {
     if (!isFetching || currentPage >= 3 || loadedAllPages) return;
-
     getAnime(currentPage + 1);
   }, [isFetching, currentPage, loadedAllPages]);
 
-  // Effect to observe scrolling for triggering data fetching
+  // Use effect to observe scrolling for triggering data fetching
   useEffect(() => {
     const options = {
       root: null,
@@ -68,10 +70,19 @@ function RecentEpisodesAnime() {
   // Function to fetch anime data
   async function getAnime(page) {
     try {
+      // Get the current year
+      const currentYear = new Date().getFullYear();
       const response = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }anime/gogoanime/recent-episodes?page=${page}&perPage=30`
+        `${import.meta.env.VITE_BACKEND_URL}meta/anilist/advanced-search`,
+        {
+          params: {
+            sort: ["SCORE_DESC"],
+            status: "RELEASING",
+            year: currentYear,
+            page: page,
+            perPage: 30,
+          },
+        }
       );
 
       if (response.data && response.data.results) {
@@ -100,7 +111,6 @@ function RecentEpisodesAnime() {
     }
   }
 
-  // JSX for rendering
   return (
     <div>
       {loading && <SearchResultsSkeleton name="Recent Episodes Anime" />}
@@ -119,7 +129,8 @@ function RecentEpisodesAnime() {
                   item.title.userPreferred ||
                   item.title}
               </p>
-              <p>{item.type || "Unknown Type"}</p>
+              <p>Episode: {item.totalEpisodes || "Unknown"}</p>
+              {/* The line above displays the episode number or "Unknown Episode Number" if not available */}
             </Wrapper>
           ))}
         </CardWrapper>
@@ -134,16 +145,14 @@ function RecentEpisodesAnime() {
 
 // Styled components
 
-// Styles for the Parent component
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
 
   @media screen and (max-width: 600px) {
-    margin: 1rem; // Adjusted margin for smaller screens
+    margin: 1rem;
   }
 `;
 
-// Styles for the CardWrapper component
 const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
@@ -170,7 +179,6 @@ const CardWrapper = styled.div`
   }
 `;
 
-// Common styles for image elements (used by Wrapper and Links components)
 const CommonImageStyles = css`
   width: 160px;
   height: 235px;
@@ -194,11 +202,10 @@ const CommonImageStyles = css`
   }
 `;
 
-// Styles for the Wrapper component
 const Wrapper = styled(Link)`
   text-decoration: none;
   img {
-    ${CommonImageStyles}// Reuse common image styles
+    ${CommonImageStyles}
   }
 
   p {
@@ -215,28 +222,6 @@ const Wrapper = styled(Link)`
   }
 `;
 
-// Styles for the Links component (similar to Wrapper)
-const Links = styled(Link)`
-  text-decoration: none;
-  img {
-    ${CommonImageStyles}// Reuse common image styles
-  }
-
-  p {
-    color: #fff;
-    font-size: 1rem;
-    font-family: "Gilroy-Medium", sans-serif;
-    text-decoration: none;
-    max-width: 160px;
-
-    @media screen and (max-width: 380px) {
-      width: 100px;
-      font-size: 0.9rem;
-    }
-  }
-`;
-
-// Styles for the Heading component
 const Heading = styled.p`
   font-size: 1.8rem;
   color: #fff;
