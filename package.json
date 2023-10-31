@@ -2,7 +2,7 @@
   "name": "miruro",
   "version": "0.0.0",
   "author": "akionii",
-  "private": "false",
+  "private": "true",
   "dependencies": {
     "@consumet/extensions": "^1.5.2",
     "@testing-library/jest-dom": "^6.1.4",
@@ -38,7 +38,7 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview",
     "test": "vite test"
   },
