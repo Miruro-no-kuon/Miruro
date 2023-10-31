@@ -137,7 +137,7 @@ function WatchAnime() {
     async function getAnimeBanner() {
       let slug = episodeSlug.split('-episode')[0];
       let res = await axios.get(
-        `https://sakamoto-api.vercel.app/api/getanime?link=/category/${slug}`
+        `https://sakamoto-api.vercel.app/api/getanime?link=/details/${slug}`
       );
       setContent((content) => {
         content = res.data[0].gogoResponse.description.replace(

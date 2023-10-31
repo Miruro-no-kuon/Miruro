@@ -4,23 +4,30 @@ import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 
+// Default filter settings
 const DefaultFilter = {
   subs: true,
   dubs: true,
 };
 
+// Function to fetch search results
 const fetchSearchResults = async (query, pages = [1, 2]) => {
   try {
+    // Fetch data from API for specified query and pages
     const responses = await Promise.all(
       pages.map((page) =>
         axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}meta/anilist/${query}?page=${page}`
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }meta/anilist/${query}?page=${page}`
         )
       )
     );
+    // Flatten and return results from multiple pages
     const results = responses.flatMap((response) => response.data.results);
     return { results };
   } catch (error) {
+    // Handle and log errors
     console.error("Error fetching search results:", error);
     throw error;
   }
@@ -29,7 +36,7 @@ const fetchSearchResults = async (query, pages = [1, 2]) => {
 function SearchResults({ changeMetaArr }) {
   // Get the search query from the URL parameters
   const { name } = useParams();
-  const urlParams = name.replace(/[:()]/g, ""); // Updated regex to remove all : and ()
+  const urlParams = name.replace(/[:()]/g, ""); // Remove special characters from the query
 
   // State to store search results and loading state
   const [results, setResults] = useState([]);
@@ -40,7 +47,7 @@ function SearchResults({ changeMetaArr }) {
 
   // Update the page title based on the search query
   useEffect(() => {
-    changeMetaArr("title", `Search results for: ${urlParams}`);
+    changeMetaArr("title", `Miruro search: ${urlParams}`);
   }, [changeMetaArr, urlParams]);
 
   // Fetch search results when the component mounts or the search query changes
@@ -49,7 +56,8 @@ function SearchResults({ changeMetaArr }) {
       setLoading(true);
       window.scrollTo(0, 0);
       try {
-        const res = await fetchSearchResults(urlParams, [1, 2, 3]); // Fetch results from page 1 and 2
+        // Fetch results from specified query and pages 1, 2, and 3
+        const res = await fetchSearchResults(urlParams, [1, 2, 3]);
         setLoading(false);
         setResults(res.results);
       } catch (error) {
@@ -86,22 +94,19 @@ function SearchResults({ changeMetaArr }) {
     return false;
   };
 
-  // Page title, description, and image for meta tags
-  const title = `Search results for: ${urlParams}`;
-  const content = "Miruro - Watch The Best Quality Anime Online";
-  const image =
-    "https://cdn.discordapp.com/attachments/985501610455224389/1041877819589927014/Miruro_Public_Preview.png";
-
   return (
     <>
       {loading ? (
+        // Display loading skeleton when data is loading
         <SearchResultsSkeleton name={urlParams} />
       ) : (
+        // Display search results
         <Parent>
           <Heading>
             Search <span>{name === undefined ? "Search" : name}</span> Results
           </Heading>
           <CheckboxWrapper>
+            {/* Filter checkboxes for dubs and subs */}
             <label htmlFor="dubs">Dubs</label>
             <input
               id="dubs"
@@ -120,12 +125,13 @@ function SearchResults({ changeMetaArr }) {
             />
           </CheckboxWrapper>
           <CardWrapper>
+            {/* Map and display search results */}
             {results.filter(filterResults).map((item, i) => (
-              <Wrapper to={`/category/${item.id}`} key={i}>
+              <Wrapper to={`/details/${item.id}`} key={i}>
                 <img className="card-img" src={item.image} alt="" />
                 <p>
-                  {item.title.romaji ||
-                    item.title.english ||
+                  {item.title.english ||
+                    item.title.romaji ||
                     item.title.native ||
                     item.title.userPreferred ||
                     item.title}
@@ -199,6 +205,7 @@ const CardWrapper = styled.div`
     grid-gap: 0rem;
     grid-row-gap: 1.5rem;
   }
+}
 `;
 
 const Wrapper = styled(Link)`
@@ -227,8 +234,13 @@ const Wrapper = styled(Link)`
     color: #ffffff;
     font-size: 1rem;
     font-family: "Gilroy-Medium", sans-serif;
+    font-weight: bold;
     text-decoration: none;
     max-width: 160px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;

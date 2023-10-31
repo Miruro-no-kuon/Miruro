@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components"; // Import 'css' from 'styled-components'
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
 import axios from "axios";
 
-function NewSeasonAnime() {
-
+function TrendingAnime() {
   // State variables
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +69,9 @@ function NewSeasonAnime() {
   async function getAnime(page) {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}meta/anilist/new-season?page=${page}&perPage=30`
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }meta/anilist/trending?page=${page}&perPage=30`
       );
 
       if (response.data && response.data.results) {
@@ -102,22 +103,23 @@ function NewSeasonAnime() {
   // JSX for rendering
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="New Seasons" />}
+      {loading && <SearchResultsSkeleton name="Trending Anime" />}
       <Parent>
         <Heading>
-          <span>New Seasons</span> Results
+          <span>Trending Anime</span> Results
         </Heading>
         <CardWrapper>
           {animeDetails.map((item, i) => (
             <Wrapper to={`/search/${item.title.romaji}`} key={i}>
               <img className="card-img" src={item.image} alt="" />
               <p>
-                {item.title.romaji ||
-                  item.title.english ||
+                {item.title.english ||
+                  item.title.romaji ||
                   item.title.native ||
-                  item.title.userPreferred}
+                  item.title.userPreferred ||
+                  item.title}
               </p>
-              <p>{item.type || 'Unknown Type'}</p>
+              <p>{item.type || "Unknown Type"}</p>
             </Wrapper>
           ))}
         </CardWrapper>
@@ -132,15 +134,16 @@ function NewSeasonAnime() {
 
 // Styled components
 
-// ... styles for Parent component
+// Styles for the Parent component
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
+
   @media screen and (max-width: 600px) {
-    margin: 1rem;
+    margin: 1rem; // Adjusted margin for smaller screens
   }
 `;
 
-// ... styles for CardWrapper component
+// Styles for the CardWrapper component
 const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
@@ -167,34 +170,44 @@ const CardWrapper = styled.div`
   }
 `;
 
+// Common styles for image elements (used by Wrapper and Links components)
+const CommonImageStyles = css`
+  width: 160px;
+  height: 235px;
+  border-radius: 0.4rem;
+  object-fit: cover;
+
+  @media screen and (max-width: 600px) {
+    width: 120px;
+    height: 180px;
+    border-radius: 0.3rem;
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 110px;
+    height: 170px;
+  }
+
+  @media screen and (max-width: 380px) {
+    width: 100px;
+    height: 160px;
+  }
+`;
+
+// Styles for the Wrapper component
 const Wrapper = styled(Link)`
   text-decoration: none;
   img {
-    width: 160px;
-    height: 235px;
-    border-radius: 0.4rem;
-    object-fit: cover;
-    @media screen and (max-width: 600px) {
-      width: 120px;
-      height: 180px;
-      border-radius: 0.3rem;
-    }
-    @media screen and (max-width: 400px) {
-      width: 110px;
-      height: 170px;
-    }
-    @media screen and (max-width: 380px) {
-      width: 100px;
-      height: 160px;
-    }
+    ${CommonImageStyles}// Reuse common image styles
   }
 
   p {
     color: #ffffff;
     font-size: 1rem;
-    font-family: 'Gilroy-Medium', sans-serif;
+    font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
+
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;
@@ -202,27 +215,11 @@ const Wrapper = styled(Link)`
   }
 `;
 
-// ... styles for Links component
+// Styles for the Links component (similar to Wrapper)
 const Links = styled(Link)`
   text-decoration: none;
   img {
-    width: 160px;
-    height: 235px;
-    border-radius: 0.4rem;
-    object-fit: cover;
-    @media screen and (max-width: 600px) {
-      width: 120px;
-      height: 180px;
-      border-radius: 0.3rem;
-    }
-    @media screen and (max-width: 400px) {
-      width: 110px;
-      height: 170px;
-    }
-    @media screen and (max-width: 380px) {
-      width: 100px;
-      height: 160px;
-    }
+    ${CommonImageStyles}// Reuse common image styles
   }
 
   p {
@@ -231,6 +228,7 @@ const Links = styled(Link)`
     font-family: "Gilroy-Medium", sans-serif;
     text-decoration: none;
     max-width: 160px;
+
     @media screen and (max-width: 380px) {
       width: 100px;
       font-size: 0.9rem;
@@ -238,12 +236,13 @@ const Links = styled(Link)`
   }
 `;
 
-// ... styles for Heading component
+// Styles for the Heading component
 const Heading = styled.p`
   font-size: 1.8rem;
   color: #fff;
   font-family: "Gilroy-Light", sans-serif;
   margin-bottom: 2rem;
+
   span {
     font-family: "Gilroy-Bold", sans-serif;
   }
@@ -254,4 +253,4 @@ const Heading = styled.p`
   }
 `;
 
-export default NewSeasonAnime;
+export default TrendingAnime;
