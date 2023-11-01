@@ -22,7 +22,7 @@
     "react-loading-skeleton": "^3.3.1",
     "react-modal": "^3.16.1",
     "react-player": "^2.13.0",
-    "react-router-dom": "^6.17.0",
+    "react-router-dom": "^6.18.0",
     "scripts": "^0.1.0",
     "styled-components": "^6.1.0",
     "swiper": "^9.2.4",
