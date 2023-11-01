@@ -1,6 +1,6 @@
 <h1 align="center">
   <p align="center"><strong>Miruro</strong></p>
-  <a href="https://github.com/akionii/Miruro/blob/master/public/assets/img/Cover.png"><img src="./public/assets/img/Cover.png" alt="Cover" style="border-radius: 5px"></a>
+  <a href="https://github.com/akionii/Miruro/blob/master/src/assets/img/Cover.png"><img src="./src/assets/img/Cover.png" alt="Cover" style="border-radius: 5px"></a>
   
   見るろ 久遠
 </h1>
@@ -102,7 +102,7 @@ SOFTWARE.
 
 ## **Thanks For Visiting**
 
-<img src="public/assets/logo2.png" width=130 align=right>
+<img src="/src/src/assets/logo2.png" width=130 align=right>
 
 Hope you liked it. Want to help?
 

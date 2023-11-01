@@ -17,7 +17,7 @@ function Home({ changeMetaArr }) {
   const content = `Miruro. An ad-free anime streaming site. Catch your favorite shows and movies right here! 
     Help us by contributing to the project on GitHub.`;
   const image =
-    "https://cdn.discordapp.com/attachments/985501610455224389/1041832015105884241/logo512.png";
+    "/src/assets/logo-tr.png";
 
   useEffect(() => {
     changeMetaArr("title", title);
@@ -149,7 +149,7 @@ function Home({ changeMetaArr }) {
 const Links = styled(Link)`
   color: rgba(255, 255, 255, 1);
   background: rgb(19, 21, 22);
-  padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+  padding: 0.4rem 0.5rem;
   border-radius: 5px;
   border: 1px solid rgba(48, 52, 54, 0.3);
   font-size: 1.1rem;
@@ -160,7 +160,6 @@ const Links = styled(Link)`
   @media screen and (max-width: 600px) {
     color: #ffffff;
     font-size: 1rem;
-    font-family: "Gilroy-Medium", sans-serif;
   }
 `;
 
@@ -168,7 +167,7 @@ const HomeDiv = styled.div`
   margin: 1.5rem 5rem 1rem 5rem;
 
   @media screen and (max-width: 600px) {
-    margin: 1rem 1rem 0rem 1rem;
+    margin: 1rem;
   }
 
   .vall-button {
@@ -179,32 +178,34 @@ const HomeDiv = styled.div`
   }
 `;
 
-const HomeHeading = styled.p`
-  font-size: 2.3rem;
-  color: #ffffff;
+const commonHeadingStyles = `
   font-family: "Gilroy-Light", sans-serif;
-  span {
-    font-family: "Gilroy-Bold", sans-serif;
-  }
-  margin-bottom: 1rem;
-
-  @media screen and (max-width: 600px) {
-    font-size: 1.7rem;
-  }
-`;
-
-const Heading = styled.p`
-  font-size: 1.8rem;
   color: #ffffff;
-  font-family: "Gilroy-Light", sans-serif;
-
-  span {
-    font-family: "Gilroy-Bold", sans-serif;
-  }
 
   @media screen and (max-width: 600px) {
     font-size: 1.5rem;
   }
+`;
+
+const HomeHeading = styled.p`
+  font-size: 2.3rem;
+  margin-bottom: 1rem;
+
+  span {
+    font-family: "Gilroy-Bold", sans-serif;
+  }
+
+  ${commonHeadingStyles}
+`;
+
+const Heading = styled.p`
+  font-size: 1.8rem;
+
+  span {
+    font-family: "Gilroy-Bold", sans-serif;
+  }
+
+  ${commonHeadingStyles}
 `;
 
 const HeadingWrapper = styled.div`

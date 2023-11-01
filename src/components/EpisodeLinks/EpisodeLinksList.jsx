@@ -61,9 +61,9 @@ const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
             to={"/watch/" + item.id}
             style={
               episodeNum === currentRangeIndex * 100 + i + 1
-                ? { backgroundColor: "#FFFFFF", color: "#23272A" }
+                ? { backgroundColor: "#FFFFFF", color: "#292b2f" }
                 : episodeNum > currentRangeIndex * 100 + i
-                ? { backgroundColor: "#AFAFAF", color: "#23272A" }
+                ? { backgroundColor: "#AFAFAF", color: "#292b2f" }
                 : {}
             }
           >
@@ -78,14 +78,14 @@ const EpisodeLinksList = ({ episodeArray, episodeNum }) => {
 
 const EpisodesWrapper = styled.div`
   margin-top: 1rem;
-  border: 1px solid #444;
+  border: 1px solid #292b2f;
   border-radius: 0.4rem;
   .header {
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
     width: 50%;
-    border-bottom: 1px solid #404040;
+    border-bottom: 1px solid #202225;
     padding: 0.6rem 1rem;
     justify-content: start;
     align-items: center;
@@ -116,11 +116,11 @@ const EpisodeLink = styled(Link)`
   text-align: center;
   color: #ffffff;
   text-decoration: none;
-  background-color: #404040;
+  background-color: #202225;
   padding: 0.9rem 0rem;
   font-family: "Gilroy-Medium", sans-serif;
   border-radius: 0.4rem;
-  border: 1px solid #23272a;
+  border: 1px solid #292b2f;
   transition: 0.2s;
 `;
 

@@ -61,13 +61,13 @@ function AnimeCardsSkeleton() {
                 width <= 600 ? (width <= 400 ? "160px" : "180px") : "235px"
               }
               borderRadius={"0.5rem"}
-              baseColor={"#808080"}
-              highlightColor={"#404040"}
+              baseColor={"#303436"}
+              highlightColor={"#202225"}
             />
             <Skeleton
               width={width <= 600 ? "120px" : "160px"}
-              baseColor={"#808080"}
-              highlightColor={"#404040"}
+              baseColor={"#303436"}
+              highlightColor={"#202225"}
               count={2}
               style={{
                 marginTop: "1rem",

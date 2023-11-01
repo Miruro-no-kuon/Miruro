@@ -96,7 +96,7 @@ function AnimeDetails() {
                 src={
                   animeDetails.cover !== animeDetails.image
                     ? animeDetails.cover
-                    : "https://cdn.discordapp.com/attachments/985501610455224389/1041877819589927014/Miruro_Public_Preview.png?ex=65404f55&is=652dda55&hm=d9cf0985dbbea351c30d1f647046b36d3b343705f29fb066c5cf9b9f8dfd06b3"
+                    : "/src/assets/img/Cover.png"
                 }
                 alt=""
               />
@@ -266,7 +266,7 @@ function AnimeDetails() {
 }
 
 const Content = styled.div`
-  margin: 2rem 5rem 2rem 5rem;
+  margin: 2rem 5rem;
   position: relative;
 
   @media screen and (max-width: 1200px) {
@@ -275,7 +275,7 @@ const Content = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  padding: 0 3rem 0 3rem;
+  padding: 0 3rem;
   display: flex;
 
   div > * {
@@ -287,36 +287,44 @@ const ContentWrapper = styled.div`
     font-size: 1rem;
     color: #808080;
     font-family: "Gilroy-Regular", sans-serif;
+
     span {
       font-family: "Gilroy-Bold", sans-serif;
       color: #ffffff;
     }
+
     p {
       text-align: justify;
     }
+
     h1 {
       font-family: "Gilroy-Bold", sans-serif;
       font-weight: normal;
       color: #ffffff;
+      font-size: 1.6rem;
     }
+
     button {
       display: none;
     }
   }
 
   @media screen and (max-width: 1200px) {
-    display: flex;
     flex-direction: column-reverse;
     padding: 0;
+
     div {
       margin: 1rem;
       margin-bottom: 0.2rem;
+
       h1 {
         font-size: 1.6rem;
       }
+
       p {
         font-size: 1rem;
       }
+
       button {
         display: inline;
         border: none;
@@ -335,6 +343,7 @@ const ContentWrapper = styled.div`
 const Poster = styled.div`
   display: flex;
   flex-direction: column;
+
   img {
     width: 220px;
     height: 300px;
@@ -343,16 +352,15 @@ const Poster = styled.div`
     position: relative;
     top: -20%;
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+
+    @media screen and (max-width: 1200px) {
+      display: none;
+    }
   }
 
   @media screen and (max-width: 1200px) {
-    img {
-      display: none;
-    }
-    @media screen and (max-width: 1200px) {
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* This creates a two-column grid */
-    }
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* This creates a two-column grid */
   }
 }
 `;
@@ -379,6 +387,9 @@ const Button = styled(Link)`
 
   @media screen and (max-width: 1200px) {
     width: auto;
+    padding: 1rem 1rem; // Reduce padding for smaller screens
+    display: block; // Set the buttons to block-level elements
+    margin-top: 1rem; // Add some margin to separate the buttons vertically
   }
 }
 `;
@@ -393,7 +404,6 @@ const Banner = styled.img`
     height: 13rem;
     border-radius: 0.5rem;
   }
-}
 `;
 
 export default AnimeDetails;

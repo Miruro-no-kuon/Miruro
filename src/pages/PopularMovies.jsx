@@ -34,7 +34,7 @@ function PopularMovies() {
 
   // Use effect to fetch more anime data when scrolling
   useEffect(() => {
-    if (!isFetching || currentPage >= 3 || loadedAllPages) return;
+    if (!isFetching || currentPage >= 5 || loadedAllPages) return;
     getAnime(currentPage + 1);
   }, [isFetching, currentPage, loadedAllPages]);
 
@@ -79,7 +79,7 @@ function PopularMovies() {
             sort:["POPULARITY"],
             format: "MOVIE",
             page: page,
-            perPage: 30,
+            perPage: 50,
           },
         }
       );
@@ -99,7 +99,7 @@ function PopularMovies() {
       setLoading(false);
       setIsFetching(false);
 
-      if (currentPage >= 2) {
+      if (currentPage >= 4) {
         setHasMore(false);
         setLoadedAllPages(true);
       }
@@ -128,8 +128,6 @@ function PopularMovies() {
                   item.title.userPreferred ||
                   item.title}
               </p>
-              <p>Episode: {item.totalEpisodes || "Unknown"}</p>
-              {/* The line above displays the episode number or "Unknown Episode Number" if not available */}
             </Wrapper>
           ))}
         </CardWrapper>

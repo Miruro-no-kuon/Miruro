@@ -505,7 +505,7 @@ const EpisodeButtons = styled.div`
 const EpisodeLinks = styled(Link)`
   color: #ffffff;
   padding: 0.6rem 1rem;
-  background-color: #404040;
+  background-color: #202225;
   text-decoration: none;
   font-family: 'Gilroy-Medium', sans-serif;
   border-radius: 0.4rem;
@@ -533,7 +533,7 @@ const Titles = styled.div`
 
   a {
     font-family: 'Gilroy-Medium', sans-serif;
-    background-color: #404040;
+    background-color: #202225;
     text-decoration: none;
     color: #ffffff;
     padding: 0.7rem 1.1rem 0.7rem 1.5rem;

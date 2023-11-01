@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import { BsFillPlayFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -38,7 +36,7 @@ function Carousel({ images }) {
                   src={
                     item.cover !== item.image
                       ? item.cover
-                      : "https://cdn.discordapp.com/attachments/985501610455224389/1041877819589927014/Miruro_Public_Preview.png?ex=65404f55&is=652dda55&hm=d9cf0985dbbea351c30d1f647046b36d3b343705f29fb066c5cf9b9f8dfd06b3"
+                      : "/src/assets/img/Cover.png"
                   }
                   alt=""
                   style={coverStyleMobile}
@@ -49,7 +47,7 @@ function Carousel({ images }) {
                   src={
                     item.cover !== item.image
                       ? item.cover
-                      : "https://cdn.discordapp.com/attachments/985501610455224389/1041877819589927014/Miruro_Public_Preview.png?ex=65404f55&is=652dda55&hm=d9cf0985dbbea351c30d1f647046b36d3b343705f29fb066c5cf9b9f8dfd06b3"
+                      : "/src/assets/img/Cover.png"
                   }
                   alt=""
                   style={bannerImgStyle}
@@ -60,14 +58,38 @@ function Carousel({ images }) {
                   {width <= 600 && (
                     <p>
                       {item.title.english
-                        ? item.title.english.length > 35
-                          ? item.title.english.substring(0, 35) + "..."
+                        ? item.title.english.length > 50
+                          ? `${item.title.english.substring(0, 50)} ...`
                           : item.title.english
                         : item.title.english}
                     </p>
                   )}
-                  {width > 600 && (
-                    <p>{item.title.english ? item.title.english : ""}</p>
+                   {width > 600 && width <= 850 && (
+                    <p>
+                      {item.title.english
+                        ? item.title.english.length > 15
+                          ? `${item.title.english.substring(0, 15)} ...`
+                          : item.title.english
+                        : item.title.english}
+                    </p>
+                  )}
+                  {width > 850 && width <= 1200 && (
+                    <p>
+                      {item.title.english
+                        ? item.title.english.length > 35
+                          ? `${item.title.english.substring(0, 35)} ...`
+                          : item.title.english
+                        : item.title.english}
+                    </p>
+                  )}
+                  {width > 1200 && (
+                    <p>
+                      {item.title.english
+                        ? item.title.english.length > 65
+                          ? `${item.title.english.substring(0, 65)} ...`
+                          : item.title.english
+                        : item.title.english}
+                    </p>
                   )}
 
                   {width <= 600 && (

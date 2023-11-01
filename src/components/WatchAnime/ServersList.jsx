@@ -29,7 +29,7 @@ function ServersList({ episodeLinks, currentServer, setCurrentServer }) {
                       currentServer === episodeLinks[0][server]
                         ? {
                             backgroundColor: '#FFFFFF',
-                            color: '#23272A',
+                            color: '#292b2f',
                           }
                         : {}
                     }
@@ -56,8 +56,8 @@ const ServerWrapper = styled.div`
 
   .server-wrapper {
     padding: 1rem;
-    background-color: #23272a;
-    border: 1px solid #808080;
+    background-color: #292b2f;
+    border: 1px solid #303436;
     border-radius: 0.4rem;
     box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81);
   }
@@ -75,8 +75,8 @@ const ServerWrapper = styled.div`
     cursor: pointer;
     outline: none;
     color: #ffffff;
-    background-color: #808080;
-    border: 1px solid #404040;
+    background-color: #303436;
+    border: 1px solid #202225;
     padding: 0.7rem 1.5rem;
     border-radius: 0.4rem;
     font-family: 'Gilroy-Medium', sans-serif;

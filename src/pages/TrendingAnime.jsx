@@ -31,7 +31,7 @@ function TrendingAnime() {
 
   // Effect to fetch more anime data when scrolling
   useEffect(() => {
-    if (!isFetching || currentPage >= 3 || loadedAllPages) return;
+    if (!isFetching || currentPage >= 5 || loadedAllPages) return;
 
     getAnime(currentPage + 1);
   }, [isFetching, currentPage, loadedAllPages]);
@@ -71,7 +71,7 @@ function TrendingAnime() {
       const response = await axios.get(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }meta/anilist/trending?page=${page}&perPage=30`
+        }meta/anilist/trending?page=${page}&perPage=50`
       );
 
       if (response.data && response.data.results) {
@@ -89,7 +89,7 @@ function TrendingAnime() {
       setLoading(false);
       setIsFetching(false);
 
-      if (currentPage >= 2) {
+      if (currentPage >= 4) {
         setHasMore(false);
         setLoadedAllPages(true);
       }

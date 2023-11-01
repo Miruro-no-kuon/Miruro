@@ -8,18 +8,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "/src/assets/logo-tr.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192 512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#23272A",
-  "background_color": "#23272A"
+  "theme_color": "#292b2f",
+  "background_color": "#292b2f"
 }

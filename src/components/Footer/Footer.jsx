@@ -17,9 +17,8 @@ const Footer = () => {
         <Row>
           <Column>
             <img
-              src="https://cdn.discordapp.com/attachments/985501610455224389/1041882683166445699/logo2.png"
+              src="/src/assets/logo2.png"
               width="130"
-              alt="Akio"
             />
             <Heading>MIRURO</Heading>
           </Column>

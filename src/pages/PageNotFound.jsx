@@ -11,11 +11,11 @@ function PageNotFound({ changeMetaArr }) {
 
   useEffect(() => {
     const array = [
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194302680219678/14.png",
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095443853322/5.png",
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663454363658/24.png",
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045197663156584468/23.png",
-      "https://cdn.discordapp.com/attachments/985501610455224389/1045194095007629372/4.png",
+      "/assets/Error 404 Illustrations 2.0/PNG/14.png",
+      "/assets/Error 404 Illustrations 2.0/PNG/5.png",
+      "/assets/Error 404 Illustrations 2.0/PNG/24.png",
+      "/assets/Error 404 Illustrations 2.0/PNG/23.png",
+      "/assets/Error 404 Illustrations 2.0/PNG/4.png",
     ];
 
     // Preload all images

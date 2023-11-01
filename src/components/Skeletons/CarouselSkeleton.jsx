@@ -14,8 +14,8 @@ function CarouselSkeleton() {
     >
       <Skeleton
         height={width <= 600 ? "270px" : "380px"}
-        baseColor={"#808080"}
-        highlightColor={"#404040"}
+        baseColor={"#303436"}
+        highlightColor={"#202225"}
         borderRadius={width <= 600 ? "0.5rem" : "0.7rem"}
       />
     </div>

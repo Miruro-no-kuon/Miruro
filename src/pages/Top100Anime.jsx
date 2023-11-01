@@ -31,7 +31,7 @@ function Top100Anime() {
 
   // Effect to fetch more anime data when scrolling
   useEffect(() => {
-    if (!isFetching || currentPage >= 3 || loadedAllPages) return;
+    if (!isFetching || currentPage >= 5 || loadedAllPages) return;
 
     getAnime(currentPage + 1);
   }, [isFetching, currentPage, loadedAllPages]);
@@ -95,7 +95,7 @@ function Top100Anime() {
       setLoading(false);
       setIsFetching(false);
 
-      if (currentPage >= 2) {
+      if (currentPage >= 4) {
         setHasMore(false);
         setLoadedAllPages(true);
       }

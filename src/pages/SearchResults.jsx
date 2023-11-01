@@ -3,61 +3,91 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/Skeletons/SearchResultsSkeleton";
+import Dropdown from "../components/Dropdown/Dropdown";
 
-// Default filter settings
-const DefaultFilter = {
-  subs: true,
-  dubs: true,
+const filterOptions = {
+  type: ["ANIME", "MANGA"],
+  season: ["WINTER", "SPRING", "SUMMER", "FALL"],
+  format: ["TV", "TV_SHORT", "OVA", "ONA", "MOVIE", "SPECIAL", "MUSIC"],
+  status: ["RELEASING", "NOT_YET_RELEASED", "FINISHED", "CANCELLED", "HIATUS"],
 };
 
-// Function to fetch search results
-const fetchSearchResults = async (query, pages = [1, 2]) => {
+const filterLabels = {
+  type: "Type:",
+  season: "Season:",
+  format: "Format:",
+  status: "Status:",
+};
+
+const fetchSearchResults = async (query, pages = [1], filters = {}) => {
   try {
-    // Fetch data from API for specified query and pages
+    const params = {
+      query: query,
+      page: pages,
+      perPage: 50,
+    };
+
+    if (filters.type) params.type = filters.type;
+    if (filters.season) params.season = filters.season;
+    if (filters.format) params.format = filters.format;
+    if (filters.status) params.status = filters.status;
+
     const responses = await Promise.all(
       pages.map((page) =>
         axios.get(
-          `${
-            import.meta.env.VITE_BACKEND_URL
-          }meta/anilist/${query}?page=${page}`
+          `${import.meta.env.VITE_BACKEND_URL}meta/anilist/advanced-search`,
+          {
+            params: params,
+          }
         )
       )
     );
-    // Flatten and return results from multiple pages
+
     const results = responses.flatMap((response) => response.data.results);
     return { results };
   } catch (error) {
-    // Handle and log errors
     console.error("Error fetching search results:", error);
     throw error;
   }
 };
 
 function SearchResults({ changeMetaArr }) {
-  // Get the search query from the URL parameters
   const { name } = useParams();
-  const urlParams = name.replace(/[:()]/g, ""); // Remove special characters from the query
-
-  // State to store search results and loading state
+  const urlParams = name.replace(/[:()]/g, "");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // State to manage the filters for dubs and subs
-  const [filter, setFilter] = useState(DefaultFilter);
+  const [selectedFilters, setSelectedFilters] = useState({
+    type: "ANIME",
+    season: "",
+    format: "",
+    status: "",
+  });
 
-  // Update the page title based on the search query
+  const updateFilters = (filterName, value) => {
+    setSelectedFilters({ ...selectedFilters, [filterName]: value });
+  };
+
+  const resetFilters = () => {
+    setSelectedFilters({
+      type: "ANIME",
+      season: "",
+      format: "",
+      status: "",
+    });
+  };
+
   useEffect(() => {
     changeMetaArr("title", `Miruro search: ${urlParams}`);
   }, [changeMetaArr, urlParams]);
 
-  // Fetch search results when the component mounts or the search query changes
   useEffect(() => {
     async function getResults() {
       setLoading(true);
       window.scrollTo(0, 0);
       try {
-        // Fetch results from specified query and pages 1, 2, and 3
-        const res = await fetchSearchResults(urlParams, [1, 2, 3]);
+        const res = await fetchSearchResults(urlParams, [1], selectedFilters);
+
         setLoading(false);
         setResults(res.results);
       } catch (error) {
@@ -66,67 +96,32 @@ function SearchResults({ changeMetaArr }) {
       }
     }
     getResults();
-  }, [urlParams]);
-
-  // Update the filter based on user selection
-  const updateSearchFilter = (ev) => {
-    const otherKey = Object.keys(filter).filter((k) => k !== ev.target.value);
-    let otherChecked = filter[otherKey];
-    if (!ev.target.checked && !otherChecked) {
-      otherChecked = true;
-    }
-    setFilter({
-      [ev.target.value]: ev.target.checked,
-      [otherKey]: otherChecked,
-    });
-  };
-
-  // Filter the results based on the selected filters
-  const filterResults = (item) => {
-    if (item.type !== null) {
-      const isDub = item.type.toLowerCase().endsWith("-dub");
-      return (
-        (filter.dubs && filter.subs) ||
-        (filter.dubs && isDub) ||
-        (filter.subs && !isDub)
-      );
-    }
-    return false;
-  };
+  }, [urlParams, selectedFilters]);
 
   return (
     <>
       {loading ? (
-        // Display loading skeleton when data is loading
         <SearchResultsSkeleton name={urlParams} />
       ) : (
-        // Display search results
         <Parent>
           <Heading>
             Search <span>{name === undefined ? "Search" : name}</span> Results
           </Heading>
-          <CheckboxWrapper>
-            {/* Filter checkboxes for dubs and subs */}
-            <label htmlFor="dubs">Dubs</label>
-            <input
-              id="dubs"
-              checked={filter.dubs}
-              onChange={updateSearchFilter}
-              type="checkbox"
-              value="dubs"
-            />
-            <label htmlFor="subs">Subs</label>
-            <input
-              id="subs"
-              checked={filter.subs}
-              onChange={updateSearchFilter}
-              type="checkbox"
-              value="subs"
-            />
-          </CheckboxWrapper>
+          <FilterContainer>
+            {Object.keys(filterOptions).map((filterKey) => (
+              <div key={filterKey}>
+                <Dropdown
+                  setCurrentRange={(value) => updateFilters(filterKey, value)}
+                  options={filterOptions[filterKey]}
+                  selected={selectedFilters[filterKey]}
+                  label={filterLabels[filterKey]}
+                />
+              </div>
+            ))}
+            <ResetButton onClick={resetFilters}>Reset Filters</ResetButton>
+          </FilterContainer>
           <CardWrapper>
-            {/* Map and display search results */}
-            {results.filter(filterResults).map((item, i) => (
+            {results.map((item, i) => (
               <Wrapper to={`/details/${item.id}`} key={i}>
                 <img className="card-img" src={item.image} alt="" />
                 <p>
@@ -147,7 +142,6 @@ function SearchResults({ changeMetaArr }) {
   );
 }
 
-// Styled components for styling the UI
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
   h2 {
@@ -158,30 +152,40 @@ const Parent = styled.div`
   }
 `;
 
-const CheckboxWrapper = styled.div`
-  color: #ffffff;
-  padding: 0.5rem 0;
-  margin-bottom: 2rem;
-  label {
-    padding-right: 0.5rem;
+const FilterContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+  @media screen and (max-width: 600px) {
+    justify-content: center;
   }
-  label:not(:first-child) {
-    margin-left: 2rem;
+`;
+
+const FilterLabel = styled.span`
+  color: #ffffff;
+  margin-right: 0.5rem;
+`;
+
+const ResetButton = styled.button`
+  background: #ff4d4d;
+  border: none;
+  color: #ffffff;
+  border-radius: 0.4rem; /* Add border-radius to match the other buttons */
+  padding: 0.5rem 1rem; /* Adjust the padding to match the other buttons */
+  cursor: pointer;
+  font-family: "Gilroy-Medium", sans-serif; /* Apply font-family */
+  font-size: 0.9rem; /* Apply font size */
+  display: flex; /* Add display and align-items properties */
+  gap: 0.4rem; /* Add gap to match the other buttons */
+  align-items: center;
+
+  &:hover {
+    background: #ff3333; /* Change the background color on hover */
   }
 `;
 
 const CardWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-flow: row wrap;
-  row-gap: 2rem;
-  column-gap: 2rem;
-
-  ::after {
-    content: "";
-    flex: auto;
-  }
-
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
   grid-gap: 1rem;
@@ -246,6 +250,7 @@ const Wrapper = styled(Link)`
       font-size: 0.9rem;
     }
   }
+}
 `;
 
 const Heading = styled.p`

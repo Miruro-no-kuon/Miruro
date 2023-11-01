@@ -20,8 +20,7 @@ export const Container = styled.div`
   img {
     border-radius: 5px;
     transition: 0.3s;
-
-    :hover {
+    &:hover {
       box-shadow: 0 0 20px rgba(150, 150, 150, 1);
     }
   }
@@ -52,7 +51,7 @@ export const FooterLink = styled.a`
   transition: color 100ms ease-in;
 
   &:hover {
-    color: #808080;
+    color: #303436;
   }
 `;
 
@@ -64,23 +63,21 @@ export const Heading = styled.p`
   font-weight: bold;
   letter-spacing: 6px;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin: 10px 0 20px;
 `;
 
 export const SectionHeading = styled.p`
-  color: #fff; // Customize the color
-  font-size: 18px; // Adjust the font size
-  font-weight: bold; // Add font weight
-  margin: 10px 0; // Adjust margin
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
 `;
 
-// Copyright style
 export const Copyright = styled.div`
   p {
-    color: #ccc; // Customize the color
-    font-size: 14px; // Adjust the font size
-    text-align: center; // Align text to the center
-    margin-top: 20px; // Adjust margin
+    color: #ccc;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
   }
 `;

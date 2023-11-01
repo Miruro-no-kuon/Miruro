@@ -11,15 +11,15 @@ function WatchAnimeSkeleton() {
       <Wrapper>
         <Skeleton
           height={40}
-          baseColor={"#808080"}
-          highlightColor={"#404040"}
+          baseColor={"#303436"}
+          highlightColor={"#202225"}
           style={{
             marginBottom: "1rem",
           }}
         />
         <Skeleton
-          baseColor={"#808080"}
-          highlightColor={"#404040"}
+          baseColor={"#303436"}
+          highlightColor={"#202225"}
           style={{
             marginBottom: "1rem",
             aspectRatio: width <= 600 ? "16 / 11" : "16 / 9",
@@ -27,8 +27,8 @@ function WatchAnimeSkeleton() {
         />
         <Skeleton
           height={40}
-          baseColor={"#808080"}
-          highlightColor={"#404040"}
+          baseColor={"#303436"}
+          highlightColor={"#202225"}
           style={{
             marginBottom: "1rem",
           }}
@@ -42,8 +42,8 @@ function WatchAnimeSkeleton() {
                   width={width <= 600 ? "5rem" : "10rem"}
                   height={width <= 600 ? 55 : 40}
                   borderRadius={"0.5rem"}
-                  baseColor={"#808080"}
-                  highlightColor={"#404040"}
+                  baseColor={"#303436"}
+                  highlightColor={"#202225"}
                 />
               </div>
             ))}

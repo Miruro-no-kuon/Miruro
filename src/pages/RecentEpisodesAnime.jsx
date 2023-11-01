@@ -34,7 +34,7 @@ function RecentEpisodesAnime() {
 
   // Use effect to fetch more anime data when scrolling
   useEffect(() => {
-    if (!isFetching || currentPage >= 3 || loadedAllPages) return;
+    if (!isFetching || currentPage >= 5 || loadedAllPages) return;
     getAnime(currentPage + 1);
   }, [isFetching, currentPage, loadedAllPages]);
 
@@ -80,7 +80,7 @@ function RecentEpisodesAnime() {
             status: "RELEASING",
             year: currentYear,
             page: page,
-            perPage: 30,
+            perPage: 50,
           },
         }
       );
@@ -100,7 +100,7 @@ function RecentEpisodesAnime() {
       setLoading(false);
       setIsFetching(false);
 
-      if (currentPage >= 2) {
+      if (currentPage >= 4) {
         setHasMore(false);
         setLoadedAllPages(true);
       }

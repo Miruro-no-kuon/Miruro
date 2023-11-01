@@ -23,13 +23,12 @@ function Search({ isActive, setIsActive }) {
   }
 
   function Keypress(event) {
-
     if (event.key === "") {
       searchEnter();
     }
   }
 
-  window.addEventListener('keypress', Keypress);
+  window.addEventListener("keypress", Keypress);
 
   return (
     <Wrapper>
@@ -103,14 +102,15 @@ function Search({ isActive, setIsActive }) {
                 }
               }}
             />
-
           </div>
           <SearchButton
             to={"/search/" + title}
             onClick={(e) => {
               setIsActive(false);
             }}
-          >SEARCH</SearchButton>
+          >
+            SEARCH
+          </SearchButton>
         </div>
       </Content>
     </Wrapper>
@@ -118,16 +118,14 @@ function Search({ isActive, setIsActive }) {
 }
 
 const Content = styled.div`
-  background-color: #111;
-  padding: 0rem 4rem 3.8rem 4rem;
+  background-color: #202225;
+  padding: 0 4rem 3.8rem 4rem;
   border-radius: 0.4rem;
 
   .main {
-    background-color: #111;
-    padding: 0.5rem;
+    background-color: #202225;
+    padding: 0.5rem 0.8rem;
     color: #fff;
-    padding-left: 1.2rem;
-    padding-right: 0.8rem;
     border-radius: 0.4rem;
     display: flex;
     justify-content: space-between;
@@ -154,7 +152,7 @@ const Content = styled.div`
 
   ::placeholder {
     color: #000;
-    background: #444;
+    background: #292b2f;
   }
 
   @media screen and (max-width: 600px) {
@@ -164,12 +162,10 @@ const Content = styled.div`
       flex-direction: column;
       background-color: transparent;
       padding: 0;
-      padding-left: 0;
-      padding-right: 0;
     }
 
     div {
-      background-color: #23272A;
+      background-color: #292b2f;
       color: #fff;
       padding: 0.3rem 1rem;
       border-radius: 0.3rem;
@@ -181,7 +177,7 @@ const Content = styled.div`
   button {
     outline: none;
     border: none;
-    background-color: #23272A;
+    background-color: #292b2f;
     color: #aaa;
     font-size: 1rem;
     padding: 0.9rem 2rem;
@@ -205,11 +201,10 @@ const Content = styled.div`
   }
 `;
 
-const SearchButton = styled(Link)`
-
+const buttonStyles = `
   outline: none;
   border: none;
-  background-color: #23272A;
+  background-color: #292b2f;
   color: #aaa;
   font-size: 1rem;
   padding: 0.9rem 2rem;
@@ -226,16 +221,19 @@ const SearchButton = styled(Link)`
     width: 100%;
     font-size: 1.2rem;
   }
+`;
 
-:hover {
-  transform: scale(1);
-  color: #fff;
-}
+const SearchButton = styled(Link)`
+  ${buttonStyles}
+  &:hover {
+    transform: scale(1);
+    color: #fff;
+  }
 `;
 
 const CloseButton = styled.div`
   display: flex;
-  background: #111;
+  background: #202225;
   justify-content: flex-end;
 
   button {
@@ -248,7 +246,7 @@ const CloseButton = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: #111;
+  background-color: #202225;
   position: absolute;
   z-index: 10;
   top: 30%;

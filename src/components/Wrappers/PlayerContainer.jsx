@@ -15,7 +15,7 @@ const PlayerContainer = styled.div`
   }
 
   button {
-    color: #202020;
+    color: #292b2f;
     outline: none;
     border: none;
     background: transparent;

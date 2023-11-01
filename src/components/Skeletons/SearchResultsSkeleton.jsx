@@ -11,20 +11,21 @@ function SearchResultsSkeleton({ name }) {
       <Heading>
         Search <span>{name === undefined ? "Search" : name}</span> Results
       </Heading>
+      <FilterLine />
       <CardWrapper>
-        {[...Array(30)].map((x, i) => (
+        {[...Array(50)].map((x, i) => (
           <div key={i}>
             <Skeleton
               width={width <= 600 ? "110px" : "160px"}
               height={width <= 600 ? "170px" : "235px"}
               borderRadius={width <= 600 ? "0.3rem" : "0.5rem"}
-              baseColor={"#808080"}
-              highlightColor={"#404040"}
+              baseColor={"#303436"}
+              highlightColor={"#202225"}
             />
             <Skeleton
               width={width <= 600 ? "110px" : "160px"}
-              baseColor={"#808080"}
-              highlightColor={"#404040"}
+              baseColor={"#303436"}
+              highlightColor={"#202225"}
               count={2}
               style={{
                 marginTop: width <= 600 ? "0.5rem" : "1rem",
@@ -83,6 +84,13 @@ const CardWrapper = styled.div`
     grid-gap: 0rem;
     grid-row-gap: 1.5rem;
   }
+`;
+
+const FilterLine = styled.hr`
+  border: none;
+  border-top: 43px solid #303436;
+  border-radius: 0.4rem;
+  margin: 2rem 0;
 `;
 
 export default SearchResultsSkeleton;
