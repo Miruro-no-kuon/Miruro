@@ -102,7 +102,7 @@ SOFTWARE.
 
 ## **Thanks For Visiting**
 
-<img src="/src/src/assets/logo2.png" width=130 align=right>
+<img src="./src/assets/logo2.png" width=130 align=right>
 
 Hope you liked it. Want to help?
 
