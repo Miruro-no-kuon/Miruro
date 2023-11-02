@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import Cover from '../../assets/img/Cover.png';
 
 function Carousel({ images }) {
   const { width } = useWindowDimensions();
@@ -33,22 +34,14 @@ function Carousel({ images }) {
             <Container>
               {width <= 600 && (
                 <img
-                  src={
-                    item.cover !== item.image
-                      ? item.cover
-                      : "/src/assets/img/Cover.png"
-                  }
+                  src={item.cover !== item.image ? item.cover : Cover}
                   alt=""
                   style={coverStyleMobile}
                 />
               )}
               {width > 600 && (
                 <img
-                  src={
-                    item.cover !== item.image
-                      ? item.cover
-                      : "/src/assets/img/Cover.png"
-                  }
+                  src={item.cover !== item.image ? item.cover : Cover}
                   alt=""
                   style={bannerImgStyle}
                 />
@@ -64,7 +57,7 @@ function Carousel({ images }) {
                         : item.title.english}
                     </p>
                   )}
-                   {width > 600 && width <= 850 && (
+                  {width > 600 && width <= 850 && (
                     <p>
                       {item.title.english
                         ? item.title.english.length > 15

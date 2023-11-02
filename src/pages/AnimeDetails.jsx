@@ -6,6 +6,7 @@ import AnimeDetailsSkeleton from "../components/Skeletons/AnimeDetailsSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import EpisodeLinksList from "../components/EpisodeLinks/EpisodeLinksList";
 import Modal from "react-modal";
+import Cover from "../assets/img/Cover.png";
 
 function AnimeDetails() {
   let slug = useParams().slug;
@@ -96,7 +97,7 @@ function AnimeDetails() {
                 src={
                   animeDetails.cover !== animeDetails.image
                     ? animeDetails.cover
-                    : "/src/assets/img/Cover.png"
+                    : Cover
                 }
                 alt=""
               />

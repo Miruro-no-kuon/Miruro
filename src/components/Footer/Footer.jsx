@@ -1,4 +1,5 @@
 import React from "react";
+import logo2 from '/src/assets/logo2.png';
 import {
   Box,
   Container,
@@ -17,7 +18,7 @@ const Footer = () => {
         <Row>
           <Column>
             <img
-              src="/src/assets/logo2.png"
+              src={logo2}
               width="130"
             />
             <Heading>MIRURO</Heading>

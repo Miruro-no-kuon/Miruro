@@ -68,6 +68,7 @@ function RecentEpisodesAnime() {
   };
 
   // Function to fetch anime data
+  // Modify the getAnime function to filter out results with currentEpisode !== null
   async function getAnime(page) {
     try {
       // Get the current year
@@ -86,9 +87,14 @@ function RecentEpisodesAnime() {
       );
 
       if (response.data && response.data.results) {
+        // Filter out results with currentEpisode !== null
+        const filteredResults = response.data.results.filter(
+          (item) => item.currentEpisode !== null
+        );
+
         setAnimeDetails((prevData) => [
           ...prevData,
-          ...response.data.results.filter((item) =>
+          ...filteredResults.filter((item) =>
             prevData.every((prevItem) => prevItem.id !== item.id)
           ),
         ]);
@@ -129,7 +135,7 @@ function RecentEpisodesAnime() {
                   item.title.userPreferred ||
                   item.title}
               </p>
-              <p>Episode: {item.totalEpisodes || "Unknown"}</p>
+              <p>Episode: {item.currentEpisode || "Unknown"}</p>
               {/* The line above displays the episode number or "Unknown Episode Number" if not available */}
             </Wrapper>
           ))}

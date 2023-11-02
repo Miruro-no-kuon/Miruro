@@ -7,6 +7,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import AnimeCards from "../components/Home/AnimeCards";
 import HomeSkeleton from "../components/Skeletons/CarouselSkeleton";
 import WatchingEpisodes from "../components/Home/WatchingEpisodes";
+import Logotr from "../assets/logo-tr.png";
 
 function Home({ changeMetaArr }) {
   const [images, setImages] = useState([]);
@@ -16,8 +17,7 @@ function Home({ changeMetaArr }) {
   const title = "Miruro";
   const content = `Miruro. An ad-free anime streaming site. Catch your favorite shows and movies right here! 
     Help us by contributing to the project on GitHub.`;
-  const image =
-    "/src/assets/logo-tr.png";
+  const image = {Logotr};
 
   useEffect(() => {
     changeMetaArr("title", title);

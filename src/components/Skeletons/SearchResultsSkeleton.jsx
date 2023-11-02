@@ -42,7 +42,7 @@ const Heading = styled.p`
   font-size: 1.8rem;
   color: #fff;
   font-family: "Gilroy-Light", sans-serif;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   span {
     font-family: "Gilroy-Bold", sans-serif;
   }
@@ -78,7 +78,6 @@ const CardWrapper = styled.div`
     grid-gap: 0rem;
     grid-row-gap: 1.5rem;
   }
-
   @media screen and (max-width: 380px) {
     grid-template-columns: repeat(auto-fill, 100px);
     grid-gap: 0rem;
@@ -90,7 +89,7 @@ const FilterLine = styled.hr`
   border: none;
   border-top: 43px solid #303436;
   border-radius: 0.4rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
 `;
 
 export default SearchResultsSkeleton;

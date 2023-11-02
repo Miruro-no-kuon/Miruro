@@ -61,7 +61,7 @@ function AnimeCards(props) {
               item.title.native ||
               item.title.userPreferred ||
               item.title.split(":")[0],
-            episodeNumber: item.totalEpisodes,
+            episodeNumber: item.currentEpisode,
             image: item.image,
             type: item.type || null, // Add the "type" property to the item or set it as null if it doesn't exist
           }));

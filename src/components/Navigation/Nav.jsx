@@ -6,6 +6,7 @@ import { FiSearch } from "react-icons/fi";
 import { IconContext } from "react-icons";
 import Search from "./Search";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import Logotr from "../../assets/logo-tr.png";
 
 function Nav() {
   // State variables
@@ -75,7 +76,7 @@ function Nav() {
         <Link to="/">
           <img
             className="logo-img"
-            src="/src/assets/logo-tr.png"
+            src={Logotr}
             alt="Miruro"
             width="100"
           />
