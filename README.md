@@ -27,8 +27,8 @@ Want to know more about us? Check out our **[Docs](https://akionii.github.io/Mir
 
 **Backend**: **[Miruro-API](https://miruro-api.vercel.app)** with /routes for trending, popular, trending anime and more! + the **[Jikan API](https://https://jikan.moe/)** for the top 100 anime /route.
 
-<img src="public/assets/img/Web.png" style="border-radius: 5px">
-<img src="public/assets/img/Web-2.png" style="border-radius: 5px">
+<img src="src/assets/img/Web.png" style="border-radius: 5px">
+<img src="src/assets/img/Web-2.png" style="border-radius: 5px">
 
 ---
 
