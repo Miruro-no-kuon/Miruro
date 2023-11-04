@@ -2,13 +2,13 @@
   "name": "miruro",
   "version": "0.0.0",
   "author": "akionii",
-  "private": "true",
+  "private": true,
   "dependencies": {
     "@consumet/extensions": "^1.5.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@vitejs/plugin-react": "^4.1.1",
+    "@vitejs/plugin-react": "^4.1.0",
     "axios": "^1.4.0",
     "hls.js": "^1.4.0",
     "plyr": "^3.7.8",
@@ -62,7 +62,6 @@
   },
   "devDependencies": {
     "nth-check": ">=2.0.1",
-    "postcss": ">=8.4.31",
     "prettier": "3.0.3"
   }
 }
