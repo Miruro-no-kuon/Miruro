@@ -25,7 +25,7 @@ Miruro is an Anime Streaming Site with minimal UI and ad-free anime streaming ex
 
 Want to know more about us? Check out our **[Docs](https://akionii.github.io/Miruro/docs)**!
 
-**Backend**: **[Miruro-API](https://miruro-api.vercel.app)** with /routes for trending, popular, trending anime and more! + the **[Jikan API](https://https://jikan.moe/)** for the top 100 anime /route.
+**Backend**: **[Miruro-API](https://miruro-api.vercel.app)** with /routes for trending, popular, trending anime and more! + the **[Jikan API](https://jikan.moe/)** for the top 100 anime /route.
 
 <img src="src/assets/img/Web.png" style="border-radius: 5px">
 <img src="src/assets/img/Web-2.png" style="border-radius: 5px">
