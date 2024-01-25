@@ -1,0 +1,138 @@
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+temp/
+out/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.sw?
+*.swo
+*.swn
+*.swp
+*.bak
+*.orig
+
+# Operating System generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package manager lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Compiled binary addons (node-gyp)
+build/Release/
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# PyCharm
+*.pyc
+
+# JetBrains IDEs (IntelliJ, PyCharm, etc)
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/settings.json
+
+# Visual Studio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Vim swap files
+*.sw?
+
+# Backup files
+*.bak
+
+# Tern project files
+.tern-project
+
+# Temporary files
+*~
+*.tmp
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Next.js build output
+.next/
+
+# Nuxt.js build output
+.nuxt/
+
+# VuePress build output
+.vuepress/dist/
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Storybook build outputs
+storybook-static/
+
+# Parcel cache
+.cache/
+
+# ESLint cache
+.eslintcache
+
+# Stylelint cache
+.stylelintcache
+
+# Temporary folders
+tmp/
+temp/
