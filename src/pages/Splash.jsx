@@ -9,9 +9,9 @@ import {
   FaComments,
   FaInfoCircle,
 } from "react-icons/fa";
-import Banner from "/src/assets/one_piece_banner.jpg";
+import Banner from "/src/assets/banner-one_piece.jpg";
+import Logo from "/src/assets/miruro-text-transparent-white.png";
 
-// Define CSS variables
 const variables = {
   textColor: "var(--global-text)",
   buttonBackgroundColor: "var(--global-button-bg)",
@@ -19,7 +19,7 @@ const variables = {
   buttonHoverBackgroundColor: "var(--global-button-hover-bg)",
   adBackgroundColor: "var(--global-ad-bg)",
   customColor: "var(--your-custom-color)",
-  paddingSize: "1.5rem", // You can adjust the padding size
+  paddingSize: "1.5rem",
 };
 
 const fadeIn = keyframes`
@@ -76,12 +76,18 @@ const Content = styled.div`
 
 const Title = styled.h1`
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin: 2rem 0 2rem 0;
   font-weight: bold;
+`;
+
+const SplashLogo = styled.img`
+  max-width: 15rem;
+  left: -5rem;
 `;
 
 const Subtitle = styled.p`
   font-size: 1.5rem;
+  margin: 1rem 0;
 `;
 
 const Button = styled(Link)`
@@ -119,7 +125,7 @@ const Keyword = styled.span`
 `;
 
 const Paragraph = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: ${variables.paddingSize};
   line-height: 1.6;
   color: ${variables.textColor};
@@ -130,7 +136,7 @@ const MainContent = styled.div`
   margin: 0 auto;
   padding: ${variables.paddingSize};
   color: ${variables.textColor};
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.6;
 `;
 
@@ -151,9 +157,9 @@ const sections = [
     title: "What's Miruro?",
     content: (
       <Paragraph>
-        Miruro is an anime streaming site where you can
-        watch anime online in HD quality with English subtitles or
-        dubbing. You can also download any anime you want without registration.
+        Miruro is an anime streaming site where you can watch anime online in HD
+        quality with English subtitles or dubbing. You can also download any
+        anime you want without registration.
       </Paragraph>
     ),
   },
@@ -227,8 +233,8 @@ const sections = [
     content: (
       <>
         <Paragraph>
-          To start using Miruro and enjoy anime streaming, follow these
-          simple steps:
+          To start using Miruro and enjoy anime streaming, follow these simple
+          steps:
         </Paragraph>
         <ol>
           <li>
@@ -243,9 +249,7 @@ const sections = [
             Choose your preferred streaming quality and language (subtitles or
             dubbing).
           </li>
-          <li>
-            Click on the play button to start watching your chosen anime.
-          </li>
+          <li>Click on the play button to start watching your chosen anime.</li>
           <li>
             Feel free to explore other features, such as downloading episodes
             and joining our anime-loving community.
@@ -306,12 +310,15 @@ function Splash() {
       <Card>
         <BannerImage />
         <Content>
-          <Title>見るろ の 久遠</Title>
+          <Title>
+            <SplashLogo src={Logo} alt="Footer Logo" />
+          </Title>
           <Button to="/home">
             Go to homepage <FaArrowRight />
           </Button>
           <Subtitle>
-           <Keyword>Miruro no Kuon</Keyword>: Where Every Moment is an <Keyword>Eternal Adventure</Keyword>
+            <Keyword>Miruro no Kuon</Keyword>: Where Every Moment is an{" "}
+            <Keyword>Eternal Adventure</Keyword>
           </Subtitle>
         </Content>
       </Card>
@@ -320,18 +327,14 @@ function Splash() {
           <div key={index}>
             {section.title && (
               <>
-                <Advertising>Advertisements here</Advertising>
+                <Advertising>* Advertisements here *</Advertising>
                 <strong>{section.title}</strong>
               </>
             )}
             {section.content}
           </div>
         ))}
-        <Paragraph>
-          For a good and safe place to watch anime online, give Miruro
-          a try. Share it with your friends and bookmark our site if you like
-          what we offer.
-        </Paragraph>
+        <Paragraph>{/* Final paragraph content */}</Paragraph>
       </MainContent>
     </>
   );

@@ -123,7 +123,7 @@ const GenreButton = styled.div`
         : lighten(0.35, props.color)
       : "var(--genre-button-color)";
   }};
-`;
+}`;
 
 // Function to strip HTML tags
 const stripHtmlTags = (html) => {
@@ -134,69 +134,71 @@ const stripHtmlTags = (html) => {
 
 // InfoPopupContent component
 
-const InfoPopupContent = ({
-  title,
-  description,
-  genres,
-  $isPositionedLeft,
-  color,
-  type,
-  status,
-  totalEpisodes,
-  releaseDate,
-  cover,
-  maxDescriptionLength,
-}) => {
-  const strippedDescription = stripHtmlTags(description);
+const InfoPopupContent = React.memo(
+  ({
+    title,
+    description,
+    genres,
+    $isPositionedLeft,
+    color,
+    type,
+    status,
+    totalEpisodes,
+    releaseDate,
+    cover,
+    maxDescriptionLength,
+  }) => {
+    const strippedDescription = stripHtmlTags(description);
 
-  const limitedGenres = genres.slice(0, 3);
-  const truncatedDescription =
-    strippedDescription?.length > maxDescriptionLength
-      ? `${strippedDescription.slice(0, maxDescriptionLength)}...`
-      : strippedDescription;
+    const limitedGenres = genres.slice(0, 3);
+    const truncatedDescription =
+      strippedDescription?.length > maxDescriptionLength
+        ? `${strippedDescription.slice(0, maxDescriptionLength)}...`
+        : strippedDescription;
 
-  const uppercaseStatus = status?.toUpperCase() || "";
+    const uppercaseStatus = status?.toUpperCase() || "";
 
-  const iconMap = {
-    faTv: <FontAwesomeIcon icon={faTv} className="icon" />,
-    faClosedCaptioning: (
-      <FontAwesomeIcon icon={faClosedCaptioning} className="icon" />
-    ),
-    faCheck: <FontAwesomeIcon icon={faCheck} className="icon" />,
-    faCalendarAlt: <FontAwesomeIcon icon={faCalendarAlt} className="icon" />,
-  };
+    const iconMap = {
+      faTv: <FontAwesomeIcon icon={faTv} className="icon" />,
+      faClosedCaptioning: (
+        <FontAwesomeIcon icon={faClosedCaptioning} className="icon" />
+      ),
+      faCheck: <FontAwesomeIcon icon={faCheck} className="icon" />,
+      faCalendarAlt: <FontAwesomeIcon icon={faCalendarAlt} className="icon" />,
+    };
 
-  return (
-    <InfoPopup
-      $isPositionedLeft={$isPositionedLeft}
-      color={color}
-      cover={cover}
-    >
-      <PopUpContent color={color}>
-        <div className="title-div">{title}</div>
-        {type && totalEpisodes && status && (
-          <p>
-            {iconMap.faTv}
-            {type} <span className="separator-span"> | </span>
-            {iconMap.faClosedCaptioning}
-            {totalEpisodes} <span className="separator-span"> | </span>
-            {iconMap.faCheck}
-            {uppercaseStatus} <span className="separator-span"> | </span>
-            {iconMap.faCalendarAlt}
-            {releaseDate}
-          </p>
-        )}
-        {truncatedDescription && <p>{truncatedDescription}</p>}
-        <div>
-          {limitedGenres.map((genre, index) => (
-            <GenreButton key={index} color={color}>
-              {genre}
-            </GenreButton>
-          ))}
-        </div>
-      </PopUpContent>
-    </InfoPopup>
-  );
-};
+    return (
+      <InfoPopup
+        $isPositionedLeft={$isPositionedLeft}
+        color={color}
+        cover={cover}
+      >
+        <PopUpContent color={color}>
+          <div className="title-div">{title}</div>
+          {type && totalEpisodes && status && (
+            <p>
+              {iconMap.faTv}
+              {type} <span className="separator-span"> | </span>
+              {iconMap.faClosedCaptioning}
+              {totalEpisodes} <span className="separator-span"> | </span>
+              {iconMap.faCheck}
+              {uppercaseStatus} <span className="separator-span"> | </span>
+              {iconMap.faCalendarAlt}
+              {releaseDate}
+            </p>
+          )}
+          {truncatedDescription && <p>{truncatedDescription}</p>}
+          <div>
+            {limitedGenres.map((genre, index) => (
+              <GenreButton key={index} color={color}>
+                {genre}
+              </GenreButton>
+            ))}
+          </div>
+        </PopUpContent>
+      </InfoPopup>
+    );
+  }
+);
 
 export default InfoPopupContent;

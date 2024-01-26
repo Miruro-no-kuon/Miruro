@@ -13,11 +13,26 @@ const GridContainer = styled.div`
   margin: 0 auto;
   display: grid;
   position: relative;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
   grid-template-rows: auto;
-  gap: 1.25rem;
-
+  gap: 1.75rem;
   transition: grid-template-columns 0.5s ease-in-out;
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(10rem, 1fr)
+    ); // smaller columns on tablets and smaller devices
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(9rem, 1fr)
+    ); // even smaller columns on mobile devices
+    gap: 1rem;
+  }
 `;
 
 const SearchResults = () => {

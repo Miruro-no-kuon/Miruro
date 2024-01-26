@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
 import InfoPopupContent from "./InfoPopup";
 import TitleComponent from "./TitleDisplay";
@@ -34,47 +34,29 @@ const StyledCardItem = styled.div`
   transition: 0.2s;
 `;
 
-const CardItemContent = ({ anime }) => {
-  const [hoverState, setHoverState] = useState({
-    isHovered: false,
-    isPositionedLeft: true,
-  });
-  const [showInfoPopup, setShowInfoPopup] = useState(false); // Added state to control popup visibility
+const CardItemContent = React.memo(({ anime, onHover, onLeave, isHovered }) => {
   const { width } = useWindowDimensions();
+  const cardRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleCardHover = useCallback(() => {
-    const cardPosition = getElementPosition(cardRef.current);
-    const isLeft = cardPosition.left < width / 2;
-    setHoverState((prevState) => ({
-      ...prevState,
-      isPositionedLeft: isLeft,
-    }));
-
-    // Set a delay (e.g., 500ms) before showing the InfoPopupContent
-    const delayTimeout = setTimeout(() => {
-      setShowInfoPopup(true);
-    }, 0);
-
-    // Clear the timeout if the user moves the cursor out before the delay
-    return () => clearTimeout(delayTimeout);
+  React.useEffect(() => {
+    if (cardRef.current) {
+      const cardPosition = getElementPosition(cardRef.current);
+      const isLeft = cardPosition.left < width / 2;
+      // No need to maintain hoverState state, compute directly in InfoPopupContent
+    }
   }, [width]);
 
-  const handleCardClick = useCallback(() => {
+  const handleCardClick = () => {
+    // Use React Router's navigate function for navigation
     navigate(`/watch/${anime.id}`);
-  }, [anime.id, navigate]);
-
-  const cardRef = React.useRef(null);
+  };
 
   return (
     <StyledCardWrapper
       onClick={handleCardClick}
-      onMouseEnter={() => setHoverState({ ...hoverState, isHovered: true })}
-      onMouseLeave={() => {
-        setHoverState({ ...hoverState, isHovered: false });
-        setShowInfoPopup(false); // Hide the popup when the cursor leaves
-      }}
-      onMouseOver={handleCardHover}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
       color={anime.color}
     >
       <StyledCardItem ref={cardRef}>
@@ -85,21 +67,22 @@ const CardItemContent = ({ anime }) => {
           totalEpisodes={anime.totalEpisodes}
           rating={anime.rating}
           color={anime.color}
-          $ishovered={hoverState.isHovered}
+          $ishovered={isHovered}
         />
 
-        <TitleComponent
-          $ishovered={hoverState.isHovered}
-          anime={anime}
-        />
+        <TitleComponent $ishovered={isHovered} anime={anime} />
       </StyledCardItem>
 
-      {hoverState.isHovered && showInfoPopup && (
+      {isHovered && (
         <InfoPopupContent
           title={anime.title.userPreferred}
           description={anime.description}
           genres={anime.genres}
-          $isPositionedLeft={hoverState.isPositionedLeft}
+          // Pass the position directly, if needed
+          $isPositionedLeft={
+            cardRef.current &&
+            getElementPosition(cardRef.current).left < width / 2
+          }
           color={anime.color}
           type={anime.type}
           status={anime.status}
@@ -113,6 +96,6 @@ const CardItemContent = ({ anime }) => {
       )}
     </StyledCardWrapper>
   );
-};
+});
 
 export default CardItemContent;

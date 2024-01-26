@@ -146,7 +146,7 @@ export async function fetchAnimeData(
 }
 
 export async function fetchAnimeEpisodes(id) {
-  const preferredProviders = ["zoro", "gogoanime", "animepache"];
+  const preferredProviders = ["gogoanime", "zoro", "animepache"];
 
   try {
     for (const providerId of preferredProviders) {
