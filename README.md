@@ -1,58 +1,25 @@
 <div align="center">
-  <a href="https://your-website-url">
-    <img src="https://your-logo-url" alt="logo" width="180"/>
+  <a>
+    <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro-no-Kuon/%F0%9F%8C%8A-MiruroNoKuon-%F0%9F%8F%94%EF%B8%8F-Rise/src/assets/miruro-banner.png" alt="logo" width="700"/>
   </a>
 </div>
 
 <h1 align="center">
-  <a href="https://your-website-url">Your Anime Streaming Website</a>
+    <a href="https://miruro.com">Miruro</a>
 </h1>
 
-<p align="center">
-  <i>Migrating to TypeScript! More active development <a href="https://github.com/YourGitHubUsername/YourRepoName/tree/beta">on the beta branch</a></i>
-
-<br />
-<br />
-
- <a href="https://github.com/YourGitHubUsername/YourRepoName/blob/main/LICENSE.md">
-    <img src="https://img.shields.io/github/license/YourGitHubUsername/YourRepoName" alt="license"/>
-  </a>
-  <a href="https://github.com/YourGitHubUsername/YourRepoName/fork">
-    <img src="https://img.shields.io/github/forks/YourGitHubUsername/YourRepoName?style=social" alt="fork"/>
-  </a>
-  <a href="https://github.com/YourGitHubUsername/YourRepoName">
-    <img src="https://img.shields.io/github/stars/YourGitHubUsername/YourRepoName?style=social" alt="stars"/>
-  </a>
-  
-</p>
-
-<p align="center">
- <img src="https://placeholder-image-url" alt="main">
-</p>
-
 <details>
-<summary>More Screenshots</summary>
 
-<h3 align="center">Home page after you login</h3>
-<img src="https://placeholder-image-url"/>
-
-<h3 align="center">Profile Page</h3>
-<img src="https://placeholder-image-url"/>
-
-<h3 align="center">Info page for PC/Mobile</h3>
-<p align="center">
-<img src="https://placeholder-image-url"/>
-</p>
-
+<h3 align="center">Splash Page</h3>
+<img src=""/>
+<h3 align="center">Home Page</h3>
+<img src=""/>
 <h3 align="center">Watch Page</h3>
-<p align="center">Normal Mode</p>
-<img src="https://placeholder-image-url"/>
-<br/>
-<p align="center">Theater Mode</p>
-<img src="https://placeholder-image-url"/>
- 
-<h3 align="center">Manga Reader</h3>
-<img src="https://placeholder-image-url"/>
+<img src=""/>
+<h3 align="center">Footer</h3>
+<img src=""/>
+<h3 align="center">Info Page</h3>
+<img src=""/>
 
 </details>
 
@@ -60,7 +27,7 @@
 
 ## Introduction
 
-<p><a href="https://your-website-url">Your Website Name</a> is an anime streaming website made possible by the <a href="https://github.com/consumet">Consumet API</a>, built with <a href="https://github.com/vercel/next.js/">Next.js</a> and <a href="https://github.com/tailwindlabs/tailwindcss">Tailwind</a>, featuring a sleek and modern design. It offers Anilist integration to help you keep track of your favorite anime series. Your Website Name is entirely free and does not display any ads, making it a great option for those who want an uninterrupted viewing experience.</p>
+<p><a href="https://miruro.com">Miruro</a> is an anime streaming website made possible by the <a href="https://github.com/consumet">Consumet API</a>, built with  <a href="https://react.dev/">React⚛️</a> and <a href="https://vitejs.dev/">Vite⚡</a>, featuring a sleek and modern design. It offers Anilist integration to help you keep track of your favorite anime series. Your Website Name is entirely free and does not display any ads, making it a great option for those who want an uninterrupted viewing experience.</p>
 
 ## Features
 
@@ -68,10 +35,7 @@
   - Free ad-supported streaming service
   - Dub Anime support
   - User-friendly interface
-  - Auto sync with AniList
   - Add Anime/Manga to your AniList
-  - Scene Searching powered by [trace.moe](https://trace.moe)
-  - PWA supported
   - Mobile responsive
   - Fast page load
 - Watch Page
@@ -81,93 +45,74 @@
     - Theater mode
   - Comment section
 - Profile page to see your watch list
-
-## To Do List
-
-- [x] Add PWA support
-- [x] Connect to consumet API to fetch episodes data
-- [x] Implement skip op/ed button on supported anime
-- [x] Create README file
-- [x] Integrate Anilist API for anime tracking
-  - [x] Ability to auto track anime after watching >= 90% through the video
-  - [x] Create a user profile page to see lists of anime watched
-  - [x] Ability to edit list inside detail page
-- [x] Working on Manga pages
+- Profile page to see your continue watching
+- Check new commits to see new features and changes!
 
 ## Bug Report
 
-If you encounter any issues or bug on the site please head to [issues](https://github.com/YourGitHubUsername/YourRepoName/issues) and create a bug report there.
+If you encounter any issues or bug on the site please head to [issues](https://github.com/Miruro-no-kuon/Miruro-no-Kuon/issues) and create a bug report there.
 
 ## For Local Development
 
 > If you want to self-host this app, please note that it is only allowed for personal use. Commercial use is not permitted, and including ads on your self-hosted site may result in actions such as site takedown.
 
-1. Clone this repository using :
+### 1. Clone this repository using :
 
 ```bash
-git clone https://github.com/YourGitHubUsername/YourRepoName.git
+git clone https://github.com/Miruro-no-kuon/Miruro-no-Kuon.git
 ```
 
-2. Install package using npm :
+### 2. Install dependencies (Its recommended to run it on bun but it can run on npm)
 
-```bash
-npm install
-```
+####    Install Node.js and npm
+- [Download Node.js](https://nodejs.org/)
+- Verify the installation: node -v /// npm -v
+####    Install Bun
+    npm install --save-dev webpack webpack-cli
+#### Install React
+    npm install react react-dom
+#### Install Vite
+    npm install --save-dev create-vite
 
-3. Create `.env` file in the root folder and put this inside the file :
+### 3. Create `.env` file in the root folder and put this inside the file :
 
 ```bash
 ## AniList
-CLIENT_ID="get the id from here https://anilist.co/settings/developer"
-CLIENT_SECRET="get the secret from here https://anilist.co/settings/developer"
-GRAPHQL_ENDPOINT="https://graphql.anilist.co"
+# VITE_BACKEND_URL: The base URL of the primary backend server.
+# Set this to the URL of your primary backend server in a production environment.
+# Example: VITE_BACKEND_URL="https://api.consumet.org"
+VITE_BACKEND_URL="https://api.consumet.org"
 
-## NextAuth
-NEXTAUTH_SECRET='run this cmd in your bash terminal (openssl rand -base64 32) with no bracket, and paste it here'
-NEXTAUTH_URL="for development use http://localhost:3000/ and for production use your domain url"
+# VITE_BACKEND_URL_2: The base URL of a secondary backend server (if applicable).
+# You can use a secondary backend server for specific features or redundancy.
+# Set this to the URL of your secondary backend server in a production environment.
+# Example: VITE_BACKEND_URL_2="https://api.anify.tv/"
+# Note: You have a commented out local development URL, which is useful for testing locally.
+# Example (local development): VITE_BACKEND_URL_2="http://localhost:3060/"
+VITE_BACKEND_URL_2="https://api.anify.tv/"
 
-## NextJS
-PROXY_URI="This is what I use for proxying video https://github.com/chaycee/M3U8Proxy. Don't put / at the end of the url."
-API_URI="host your own API from this repo https://github.com/consumet/api.consumet.org. Don't put / at the end of the url."
-DISQUS_SHORTNAME='put your disqus shortname here (optional)'
+# VITE_API_KEY: Your API key for authentication with the backend servers.
+# Set this to your actual API key in a production environment.
+# Example: VITE_API_KEY="12345678-12345678-12345678"
+VITE_API_KEY=""
 
-## Prisma
-DATABASE_URL="Your postgresql connection url"
+# PORT: The port number on which your server (if applicable) should listen.
+# Set this to the desired port number in a production environment.
+# Example: PORT=5173
+PORT=5173
 
-## Redis
-# If you don't want to use redis, just comment the REDIS_URL (press ctrl + / on windows or cmd + / on mac)
-REDIS_URL="rediss://username:password@host:port"
+# IS_SERVERLESS: A flag indicating whether the application is running in a serverless environment.
+# Set this to "true" when deploying your application as a serverless function (e.g., on Vercel).
+# Set this to "false" when running your application on a traditional server.
+# Example (serverless environment): IS_SERVERLESS=true
+IS_SERVERLESS=false
 ```
 
-4. Add this endpoint as Redirect Url on AniList Developer :
+### 4. Start local server :
 
 ```bash
-https://your-website-domain/api/auth/callback/AniListProvider
+bun run dev
 ```
-
-5. Generate Prisma :
-
-```bash
-npx prisma migrate dev
-npx prisma generate
-
-### NOTE
-# If you get a vercel build error related to prisma that says prisma detected but no initialized just change the following line in package.json line number 8
-"build": "next build" to > "build": "npx prisma migrate deploy && npx prisma generate && next build"
-```
-
-6. Start local server :
-
-```bash
-npm run dev
-```
-
-## Credits
-
-- [Consumet API](https://github.com/consumet/api.consumet.org) for anime sources
-- [AniList API](https://github.com/AniList/ApiV2-GraphQL-Docs) for anime details source
-- [Anify API](https://anify.tv/discord) for manga sources
-- [miru](https://github.com/ThaUnknown/miru/) for inspiring me making this site
 
 ## License
 
@@ -179,15 +124,17 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 Thank You for passing by!!
 
-If you have any questions or feedback, please reach out to us at [contact@your-website-url](mailto:contact@your-website-url?subject=[YourWebsite]%20-%20Your%20Subject), or you can join our [discord sever](https://discord.gg/your-discord-link).
-<br>
-or you can DM me on Discord `YourDiscordUsername#1234`.
+If you have any questions or feedback, please reach out to us at [miruro@proton.me](mailto:miruro@proton.me), or you can join our [Discord Sever](https://discord.com/invite/4kfypZ96K4).
 
-[![Discord Banner](https://discordapp.com/api/guilds/your-discord-server-id/widget.png?style=banner2)](https://discord.gg/your-discord-link)
+
+- Visit our website at **[miuro.com](https://miruro.com)**
+  
+- Join our **[Discord](https://discord.gg/4kfypZ96K4)**
+
+- Follow us on **[Twitter](https://twitter.com/miruro_official)** 
+
+- Join our **[Subreddit](https://www.reddit.com/r/miruro)**
 
 ## Support This Project
 
-✨ [Star this project](https://github.com/YourGitHubUsername/YourRepoName)
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/your-ko-fi-link)  
-<a href="https://trakteer.id/your-trakteer-id" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-5.png" height="36" style="border: 0px; height: 36px;" alt="Trakteer Saya"></a>
+✨ [Star this project](https://github.com/Miruro-no-kuon/Miruro-no-Kuon)
