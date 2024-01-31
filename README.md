@@ -1,6 +1,6 @@
 <div align="center">
   <a>
-    <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro-no-Kuon/%F0%9F%8C%8A-MiruroNoKuon-%F0%9F%8F%94%EF%B8%8F-Rise/src/assets/miruro-banner.png" alt="logo" width="700"/>
+    <img src="https://github.com/Miruro-no-kuon/Miruro-no-Kuon/blob/%F0%9F%8C%8A-MiruroNoKuon-%F0%9F%8F%94%EF%B8%8F-Rise/src/assets/banner-one_piece.jpg" alt="logo" width="700"/>
   </a>
 </div>
 
