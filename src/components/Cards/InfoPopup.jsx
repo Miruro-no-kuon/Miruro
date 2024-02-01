@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTv,
   faClosedCaptioning,
-  faCheck,
   faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -61,8 +60,7 @@ const InfoPopup = styled.div`
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(10px);
-  background-image: url("${(props) => props.cover}");
-  background-size: cover;
+  background-image: url("${(props) => props.$cover}");
   background-position: center;
   box-shadow: 0.3125rem 0.3125rem 0.625rem var(--global-card-shadow);
 
@@ -163,7 +161,6 @@ const InfoPopupContent = React.memo(
       faClosedCaptioning: (
         <FontAwesomeIcon icon={faClosedCaptioning} className="icon" />
       ),
-      faCheck: <FontAwesomeIcon icon={faCheck} className="icon" />,
       faCalendarAlt: <FontAwesomeIcon icon={faCalendarAlt} className="icon" />,
     };
 
@@ -171,7 +168,7 @@ const InfoPopupContent = React.memo(
       <InfoPopup
         $isPositionedLeft={$isPositionedLeft}
         color={color}
-        cover={cover}
+        $cover={cover}
       >
         <PopUpContent color={color}>
           <div className="title-div">{title}</div>
@@ -181,7 +178,6 @@ const InfoPopupContent = React.memo(
               {type} <span className="separator-span"> | </span>
               {iconMap.faClosedCaptioning}
               {totalEpisodes} <span className="separator-span"> | </span>
-              {iconMap.faCheck}
               {uppercaseStatus} <span className="separator-span"> | </span>
               {iconMap.faCalendarAlt}
               {releaseDate}

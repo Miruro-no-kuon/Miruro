@@ -11,6 +11,7 @@
     "start": "vite build && cd server && bun run server.js"
   },
   "dependencies": {
+    "@cloudflare/wrangler": "^1.21.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -43,6 +44,7 @@
     "react-router-dom": "^6.21.3",
     "scrollreveal": "^4.0.9",
     "styled-components": "^6.1.0",
+    "swiper": "^11.0.5",
     "tailwindcss": "^3.3.5",
     "video.js": "^8.6.1",
     "vite-plugin-checker": "^0.6.2",

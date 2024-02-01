@@ -7,10 +7,8 @@ const TitleContainer = styled.div`
   padding: 0.5rem;
   margin-top: 0.35rem;
   border-radius: 0.2rem;
-  background: ${(props) =>
-    props.$ishovered ? "var(--global-card-title-bg)" : "transparent"};
-  transition: background 0.1s;
   cursor: pointer;
+  transition: background 0.2s ease;
 
   &:hover {
     background: var(--global-card-title-bg);
@@ -40,10 +38,9 @@ const Title = styled.h5`
   white-space: nowrap;
   text-overflow: ellipsis;
   color: ${(props) => (props.$ishovered ? props.color : "var(--title-color)")};
-  transition: color 0.1s;
 
   &:hover {
-    color: var(--title-hover-color);
+    transition: 0.1s ease;
   }
 `;
 
@@ -51,12 +48,19 @@ const TitleComponent = ({ $ishovered, anime }) => {
   const truncateTitle = (title, maxLength) =>
     title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
 
+  // Use optional chaining and provide a default value
+  const displayTitle =
+    anime.title?.english || anime.title?.romaji || "No Title";
+
   return (
     <TitleContainer $ishovered={$ishovered}>
-      {anime.status === "Ongoing" && <Dot />}
-      {anime.status === "Completed" && <CompletedIndicator />}
+      {(anime.status === "Ongoing" || anime.status === "RELEASING") && <Dot />}
+      {(anime.status === "Completed" || anime.status === "FINISHED") && (
+        <CompletedIndicator />
+      )}
+
       <Title $ishovered={$ishovered} color={anime.color}>
-        {truncateTitle(anime.title.userPreferred, 35)}
+        {truncateTitle(displayTitle, 35)}
       </Title>
     </TitleContainer>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import styled, { keyframes } from "styled-components";
 import CardItem from "./CardItem";
 import CardSkeleton from "../Skeletons/CardSkeleton";
@@ -7,22 +7,28 @@ import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 
 const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
   const hoverTimeouts = useRef({});
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setLoading(false);
       setShowLoadMoreButton(true);
-    }, 1000);
+      setLoadMoreClicked(false); // Reset the load more click state when new data is loaded
+    }, 0);
 
     return () => clearTimeout(loadingTimeout);
-  }, []);
+  }, [animeData]); // Update the dependency array to include animeData
 
-  const handleCardHover = useCallback(
-    (animeId) => {
+  const handleLoadMoreClick = () => {
+    setLoadMoreClicked(true); // Disable the button once clicked
+    onLoadMore();
+  };
+
+  const handleCardHover = useMemo(
+    () => (animeId) => {
       if (hoverTimeouts.current[animeId]) {
         clearTimeout(hoverTimeouts.current[animeId]);
       }
@@ -31,13 +37,13 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
         if (hoveredCard !== animeId) {
           setHoveredCard(animeId);
         }
-      }, 200);
+      }, 0);
     },
     [hoveredCard]
   );
 
-  const handleCardLeave = useCallback(
-    (animeId) => {
+  const handleCardLeave = useMemo(
+    () => (animeId) => {
       if (hoverTimeouts.current[animeId]) {
         clearTimeout(hoverTimeouts.current[animeId]);
       }
@@ -51,10 +57,13 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
   const renderLoadMoreButton = () => {
     if (hasNextPage && showLoadMoreButton) {
       return (
-        <LoadMoreButton onClick={onLoadMore} disabled={loadingMore}>
+        <LoadMoreButton
+          onClick={handleLoadMoreClick}
+          disabled={loading || loadMoreClicked} // Button is disabled when loading or already clicked
+        >
           <FontAwesomeIcon icon={faArrowCircleDown} className="icon" />
           <LoadMoreText>
-            {loadingMore ? "Loading..." : "Load More"}
+            {loading || loadMoreClicked ? "Loading..." : "Load More"}
           </LoadMoreText>
         </LoadMoreButton>
       );
@@ -82,16 +91,16 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
   );
 };
 
-const StyledCardGrid = styled.div`
+export const StyledCardGrid = styled.div`
   margin: 0 auto;
   display: grid;
   position: relative;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
   grid-template-rows: auto;
   gap: 1.75rem;
   transition: grid-template-columns 0.5s ease-in-out;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1200px) {
     grid-template-columns: repeat(
       auto-fill,
       minmax(10rem, 1fr)
@@ -99,10 +108,10 @@ const StyledCardGrid = styled.div`
     gap: 1.5rem;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 800px) {
     grid-template-columns: repeat(
       auto-fill,
-      minmax(9rem, 1fr)
+      minmax(8rem, 1fr)
     ); // even smaller columns on mobile devices
     gap: 1rem;
   }

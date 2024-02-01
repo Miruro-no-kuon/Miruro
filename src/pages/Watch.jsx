@@ -87,7 +87,7 @@ const Watch = () => {
         } finally {
           setLoading(false);
         }
-      }, 600); // Simulate a 0.6-second loading delay
+      }, 0);
     };
 
     fetchData();

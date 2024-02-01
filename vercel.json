@@ -22,6 +22,11 @@
       "dest": "api/proxy.js"
     },
     {
+      "src": "/api/json",
+      "methods": ["GET"],
+      "dest": "api/proxy.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/$1"
     }

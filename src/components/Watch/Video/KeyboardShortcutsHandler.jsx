@@ -35,7 +35,7 @@ const KeyboardShortcutsHandler = ({
       [`${i}`]: () => jumpToPercentage(i * 10),
     })),
 
-    "?": () => {
+    ">": () => {
       const currentSpeed = videoRef.current.playbackRate;
       const currentIndex = speeds.indexOf(currentSpeed);
       if (currentIndex < speeds.length - 1) {
@@ -43,7 +43,7 @@ const KeyboardShortcutsHandler = ({
         changePlaybackSpeed(newSpeed);
       }
     },
-    ">": () => {
+    "<": () => {
       const currentSpeed = videoRef.current.playbackRate;
       const currentIndex = speeds.indexOf(currentSpeed);
       if (currentIndex > 0) {

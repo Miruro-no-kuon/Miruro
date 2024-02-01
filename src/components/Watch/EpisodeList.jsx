@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
@@ -30,6 +32,9 @@ const ListItem = styled.button`
     $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
   text-align: ${({ $isRowLayout }) => ($isRowLayout ? "left" : "center")};
   cursor: pointer;
+  justify-content: ${({ $isRowLayout }) =>
+    $isRowLayout ? "space-between" : "center"};
+  align-items: center;
   transition: background-color 0.15s, color 0.15s;
 
   &:hover {
@@ -101,7 +106,10 @@ const EpisodeList = ({ episodes, selectedEpisodeId, onEpisodeSelect }) => {
                 <>
                   <EpisodeNumber>{episode.number}</EpisodeNumber>
                   <EpisodeTitle>{episode.title}</EpisodeTitle>
+                  {$isSelected && <FontAwesomeIcon icon={faPlay} />}
                 </>
+              ) : $isSelected ? (
+                <FontAwesomeIcon icon={faPlay} />
               ) : (
                 <EpisodeNumber>{episode.number}</EpisodeNumber>
               )}

@@ -1,12 +1,28 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SpeedInsights } from "@vercel/speed-insights/react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Splash from "./pages/Splash";
 import Home from "./pages/Home";
 import Watch from "./pages/Watch";
 import SearchResults from "./pages/SearchResults";
+import PageNotFound from "./pages/404";
+import ScrollToTopButton from "./components/ScrollUp";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   useEffect(() => {
@@ -23,13 +39,16 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <SpeedInsights />
+      <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Splash />} />
+        <Route path="/faq" element={<Splash />} />
+        <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/watch/:animeId" element={<Watch />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <ScrollToTopButton />
       <Footer />
     </Router>
   );

@@ -15,7 +15,7 @@ const pulseAnimation = keyframes`
 const popInAnimation = keyframes`
   0%, 100%{
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.975);
   }
   50% {
     opacity: 1;
@@ -27,37 +27,39 @@ const popInAnimation = keyframes`
   }
 `;
 
-const SkeletonCard = styled.div`
+const SkeletonSlide = styled.div`
   width: 100%;
   max-width: 100%;
-  height: 0;
-  padding-top: ${aspectRatio(184, 133)};
+  height: 24rem;
   background: var(--global-card-bg);
   border-radius: 0.2rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 
-  ${(props) => css`
-    animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s infinite;;
-  `}
+  @media (max-width: 1000px) {
+    height: 20rem;
+  }
+  @media (max-width: 500px) {
+    height: 18rem;
+  }
+
+  ${(props) =>
+    css`
+      animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s
+        infinite;
+    `}
 `;
 
-const SkeletonTitle = styled.div`
-  width: 80%;
-  height: 1.3rem;
+const SkeletonImage = styled.div`
+  width: 100%;
+  height: 100%;
   background: var(--global-card-bg);
   border-radius: 0.2rem;
-  margin-top: 0.5rem;
-  margin-left: 0.3rem;
-
-  ${(props) => css`
-    animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s infinite;;
-  `}
 `;
 
-const CardSkeleton = React.memo(({ loading }) => (
-  <SkeletonCard loading={loading}>
-    <SkeletonTitle loading={loading} />
-  </SkeletonCard>
+const CarouselSlideSkeleton = React.memo(({ loading }) => (
+  <SkeletonSlide loading={loading}>
+    <SkeletonImage loading={loading} />
+  </SkeletonSlide>
 ));
 
-export default CardSkeleton;
+export default CarouselSlideSkeleton;
