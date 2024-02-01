@@ -1,6 +1,9 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/rise/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
+  <a href="https://www.miruro.com" target="_blank">
+    <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/rise/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
+  </a>
 </p>
+
 <h3 align="center">
     <a href="https://www.miruro.com">Miruro</a>
 </h1>
@@ -8,7 +11,7 @@
 
 ## Introduction
 
-<p><a href="https://miruro.com">Miruro</a> is an anime streaming website made possible by the <a href="https://github.com/consumet">Consumet API</a>, built with  <a href="https://react.dev/">React⚛️</a> and <a href="https://vitejs.dev/">Vite⚡</a>, featuring a sleek and modern design. It offers Anilist integration to help you keep track of your favorite anime series. Your Website Name is entirely free and does not display any ads, making it a great option for those who want an uninterrupted viewing experience.</p>
+<p><a href="https://www.miruro.com">Miruro</a> is an anime streaming website made possible by the <a href="https://github.com/consumet">Consumet API</a>, built with  <a href="https://react.dev/">React⚛️</a> and <a href="https://vitejs.dev/">Vite⚡</a>, featuring a sleek and modern design. It offers Anilist integration to help you keep track of your favorite anime series. Your Website Name is entirely free and does not display any ads, making it a great option for those who want an uninterrupted viewing experience.</p>
 
 ## Features
 
