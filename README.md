@@ -1,29 +1,14 @@
-<div align="center">
-  <a>
-    <img src="https://github.com/Miruro-no-kuon/Miruro-no-Kuon/blob/%F0%9F%8C%8A-MiruroNoKuon-%F0%9F%8F%94%EF%B8%8F-Rise/src/assets/banner-one_piece.jpg" alt="logo" width="700"/>
-  </a>
-</div>
-
 <h1 align="center">
     <a href="https://miruro.com">Miruro</a>
 </h1>
 
-<details>
+| Splash Page | Home Page |
+|-------------|-----------|
+| ![Splash Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/splash-page.webp) | ![Home Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/home-page.webp) |
 
-<h3 align="center">Splash Page</h3>
-<img src=""/>
-<h3 align="center">Home Page</h3>
-<img src=""/>
-<h3 align="center">Watch Page</h3>
-<img src=""/>
-<h3 align="center">Footer</h3>
-<img src=""/>
-<h3 align="center">Info Page</h3>
-<img src=""/>
-
-</details>
-
-> **Warning:** If you are not familiar with JavaScript or any other programming language related to this project, please learn it first before attempting to work on this project. **I won't be able to help anyone who doesn't know how to do basic stuff.**
+| Watch Page | Footer |
+|------------|--------|
+| ![Watch Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/watch-page.webp) | ![Footer](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/footer.webp) |
 
 ## Introduction
 
@@ -138,3 +123,7 @@ If you have any questions or feedback, please reach out to us at [miruro@proton.
 ## Support This Project
 
 ✨ [Star this project](https://github.com/Miruro-no-kuon/Miruro-no-Kuon)
+
+
+### Note for Beginners: 
+> If you're new to JavaScript or programming in general, no worries! Take some time to familiarize yourself with the basics before diving into this project. I'm here to help answer any questions you might have along the way. Don't hesitate to reach out, and let's learn and build together! 😊
