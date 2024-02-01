@@ -1,14 +1,10 @@
-<h1 align="center">
-    <a href="https://miruro.com">Miruro</a>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/rise/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
+</p>
+<h3 align="center">
+    <a href="https://www.miruro.com">Miruro</a>
 </h1>
 
-| Splash Page | Home Page |
-|-------------|-----------|
-| ![Splash Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/splash-page.webp) | ![Home Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/home-page.webp) |
-
-| Watch Page | Footer |
-|------------|--------|
-| ![Watch Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/watch-page.webp) | ![Footer](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/footer.webp) |
 
 ## Introduction
 
@@ -33,9 +29,13 @@
 - Profile page to see your continue watching
 - Check new commits to see new features and changes!
 
-## Bug Report
+| Splash Page | Home Page |
+|-------------|-----------|
+| ![Splash Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/splash-page.webp) | ![Home Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/home-page.webp) |
 
-If you encounter any issues or bug on the site please head to [issues](https://github.com/Miruro-no-kuon/Miruro-no-Kuon/issues) and create a bug report there.
+| Watch Page | Footer |
+|------------|--------|
+| ![Watch Page](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/watch-page.webp) | ![Footer](https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/footer.webp) |
 
 ## For Local Development
 
@@ -44,20 +44,20 @@ If you encounter any issues or bug on the site please head to [issues](https://g
 ### 1. Clone this repository using :
 
 ```bash
-git clone https://github.com/Miruro-no-kuon/Miruro-no-Kuon.git
+git clone https://github.com/Miruro-no-kuon/Miruro.git
 ```
 
 ### 2. Install dependencies (Its recommended to run it on bun but it can run on npm)
 
 ####    Install Node.js and npm
 - [Download Node.js](https://nodejs.org/)
-- Verify the installation: node -v /// npm -v
-####    Install Bun
-    npm install --save-dev webpack webpack-cli
-#### Install React
-    npm install react react-dom
+#### Verify the installation: 
+- node -v 
+- npm -v
 #### Install Vite
-    npm install --save-dev create-vite
+- //////
+####    Install Bun
+- //////
 
 ### 3. Create `.env` file in the root folder and put this inside the file :
 
@@ -104,6 +104,10 @@ bun run dev
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
 > This means that if you choose to use or host this site for your own purposes, you are also required to release the source code of any modifications or improvements you make to this project. This open-source ethos is central to the project's philosophy.
+
+## Bug Report
+
+If you encounter any issues or bug on the site please head to [issues](https://github.com/Miruro-no-kuon/Miruro-no-Kuon/issues) and create a bug report there.
 
 ## Contact
 
