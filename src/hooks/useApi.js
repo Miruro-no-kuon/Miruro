@@ -3,7 +3,7 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const BASE_URL_2 = import.meta.env.VITE_BACKEND_URL_2;
 const API_KEY = import.meta.env.VITE_API_KEY;
-const IS_LOCAL = true;
+const IS_LOCAL = false;
 
 const PROXY_SERVER_BASE_URL = IS_LOCAL
   ? "http://192.168.1.43:5173/api"
