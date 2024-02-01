@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.miruro.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/rise/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
+    <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/main/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
   </a>
 </p>
 
