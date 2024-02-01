@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
 import InfoPopupContent from "./InfoPopup";
 import TitleComponent from "./TitleDisplay";
@@ -39,16 +39,37 @@ const CardItemContent = React.memo(({ anime, onHover, onLeave, isHovered }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (cardRef.current) {
       const cardPosition = getElementPosition(cardRef.current);
       const isLeft = cardPosition.left < width / 2;
-      // No need to maintain hoverState state, compute directly in InfoPopupContent
     }
   }, [width]);
 
+  const {
+    coverImage,
+    bannerImage,
+    releaseDate,
+    popularity,
+    format,
+    type,
+    totalEpisodes,
+    currentEpisode,
+    description,
+    genres,
+  } = anime;
+
+  const altText = anime.title?.romaji || anime.title?.english;
+
+  // Use rating.anilist if available, otherwise null
+  const ratingValue =
+    typeof anime.rating === "number"
+      ? anime.rating
+      : anime.rating?.anilist ?? null;
+
+  const isMobile = width <= 1000;
+
   const handleCardClick = () => {
-    // Use React Router's navigate function for navigation
     navigate(`/watch/${anime.id}`);
   };
 
@@ -61,11 +82,11 @@ const CardItemContent = React.memo(({ anime, onHover, onLeave, isHovered }) => {
     >
       <StyledCardItem ref={cardRef}>
         <ImageDisplay
-          imageSrc={anime.image}
-          altText={anime.title.userPreferred}
-          type={anime.type}
-          totalEpisodes={anime.totalEpisodes}
-          rating={anime.rating}
+          imageSrc={anime.coverImage || anime.image}
+          altText={altText}
+          type={format || type}
+          totalEpisodes={totalEpisodes}
+          rating={ratingValue}
           color={anime.color}
           $ishovered={isHovered}
         />
@@ -73,24 +94,23 @@ const CardItemContent = React.memo(({ anime, onHover, onLeave, isHovered }) => {
         <TitleComponent $ishovered={isHovered} anime={anime} />
       </StyledCardItem>
 
-      {isHovered && (
+      {!isMobile && isHovered && (
         <InfoPopupContent
-          title={anime.title.userPreferred}
-          description={anime.description}
-          genres={anime.genres}
-          // Pass the position directly, if needed
+          title={altText}
+          description={description}
+          genres={genres}
           $isPositionedLeft={
             cardRef.current &&
             getElementPosition(cardRef.current).left < width / 2
           }
           color={anime.color}
-          type={anime.type}
+          type={format || type}
           status={anime.status}
-          popularity={anime.popularity}
-          totalEpisodes={anime.totalEpisodes}
-          currentEpisode={anime.currentEpisode}
-          releaseDate={anime.releaseDate}
-          cover={anime.cover}
+          popularity={popularity?.anidb || popularity}
+          totalEpisodes={totalEpisodes}
+          currentEpisode={currentEpisode}
+          releaseDate={releaseDate || anime.year}
+          cover={bannerImage || anime.cover}
           maxDescriptionLength={100}
         />
       )}

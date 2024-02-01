@@ -1,24 +1,38 @@
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import styled, { keyframes } from "styled-components";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
+const colors = {
+  globalPrimaryBgTr: "var(--global-primary-bg-tr)",
+  globalText: "var(--global-text)",
+  globalInputDiv: "var(--global-input-div)",
+};
+
+// Styled Components
+const fadeInAnimation = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
 const StyledNavbar = styled.div`
   position: sticky;
-  top: 0.5rem;
+  top: 0;
   text-align: center;
-  margin: 0 auto 2rem auto;
-  background-color: var(--global-primary-bg-tr);
-  backdrop-filter: blur(1px);
-  border-radius: 0.2rem;
-  transition: transform 0.2s ease-in-out;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 0 1rem 1rem;
+  background-color: ${(props) =>
+    props.$isTop
+      ? "transparent"
+      : colors.globalPrimaryBgTr}; // Change background color based on scroll position
+  backdrop-filter: blur(50px);
   transform: translateY(0);
   z-index: 4;
-
-  &.hidden {
-    transform: translateY(-110%);
-  }
+  width: calc(100%);
+  animation: ${fadeInAnimation} 0.5s ease-out;
+  transition: 0.1s ease-in-out;
 `;
 
 const TopContainer = styled.div`
@@ -28,15 +42,22 @@ const TopContainer = styled.div`
 `;
 
 const LogoLink = styled(Link)`
-  max-width: 8rem;
+  max-width: 7rem;
   padding: 0;
   font-size: 1.25rem;
   font-weight: bold;
+  padding: 0.5rem 0;
   text-decoration: none;
-  color: var(--global-text);
+  color: ${colors.globalText};
   content: var(--logo-text-transparent);
   cursor: pointer;
   transition: 0.2s;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    color: #someHoverColor; // Replace with your hover color
+    transform: scale(1.05);
+  }
 `;
 
 const InputContainer = styled.div`
@@ -46,12 +67,12 @@ const InputContainer = styled.div`
   align-items: center;
   padding: 0.8rem;
   border-radius: 0.2rem;
-  background-color: var(--global-input-div);
+  background-color: ${colors.globalInputDiv};
 `;
 
 const Icon = styled.div`
   margin-right: 10px;
-  color: var(--global-text);
+  color: ${colors.globalText};
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
   font-size: ${({ $fontSize }) => $fontSize || "0.8rem"};
   transition: opacity 0.2s;
@@ -60,7 +81,7 @@ const Icon = styled.div`
 const SearchInput = styled.input`
   background: 0;
   border: none;
-  color: var(--global-text);
+  color: ${colors.globalText};
   display: inline-block;
   font-size: 0.9rem;
   margin-right: 10px;
@@ -68,12 +89,13 @@ const SearchInput = styled.input`
   padding: 0;
   padding-top: 0;
   width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 `;
 
 const ClearButton = styled.button`
   background: transparent;
   border: none;
-  color: var(--global-text);
+  color: ${colors.globalText};
   font-size: 1.1rem;
   cursor: pointer;
   opacity: ${({ $query }) => ($query ? 0.5 : 0)};
@@ -81,7 +103,7 @@ const ClearButton = styled.button`
   transition: color 0.2s, opacity 0.2s;
 
   &:hover {
-    color: var(--global-text);
+    color: ${colors.globalText};
     opacity: 1;
   }
 `;
@@ -89,24 +111,23 @@ const ClearButton = styled.button`
 const ThemeToggleBtn = styled.button`
   background: transparent;
   border: none;
-  color: var(--global-text);
+  color: ${colors.globalText};
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 0.8rem;
-  transition: color 0.2s;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
 
   &:hover {
-    color: var(--global-text);
-    opacity: 1;
+    transform: rotate(-45deg);
   }
 `;
 
 const SlashToggleBtn = styled.button`
   background: transparent;
-  border: 2px solid var(--global-text);
+  border: 2px solid ${colors.globalText};
   border-radius: 0.2rem;
   padding: 0.3rem;
-  color: var(--global-text);
+  color: ${colors.globalText};
   font-size: 0.5rem;
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
@@ -118,55 +139,82 @@ const SlashToggleBtn = styled.button`
   }
 `;
 
+const detectUserTheme = () => {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return true;
+  }
+  return false;
+};
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const inputRef = useRef(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const navbarRef = useRef(null);
+  const delayTimeout = useRef(null);
+  const [isDarkMode, setIsDarkMode] = useState(detectUserTheme());
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("query") || ""
   );
-  const [scrollingDown, setScrollingDown] = useState(false);
-  const navbarRef = useRef(null);
-  const delayTimeout = useRef(null);
+  const [isTop, setIsTop] = useState(true); // Track if the scroll position is at the top
 
+  // Add scroll event listener to detect scroll position
   useEffect(() => {
-    document.documentElement.classList.toggle("light-mode", isDarkMode);
-  }, [isDarkMode]);
-
-  useEffect(() => {
-    const focusNavbar = (e) => {
-      if (e.key === "/" && inputRef.current) {
-        e.preventDefault();
-        inputRef.current.focus();
-        setIsSearchFocused(true);
-      } else if (e.key === "Escape" && inputRef.current) {
-        inputRef.current.blur();
-        setIsSearchFocused(false);
-      }
+    const handleScroll = () => {
+      setIsTop(window.scrollY === 0);
     };
 
-    document.addEventListener("keydown", focusNavbar);
-    return () => document.removeEventListener("keydown", focusNavbar);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
+  // Toggle Dark Mode
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", isDarkMode);
+  }, [isDarkMode]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === "/" && inputRef.current) {
+      e.preventDefault();
+      inputRef.current.focus();
+      setIsSearchFocused(true);
+    } else if (e.key === "Escape" && inputRef.current) {
+      inputRef.current.blur();
+      setIsSearchFocused(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Update search query from URL
   useEffect(() => {
     setSearchQuery(searchParams.get("query") || "");
   }, [searchParams]);
 
-  const navigateWithQuery = (value) => {
-    clearTimeout(delayTimeout.current);
-
-    delayTimeout.current = setTimeout(() => {
-      navigate(value ? `/search?query=${value}` : "/search");
-    }, 400);
-  };
+  const navigateWithQuery = useCallback(
+    (value, delay = 1000) => {
+      clearTimeout(delayTimeout.current);
+      delayTimeout.current = setTimeout(() => {
+        navigate(value ? `/search?query=${value}` : "/search");
+      }, delay);
+    },
+    [navigate]
+  );
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setSearchQuery(newValue);
-    navigateWithQuery(newValue);
+    navigateWithQuery(newValue, e.key === "Enter" ? 0 : 1000);
   };
 
   const handleClearSearch = () => {
@@ -177,35 +225,8 @@ const Navbar = () => {
 
   const toggleTheme = () => setIsDarkMode((prev) => !prev);
 
-  const handleScroll = () => {
-    const threshold = 5;
-    let lastScrollY = window.scrollY;
-
-    return () => {
-      const currentScrollY = window.scrollY;
-
-      if (Math.abs(currentScrollY - lastScrollY) > threshold) {
-        if (currentScrollY < lastScrollY) {
-          setScrollingDown(false);
-          navbarRef.current.classList.remove("hidden");
-        } else {
-          setScrollingDown(true);
-          navbarRef.current.classList.add("hidden");
-        }
-      }
-
-      lastScrollY = currentScrollY;
-    };
-  };
-
-  useEffect(() => {
-    const onScroll = handleScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [scrollingDown]);
-
   return (
-    <StyledNavbar ref={navbarRef} className={scrollingDown ? "hidden" : ""}>
+    <StyledNavbar ref={navbarRef} $isTop={isTop}>
       <TopContainer>
         <LogoLink to="/home">見るろ の 久遠</LogoLink>{" "}
         <ThemeToggleBtn onClick={toggleTheme}>
@@ -221,6 +242,7 @@ const Navbar = () => {
           placeholder="Search Anime"
           value={searchQuery}
           onChange={handleInputChange}
+          onKeyDown={handleInputChange}
           ref={inputRef}
         />
         <ClearButton $query={searchQuery} onClick={handleClearSearch}>

@@ -5,6 +5,7 @@ import {
   faTv,
   faClosedCaptioning,
   faStar,
+  faPlay, // Add the play icon
 } from "@fortawesome/free-solid-svg-icons";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import PropTypes from "prop-types";
@@ -37,6 +38,18 @@ const AnimeImage = styled.div`
   }
 `;
 
+const PlayIcon = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+`;
+
 const ImageWrapper = styled.div`
   position: absolute;
   top: 0;
@@ -54,12 +67,27 @@ const ImageWrapper = styled.div`
     border-radius: 0.2rem;
     font-weight: bold;
     font-size: 12px;
-    transition: transform 0.2s ease-in;
+    transition: 0.3s ease-in;
   }
 
-  &:hover img {
-    transform: scale(1.095);
-    transition-delay: 0.15s;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); // Dark filter
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+  &:hover ${PlayIcon} {
+    opacity: 1;
   }
 `;
 
@@ -110,6 +138,7 @@ const ImageDisplay = ({
   <AnimeImage $ishovered={$ishovered} color={color}>
     <ImageWrapper>
       <LazyLoadImage src={imageSrc} alt={altText} effect="blur" />
+      <PlayIcon icon={faPlay} />
     </ImageWrapper>
     <InfoButtons $ishovered={$ishovered}>
       <Button $ishovered={$ishovered} color={color}>
@@ -138,8 +167,8 @@ ImageDisplay.propTypes = {
   imageSrc: PropTypes.string.isRequired,
   altText: PropTypes.string,
   type: PropTypes.string,
-  totalEpisodes: PropTypes.string,
-  rating: PropTypes.string,
+  totalEpisodes: PropTypes.number,
+  rating: PropTypes.number,
   color: PropTypes.string,
   $ishovered: PropTypes.bool,
 };

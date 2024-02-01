@@ -46,6 +46,13 @@ const StyledVideo = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
+
+  &:fullscreen {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 const fadeIn = keyframes`
@@ -77,9 +84,11 @@ const LargePlayIcon = styled.div`
     !isPlaying &&
     css`
       animation: ${fadeIn} 1s;
-    `} cursor: pointer;
+    `}
+  cursor: pointer;
   transition: border 0.15s ease-in-out, color 0.15s ease-in-out,
     transform 0.15s ease-in-out;
+
   &:hover {
     border: 0.3rem solid #ffffff;
     color: #ffffff;
@@ -114,6 +123,14 @@ const PlayPauseOverlay = styled.div`
   z-index: 2;
 `;
 
+const isMobileDevice = () => {
+  const userAgent =
+    typeof window.navigator === "undefined" ? "" : navigator.userAgent;
+  const mobileRegex =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return mobileRegex.test(userAgent) || window.innerWidth <= 768;
+};
+
 const VideoPlayer = ({
   id,
   watchId,
@@ -141,12 +158,20 @@ const VideoPlayer = ({
   const [isHovering, setIsHovering] = useState(false);
   const [isCursorIdle, setIsCursorIdle] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [isMobile, setIsMobile] = useState(isMobileDevice());
 
   const videoRef = useRef(null);
   const timeoutIdRef = useRef(null);
   const playerWrapperRef = useRef(null);
   const videoPlayerWrapperRef = useRef(null);
   const videoControlsRef = useRef(null);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(isMobileDevice());
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useFetchAndSetupSources(
     watchId,
@@ -407,7 +432,7 @@ const VideoPlayer = ({
                   <img className="pikachuLoader" src={pikachuLoader} />
                 </Loader>
               )}
-              {hasPlayed && (
+              {!isMobile && hasPlayed && (
                 <PlayPauseOverlay
                   onClick={() => {
                     togglePlayPause();
@@ -415,7 +440,7 @@ const VideoPlayer = ({
                   }}
                 />
               )}
-              {!isPlaying && !hasPlayed && !isVideoChanging && (
+              {!isMobile && !isPlaying && !hasPlayed && !isVideoChanging && (
                 <LargePlayIcon $isPlaying={isPlaying} onClick={handlePlay}>
                   <i className="material-icons" style={{ fontSize: "4rem" }}>
                     play_arrow
@@ -423,9 +448,10 @@ const VideoPlayer = ({
                 </LargePlayIcon>
               )}
 
-              <StyledVideo ref={videoRef} controls={false} />
+              <StyledVideo ref={videoRef} controls={isMobile} />
 
-              {videoRef.current &&
+              {!isMobile &&
+                videoRef.current &&
                 hasPlayed &&
                 !isLoading &&
                 !isVideoChanging && (

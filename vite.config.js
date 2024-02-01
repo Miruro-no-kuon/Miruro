@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    chunkSizeWarningLimit: 700,
+    chunkSizeWarningLimit: 1000,
     // You can customize the output directory and publicPath if needed
     outDir: "dist", // Specify your desired output directory
     publicDir: "public", // Specify your public directory

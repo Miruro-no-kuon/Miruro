@@ -1,0 +1,243 @@
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import { FaPlay } from "react-icons/fa";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.css";
+import { useNavigate } from "react-router-dom";
+
+// Styled components for the Carousel
+
+const BannerNotFound = "var(--logo-text-transparent)";
+
+const StyledSwiperContainer = styled(Swiper)`
+  position: relative;
+  max-width: 100%;
+  height: 24rem;
+  margin-bottom: 2rem;
+  border-radius: 0.2rem;
+  cursor: grab;
+
+  @media (max-width: 1000px) {
+    height: 20rem;
+  }
+  @media (max-width: 500px) {
+    height: 18rem;
+  }
+`;
+
+const StyledSwiperSlide = styled(SwiperSlide)`
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  animation: ${keyframes`
+    0% {
+      opacity: 0.4;
+      transform: scale(0.965);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  `} 0.2s ease-in-out forwards;
+`;
+
+const DarkOverlay = styled.div`
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0.2rem;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(8, 8, 8, 1) 0%, transparent 60%);
+`;
+
+const SlideImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.2rem;
+`;
+
+const SlideImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.2rem;
+  position: absolute;
+  content: ${(props) =>
+    props.cover === props.image ? BannerNotFound : props.cover};
+`;
+
+const SlideContent = styled.div`
+  position: absolute;
+  left: 2rem;
+  bottom: 3rem;
+  z-index: 5;
+  max-width: 60%;
+
+  @media (max-width: 1000px) {
+    left: 1rem;
+    bottom: 1.5rem;
+  }
+  @media (max-width: 500px) {
+    left: 1rem;
+    bottom: 1.5rem;
+  }
+`;
+
+const SlideTitle = styled.h2`
+  color: var(--white, #fff);
+  font-size: clamp(1.2rem, 3vw, 3rem);
+  margin: auto;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (min-width: 500px) {
+    white-space: nowrap;
+    max-width: 100%;
+  }
+`;
+
+const SlideDescription = styled.p`
+  color: var(--white, #ccc);
+  background: var(--global-primary-bg)
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  line-height: 1;
+  margin-bottom: 1rem;
+  max-width: 50%;
+  max-height: 4rem;
+  overflow: hidden;
+
+  @media (max-width: 1000px) {
+    line-height: 1.2;
+    max-width: 70%;
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+    max-height: 3rem;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
+    max-height: 2.5rem;
+  }
+
+  /* Add overflow-y: auto if the content exceeds max height */
+  overflow-y: ${({ maxLines }) => (maxLines ? "auto" : "hidden")};
+`;
+
+const PlayButton = styled.button`
+  background-color: var(--global-button-bg);
+  color: var(--global-text, var(--global-text-color));
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+
+  &:hover {
+    background-color: var(--primary-accent-bg, var(--primary-accent-bg-color));
+    transform: scale(1.035);
+  }
+
+  @media (max-width: 1000px) {
+    padding: 0.8rem 1.6rem;
+  }
+
+  @media (max-width: 500px) {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+`;
+
+const PlayIcon = styled(FaPlay)`
+  margin-right: 0.5rem;
+`;
+
+const PaginationStyle = styled.div`
+  .swiper-pagination-bullet {
+    background: var(--global-primary-bg, #007bff);
+    opacity: 0.7;
+    margin: 0 3px;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: var(--global-text);
+    opacity: 1;
+  }
+`;
+
+// Carousel component
+
+const Carousel = ({ data = [] }) => {
+  const navigate = useNavigate();
+
+  const handlePlayButtonClick = (id) => {
+    navigate(`/watch/${id}`);
+  };
+
+  const truncateTitle = (title, maxLength = 40) => {
+    return title.length > maxLength
+      ? `${title.substring(0, maxLength)}...`
+      : title;
+  };
+
+  return (
+    <PaginationStyle>
+      <StyledSwiperContainer
+        spaceBetween={30}
+        slidesPerView={1}
+        loop={true}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+        }}
+        navigation={{
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        }}
+        pagination={{
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+          type: "bullets",
+        }}
+      >
+        {data.map(({ id, image, cover, title, description }) => (
+          <StyledSwiperSlide key={id}>
+            <SlideImageWrapper>
+              <SlideImage
+                src={cover === image ? BannerNotFound : cover}
+                cover={cover}
+                image={image}
+                alt={title.native}
+                loading="lazy"
+              />
+              <DarkOverlay />
+            </SlideImageWrapper>
+            <SlideContent>
+              <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
+              <SlideDescription
+                dangerouslySetInnerHTML={{ __html: description }}
+                maxLines={description.length > 200} // Adjust the condition as needed
+              />
+              <PlayButton onClick={() => handlePlayButtonClick(id)}>
+                <PlayIcon /> Play Now
+              </PlayButton>
+            </SlideContent>
+          </StyledSwiperSlide>
+        ))}
+        <div className="swiper-pagination"></div>
+      </StyledSwiperContainer>
+    </PaginationStyle>
+  );
+};
+
+export default Carousel;

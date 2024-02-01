@@ -8,23 +8,46 @@ import {
   FaStar,
   FaComments,
   FaInfoCircle,
+  FaEnvelope,
+  FaReddit,
+  FaDiscord,
+  FaTwitter,
+  FaGithub,
 } from "react-icons/fa";
-import Banner from "/src/assets/banner-one_piece.jpg";
-import Logo from "/src/assets/miruro-text-transparent-white.png";
+import BannerImageURL from "/src/assets/banner-one_piece-compressed.jpg";
+import LogoURL from "/src/assets/miruro-text-transparent-white.png";
 
-const variables = {
+const colors = {
   textColor: "var(--global-text)",
-  buttonBackgroundColor: "var(--global-button-bg)",
-  buttonTextColor: "var(--global-button-text)",
-  buttonHoverBackgroundColor: "var(--global-button-hover-bg)",
-  adBackgroundColor: "var(--global-ad-bg)",
+  buttonBackground: "var(--global-button-bg)",
+  buttonText: "var(--global-button-text)",
+  buttonHoverBackground: "var(--global-button-hover-bg)",
+  adBackground: "var(--global-ad-bg)",
   customColor: "var(--your-custom-color)",
   paddingSize: "1.5rem",
 };
 
-const fadeIn = keyframes`
+const fadeInAnimation = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
+`;
+
+const popInAnimation = keyframes`
+  0% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.075);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+const SplashContainer = styled.div`
+  margin-top: -2rem;
 `;
 
 const Card = styled.div`
@@ -36,7 +59,7 @@ const Card = styled.div`
   border-radius: 0.2rem;
   overflow: hidden;
   box-shadow: 0 0 1rem var(--global-card-shadow);
-  animation: ${fadeIn} 0.5s ease-in-out;
+  animation: ${fadeInAnimation} 0.5s ease-in-out;
 
   @media (min-width: 62.5rem) {
     flex-direction: row;
@@ -57,7 +80,7 @@ const Card = styled.div`
 const BannerImage = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url(${Banner});
+  background-image: url(${BannerImageURL});
   background-size: cover;
   background-position: left;
   position: absolute;
@@ -68,7 +91,7 @@ const BannerImage = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  padding: ${variables.paddingSize};
+  padding: ${colors.paddingSize};
   color: #e8e8e8;
   position: relative;
   z-index: 1;
@@ -76,24 +99,25 @@ const Content = styled.div`
 
 const Title = styled.h1`
   font-size: 2.5rem;
-  margin: 2rem 0 2rem 0;
+  margin: 0 0 5rem 0;
   font-weight: bold;
 `;
 
 const SplashLogo = styled.img`
-  max-width: 15rem;
-  left: -5rem;
+  max-width: 13rem;
 `;
+
+const ContentWrapper = styled.div``;
 
 const Subtitle = styled.p`
   font-size: 1.5rem;
-  margin: 1rem 0;
+  margin: 2rem 0 1rem 0.5rem;
 `;
 
 const Button = styled(Link)`
   padding: 1rem 2rem;
-  background-color: ${variables.buttonBackgroundColor};
-  color: ${variables.buttonTextColor};
+  background-color: ${colors.buttonBackground};
+  color: ${colors.buttonText};
   text-decoration: none;
   border-radius: 2rem;
   font-weight: bold;
@@ -103,14 +127,13 @@ const Button = styled(Link)`
   transition: background-color 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: var(--primary-accent-bg);
     transform: scale(1.075);
   }
 `;
 
 const Keyword = styled.span`
   font-weight: bold;
-  color: ${variables.customColor};
+  color: ${colors.customColor};
   position: relative;
   margin-right: 0.2rem;
 
@@ -120,36 +143,109 @@ const Keyword = styled.span`
     position: absolute;
     top: 0;
     left: -0.5rem;
-    color: ${variables.customColor};
+    color: ${colors.customColor};
   }
 `;
 
 const Paragraph = styled.p`
   font-size: 1rem;
-  margin-bottom: ${variables.paddingSize};
+  margin-bottom: ${colors.paddingSize};
   line-height: 1.6;
-  color: ${variables.textColor};
+  color: ${colors.textColor};
 `;
 
 const MainContent = styled.div`
   max-width: 50rem;
   margin: 0 auto;
-  padding: ${variables.paddingSize};
-  color: ${variables.textColor};
+  padding: ${colors.paddingSize};
+  color: ${colors.textColor};
   font-size: 1rem;
   line-height: 1.6;
 `;
 
 const Advertising = styled.div`
-  margin: ${variables.paddingSize} 0;
+  margin: ${colors.paddingSize} 0;
   text-align: center;
-  background-color: ${variables.adBackgroundColor};
-  padding: ${variables.paddingSize};
+  background-color: ${colors.adBackground};
+  padding: ${colors.paddingSize};
   border-radius: 0.2rem;
-  color: ${variables.textColor};
+  color: ${colors.textColor};
   background-image: url("/src/assets/advertisement.jpg");
   background-size: cover;
   background-position: center;
+`;
+
+const ShareSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: ${colors.paddingSize} 0;
+  padding: ${colors.paddingSize};
+  background-color: ${colors.adBackground};
+  border-radius: 0.2rem;
+  color: ${colors.textColor};
+  text-align: center;
+`;
+
+const ShareText = styled.span`
+  text-align: left;
+  font-size: 1rem;
+  color: var(--global-text);
+
+  svg {
+    margin-right: 0.5rem;
+  }
+`;
+
+const ShareButtons = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background: var(--global-primary-bg);
+  max-width: 10rem;
+  text-align: center;
+  border-radius: 0.2rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+
+  & > * {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+`;
+
+const ShareButton = styled.a`
+  margin: 0 8px;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+
+  svg {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    transform: scale(1.35);
+  }
+`;
+
+const StyledLink = styled.a`
+  color: ${colors.customColor};
+  text-decoration: none;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: ${colors.customColor};
+  }
 `;
 
 const sections = [
@@ -293,36 +389,119 @@ const sections = [
   },
 
   {
-    title: "Contact Us ",
+    title: "Contact Us",
     content: (
-      <Paragraph>
-        If you have any questions, suggestions, or encounter any issues while
-        using Miruro, please don't hesitate to <Keyword>contact us</Keyword>. We
-        value your feedback and are here to assist you.
-      </Paragraph>
+      <>
+        <Paragraph>
+          If you have any questions, suggestions, or encounter any issues while
+          using Miruro, please don't hesitate to contact us. We value your
+          feedback and are here to assist you. You can reach out to us through
+          multiple channels:
+        </Paragraph>
+        <ul>
+          <li>
+            <FaEnvelope /> Email us at{" "}
+            <StyledLink
+              href="mailto:miruro@proton.me"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              miruro@proton.me
+            </StyledLink>
+          </li>
+          <li>
+            <FaDiscord /> Join our{" "}
+            <StyledLink
+              href="https://discord.gg/4kfypZ96K4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Discord server
+            </StyledLink>{" "}
+            for live discussions and support.
+          </li>
+          <li>
+            <FaReddit /> Visit our{" "}
+            <StyledLink
+              href="https://www.reddit.com/r/miruro"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Subreddit
+            </StyledLink>{" "}
+            for community support and information.
+          </li>
+        </ul>
+      </>
     ),
   },
 ];
 
 function Splash() {
   return (
-    <>
+    <SplashContainer>
       <Card>
         <BannerImage />
         <Content>
           <Title>
-            <SplashLogo src={Logo} alt="Footer Logo" />
+            <SplashLogo src={LogoURL} alt="Footer Logo" />
           </Title>
-          <Button to="/home">
-            Go to homepage <FaArrowRight />
-          </Button>
-          <Subtitle>
-            <Keyword>Miruro no Kuon</Keyword>: Where Every Moment is an{" "}
-            <Keyword>Eternal Adventure</Keyword>
-          </Subtitle>
+          <ContentWrapper>
+            <Button to="/home">
+              Go to homepage <FaArrowRight />
+            </Button>
+            <Subtitle>
+              <Keyword>Miruro no Kuon</Keyword>: Where Every Moment is an{" "}
+              <Keyword>Eternal Adventure</Keyword>
+            </Subtitle>
+          </ContentWrapper>
         </Content>
       </Card>
       <MainContent>
+        <ShareSection>
+          <ShareText>
+            <FaInfoCircle />
+            If you enjoy what you're seeing, we'd be thrilled if you could share
+            it with your friends and family. Your support is not just
+            appreciated; it's essential in helping us grow and continue bringing
+            you the best content. By sharing, you become a vital part of our
+            community's journey. And don't forget to follow us on our socials!
+            It's the best way to stay connected and up-to-date with all the
+            latest news, updates, and exclusive content. Your engagement and
+            feedback fuel our passion and drive us to innovate. Thank you for
+            being with us every step of the way!
+          </ShareText>
+          <ShareButtons>
+            <ShareButton
+              href="https://twitter.com/miruro_official"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTwitter />
+            </ShareButton>
+            <ShareButton
+              href="https://discord.gg/4kfypZ96K4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaDiscord />
+            </ShareButton>
+            <ShareButton
+              href="https://github.com/Miruro-no-kuon/Miruro-no-Kuon"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaGithub />
+            </ShareButton>
+            <ShareButton
+              href="https://www.reddit.com/r/miruro"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaReddit />
+            </ShareButton>
+          </ShareButtons>
+        </ShareSection>
         {sections.map((section, index) => (
           <div key={index}>
             {section.title && (
@@ -334,9 +513,8 @@ function Splash() {
             {section.content}
           </div>
         ))}
-        <Paragraph>{/* Final paragraph content */}</Paragraph>
       </MainContent>
-    </>
+    </SplashContainer>
   );
 }
 

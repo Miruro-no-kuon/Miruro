@@ -7,7 +7,7 @@ import logoTransparentWhite from "/src/assets/miruro-transparent-white.png";
 const GlobalStyles = createGlobalStyle`
 
 /* Base Colors - Darker Shades for Dark Mode */
-:root {
+:root.dark-mode {
   --global-primary-bg: #080808;
   --global-primary-bg-tr: rgba(8, 8, 8, 0.8);
   --global-ad-bg: #141414;
@@ -26,19 +26,21 @@ const GlobalStyles = createGlobalStyle`
   --global-genre-button-bg: #222222;
   --global-genre-button-bg: #2a2a2a;
   --global-shadow: rgba(255, 255, 255, 0.08);
-  --global-filter: rgba(0, 0, 0, 0.65);
+  --global-filter: rgba(0, 0, 0, 0.60);
   --global-secondary-bg: #141414;
   --global-tertiary-bg: #222222;
   --global-card-title-bg: #151515;
+  
   --primary-accent: #ffffff;
   --primary-accent-bg: #5900ff;
+  --primary-accent-bg-tr: rgba(89, 0, 255, 0.5);
 
   --logo-text-transparent: url(${logoTextTransparentWhite});
   --logo-transparent: url(${logoTransparentWhite});
 }
 
 /* Light Mode Specific Colors */
-:root.light-mode {
+:root {
   --global-primary-bg: #f5f5f5;
   --global-primary-bg-tr: rgba(245, 245, 245, 0.8);
   --global-ad-bg: #e0e0e0;
@@ -58,9 +60,13 @@ const GlobalStyles = createGlobalStyle`
   --global-genre-button-bg: #d4d4d4;
   --global-genre-button-bg: #bdbdbd;
   --global-shadow: rgba(0, 0, 0, 0.1);
-  --global-filter: rgba(0, 0, 0, 0.65);
+  --global-filter: rgba(0, 0, 0, 0.60);
   --global-secondary-bg: #e0e0e0;
   --global-tertiary-bg: #eaeaea;
+
+  --primary-accent: #ffffff;
+  --primary-accent-bg: #5900ff;
+  --primary-accent-bg-tr: rgba(89, 0, 255, 0.5);
 
   --logo-text-transparent: url(${logoTextTransparentBlack});
   --logo-transparent: url(${logoTransparentBlack});
@@ -76,7 +82,7 @@ body {
   margin: auto;
   background-color: var(--global-primary-bg);
   color: var(--global-text);
-  transition: 0.2s ease;
+  transition:  0s ease;
 }
 
 /* Selection styles */
@@ -85,6 +91,17 @@ body {
   color: var(--primary-accent);
 }
 
+video::cue {
+  background: rgba(0, 0, 0, 0.5);
+  color: #e8e8e8;
+  padding: 1rem;
+  font-size: 2.5vw;
+  text-shadow:
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000; 
+}
 `;
 
 export default GlobalStyles;
