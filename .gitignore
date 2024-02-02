@@ -136,3 +136,6 @@ storybook-static/
 # Temporary folders
 tmp/
 temp/
+
+#bun.lockb
+bun.lockb
