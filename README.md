@@ -106,7 +106,7 @@ VITE_BACKEND_URL="https://api.consumet.org"
 # Note: You have a commented out local development URL, which is useful for testing locally.
 # Example (local development): VITE_BACKEND_URL_2="http://localhost:3060/"
 VITE_BACKEND_URL_2="https://api.anify.tv/"
-z
+
 # VITE_API_KEY: Your API key for authentication with the backend servers.
 # Set this to your actual API key in a production environment.
 # Example: VITE_API_KEY="12345678-12345678-12345678"
