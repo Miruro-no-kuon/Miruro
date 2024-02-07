@@ -12,7 +12,6 @@ import Home from "./pages/Home";
 import Watch from "./pages/Watch";
 import SearchResults from "./pages/SearchResults";
 import PageNotFound from "./pages/404";
-import ScrollToTopButton from "./components/ScrollUp";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -48,7 +47,6 @@ function App() {
         <Route path="/watch/:animeId" element={<Watch />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-      <ScrollToTopButton />
       <Footer />
     </Router>
   );

@@ -9,9 +9,10 @@ const GlobalStyles = createGlobalStyle`
 /* Base Colors - Darker Shades for Dark Mode */
 :root.dark-mode {
   --global-primary-bg: #080808;
-  --global-primary-bg-tr: rgba(8, 8, 8, 0.8);
+  --global-primary-bg-tr: rgba(8, 8, 8, 0.97);
   --global-ad-bg: #141414;
   --global-input-div: #141414;
+  --global-input-border: rgba(245, 245, 245, 0.1);
   --global-text: #e8e8e8;
   --global-card-bg: #181818;
   --global-card-shadow: rgba(0, 0, 0, 0.6);
@@ -30,11 +31,11 @@ const GlobalStyles = createGlobalStyle`
   --global-secondary-bg: #141414;
   --global-tertiary-bg: #222222;
   --global-card-title-bg: #151515;
-  
-  --primary-accent: #ffffff;
-  --primary-accent-bg: #5900ff;
-  --primary-accent-bg-tr: rgba(89, 0, 255, 0.5);
 
+  --primary-accent: #8080cf;
+  --primary-accent-bg: #aeaee4;
+  --primary-accent-bg-tr: rgba(255, 0, 81, 0.99);
+  
   --logo-text-transparent: url(${logoTextTransparentWhite});
   --logo-transparent: url(${logoTransparentWhite});
 }
@@ -42,9 +43,10 @@ const GlobalStyles = createGlobalStyle`
 /* Light Mode Specific Colors */
 :root {
   --global-primary-bg: #f5f5f5;
-  --global-primary-bg-tr: rgba(245, 245, 245, 0.8);
+  --global-primary-bg-tr: rgba(245, 245, 245, 0.97);
   --global-ad-bg: #e0e0e0;
   --global-input-div: #e0e0e0;
+  --global-input-border: rgba( 8, 8, 8, 0.1);
   --global-text: #333333;
   --global-card-bg: #ffffff;
   --global-card-title-bg: #e8e8e8;
@@ -64,9 +66,9 @@ const GlobalStyles = createGlobalStyle`
   --global-secondary-bg: #e0e0e0;
   --global-tertiary-bg: #eaeaea;
 
-  --primary-accent: #ffffff;
-  --primary-accent-bg: #5900ff;
-  --primary-accent-bg-tr: rgba(89, 0, 255, 0.5);
+  --primary-accent: #8080cf;
+  --primary-accent-bg: #aeaee4;
+  --primary-accent-bg-tr: rgba(255, 0, 81, 0.99);
 
   --logo-text-transparent: url(${logoTextTransparentBlack});
   --logo-transparent: url(${logoTransparentBlack});
@@ -77,12 +79,16 @@ body {
   font-family: Overpass, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   margin: 0;
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 2rem 2rem 2rem;
   max-width: 125rem;
   margin: auto;
   background-color: var(--global-primary-bg);
   color: var(--global-text);
-  transition:  0s ease;
+  transition: 0.1s ease;
+
+  @media (max-width: 768px) {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
 }
 
 /* Selection styles */

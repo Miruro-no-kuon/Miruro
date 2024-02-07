@@ -71,6 +71,9 @@ const LargePlayIcon = styled.div`
   border: 0.35rem solid #eeeeee;
   border-radius: 50%;
   backdrop-filter: blur(10px);
+  z-index: 2;
+  background-size: cover; // Optional: if you want the image to cover the whole area
+  background-position: center; // Optional: for centering the image
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   color: #eeeeee;
   top: 50%;
@@ -123,6 +126,18 @@ const PlayPauseOverlay = styled.div`
   z-index: 2;
 `;
 
+const BannerOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${({ bannerImage }) => bannerImage});
+  background-size: cover; // Adjust this as needed
+  background-position: center;
+  z-index: 1; // Make sure this is below the play button but above the video
+`;
+
 const isMobileDevice = () => {
   const userAgent =
     typeof window.navigator === "undefined" ? "" : navigator.userAgent;
@@ -137,6 +152,7 @@ const VideoPlayer = ({
   shouldPreload = false,
   provider,
   episodeNumber,
+  bannerImage,
 }) => {
   const [videoSources, setVideoSources] = useState([]);
   const [selectedSource, setSelectedSource] = useState("");
@@ -165,6 +181,7 @@ const VideoPlayer = ({
   const playerWrapperRef = useRef(null);
   const videoPlayerWrapperRef = useRef(null);
   const videoControlsRef = useRef(null);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(isMobileDevice());
@@ -440,12 +457,15 @@ const VideoPlayer = ({
                   }}
                 />
               )}
-              {!isMobile && !isPlaying && !hasPlayed && !isVideoChanging && (
+              {!isPlaying && !hasPlayed && !isVideoChanging && (
                 <LargePlayIcon $isPlaying={isPlaying} onClick={handlePlay}>
                   <i className="material-icons" style={{ fontSize: "4rem" }}>
                     play_arrow
                   </i>
                 </LargePlayIcon>
+              )}
+              {!isPlaying && !hasPlayed && !isVideoChanging && (
+                <BannerOverlay bannerImage={bannerImage} />
               )}
 
               <StyledVideo ref={videoRef} controls={isMobile} />

@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Miruro no Kuon" />
+    <meta
+      name="description"
+      content="Miruro no Kuon - Anime Streaming Site with minimal UI 🍜. Enjoy HD fast streaming of your favorite anime, manga reading, and explore anime-related forums on www.miruro.tv. Discover a world of anime entertainment at Miruro no Kuon!"
+    />
     <link
       rel="icon"
       type="image/svg+xml"
-      href="/src/assets/favicon white/android-chrome-512x512.png"
+      href="src/assets/favicon notr/favicon-circular-miruro-512x512.png"
     />
     <link
       rel="stylesheet"
@@ -17,10 +20,30 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
-    <title>Miruro no Kuon</title>
+    <title>Miruro</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const themePreference = localStorage.getItem("themePreference");
+
+      if (themePreference === "dark") {
+        document.body.style.backgroundColor = "#080808";
+      } else if (themePreference === "light") {
+        document.body.style.backgroundColor = "#f5f5f5";
+      } else if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        document.body.style.backgroundColor = "#080808"; // Set to dark if user prefers dark theme
+      } else {
+        document.body.style.backgroundColor = "#f5f5f5"; // Set to light if none of the above conditions match
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.style.backgroundColor = "";
+      });
+    </script>
   </body>
 </html>

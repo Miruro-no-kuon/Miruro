@@ -56,10 +56,10 @@ const SkeletonImage = styled.div`
   border-radius: 0.2rem;
 `;
 
-const CarouselSlideSkeleton = React.memo(({ loading }) => (
+const CarouselSkeleton = React.memo(({ loading }) => (
   <SkeletonSlide loading={loading}>
     <SkeletonImage loading={loading} />
   </SkeletonSlide>
 ));
 
-export default CarouselSlideSkeleton;
+export default CarouselSkeleton;

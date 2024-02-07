@@ -8,7 +8,8 @@ import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
   const [loading, setLoading] = useState(true);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredCardInstant, setHoveredCardInstant] = useState(null);
+  const [hoveredCardDelayed, setHoveredCardDelayed] = useState(null);
   const [loadMoreClicked, setLoadMoreClicked] = useState(false);
   const hoverTimeouts = useRef({});
 
@@ -16,50 +17,49 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
     const loadingTimeout = setTimeout(() => {
       setLoading(false);
       setShowLoadMoreButton(true);
-      setLoadMoreClicked(false); // Reset the load more click state when new data is loaded
+      setLoadMoreClicked(false);
     }, 0);
-
     return () => clearTimeout(loadingTimeout);
-  }, [animeData]); // Update the dependency array to include animeData
-
-  const handleLoadMoreClick = () => {
-    setLoadMoreClicked(true); // Disable the button once clicked
-    onLoadMore();
-  };
+  }, [animeData]);
 
   const handleCardHover = useMemo(
     () => (animeId) => {
+      setHoveredCardInstant(animeId); // Set instant hover state
+
       if (hoverTimeouts.current[animeId]) {
         clearTimeout(hoverTimeouts.current[animeId]);
       }
 
       hoverTimeouts.current[animeId] = setTimeout(() => {
-        if (hoveredCard !== animeId) {
-          setHoveredCard(animeId);
-        }
-      }, 0);
+        setHoveredCardDelayed(animeId); // Set delayed hover state
+      }, 200);
     },
-    [hoveredCard]
+    []
   );
 
   const handleCardLeave = useMemo(
     () => (animeId) => {
+      setHoveredCardInstant(null); // Clear instant hover state
+
       if (hoverTimeouts.current[animeId]) {
         clearTimeout(hoverTimeouts.current[animeId]);
       }
-      if (hoveredCard !== null) {
-        setHoveredCard(null);
-      }
+      setHoveredCardDelayed(null); // Clear delayed hover state
     },
-    [hoveredCard]
+    []
   );
+
+  const handleLoadMoreClick = () => {
+    setLoadMoreClicked(true);
+    onLoadMore();
+  };
 
   const renderLoadMoreButton = () => {
     if (hasNextPage && showLoadMoreButton) {
       return (
         <LoadMoreButton
           onClick={handleLoadMoreClick}
-          disabled={loading || loadMoreClicked} // Button is disabled when loading or already clicked
+          disabled={loading || loadMoreClicked}
         >
           <FontAwesomeIcon icon={faArrowCircleDown} className="icon" />
           <LoadMoreText>
@@ -83,7 +83,8 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
               anime={anime}
               onHover={() => handleCardHover(anime.id)}
               onLeave={() => handleCardLeave(anime.id)}
-              isHovered={hoveredCard === anime.id}
+              isHoveredInstant={hoveredCardInstant === anime.id}
+              isHoveredDelayed={hoveredCardDelayed === anime.id}
             />
           ))}
       {renderLoadMoreButton()}
