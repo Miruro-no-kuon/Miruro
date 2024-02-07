@@ -90,35 +90,13 @@ npm install
 bun install
 ```
 
-### 3. Create `.env` file in the root folder and put this inside the file :
+#### Create a `.env` file in the root folder and copy the contents of `.env.example` into it
 
 ```bash
-## AniList
-# VITE_BACKEND_URL: The base URL of the primary backend server.
-# Set this to the URL of your primary backend server in a production environment.
-# Example: VITE_BACKEND_URL="https://api.consumet.org"
-VITE_BACKEND_URL="https://api.consumet.org"
-
-# VITE_BACKEND_URL_2: The base URL of a secondary backend server (if applicable).
-# You can use a secondary backend server for specific features or redundancy.
-# Set this to the URL of your secondary backend server in a production environment.
-# Example: VITE_BACKEND_URL_2="https://api.anify.tv/"
-# Note: You have a commented out local development URL, which is useful for testing locally.
-# Example (local development): VITE_BACKEND_URL_2="http://localhost:3060/"
-VITE_BACKEND_URL_2="https://api.anify.tv/"
-
-# VITE_API_KEY: Your API key for authentication with the backend servers.
-# Set this to your actual API key in a production environment.
-# Example: VITE_API_KEY="12345678-12345678-12345678"
-VITE_API_KEY=""
-
-# PORT: The port number on which your server (if applicable) should listen.
-# Set this to the desired port number in a production environment.
-# Example: PORT=5173
-PORT=5173
+cp .env.example .env
 ```
 
-### 4. Start local server :
+### 3. Start local server :
 
 #### Npm
 
