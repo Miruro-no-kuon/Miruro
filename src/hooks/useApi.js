@@ -8,7 +8,7 @@ const IS_LOCAL = false;
 
 const PROXY_SERVER_BASE_URL = IS_LOCAL
   ? "http://localhost:5173/api"
-  : `${PROXY_URL}`;
+  : `${PROXY_URL}/api`;
 
 const axiosInstance = axios.create({
   baseURL: PROXY_SERVER_BASE_URL,
