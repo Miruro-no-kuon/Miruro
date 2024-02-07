@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
-import CardGrid from "../components/Cards/CardGrid";
+import CardGrid, { StyledCardGrid }  from "../components/Cards/CardGrid";
+import CarouselSkeleton from "../components/Skeletons/CarouselSkeleton";
+import CardSkeleton from "../components/Skeletons/CardSkeleton";
 import {
   fetchTrendingAnime,
   fetchPopularAnime,
@@ -63,7 +65,7 @@ const Tab = styled.button`
   }
 
   border-bottom: ${({ $isActive }) =>
-    $isActive ? "2px solid transparent" : "none"};
+  $isActive ? "2px solid transparent" : "none"};
 
   &:focus {
     outline: none;
@@ -81,6 +83,11 @@ const Home = () => {
   const [popularAnime, setPopularAnime] = useState([]);
   const [topAnime, setTopAnime] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState({
+    trending: true,
+    popular: true,
+    top: true,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +103,8 @@ const Home = () => {
         setTopAnime(top.results);
       } catch (fetchError) {
         setError(fetchError.message);
+      } finally {
+        setLoading({ trending: false, popular: false, top: false });
       }
     };
 
@@ -106,16 +115,28 @@ const Home = () => {
     setActiveTab(tabName);
   };
 
-  const renderCardGrid = (animeData) => (
+  const renderCardGrid = (animeData, isLoading) => (
     <Section>
-      <CardGrid animeData={animeData} />
+      {isLoading ? (
+        <StyledCardGrid>
+          {Array.from({ length: 16 }, (_, index) => (
+            <CardSkeleton key={index} isLoading={true} />
+          ))}
+        </StyledCardGrid>
+      ) : (
+        <CardGrid animeData={animeData} />
+      )}
     </Section>
   );
 
   return (
     <SimpleLayout>
       {error && <p>Error: {error}</p>}
-      <Carousel data={trendingAnime} />
+      {loading.trending ? (
+        <CarouselSkeleton />
+      ) : (
+        <Carousel data={trendingAnime} />
+      )}
 
       <TabContainer>
         <Tab
@@ -138,9 +159,10 @@ const Home = () => {
         </Tab>
       </TabContainer>
 
-      {activeTab === "trending" && renderCardGrid(trendingAnime)}
-      {activeTab === "popular" && renderCardGrid(popularAnime)}
-      {activeTab === "top" && renderCardGrid(topAnime)}
+      {activeTab === "trending" &&
+        renderCardGrid(trendingAnime, loading.trending)}
+      {activeTab === "popular" && renderCardGrid(popularAnime, loading.popular)}
+      {activeTab === "top" && renderCardGrid(topAnime, loading.top)}
     </SimpleLayout>
   );
 };
