@@ -3,11 +3,12 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const BASE_URL_2 = import.meta.env.VITE_BACKEND_URL_2;
 const API_KEY = import.meta.env.VITE_API_KEY;
+const PROXY_URL = import.meta.env.VITE_PROXY_URL;
 const IS_LOCAL = false;
 
 const PROXY_SERVER_BASE_URL = IS_LOCAL
-  ? "http://192.168.1.43:5173/api"
-  : "https://genesis.akioni-uwu.workers.dev/api";
+  ? "http://localhost:5173/api"
+  : `${PROXY_URL}`;
 
 const axiosInstance = axios.create({
   baseURL: PROXY_SERVER_BASE_URL,
