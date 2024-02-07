@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
@@ -34,88 +34,105 @@ const StyledCardItem = styled.div`
   transition: 0.2s;
 `;
 
-const CardItemContent = React.memo(({ anime, onHover, onLeave, isHovered }) => {
-  const { width } = useWindowDimensions();
-  const cardRef = useRef(null);
-  const navigate = useNavigate();
+const CardItemContent = React.memo(
+  ({ anime, onHover, onLeave, isHoveredInstant, isHoveredDelayed }) => {
+    const [isMobile, setIsMobile] = useState(isMobileDevice());
+    const { width } = useWindowDimensions();
+    const cardRef = useRef(null);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (cardRef.current) {
-      const cardPosition = getElementPosition(cardRef.current);
-      const isLeft = cardPosition.left < width / 2;
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(isMobileDevice());
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
+      if (cardRef.current) {
+        const cardPosition = getElementPosition(cardRef.current);
+        const isLeft = cardPosition.left < width / 2;
+      }
+    }, [width]);
+
+    const {
+      coverImage,
+      bannerImage,
+      releaseDate,
+      popularity,
+      format,
+      type,
+      totalEpisodes,
+      currentEpisode,
+      description,
+      genres,
+    } = anime;
+
+    const altText = anime.title?.romaji || anime.title?.english;
+
+    // Use rating.anilist if available, otherwise null
+    const ratingValue =
+      typeof anime.rating === "number"
+        ? anime.rating
+        : anime.rating?.anilist ?? null;
+
+    function isMobileDevice() {
+      const userAgent =
+        typeof window.navigator === "undefined" ? "" : navigator.userAgent;
+      const mobileRegex =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      return mobileRegex.test(userAgent) || window.innerWidth <= 768;
     }
-  }, [width]);
 
-  const {
-    coverImage,
-    bannerImage,
-    releaseDate,
-    popularity,
-    format,
-    type,
-    totalEpisodes,
-    currentEpisode,
-    description,
-    genres,
-  } = anime;
+    const handleCardClick = () => {
+      navigate(`/watch/${anime.id}`);
+    };
 
-  const altText = anime.title?.romaji || anime.title?.english;
+    return (
+      <StyledCardWrapper
+        onClick={handleCardClick}
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        color={anime.color}
+      >
+        <StyledCardItem ref={cardRef}>
+          <ImageDisplay
+            imageSrc={anime.coverImage || anime.image}
+            altText={altText}
+            type={format || type}
+            totalEpisodes={totalEpisodes}
+            rating={ratingValue}
+            color={anime.color}
+            $ishovered={isHoveredInstant}
+          />
 
-  // Use rating.anilist if available, otherwise null
-  const ratingValue =
-    typeof anime.rating === "number"
-      ? anime.rating
-      : anime.rating?.anilist ?? null;
+          <TitleComponent $ishovered={isHoveredInstant} anime={anime} />
+        </StyledCardItem>
 
-  const isMobile = width <= 1000;
-
-  const handleCardClick = () => {
-    navigate(`/watch/${anime.id}`);
-  };
-
-  return (
-    <StyledCardWrapper
-      onClick={handleCardClick}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      color={anime.color}
-    >
-      <StyledCardItem ref={cardRef}>
-        <ImageDisplay
-          imageSrc={anime.coverImage || anime.image}
-          altText={altText}
-          type={format || type}
-          totalEpisodes={totalEpisodes}
-          rating={ratingValue}
-          color={anime.color}
-          $ishovered={isHovered}
-        />
-
-        <TitleComponent $ishovered={isHovered} anime={anime} />
-      </StyledCardItem>
-
-      {!isMobile && isHovered && (
-        <InfoPopupContent
-          title={altText}
-          description={description}
-          genres={genres}
-          $isPositionedLeft={
-            cardRef.current &&
-            getElementPosition(cardRef.current).left < width / 2
-          }
-          color={anime.color}
-          type={format || type}
-          status={anime.status}
-          popularity={popularity?.anidb || popularity}
-          totalEpisodes={totalEpisodes}
-          currentEpisode={currentEpisode}
-          releaseDate={releaseDate || anime.year}
-          cover={bannerImage || anime.cover}
-          maxDescriptionLength={100}
-        />
-      )}
-    </StyledCardWrapper>
-  );
-});
+        {!isMobile && isHoveredDelayed && (
+          <InfoPopupContent
+            title={altText}
+            description={description}
+            genres={genres}
+            $isPositionedLeft={
+              cardRef.current &&
+              getElementPosition(cardRef.current).left < width / 2
+            }
+            color={anime.color}
+            type={format || type}
+            status={anime.status}
+            popularity={popularity?.anidb || popularity}
+            totalEpisodes={totalEpisodes}
+            currentEpisode={currentEpisode}
+            releaseDate={releaseDate || anime.year}
+            cover={bannerImage || anime.cover}
+            maxDescriptionLength={100}
+          />
+        )}
+      </StyledCardWrapper>
+    );
+  }
+);
 
 export default CardItemContent;

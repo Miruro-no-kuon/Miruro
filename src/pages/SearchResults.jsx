@@ -23,6 +23,7 @@ const SearchResults = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [totalResults, setTotalResults] = useState(0);
   const [page, setPage] = useState(1);
   const delayTimeout = useRef(null);
   const lastCachedPage = useRef(0);
@@ -66,6 +67,7 @@ const SearchResults = () => {
 
       setTotalPages(fetchedData.totalPages);
       setHasNextPage(fetchedData.hasNextPage);
+      setTotalResults(fetchedData.totalResults);
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -83,7 +85,7 @@ const SearchResults = () => {
       nextPage > lastCachedPage.current &&
       hasNextPage
     ) {
-      fetchAnimeData(query, nextPage, 30, (isCached) => {
+      fetchAnimeData(query, nextPage, 25, (isCached) => {
         if (!isCached) {
           lastCachedPage.current = nextPage;
           preloadNextPage(nextPage + 1);
@@ -103,11 +105,11 @@ const SearchResults = () => {
 
   return (
     <Container>
-      {query && (
+      {
         <Title>
-          Search Results for <strong>{query}</strong>
+          {animeData.length} Search Results found: <strong>{query}</strong>
         </Title>
-      )}
+      }
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 20 }).map((_, index) => (

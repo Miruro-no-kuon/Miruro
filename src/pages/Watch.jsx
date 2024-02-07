@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import { fetchAnimeEpisodes } from "../hooks/useApi";
+import { fetchAnimeEpisodes, fetchAnimeInfo2 } from "../hooks/useApi";
 import WatchSkeleton from "../components/Skeletons/WatchSkeleton"; // Update the import
 
 const LOCAL_STORAGE_KEYS = {
@@ -47,6 +47,7 @@ const Watch = () => {
   const { animeId } = useParams();
   const [episodes, setEpisodes] = useState([]);
   const [provider, setProvider] = useState(null);
+  const [animeInfo, setAnimeInfo] = useState(null);
   const [currentEpisode, setCurrentEpisode] = useState({
     id: null,
     number: 1,
@@ -82,6 +83,11 @@ const Watch = () => {
               number: matchedEpisode?.number || defaultEpisode.number,
             });
           }
+
+          // Fetching additional anime information
+          const infoData = await fetchAnimeInfo2(animeId);
+          setAnimeInfo(infoData); // Store the fetched information in state
+
         } catch (error) {
           console.error("Failed to fetch anime info:", error);
         } finally {
@@ -125,6 +131,7 @@ const Watch = () => {
           episodeNumber={currentEpisode.number}
           provider={provider}
           shouldPreload={shouldPreload}
+          bannerImage={animeInfo?.bannerImage}
         />
       </VideoPlayerContainer>
       <EpisodeListContainer>

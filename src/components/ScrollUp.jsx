@@ -32,11 +32,10 @@ const StyledButton = styled.button`
   z-index: 1000;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid var(--global-card-button-shadow);
+  border: 2px solid #ffffff;
   background-color: transparent;
   backdrop-filter: blur(10px);
   color: var(--global-button-text);
-  font-size: 1.25rem;
   padding: 0;
   width: 3.5rem;
   height: 3.5rem;
@@ -44,12 +43,11 @@ const StyledButton = styled.button`
   display: ${({ $isVisible }) =>
     $isVisible ? "block" : "none"}; // Use $isVisible here
   animation: ${({ $isVisible }) => ($isVisible ? fadeInFromBottom : fadeOut)}
-    0.35s ease;
-  box-shadow: 0 0 10px var(--global-button-shadow);
+    0.5s ease;
   bottom: ${({ $isVisible }) => ($isVisible ? "1.5rem" : "-3.5rem")};
 
   .icon {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 `;
 

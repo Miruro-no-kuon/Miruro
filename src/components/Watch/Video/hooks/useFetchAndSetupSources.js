@@ -94,7 +94,9 @@ const useFetchAndSetupSources = (
 
         setVideoSources(uniqueSources);
         setVideoQualityOptions(uniqueSources.map((source) => source.quality));
-        const initialSource = uniqueSources[0]?.url;
+        const initialSource = `${import.meta.env.VITE_PROXY_URL}/m3u8?url=${
+          uniqueSources[0]?.url
+        }`;
 
         setSelectedSource(initialSource);
 

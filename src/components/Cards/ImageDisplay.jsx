@@ -5,9 +5,8 @@ import {
   faTv,
   faClosedCaptioning,
   faStar,
-  faPlay, // Add the play icon
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import PropTypes from "prop-types";
 
 const popInAnimation = keyframes`
@@ -137,7 +136,7 @@ const ImageDisplay = ({
 }) => (
   <AnimeImage $ishovered={$ishovered} color={color}>
     <ImageWrapper>
-      <LazyLoadImage src={imageSrc} alt={altText} effect="blur" />
+      <img src={imageSrc} alt={altText} />
       <PlayIcon icon={faPlay} />
     </ImageWrapper>
     <InfoButtons $ishovered={$ishovered}>
