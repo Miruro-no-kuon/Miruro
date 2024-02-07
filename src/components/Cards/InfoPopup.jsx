@@ -7,6 +7,7 @@ import {
   faClosedCaptioning,
   faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import backgroundImage from "/src/assets/miruro-black-resized.webp";
 
 // Utility functions
 
@@ -59,8 +60,7 @@ const InfoPopup = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(10px);
-  background-image: url("${(props) => props.$cover}");
+  background-image: url("${(props) => props.$cover || backgroundImage}");
   background-position: center;
   box-shadow: 0.3125rem 0.3125rem 0.625rem var(--global-card-shadow);
 

@@ -4,10 +4,9 @@ import { FaPlay } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { useNavigate } from "react-router-dom";
+import BannerNotFound from "/src/assets/miruro-banner-dark-bg.png";
 
 // Styled components for the Carousel
-
-const BannerNotFound = "var(--logo-text-transparent)";
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -51,7 +50,7 @@ const DarkOverlay = styled.div`
   bottom: 0;
   border-radius: 0.2rem;
   z-index: 1;
-  background: linear-gradient(90deg, rgba(8, 8, 8, 1) 0%, transparent 60%);
+  background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 55%);
 `;
 
 const SlideImageWrapper = styled.div`
@@ -71,6 +70,13 @@ const SlideImage = styled.img`
     props.cover === props.image ? BannerNotFound : props.cover};
 `;
 
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+`;
+
 const SlideContent = styled.div`
   position: absolute;
   left: 2rem;
@@ -79,10 +85,6 @@ const SlideContent = styled.div`
   max-width: 60%;
 
   @media (max-width: 1000px) {
-    left: 1rem;
-    bottom: 1.5rem;
-  }
-  @media (max-width: 500px) {
     left: 1rem;
     bottom: 1.5rem;
   }
@@ -126,41 +128,61 @@ const SlideDescription = styled.p`
   }
 
   /* Add overflow-y: auto if the content exceeds max height */
-  overflow-y: ${({ maxLines }) => (maxLines ? "auto" : "hidden")};
+  overflow-y: ${({ $maxLines }) => ($maxLines ? "auto" : "hidden")};
+`;
+
+const PlayButtonWrapper = styled.div`
+  position: absolute;
+  right: 2rem;
+  bottom: 3rem;
+  z-index: 5;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+
+  @media (max-width: 1000px) {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
 `;
 
 const PlayButton = styled.button`
   background-color: var(--global-button-bg);
-  color: var(--global-text, var(--global-text-color));
+  color: var(--global-text);
   border: none;
   border-radius: 0.4rem;
-  font-size: 1rem;
+  font-size: 1.2rem; /* Increased font size */
   font-weight: bold;
   cursor: pointer;
   transition: 0.2s ease;
+  padding: 1.2rem 2.4rem; /* Increased padding */
   display: flex;
   align-items: center;
-  padding: 1rem 2rem;
 
   &:hover {
-    background-color: var(--primary-accent-bg, var(--primary-accent-bg-color));
-    transform: scale(1.035);
+    background-color: var(--primary-accent-bg);
+    transform: scale(1.05); /* Slightly larger scale on hover */
   }
 
   @media (max-width: 1000px) {
-    padding: 0.8rem 1.6rem;
+    padding: 1rem 2rem; /* Adjusted for medium-sized devices */
   }
 
   @media (max-width: 500px) {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.9rem 1.4rem; /* Adjusted for small devices */
+    font-size: 1rem; /* Adjusted font size for small devices */
+    span {
+      display: none;
+    }
   }
 `;
 
 const PlayIcon = styled(FaPlay)`
   margin-right: 0.5rem;
+  @media (max-width: 500px) {
+    margin-right: 0;
+  }
 `;
-
 const PaginationStyle = styled.div`
   .swiper-pagination-bullet {
     background: var(--global-primary-bg, #007bff);
@@ -220,18 +242,23 @@ const Carousel = ({ data = [] }) => {
                 alt={title.native}
                 loading="lazy"
               />
+              <ContentWrapper>
+                <SlideContent>
+                  <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
+                  <SlideDescription
+                    dangerouslySetInnerHTML={{ __html: description }}
+                    $maxLines={description.length > 200}
+                  />
+                </SlideContent>
+                <PlayButtonWrapper>
+                  <PlayButton onClick={() => handlePlayButtonClick(id)}>
+                    <PlayIcon />
+                    <span>Play Now</span>
+                  </PlayButton>
+                </PlayButtonWrapper>
+              </ContentWrapper>
               <DarkOverlay />
             </SlideImageWrapper>
-            <SlideContent>
-              <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
-              <SlideDescription
-                dangerouslySetInnerHTML={{ __html: description }}
-                maxLines={description.length > 200} // Adjust the condition as needed
-              />
-              <PlayButton onClick={() => handlePlayButtonClick(id)}>
-                <PlayIcon /> Play Now
-              </PlayButton>
-            </SlideContent>
           </StyledSwiperSlide>
         ))}
         <div className="swiper-pagination"></div>
