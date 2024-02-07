@@ -187,10 +187,10 @@ export async function fetchAnimeInfo(animeId, provider = "gogoanime") {
   }
 }
 
-export async function fetchTopAiringAnime(page = 1, perPage = 16) {
+export async function fetchTopAnime(page = 1, perPage = 16) {
   const options = {
     type: "ANIME",
-    status: "RELEASING",
+    sort: ["SCORE_DESC"],
   };
   return fetchAnimeData("", page, perPage, options);
 }
@@ -264,6 +264,31 @@ export async function fetchWatchInfo(episodeId) {
 
 //? Anify* | localhost:3060/
 
+export async function fetchAnimeInfo2(id, fields = []) {
+  const cacheKey = generateCacheKey("animeInfo", id, fields.join("-"));
+  const cachedData = cachedResults.get(cacheKey);
+  if (cachedData) {
+    return cachedData;
+  }
+
+  const url = `${BASE_URL_2}info/${id}`;
+  const params = new URLSearchParams(API_KEY ? { apikey: API_KEY } : {});
+
+  // Append 'fields' to the parameters only if it's not empty
+  if (fields.length > 0) {
+    params.append("fields", fields.join(","));
+  }
+
+  try {
+    const response = await fetchFromProxy(`${url}?${params.toString()}`);
+    const result = response;
+    cachedResults.set(cacheKey, result);
+    return result;
+  } catch (error) {
+    handleError(error, "anime info");
+  }
+}
+
 export async function fetchAnimeEpisodes(id) {
   const preferredProviders = ["gogoanime", "zoro", "animepache"];
 
@@ -331,29 +356,5 @@ export async function fetchEpisodeVideoUrls(
     return response;
   } catch (error) {
     handleError(error, "episode video URLs");
-  }
-}
-
-export async function fetchContinueWatching() {
-  try {
-    // Retrieve 'video-sources' data from session storage
-    const videoSources =
-      JSON.parse(sessionStorage.getItem("video-sources")) || {};
-
-    // Aggregate continue watching data
-    const continueWatchingData = Object.entries(videoSources).map(
-      ([watchId, videoSource]) => {
-        const savedTime = localStorage.getItem(`savedTime-${watchId}`);
-        return {
-          animeId: videoSource.id,
-          savedTime: savedTime ? parseFloat(savedTime) : 0,
-        };
-      }
-    );
-
-    return continueWatchingData;
-  } catch (error) {
-    handleError(error, "continue watching data");
-    return [];
   }
 }
