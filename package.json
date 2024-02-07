@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite build && cd server && bun run server.js"
+    "start": "vite build && cd server && bun run server.js",
+    "iu": "bun i && cd server && bun i"
   },
   "dependencies": {
     "@cloudflare/wrangler": "^1.21.0",
