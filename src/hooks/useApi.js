@@ -4,9 +4,9 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const BASE_URL_2 = import.meta.env.VITE_BACKEND_URL_2;
 const API_KEY = import.meta.env.VITE_API_KEY;
 const PROXY_URL = import.meta.env.VITE_PROXY_URL;
-const IS_LOCAL = false;
+const IS_LOCAL = import.meta.env.VITE_IS_LOCAL;
 
-const PROXY_SERVER_BASE_URL = IS_LOCAL
+const PROXY_SERVER_BASE_URL = IS_LOCAL == "true"
   ? "http://localhost:5173/api"
   : `${PROXY_URL}/api`;
 
@@ -89,7 +89,7 @@ async function fetchFromProxy(url) {
     if (cachedResponse) return cachedResponse;
 
     // Determine the correct endpoint based on IS_LOCAL
-    const endpoint = IS_LOCAL ? "/text" : "/json";
+    const endpoint = IS_LOCAL  == "true" ? "/text" : "/json";
     const proxyUrl = `${PROXY_SERVER_BASE_URL}${endpoint}`;
 
     // Make the request to the proxy
