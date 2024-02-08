@@ -144,7 +144,6 @@ bun start
 Please be aware that self-hosting this application is strictly limited to personal use only. Commercial utilization is prohibited, and the inclusion of advertisements on your self-hosted website may lead to consequences, including potential site takedown measures.
 
 ## License 📝
-## License 📝
 
 This project is licensed under the Custom BY-NC [License](LICENSE). You are free to use, share, and modify the code for non-commercial purposes with proper attribution to the original author(s). Commercial use is not allowed. For details, see the [LICENSE](LICENSE) file. Feel free to contact the author(s) for questions or additional permissions.
 
