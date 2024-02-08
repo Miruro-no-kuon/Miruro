@@ -211,6 +211,10 @@ const Carousel = ({ data = [] }) => {
       : title;
   };
 
+  const validData = data.filter(
+    (item) => item.title && item.title.english && item.description
+  );
+
   return (
     <PaginationStyle>
       <StyledSwiperContainer
@@ -232,7 +236,7 @@ const Carousel = ({ data = [] }) => {
           type: "bullets",
         }}
       >
-        {data.map(({ id, image, cover, title, description }) => (
+        {validData.map(({ id, image, cover, title, description }) => (
           <StyledSwiperSlide key={id}>
             <SlideImageWrapper>
               <SlideImage

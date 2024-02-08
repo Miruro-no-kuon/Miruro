@@ -212,10 +212,13 @@ const Navbar = () => {
       } else if (e.key === "Escape" && inputRef.current) {
         inputRef.current.blur();
         setSearch({ ...search, isSearchFocused: false });
-      } else if (e.shiftKey && e.key === "D") {
-        // Listening for Shift + D
-        e.preventDefault();
-        toggleTheme();
+      } else if (e.shiftKey && e.key.toLowerCase() === "d") {
+        // Check if search bar is focused
+        if (document.activeElement !== inputRef.current) {
+          // Listening for Shift + D or Shift + d and ensuring search bar is not focused
+          e.preventDefault();
+          toggleTheme();
+        }
       }
     },
     [search, isDarkMode]
