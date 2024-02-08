@@ -69,7 +69,7 @@ const FooterLogoImage = styled.img`
 const FooterLinks = styled.div`
   font-weight: bold;
   padding: 1rem;
-  
+
   h3 {
     font-size: 1rem;
     margin-bottom: 0.5rem;
@@ -172,7 +172,7 @@ function Footer() {
         <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
         <FooterLinks>
           <StyledLinkList>
-            <a href="#">FAQ</a>
+            <a href="Info">FAQ</a>
             <a href="Info">Policy</a>
             <a href="Info">Terms</a>
           </StyledLinkList>
