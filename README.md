@@ -61,7 +61,6 @@
 </div>
 
 ## Installation 🛠️
-## Installation 🛠️
 
 ### Before starting installation ⚠️
 
