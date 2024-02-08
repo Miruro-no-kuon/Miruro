@@ -7,8 +7,8 @@ const PROXY_URL = import.meta.env.VITE_PROXY_URL;
 const IS_LOCAL = import.meta.env.VITE_IS_LOCAL;
 
 const PROXY_SERVER_BASE_URL = IS_LOCAL == "true"
-  ? "http://localhost:5173/api"
-  : `${PROXY_URL}/api`;
+  ? "http://localhost:5173/api/json"
+  : `${PROXY_URL}/api/json`;
 
 const axiosInstance = axios.create({
   baseURL: PROXY_SERVER_BASE_URL,
@@ -88,9 +88,7 @@ async function fetchFromProxy(url) {
     const cachedResponse = cachedResults.get(cacheKey);
     if (cachedResponse) return cachedResponse;
 
-    // Determine the correct endpoint based on IS_LOCAL
-    const endpoint = IS_LOCAL  == "true" ? "/text" : "/json";
-    const proxyUrl = `${PROXY_SERVER_BASE_URL}${endpoint}`;
+    const proxyUrl = `${PROXY_SERVER_BASE_URL}`;
 
     // Make the request to the proxy
     const response = await axiosInstance.get(proxyUrl, {
