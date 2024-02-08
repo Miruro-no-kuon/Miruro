@@ -56,7 +56,11 @@ const proxyHandler = async (req, res, contentType) => {
       throw new Error(`Failed to fetch ${contentType} data from ${url}`);
     }
 
-    const data = await response.text();
+    // Check if content type is JSON and parse accordingly
+    const data =
+      contentType === "application/json"
+        ? await response.json()
+        : await response.text();
     res.header("Content-Type", contentType);
     res.send(data);
     logger.info(`Successfully fetched ${contentType} data from ${url}`);
@@ -92,6 +96,14 @@ app.get("/api/text", async (req, res) => {
     await proxyHandler(req, res, "text/plain");
   } catch (error) {
     handleError(res, "text/plain", error);
+  }
+});
+
+app.get("/api/json", async (req, res) => {
+  try {
+    await proxyHandler(req, res, "application/json");
+  } catch (error) {
+    handleError(res, "application/json", error);
   }
 });
 
