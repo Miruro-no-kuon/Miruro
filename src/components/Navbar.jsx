@@ -185,19 +185,7 @@ const Navbar = () => {
     searchQuery: searchParams.get("query") || "",
   });
 
-  const [isTop, setIsTop] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsTop(window.scrollY === 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", isDarkMode);
@@ -282,7 +270,7 @@ const Navbar = () => {
   };
 
   return (
-    <StyledNavbar ref={navbarRef} $isTop={isTop}>
+    <StyledNavbar ref={navbarRef}>
       <TopContainer>
         <LogoLink to="/home">見るろ の 久遠</LogoLink>
         <InputContainer>
