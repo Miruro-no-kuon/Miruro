@@ -1,23 +1,23 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 import path from "path";
-import { createLogger, transports, format } from "winston";
+import { createLogger, transports, format, Logger } from "winston";
 import chalk from "chalk";
 
 const app = express();
-const PORT = process.env.PORT || 5173;
+const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 const { combine, timestamp, printf } = format;
 
-const colors = {
+const colors: { [key: string]: Function } = {
   error: chalk.red.bold,
   warn: chalk.yellow.bold,
   info: chalk.green.bold,
   gray: chalk.gray,
 };
 
-const logger = createLogger({
+const logger: Logger = createLogger({
   level: "info",
   format: combine(
     timestamp(),
@@ -26,9 +26,9 @@ const logger = createLogger({
         ? colors[level](level.toUpperCase())
         : level.toUpperCase();
       const parts = message.split("from ");
-      const formattedMessage = `${formattedLevel}: ${parts[0]}${colors.gray(
-        "from "
-      )}${colors.gray(parts[1])}`;
+      const formattedMessage = `${formattedLevel}: ${
+        parts[0]
+      }${colors.gray("from ")}${colors.gray(parts[1])}`;
 
       return `${timestamp} ${formattedMessage}\n`;
     })
@@ -42,10 +42,14 @@ const logger = createLogger({
 app.use(cors());
 app.use(express.static(path.join(__dirname, "../dist")));
 
-const proxyHandler = async (req, res, contentType) => {
-  const url = req.query.url;
+const proxyHandler = async (
+  req: Request,
+  res: Response,
+  contentType: string
+): Promise<void> => {
+  const url: string | string[] | undefined = req.query.url as string;
   if (!url) {
-    const errorMessage = "URL parameter is required";
+    const errorMessage: string = "URL parameter is required";
     logger.error(errorMessage);
     return res.status(400).send(errorMessage);
   }
@@ -69,13 +73,13 @@ const proxyHandler = async (req, res, contentType) => {
   }
 };
 
-const handleError = (res, contentType, error) => {
+const handleError = (res: Response, contentType: string, error: Error): void => {
   const errorMessage = `Error fetching ${contentType}: ${error.message}`;
   logger.error(errorMessage);
   res.status(500).send(`Error occurred while fetching ${contentType} data`);
 };
 
-app.get("/api/vtt", async (req, res) => {
+app.get("/api/vtt", async (req: Request, res: Response) => {
   try {
     await proxyHandler(req, res, "text/vtt");
   } catch (error) {
@@ -83,7 +87,7 @@ app.get("/api/vtt", async (req, res) => {
   }
 });
 
-app.get("/api/m3u8", async (req, res) => {
+app.get("/api/m3u8", async (req: Request, res: Response) => {
   try {
     await proxyHandler(req, res, "application/x-mpegURL");
   } catch (error) {
@@ -91,7 +95,7 @@ app.get("/api/m3u8", async (req, res) => {
   }
 });
 
-app.get("/api/text", async (req, res) => {
+app.get("/api/text", async (req: Request, res: Response) => {
   try {
     await proxyHandler(req, res, "text/plain");
   } catch (error) {
@@ -99,7 +103,7 @@ app.get("/api/text", async (req, res) => {
   }
 });
 
-app.get("/api/json", async (req, res) => {
+app.get("/api/json", async (req: Request, res: Response) => {
   try {
     await proxyHandler(req, res, "application/json");
   } catch (error) {
@@ -107,7 +111,7 @@ app.get("/api/json", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
+app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../dist", "index.html"), (err) => {
     if (err) {
       handleError(res, "index.html", err);

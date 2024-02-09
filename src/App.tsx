@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,8 +26,11 @@ function ScrollToTop() {
 
 function App() {
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape" && document.activeElement) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === "Escape" &&
+        document.activeElement instanceof HTMLElement
+      ) {
         document.activeElement.blur();
       }
     };
@@ -46,7 +49,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/watch/:animeId" element={<Watch />} />
-        <Route path="Info" element={<Info />} />
+        <Route path="/Info" element={<Info />} /> {/* Corrected the path */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />

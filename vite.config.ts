@@ -8,7 +8,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     // You can customize the output directory and publicPath if needed
     outDir: "dist", // Specify your desired output directory
-    publicDir: "public", // Specify your public directory
     rollupOptions: {
       output: {
         manualChunks: {

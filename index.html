@@ -21,7 +21,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx" defer></script>
     <script>
       const themePreference = localStorage.getItem("themePreference");
 
@@ -42,5 +41,6 @@
         document.body.style.backgroundColor = "";
       });
     </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
