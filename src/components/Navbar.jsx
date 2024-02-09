@@ -2,7 +2,13 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSun,
+  faMoon,
+  faSearch,
+  faTimes,
+  faSlash,
+} from "@fortawesome/free-solid-svg-icons";
 
 const colors = {
   globalPrimaryBgTr: "var(--global-primary-bg-tr)",
@@ -275,7 +281,7 @@ const Navbar = () => {
         <LogoLink to="/home">見るろ の 久遠</LogoLink>
         <InputContainer>
           <Icon $isFocused={search.isSearchFocused}>
-            <i className="fas fa-search"></i>
+            <FontAwesomeIcon icon={faSearch} />
           </Icon>
           <SearchInput
             type="text"
@@ -286,10 +292,10 @@ const Navbar = () => {
             ref={inputRef}
           />
           <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>
-            <i className="fas fa-times"></i>
+            <FontAwesomeIcon icon={faTimes} />
           </ClearButton>
           <SlashToggleBtn $isFocused={search.isSearchFocused}>
-            <i className="fa-solid fa-slash fa-rotate-90"></i>
+            <FontAwesomeIcon icon={faSlash} rotation={90} />
           </SlashToggleBtn>
         </InputContainer>
         <ThemeToggleBtn onClick={toggleTheme}>

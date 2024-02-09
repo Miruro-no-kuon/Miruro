@@ -58,7 +58,7 @@ const CardItemContent = React.memo(
 
     const {
       coverImage,
-      bannerImage,
+      $bannerImage,
       releaseDate,
       popularity,
       format,
@@ -126,7 +126,7 @@ const CardItemContent = React.memo(
             totalEpisodes={totalEpisodes}
             currentEpisode={currentEpisode}
             releaseDate={releaseDate || anime.year}
-            cover={bannerImage || anime.cover}
+            cover={$bannerImage || anime.cover}
             maxDescriptionLength={100}
           />
         )}

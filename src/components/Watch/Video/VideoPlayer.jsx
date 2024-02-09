@@ -132,7 +132,7 @@ const BannerOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(${({ bannerImage }) => bannerImage});
+  background-image: url(${({ $bannerImage }) => $bannerImage});
   background-size: cover; // Adjust this as needed
   background-position: center;
   z-index: 1; // Make sure this is below the play button but above the video
@@ -465,7 +465,7 @@ const VideoPlayer = ({
                 </LargePlayIcon>
               )}
               {!isPlaying && !hasPlayed && !isVideoChanging && (
-                <BannerOverlay bannerImage={bannerImage} />
+                <BannerOverlay $bannerImage={bannerImage} />
               )}
 
               <StyledVideo ref={videoRef} controls={isMobile} />

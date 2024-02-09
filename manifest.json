@@ -1,0 +1,45 @@
+{
+  "theme_color": "#aeaee4",
+  "background_color": "#080808",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Miruro",
+  "short_name": "Miruro",
+  "description": "🍜 Miruro is an Anime Streaming Site with minimal UI. Made with ⚡ Vite & 🍞 Bun!",
+  "lang": "en",
+  "categories": ["entertainment", "books", "comics"],
+  "icons": [
+    {
+      "src": "/src/assets/favicon notr/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/src/assets/favicon notr/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/src/assets/favicon notr/favicon-circular-miruro-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/homepage.png",
+      "sizes": "1024x768",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/read-view.png",
+      "sizes": "1024x768",
+      "type": "image/png"
+    }
+  ]
+}

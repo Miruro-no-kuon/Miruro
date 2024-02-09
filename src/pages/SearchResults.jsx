@@ -7,7 +7,7 @@ import { fetchAnimeData } from "../hooks/useApi";
 import CardSkeleton from "../components/Skeletons/CardSkeleton";
 
 const Container = styled.div`
-  /* Add any styling for the container here */
+  min-height: 85vh;
 `;
 
 const Title = styled.h2`

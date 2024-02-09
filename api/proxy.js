@@ -1,27 +1,58 @@
+/**
+ * Welcome to Cloudflare Workers! This is your first worker.
+ *
+ * - Run "bun run dev" in your terminal to start a development server
+ * - Open a browser tab at http://localhost:8787/ to see your worker in action
+ * - Run "bun run deploy" to publish your worker
+ *
+ * Learn more at https://developers.cloudflare.com/workers/
+ */
+
 addEventListener("fetch", (event) => {
-  event.respondWith(handleRequest(event.request));
+  event.respondWith(handleRequest(event));
 });
 
-async function handleRequest(request) {
+async function handleRequest(event) {
+  const request = event.request;
   const url = new URL(request.url);
   const pathname = url.pathname;
 
   try {
     if (pathname.startsWith("/api/vtt")) {
-      return proxyHandler(request, "text/vtt");
+      return handleProxy(event, "text/vtt");
     } else if (pathname.startsWith("/api/m3u8")) {
-      return proxyHandler(request, "application/x-mpegURL");
+      return handleProxy(event, "application/x-mpegURL");
     } else if (pathname.startsWith("/api/text")) {
-      return proxyHandler(request, "text/plain");
+      return handleProxy(event, "text/plain");
     } else if (pathname.startsWith("/api/json")) {
-      // Adding handling for JSON content type
-      return proxyHandler(request, "application/json");
+      return handleProxy(event, "application/json");
     } else {
       return new Response("Not Found", { status: 404 });
     }
   } catch (error) {
     return new Response(`Error: ${error.message}`, { status: 500 });
   }
+}
+
+async function handleProxy(event, contentType) {
+  const request = event.request;
+  const cacheUrl = new URL(request.url);
+  const cacheKey = new Request(cacheUrl.toString(), request);
+  const cache = caches.default;
+
+  // Check whether the response is already in the cache
+  let response = await cache.match(cacheKey);
+  if (!response) {
+    // If not in cache, fetch from the network
+    response = await proxyHandler(request, contentType);
+
+    // Update the cache with the fetched response
+    response = new Response(response.body, response);
+    response.headers.append("Cache-Control", "s-maxage=3600"); // Adjust cache duration as needed
+    event.waitUntil(cache.put(cacheKey, response.clone()));
+  }
+
+  return response;
 }
 
 async function proxyHandler(request, contentType) {

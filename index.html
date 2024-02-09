@@ -7,14 +7,11 @@
       name="description"
       content="Miruro no Kuon - Anime Streaming Site with minimal UI 🍜. Enjoy HD fast streaming of your favorite anime, manga reading, and explore anime-related forums on www.miruro.tv. Discover a world of anime entertainment at Miruro no Kuon!"
     />
+    <link rel="manifest" href="manifest.json" />
     <link
       rel="icon"
       type="image/svg+xml"
       href="src/assets/favicon notr/favicon-circular-miruro-512x512.png"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     />
     <link
       rel="stylesheet"
@@ -24,7 +21,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx" defer></script>
     <script>
       const themePreference = localStorage.getItem("themePreference");
 

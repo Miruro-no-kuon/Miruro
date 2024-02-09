@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
-import CardGrid, { StyledCardGrid }  from "../components/Cards/CardGrid";
+import CardGrid, { StyledCardGrid } from "../components/Cards/CardGrid";
 import CarouselSkeleton from "../components/Skeletons/CarouselSkeleton";
 import CardSkeleton from "../components/Skeletons/CardSkeleton";
 import {
@@ -53,9 +53,7 @@ const Tab = styled.button`
     transform-origin: left center;
     transform: scaleX(0);
     transition: transform 0.2s ease;
-    transform: scaleX(
-      ${({ $isActive }) => ($isActive ? 1 : 0)}
-    ); /* Add this line */
+    transform: scaleX(${({ $isActive }) => ($isActive ? 1 : 0)});
   }
 
   &:hover::before,
@@ -65,7 +63,7 @@ const Tab = styled.button`
   }
 
   border-bottom: ${({ $isActive }) =>
-  $isActive ? "2px solid transparent" : "none"};
+    $isActive ? "2px solid transparent" : "none"};
 
   &:focus {
     outline: none;
@@ -75,6 +73,21 @@ const Tab = styled.button`
 const Section = styled.section`
   padding: 0rem;
   border-radius: 0.2rem;
+`;
+
+// Styled component for error messages
+const ErrorMessage = styled.div`
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #ffdddd;
+  border-left: 4px solid #f44336;
+  color: #f44336;
+  border-radius: 0.2rem;
+
+  p {
+    margin: 0;
+    font-weight: bold;
+  }
 `;
 
 const Home = () => {
@@ -131,7 +144,11 @@ const Home = () => {
 
   return (
     <SimpleLayout>
-      {error && <p>Error: {error}</p>}
+      {error && (
+        <ErrorMessage>
+          <p>Error: {error}</p>
+        </ErrorMessage>
+      )}
       {loading.trending ? (
         <CarouselSkeleton />
       ) : (

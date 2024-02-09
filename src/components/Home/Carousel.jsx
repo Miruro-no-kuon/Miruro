@@ -67,7 +67,7 @@ const SlideImage = styled.img`
   border-radius: 0.2rem;
   position: absolute;
   content: ${(props) =>
-    props.cover === props.image ? BannerNotFound : props.cover};
+    props.$cover === props.$image ? BannerNotFound : props.$cover};
 `;
 
 const ContentWrapper = styled.div`
@@ -109,7 +109,7 @@ const SlideDescription = styled.p`
   background: var(--global-primary-bg)
   font-size: clamp(0.9rem, 1.5vw, 1rem);
   line-height: 1;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   max-width: 50%;
   max-height: 4rem;
   overflow: hidden;
@@ -169,7 +169,8 @@ const PlayButton = styled.button`
   }
 
   @media (max-width: 500px) {
-    padding: 0.9rem 1.4rem; /* Adjusted for small devices */
+    border-radius: 50%;
+    padding: 1.25rem; /* Adjusted for small devices */
     font-size: 1rem; /* Adjusted font size for small devices */
     span {
       display: none;
@@ -241,8 +242,8 @@ const Carousel = ({ data = [] }) => {
             <SlideImageWrapper>
               <SlideImage
                 src={cover === image ? BannerNotFound : cover}
-                cover={cover}
-                image={image}
+                $cover={cover}
+                $image={image}
                 alt={title.native}
                 loading="lazy"
               />
