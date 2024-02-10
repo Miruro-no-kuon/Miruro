@@ -34,11 +34,15 @@ async function handleRequest(event) {
   }
 }
 
+interface ExtendedCacheStorage extends CacheStorage {
+  default: Cache;
+}
+
 async function handleProxy(event, contentType) {
   const request = event.request;
   const cacheUrl = new URL(request.url);
   const cacheKey = new Request(cacheUrl.toString(), request);
-  const cache = caches.default;
+  const cache = (caches as ExtendedCacheStorage).default;
 
   // Check whether the response is already in the cache
   let response = await cache.match(cacheKey);

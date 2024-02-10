@@ -22,6 +22,8 @@
     "@material-tailwind/react": "^2.1.4",
     "@mui/icons-material": "^5.15.2",
     "@mui/material": "^5.15.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
     "@vercel/speed-insights": "^1.0.8",
     "@vidstack/react": "next",
     "axios": "^1.6.0",

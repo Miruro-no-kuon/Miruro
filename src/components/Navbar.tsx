@@ -86,7 +86,12 @@ const InputContainer = styled.div`
   }
 `;
 
-const Icon = styled.div`
+interface IconProps {
+  $isFocused: boolean;
+  $fontSize?: string;
+}
+
+const Icon = styled.div<IconProps>`
   margin-right: 0.7rem;
   color: ${colors.globalText};
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
@@ -107,7 +112,11 @@ const SearchInput = styled.input`
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 `;
 
-const ClearButton = styled.button`
+interface ClearButtonProps {
+  $query: string;
+}
+
+const ClearButton = styled.button<ClearButtonProps>`
   background: transparent;
   border: none;
   color: ${colors.globalText};
@@ -138,7 +147,11 @@ const ThemeToggleBtn = styled.button`
   }
 `;
 
-const SlashToggleBtn = styled.button`
+interface SlashToggleBtnProps {
+  $isFocused: boolean;
+}
+
+const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
   background: transparent;
   border: 2px solid ${colors.globalText};
   border-radius: 0.2rem;
@@ -165,7 +178,7 @@ const detectUserTheme = () => {
   return false;
 };
 
-const saveThemePreference = (isDarkMode) => {
+const saveThemePreference = (isDarkMode: boolean) => {
   localStorage.setItem("themePreference", isDarkMode ? "dark" : "light");
 };
 
@@ -182,9 +195,9 @@ const getInitialThemePreference = () => {
 const Navbar = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
-  const delayTimeout = useRef(null);
+  // * const delayTimeout = useRef(null);
 
   const [search, setSearch] = useState({
     isSearchFocused: false,
@@ -198,7 +211,7 @@ const Navbar = () => {
   }, [isDarkMode]);
 
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       if (e.key === "/" && inputRef.current) {
         e.preventDefault();
         inputRef.current.focus();
@@ -219,9 +232,10 @@ const Navbar = () => {
   ); // Adding isDarkMode as a dependency
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
+    const listener = handleKeyDown as EventListener;
+    document.addEventListener("keydown", listener);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", listener);
     };
   }, [handleKeyDown]);
 
@@ -247,26 +261,30 @@ const Navbar = () => {
   }; */
 
   const navigateWithQuery = useCallback(
-    (value) => {
+    (value: string) => {
       navigate(value ? `/search?query=${value}` : "/search");
     },
     [navigate]
   );
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearch({ ...search, searchQuery: newValue });
+  };
 
-    // Only navigate when 'Enter' is pressed
+  const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      navigateWithQuery(newValue);
+      // Use the current state value for navigation
+      navigateWithQuery(search.searchQuery);
     }
   };
 
   const handleClearSearch = () => {
     setSearch({ ...search, searchQuery: "" });
     navigateWithQuery("");
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   const toggleTheme = () => {
@@ -288,7 +306,7 @@ const Navbar = () => {
             placeholder="Search Anime"
             value={search.searchQuery}
             onChange={handleInputChange}
-            onKeyDown={handleInputChange}
+            onKeyDown={handleKeyDownOnInput}
             ref={inputRef}
           />
           <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>

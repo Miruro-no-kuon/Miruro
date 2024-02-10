@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import CardGrid from "../components/Cards/CardGrid";
@@ -19,15 +19,14 @@ const Title = styled.h2`
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
-  const [animeData, setAnimeData] = useState([]);
+  const [animeData, setAnimeData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [totalResults, setTotalResults] = useState(0);
   const [page, setPage] = useState(1);
-  const delayTimeout = useRef(null);
+  const delayTimeout = useRef<NodeJS.Timeout | null>(null);
   const lastCachedPage = useRef(0);
-  const [loadingStates, setLoadingStates] = useState([]);
+  const [loadingStates, setLoadingStates] = useState<boolean[]>([]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -46,11 +45,16 @@ const SearchResults = () => {
     }
 
     try {
-      const fetchedData = await fetchAnimeData(query, page, 20, (isCached) => {
-        if (!isCached) {
-          preloadNextPage(page + 1);
+      const fetchedData = await fetchAnimeData(
+        query,
+        page,
+        20,
+        (isCached: boolean) => {
+          if (!isCached) {
+            preloadNextPage(page + 1);
+          }
         }
-      });
+      );
 
       if (page === 1) {
         setAnimeData(fetchedData.results);
@@ -67,7 +71,6 @@ const SearchResults = () => {
 
       setTotalPages(fetchedData.totalPages);
       setHasNextPage(fetchedData.hasNextPage);
-      setTotalResults(fetchedData.totalResults);
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -79,13 +82,13 @@ const SearchResults = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const preloadNextPage = (nextPage) => {
+  const preloadNextPage = (nextPage: number) => {
     if (
       nextPage <= totalPages &&
       nextPage > lastCachedPage.current &&
       hasNextPage
     ) {
-      fetchAnimeData(query, nextPage, 25, (isCached) => {
+      fetchAnimeData(query, nextPage, 25, (isCached: boolean) => {
         if (!isCached) {
           lastCachedPage.current = nextPage;
           preloadNextPage(nextPage + 1);
@@ -95,12 +98,14 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
-    clearTimeout(delayTimeout.current);
+    if (delayTimeout.current) clearTimeout(delayTimeout.current);
     delayTimeout.current = setTimeout(() => {
       initiateFetchAnimeData();
     }, 0);
 
-    return () => clearTimeout(delayTimeout.current);
+    return () => {
+      if (delayTimeout.current) clearTimeout(delayTimeout.current);
+    };
   }, [query, page]);
 
   return (
@@ -113,7 +118,7 @@ const SearchResults = () => {
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 20 }).map((_, index) => (
-            <CardSkeleton key={index} isLoading={true} />
+            <CardSkeleton key={index} {...{ isLoading: true }} />
           ))}
         </StyledCardGrid>
       ) : (

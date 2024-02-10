@@ -1,5 +1,4 @@
 // NotFound.jsx
-import React from "react";
 import styled from "styled-components";
 import Image404URL from "/src/assets/404-Page-not-found.gif";
 

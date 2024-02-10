@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
 import { fetchAnimeEpisodes /* fetchAnimeInfo2 */ } from "../hooks/useApi";
-import WatchSkeleton from "../components/Skeletons/WatchSkeleton"; // Update the import
+import WatchSkeleton from "../components/Skeletons/WatchSkeleton";
 
+// Update the import
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
 };
@@ -43,12 +44,21 @@ const VideoPlayerContainer = styled.div`
   }
 `;
 
+interface Episode {
+  id: string;
+  number: number;
+}
+
+interface CurrentEpisode {
+  id: string | null;
+  number: number;
+}
+
 const Watch = () => {
   const { animeId } = useParams();
-  const [episodes, setEpisodes] = useState([]);
-  const [provider, setProvider] = useState(null);
-  // const [animeInfo, setAnimeInfo] = useState(null);
-  const [currentEpisode, setCurrentEpisode] = useState({
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [provider, setProvider] = useState<any>(null);
+  const [currentEpisode, setCurrentEpisode] = useState<CurrentEpisode>({
     id: null,
     number: 1,
   });
@@ -72,7 +82,7 @@ const Watch = () => {
               fetchedEpisodes[0]?.id ||
               null;
             const matchedEpisode = fetchedEpisodes.find(
-              (episode) => episode.id === savedEpisodeId
+              (episode: Episode) => episode.id === savedEpisodeId
             );
             const defaultEpisode = fetchedEpisodes[0] || {
               id: null,
@@ -84,7 +94,7 @@ const Watch = () => {
             });
           }
           //! fetchAnimeInfo2 TEMP REMOVED FOR CACHING 🐛 BUG PURPOSES
-          /*           // Fetching additional anime information
+          /*// Fetching additional anime information
           const infoData = await fetchAnimeInfo2(animeId);
           setAnimeInfo(infoData); // Store the fetched information in state */
         } catch (error) {
@@ -99,7 +109,7 @@ const Watch = () => {
   }, [animeId]);
 
   const handleEpisodeSelect = useCallback(
-    (episodeId) => {
+    (episodeId: string) => {
       const selectedEpisode = episodes.find(
         (episode) => episode.id === episodeId
       );

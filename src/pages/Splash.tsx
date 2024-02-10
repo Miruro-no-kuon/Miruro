@@ -1,4 +1,3 @@
-import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import {
@@ -30,20 +29,6 @@ const colors = {
 const fadeInAnimation = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
-`;
-
-const popInAnimation = keyframes`
-  0% {
-    transform: scale(0.5);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.075);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 `;
 
 const SplashContainer = styled.div`

@@ -26,9 +26,8 @@ const logger: Logger = createLogger({
         ? colors[level](level.toUpperCase())
         : level.toUpperCase();
       const parts = message.split("from ");
-      const formattedMessage = `${formattedLevel}: ${
-        parts[0]
-      }${colors.gray("from ")}${colors.gray(parts[1])}`;
+      const formattedMessage = `${formattedLevel}: ${parts[0]
+        }${colors.gray("from ")}${colors.gray(parts[1])}`;
 
       return `${timestamp} ${formattedMessage}\n`;
     })
@@ -51,7 +50,8 @@ const proxyHandler = async (
   if (!url) {
     const errorMessage: string = "URL parameter is required";
     logger.error(errorMessage);
-    return res.status(400).send(errorMessage);
+    res.status(400).send(errorMessage);
+    return; // Return early without continuing further
   }
 
   try {
@@ -73,11 +73,13 @@ const proxyHandler = async (
   }
 };
 
-const handleError = (res: Response, contentType: string, error: Error): void => {
+
+const handleError = (res: Response, contentType: string, error: any): void => {
   const errorMessage = `Error fetching ${contentType}: ${error.message}`;
   logger.error(errorMessage);
   res.status(500).send(`Error occurred while fetching ${contentType} data`);
 };
+
 
 app.get("/api/vtt", async (req: Request, res: Response) => {
   try {

@@ -1,7 +1,4 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import { Link } from "react-router-dom";
-import BannerImageURL from "/src/assets/banner-one_piece-compressed.jpg";
+import styled from "styled-components";
 import { FaCheckCircle } from "react-icons/fa";
 const colors = {
   textColor: "var(--global-text)",

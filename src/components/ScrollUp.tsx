@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FaArrowUp } from "react-icons/fa";
 
@@ -25,8 +25,13 @@ const fadeOut = keyframes`
   }
 `;
 
+// Define interface for styled button props
+interface StyledButtonProps {
+  $isVisible: boolean;
+}
+
 // Styled button component
-const StyledButton = styled.button`
+const StyledButton = styled.button<StyledButtonProps>`
   position: fixed;
   right: 1.5rem;
   z-index: 1000;
@@ -40,8 +45,7 @@ const StyledButton = styled.button`
   width: 3.5rem;
   height: 3.5rem;
   cursor: pointer;
-  display: ${({ $isVisible }) =>
-    $isVisible ? "block" : "none"}; // Use $isVisible here
+  display: ${({ $isVisible }) => ($isVisible ? "block" : "none")};
   animation: ${({ $isVisible }) => ($isVisible ? fadeInFromBottom : fadeOut)}
     0.5s ease;
   bottom: ${({ $isVisible }) => ($isVisible ? "1.5rem" : "-3.5rem")};
