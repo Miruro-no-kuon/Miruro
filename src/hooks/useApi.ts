@@ -7,7 +7,7 @@ const API_KEY = import.meta.env.VITE_API_KEY as string;
 const PROXY_URL = import.meta.env.VITE_PROXY_URL as string;
 const IS_LOCAL = import.meta.env.VITE_IS_LOCAL as string;
 const LOCAL_IP = import.meta.env.VITE_LOCAL_IP as string || "localhost";
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5173;
+const PORT: number = import.meta.env.PORT ? parseInt(import.meta.env.PORT) : 5173;
 
 // Axios instance
 const PROXY_SERVER_BASE_URL = IS_LOCAL == "true"

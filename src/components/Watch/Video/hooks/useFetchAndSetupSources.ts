@@ -24,18 +24,23 @@ const useFetchAndSetupSources = (
   videoRef
 ) => {
   useEffect(() => {
-    const deduplicateSources = (sources) => {
+    const deduplicateAndProxySources = (sources) => {
       const uniqueQualities = new Set();
+      const proxyBaseUrl = import.meta.env.VITE_PROXY_URL;
 
       return sources
         .map((source) => {
           if (source.quality === "default") {
             source.quality = "auto"; // Change "default" to "auto"
           }
+
           if (!uniqueQualities.has(source.quality)) {
             uniqueQualities.add(source.quality);
+            // Append the proxy base URL to M3U8 URLs
+            source.url = `${proxyBaseUrl}/api/m3u8?url=${encodeURIComponent(source.url)}`;
             return source;
           }
+
           return null; // Filter out duplicate qualities
         })
         .filter(Boolean) // Remove null values from the result
@@ -89,14 +94,12 @@ const useFetchAndSetupSources = (
           episodeNumber
         );
 
-        // Add your proxy base URL for M3U8 URLs
-        const uniqueSources = deduplicateSources(data.sources);
+        const uniqueSources = deduplicateAndProxySources(data.sources);
 
         setVideoSources(uniqueSources);
         setVideoQualityOptions(uniqueSources.map((source) => source.quality));
-        const initialSource = `${import.meta.env.VITE_PROXY_URL}/m3u8?url=${
-          uniqueSources[0]?.url
-        }`;
+        const initialSource = `${import.meta.env.VITE_PROXY_URL}/api/m3u8?url=${uniqueSources[0]?.url
+          }`;
 
         setSelectedSource(initialSource);
 
