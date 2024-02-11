@@ -1,8 +1,8 @@
 import { createGlobalStyle } from "styled-components";
-import logoTextTransparentBlack from "/src/assets/miruro-text-transparent-black.png";
-import logoTextTransparentWhite from "/src/assets/miruro-text-transparent-white.png";
-import logoTransparentBlack from "/src/assets/miruro-transparent-black.png";
-import logoTransparentWhite from "/src/assets/miruro-transparent-white.png";
+import logoTextTransparentBlack from "/src/assets/miruro-text-transparent-black.webp";
+import logoTextTransparentWhite from "/src/assets/miruro-text-transparent-white.webp";
+import logoTransparentBlack from "/src/assets/miruro-transparent-black.webp";
+import logoTransparentWhite from "/src/assets/miruro-transparent-white.webp";
 
 const GlobalStyles = createGlobalStyle`
 

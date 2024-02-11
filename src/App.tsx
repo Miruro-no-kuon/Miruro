@@ -7,12 +7,11 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Splash from "./pages/Splash";
 import Home from "./pages/Home";
 import Watch from "./pages/Watch";
 import SearchResults from "./pages/SearchResults";
 import PageNotFound from "./pages/404";
-import Info from "./components/Info";
+import Info from "./pages/Info";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -44,7 +43,6 @@ function App() {
       <Navbar />
       <ScrollToTop />
       <Routes>
-        <Route path="/faq" element={<Splash />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />

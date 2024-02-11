@@ -3,7 +3,7 @@ import styled, { keyframes, css } from "styled-components";
 import useFetchAndSetupSources from "./hooks/useFetchAndSetupSources";
 import useSubtitleLogic from "./hooks/useSubtitleLogic";
 import VideoControls from "./Controls/VideoControls";
-import pikachuLoader from "/src/assets/load-gif-Pikachu_Runnin.webp";
+import pikachuLoader from "/src/assets/load-gif-Pikachu_Runnin.gif";
 import useHLS from "./hooks/useHLS";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { ring2 } from "ldrs";

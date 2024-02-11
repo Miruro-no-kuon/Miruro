@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const theme = {
   primaryBackgroundColor: "var(--global-secondary-bg)",
@@ -66,10 +67,26 @@ const FooterLogoImage = styled.img`
   }
 `;
 
-const FooterLinks = styled.div`
+const StyledLinkList = styled.div`
+  display: flex;
   font-weight: bold;
   padding: 1rem;
+  padding-bottom: 2rem;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 
+  a {
+    color: ${theme.textColor};
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: ${theme.buttonTextColor};
+      text-decoration: underline;
+    }
+  }
   h3 {
     font-size: 1rem;
     margin-bottom: 0.5rem;
@@ -81,6 +98,7 @@ const FooterLinks = styled.div`
     margin-bottom: 1rem;
   }
 `;
+const FooterLink = styled(Link)``;
 
 const CopyrightText = styled.p`
   font-size: 0.8rem;
@@ -113,27 +131,6 @@ const ShareButton = styled.a`
 `;
 
 const currentYear = new Date().getFullYear();
-
-const StyledLinkList = styled.div`
-  display: flex;
-  padding: 0;
-  padding-bottom: 2rem;
-  margin: 0;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-
-  a {
-    color: ${theme.textColor};
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: ${theme.buttonTextColor};
-      text-decoration: underline;
-    }
-  }
-`;
 
 function Footer() {
   return (
@@ -170,13 +167,11 @@ function Footer() {
           </ShareButton>
         </SocialIconsWrapper>
         <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
-        <FooterLinks>
-          <StyledLinkList>
-            <a href="Info">FAQ</a>
-            <a href="Info">Policy</a>
-            <a href="Info">Terms</a>
-          </StyledLinkList>
-        </FooterLinks>
+        <StyledLinkList>
+          <FooterLink to="/Info">FAQ</FooterLink>
+          <FooterLink to="Info">Policy</FooterLink>
+          <FooterLink to="Info">Terms</FooterLink>
+        </StyledLinkList>
       </FooterContainer>
       <CopyrightText>
         &copy; {currentYear} Miruro no Kuon. All Rights Reserved.
