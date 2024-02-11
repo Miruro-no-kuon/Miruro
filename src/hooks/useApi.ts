@@ -6,10 +6,12 @@ const BASE_URL_2 = import.meta.env.VITE_BACKEND_URL_2 as string;
 const API_KEY = import.meta.env.VITE_API_KEY as string;
 const PROXY_URL = import.meta.env.VITE_PROXY_URL as string;
 const IS_LOCAL = import.meta.env.VITE_IS_LOCAL as string;
+const LOCAL_IP = import.meta.env.VITE_LOCAL_IP as string || "localhost";
+const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 // Axios instance
 const PROXY_SERVER_BASE_URL = IS_LOCAL == "true"
-  ? "http://localhost:5173/api/json"
+  ? `http://${LOCAL_IP}:${PORT}/api/json`
   : `${PROXY_URL}/api/json`;
 
 const axiosInstance = axios.create({
