@@ -4,7 +4,7 @@ import { FaPlay } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { useNavigate } from "react-router-dom";
-import BannerNotFound from "/src/assets/miruro-banner-dark-bg.png";
+import BannerNotFound from "/src/assets/miruro-banner-dark-bg.webp";
 
 // Styled components for the Carousel
 
