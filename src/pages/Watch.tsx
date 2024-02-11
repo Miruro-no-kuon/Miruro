@@ -6,7 +6,6 @@ import VideoPlayer from "../components/Watch/Video/VideoPlayer";
 import { fetchAnimeEpisodes /* fetchAnimeInfo2 */ } from "../hooks/useApi";
 import WatchSkeleton from "../components/Skeletons/WatchSkeleton";
 
-// Update the import
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
 };
@@ -66,6 +65,12 @@ const Watch = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!animeId) {
+        console.error("Anime ID is null.");
+        setLoading(false);
+        return;
+      }
+
       // Simulate loading delay
       setTimeout(async () => {
         setLoading(true);
@@ -129,6 +134,10 @@ const Watch = () => {
 
   if (loading) {
     return <WatchSkeleton />;
+  }
+
+  if (!episodes || episodes.length === 0) {
+    return <div>No episodes found.</div>;
   }
 
   return (

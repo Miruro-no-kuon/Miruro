@@ -19,8 +19,30 @@ const axiosInstance = axios.create({
 
 // Error handling function
 function handleError(error: any, context: string) {
-  const errorMessage = error.response?.data?.message || "Unknown error occurred";
-  console.error(`Error fetching ${context}: ${errorMessage}`, error);
+  let errorMessage = "An error occurred";
+
+  switch (context) {
+    case "data":
+      errorMessage = "Error fetching data";
+      break;
+    case "anime episodes":
+      errorMessage = "Error fetching anime episodes";
+      break;
+    case "episode video URLs":
+      errorMessage = "Error fetching episode video URLs";
+      break;
+    default:
+      errorMessage = "Unknown error occurred";
+      break;
+  }
+
+  if (error.response && error.response.data && error.response.data.message) {
+    errorMessage += `: ${error.response.data.message}`;
+  } else if (error.message) {
+    errorMessage += `: ${error.message}`;
+  }
+
+  console.error(`${errorMessage}`, error);
   throw new Error(errorMessage);
 }
 
