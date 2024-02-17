@@ -1,3 +1,6 @@
+<h4 align="center">🚧️ A major rewrite of the website is being worked on! 🚧️  That means, most efforts around Miruro will be kept at minimum – there might be no time-intensive and major updates done on top 	of the existing code.
+</h4>
+
 <p align="center">
   <a href="https://www.miruro.com" target="_blank">
     <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/main/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
