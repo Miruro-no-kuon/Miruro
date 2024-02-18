@@ -28,7 +28,13 @@ const VideoBorderWrapper = styled.div`
   border-bottom: none;
 `;
 
-const VideoPlayerWrapper = styled.div`
+type VideoPlayerWrapperProps = {
+  $isCursorIdle: boolean;
+  $isLoading: boolean;
+  $isVideoChanging: boolean;
+};
+
+const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
   position: relative;
   padding-top: 56.25%;
   height: 0;
@@ -66,7 +72,11 @@ const fadeIn = keyframes`
   }
 `;
 
-const LargePlayIcon = styled.div`
+type LargePlayIconProps = {
+  $isPlaying: boolean;
+};
+
+const LargePlayIcon = styled.div<LargePlayIconProps>`
   position: absolute;
   border: 0.35rem solid #eeeeee;
   border-radius: 50%;
@@ -81,10 +91,10 @@ const LargePlayIcon = styled.div`
   padding: 0.12rem;
   transform: translate(-50%, -50%) scaleX(1.1);
   z-index: 2;
-  opacity: ${({ isPlaying }) => (isPlaying ? "0" : "1")};
-  visibility: ${({ isPlaying }) => (isPlaying ? "hidden" : "visible")};
-  ${({ isPlaying }) =>
-    !isPlaying &&
+  opacity: ${({ $isPlaying }) => ($isPlaying ? "0" : "1")};
+  visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
+  ${({ $isPlaying }) =>
+    !$isPlaying &&
     css`
       animation: ${fadeIn} 1s;
     `}
@@ -126,7 +136,11 @@ const PlayPauseOverlay = styled.div`
   z-index: 2;
 `;
 
-const BannerOverlay = styled.div`
+type BannerOverlayProps = {
+  $bannerImage: string;
+};
+
+const BannerOverlay = styled.div<BannerOverlayProps>`
   position: absolute;
   top: 0;
   left: 0;
@@ -146,24 +160,32 @@ const isMobileDevice = () => {
   return mobileRegex.test(userAgent) || window.innerWidth <= 768;
 };
 
-const VideoPlayer = ({
-  id,
-  watchId,
-  shouldPreload = false,
-  provider,
-  episodeNumber,
+// Define the type for your props
+type VideoPlayerProps = {
+  id: string;
+  episodeId: string;
+  shouldPreload?: boolean;
+  provider: string;
+  episodeNumber: number;
+  bannerImage: string;
+};
+
+// Apply the props type to your component
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  episodeId,
   bannerImage,
 }) => {
-  const [videoSources, setVideoSources] = useState([]);
+  interface VideoSource {
+    quality: string;
+    url: string;
+  }
+
+  const [videoSources, setVideoSources] = useState<VideoSource[]>([]);
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedQuality, setSelectedQuality] = useState("auto");
   const [videoQualityOptions, setVideoQualityOptions] = useState([]);
-  const [subtitles, setSubtitles] = useState([]);
   const [subtitleTracks, setSubtitleTracks] = useState([]);
   const [subtitlesEnabled, setSubtitlesEnabled] = useState(true);
-  const [audioTracks, setAudioTracks] = useState([]);
-  const [intro, setIntro] = useState(null);
-  const [outro, setOutro] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isVideoChanging, setIsVideoChanging] = useState(false);
@@ -171,16 +193,15 @@ const VideoPlayer = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [showControls, setShowControls] = useState(true);
-  const [isHovering, setIsHovering] = useState(false);
   const [isCursorIdle, setIsCursorIdle] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isMobile, setIsMobile] = useState(isMobileDevice());
 
-  const videoRef = useRef(null);
-  const timeoutIdRef = useRef(null);
-  const playerWrapperRef = useRef(null);
-  const videoPlayerWrapperRef = useRef(null);
-  const videoControlsRef = useRef(null);
+  const timeoutIdRef = useRef<number | undefined>(undefined);
+  const playerWrapperRef = useRef<HTMLDivElement>(null);
+  const videoPlayerWrapperRef = useRef<HTMLDivElement>(null);
+  const videoControlsRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -191,24 +212,13 @@ const VideoPlayer = ({
   }, []);
 
   useFetchAndSetupSources(
-    watchId,
-    shouldPreload,
-    id,
-    provider,
-    episodeNumber,
-    isLoading,
+    episodeId,
     setIsLoading,
-    videoSources,
     setVideoSources,
-    videoQualityOptions,
     setVideoQualityOptions,
-    selectedSource,
     setSelectedSource,
-    subtitleTracks,
     setSubtitleTracks,
-    error,
     setError,
-    currentTime,
     setCurrentTime,
     videoRef
   );
@@ -260,16 +270,16 @@ const VideoPlayer = ({
     setIsPlaying(false);
     setHasPlayed(false);
 
-    const savedTime = localStorage.getItem(`savedTime-${watchId}`);
+    const savedTime = localStorage.getItem(`savedTime-${episodeId}`);
     if (savedTime) {
       setCurrentTime(parseFloat(savedTime));
       if (videoRef.current) {
         videoRef.current.currentTime = parseFloat(savedTime);
       }
     }
-  }, [videoSources, selectedQuality, watchId]);
+  }, [videoSources, selectedQuality, episodeId]);
 
-  useLocalStorage(videoRef, watchId);
+  useLocalStorage(videoRef, episodeId);
 
   useEffect(() => {
     setShowControls(true);
@@ -282,12 +292,13 @@ const VideoPlayer = ({
   }, [isPlaying, volume]);
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: number; // Changed to number type
 
     const handleIdleStateReset = () => {
       setShowControls(true);
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
+        // Using window.setTimeout
         if (isPlaying) {
           setShowControls(false);
           setIsCursorIdle(true);
@@ -298,20 +309,26 @@ const VideoPlayer = ({
     handleIdleStateReset();
 
     const playerWrapper = playerWrapperRef.current;
-    playerWrapper.addEventListener("mousemove", handleIdleStateReset);
-    playerWrapper.addEventListener("mouseenter", () => setShowControls(true));
+    if (playerWrapper) {
+      // Null check
+      playerWrapper.addEventListener("mousemove", handleIdleStateReset);
+      playerWrapper.addEventListener("mouseenter", () => setShowControls(true));
+    }
 
     return () => {
-      playerWrapper.removeEventListener("mousemove", handleIdleStateReset);
-      playerWrapper.removeEventListener("mouseenter", () =>
-        setShowControls(true)
-      );
+      if (playerWrapper) {
+        // Null check
+        playerWrapper.removeEventListener("mousemove", handleIdleStateReset);
+        playerWrapper.removeEventListener("mouseenter", () =>
+          setShowControls(true)
+        );
+      }
       clearTimeout(timeoutId);
     };
   }, [isPlaying]);
 
   useEffect(() => {
-    let cursorIdleTimeout;
+    let cursorIdleTimeout: ReturnType<typeof setTimeout>;
 
     const handleIdleStateReset = () => {
       setIsCursorIdle(false);
@@ -325,12 +342,14 @@ const VideoPlayer = ({
     handleIdleStateReset();
 
     const playerWrapper = playerWrapperRef.current;
-    playerWrapper.addEventListener("mousemove", handleIdleStateReset);
+    if (playerWrapper) {
+      playerWrapper.addEventListener("mousemove", handleIdleStateReset);
 
-    return () => {
-      clearTimeout(cursorIdleTimeout);
-      playerWrapper.removeEventListener("mousemove", handleIdleStateReset);
-    };
+      return () => {
+        clearTimeout(cursorIdleTimeout);
+        playerWrapper.removeEventListener("mousemove", handleIdleStateReset);
+      };
+    }
   }, [isPlaying]);
 
   useEffect(() => {
@@ -344,16 +363,19 @@ const VideoPlayer = ({
     }
   }, []);
 
-  const changeQuality = (newQuality) => {
-    const currentTime = videoRef.current.currentTime;
-    setSelectedQuality(newQuality);
-
-    const handleCanPlay = () => {
-      videoRef.current.currentTime = currentTime;
-      videoRef.current.removeEventListener("canplay", handleCanPlay);
-    };
-
+  const changeQuality = (newQuality: string) => {
     if (videoRef.current) {
+      const currentTime = videoRef.current.currentTime;
+      setSelectedQuality(newQuality);
+
+      const handleCanPlay = () => {
+        if (videoRef.current) {
+          // Check added here
+          videoRef.current.currentTime = currentTime;
+          videoRef.current.removeEventListener("canplay", handleCanPlay);
+        }
+      };
+
       videoRef.current.addEventListener("canplay", handleCanPlay);
     }
   };
@@ -362,10 +384,12 @@ const VideoPlayer = ({
     setIsCursorIdle(false);
     setShowControls(true);
 
-    clearTimeout(timeoutIdRef.current);
+    if (timeoutIdRef.current !== undefined) {
+      clearTimeout(timeoutIdRef.current);
+    }
 
     if (isPlaying) {
-      timeoutIdRef.current = setTimeout(() => {
+      timeoutIdRef.current = window.setTimeout(() => {
         setShowControls(false);
         setIsCursorIdle(true);
       }, 1000);
@@ -373,31 +397,36 @@ const VideoPlayer = ({
   };
 
   const toggleFullscreen = () => {
-    const videoContainer = videoRef.current.parentElement;
-    const requestFullscreen =
-      videoContainer.requestFullscreen ||
-      videoContainer.mozRequestFullScreen ||
-      videoContainer.webkitRequestFullscreen ||
-      videoContainer.msRequestFullscreen;
-    const exitFullscreen =
-      document.exitFullscreen ||
-      document.mozCancelFullScreen ||
-      document.webkitExitFullscreen ||
-      document.msExitFullscreen;
+    const videoContainer = videoRef.current?.parentElement;
+    if (videoContainer) {
+      // Store references to the fullscreen methods
+      const requestFullscreen =
+        videoContainer.requestFullscreen ||
+        (videoContainer as any).webkitRequestFullscreen ||
+        (videoContainer as any).mozRequestFullScreen ||
+        (videoContainer as any).msRequestFullscreen;
 
-    if (!document.fullscreenElement && requestFullscreen) {
-      requestFullscreen.call(videoContainer);
-    } else if (document.fullscreenElement && exitFullscreen) {
-      exitFullscreen.call(document);
+      const exitFullscreen =
+        document.exitFullscreen ||
+        (document as any).mozCancelFullScreen ||
+        (document as any).webkitExitFullscreen ||
+        (document as any).msExitFullscreen;
+
+      // Call the appropriate method based on the current fullscreen state
+      if (!document.fullscreenElement && requestFullscreen) {
+        requestFullscreen.call(videoContainer);
+      } else if (document.fullscreenElement && exitFullscreen) {
+        exitFullscreen.call(document);
+      }
     }
 
     resetIdleState();
   };
 
-  const handleDoubleClick = (event) => {
+  const handleDoubleClick = (event: MouseEvent) => {
     if (
       videoControlsRef.current &&
-      videoControlsRef.current.contains(event.target)
+      videoControlsRef.current.contains(event.target as Node)
     ) {
       return;
     }
@@ -476,20 +505,15 @@ const VideoPlayer = ({
                 !isLoading &&
                 !isVideoChanging && (
                   <VideoControls
-                    ref={videoControlsRef}
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
                     videoRef={videoRef}
+                    videoControlsRef={videoControlsRef}
                     isPlaying={isPlaying}
                     setIsPlaying={setIsPlaying}
                     togglePlayPause={togglePlayPause}
                     toggleFullscreen={toggleFullscreen}
                     currentTime={currentTime}
                     setCurrentTime={setCurrentTime}
-                    hasPlayed={hasPlayed}
-                    setHasPlayed={setHasPlayed}
                     showControls={showControls}
-                    setShowControls={setShowControls}
                     qualityOptions={videoQualityOptions}
                     changeQuality={changeQuality}
                     selectedQuality={selectedQuality}
@@ -497,13 +521,9 @@ const VideoPlayer = ({
                     onToggleSubtitles={() =>
                       setSubtitlesEnabled(!subtitlesEnabled)
                     }
-                    subtitles={subtitles}
                     subtitleTracks={subtitleTracks}
                     setSubtitlesEnabled={setSubtitlesEnabled}
                     onSubtitleChange={handleSubtitleChange}
-                    audioTracks={audioTracks}
-                    intro={intro}
-                    outro={outro}
                     volume={volume}
                     setVolume={setVolume}
                   />

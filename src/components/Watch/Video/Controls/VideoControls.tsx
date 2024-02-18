@@ -13,7 +13,7 @@ import VolumeControlComponent from "./VolumeControl";
 import TimeDisplayComponent from "./Timeline/TimeDisplay";
 import KeyboardShortcutsHandler from "../KeyboardShortcutsHandler";
 
-const ControlsWrapper = styled.div`
+const ControlsWrapper = styled.div<{ $isVisible: boolean }>`
   position: absolute;
   bottom: 0;
   right: 0;
@@ -40,7 +40,7 @@ const MainControls = styled.div`
   margin-left: 0.5rem;
 `;
 
-const ControlGroup = styled.div`
+const ControlGroup = styled.div<{ $position: "left" | "right" }>`
   display: flex;
   align-items: center;
   margin: 0.25rem 0.5rem 0.5rem 0;
@@ -59,45 +59,62 @@ const FullscreenButton = styled(ControlButtonComponent)``;
 
 const SkipButton = styled(ControlButtonComponent)``;
 
-const useFormattedTime = (seconds) => {
-  const format = (value) => String(value).padStart(2, "0");
+const formatTime = (seconds: number) => {
+  const format = (value: number) => String(value).padStart(2, "0");
   const hours = format(Math.floor(seconds / 3600));
   const minutes = format(Math.floor((seconds % 3600) / 60));
   const secs = format(Math.floor(seconds % 60));
   return seconds >= 3600 ? `${hours}:${minutes}:${secs}` : `${minutes}:${secs}`;
 };
+interface VideoControlsProps {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  videoControlsRef: React.RefObject<HTMLDivElement>;
+  isPlaying: boolean;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  togglePlayPause: () => void;
+  toggleFullscreen: () => void;
+  currentTime: number;
+  setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
+  showControls: boolean;
+  qualityOptions: string[]; // Assuming qualityOptions is an array of strings
+  changeQuality: (quality: string) => void;
+  subtitlesEnabled: boolean;
+  onToggleSubtitles: () => void;
+  subtitleTracks: string[]; // Assuming subtitleTracks is an array of strings
+  setSubtitlesEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubtitleChange: (track: string | null) => void;
+  selectedQuality: string; // Assuming selectedQuality is a string
+  volume: number;
+  setVolume: React.Dispatch<React.SetStateAction<number>>;
+}
 
-const VideoControls = React.forwardRef(
-  (
-    {
-      videoRef,
-      isPlaying,
-      setIsPlaying,
-      togglePlayPause,
-      toggleFullscreen,
-      currentTime,
-      setCurrentTime,
-      showControls,
-      qualityOptions,
-      changeQuality,
-      subtitlesEnabled,
-      onToggleSubtitles,
-      subtitleTracks,
-      setSubtitlesEnabled,
-      onSubtitleChange,
-      selectedQuality,
-      volume,
-      setVolume,
-    },
-    ref
-  ) => {
+const VideoControls: React.FC<VideoControlsProps> = React.memo(
+  ({
+    videoRef,
+    isPlaying,
+    togglePlayPause,
+    toggleFullscreen,
+    currentTime,
+    setCurrentTime,
+    showControls,
+    qualityOptions,
+    changeQuality,
+    subtitlesEnabled,
+    onToggleSubtitles,
+    subtitleTracks,
+    setSubtitlesEnabled,
+    onSubtitleChange,
+    selectedQuality,
+    volume,
+    setVolume,
+  }) => {
     const [isSettingsPopupVisible, setIsSettingsPopupVisible] = useState(false);
     const [activeSubtitleTrack, setActiveSubtitleTrack] = useState("English");
     const [playbackSpeed, setPlaybackSpeed] = useState(1);
-    const settingsRef = useRef(null);
+    const settingsRef = useRef<HTMLDivElement>(null);
 
-    const changePlaybackSpeed = (speed) => {
-      if (videoRef?.current) {
+    const changePlaybackSpeed = (speed: number) => {
+      if (videoRef.current) {
         videoRef.current.playbackRate = speed;
         setPlaybackSpeed(speed);
       }
@@ -107,7 +124,7 @@ const VideoControls = React.forwardRef(
       setIsSettingsPopupVisible(!isSettingsPopupVisible);
 
     const handleQualityChange = useCallback(
-      (quality) => {
+      (quality: string) => {
         changeQuality(quality);
         setIsSettingsPopupVisible(false);
       },
@@ -115,10 +132,10 @@ const VideoControls = React.forwardRef(
     );
 
     useEffect(() => {
-      const handleClickOutside = (event) => {
+      const handleClickOutside = (event: MouseEvent) => {
         if (
           settingsRef.current &&
-          !settingsRef.current.contains(event.target)
+          !settingsRef.current.contains(event.target as Node)
         ) {
           setIsSettingsPopupVisible(false);
         }
@@ -136,46 +153,47 @@ const VideoControls = React.forwardRef(
     }, [isSettingsPopupVisible]);
 
     useEffect(() => {
-      if (videoRef?.current) {
-        const updateProgress = () => {
-          const progressTime = videoRef.current.currentTime;
-          setCurrentTime(progressTime);
-          const progressPercentage =
-            (progressTime / videoRef.current.duration) * 100;
-          document.documentElement.style.setProperty(
-            "--progress-percentage",
-            `${progressPercentage}%`
-          );
-        };
+      const videoElement = videoRef.current;
 
-        videoRef.current.addEventListener("timeupdate", updateProgress);
+      if (!videoElement) return;
 
-        return () => {
-          if (videoRef.current) {
-            videoRef.current.removeEventListener("timeupdate", updateProgress);
-          }
-        };
-      }
-    }, [videoRef]);
+      const updateProgress = () => {
+        const progressTime = videoElement.currentTime;
+        setCurrentTime(progressTime);
+        const progressPercentage = (progressTime / videoElement.duration) * 100;
+        document.documentElement.style.setProperty(
+          "--progress-percentage",
+          `${progressPercentage}%`
+        );
+      };
 
-    const formattedTime = useFormattedTime(currentTime);
+      videoElement.addEventListener("timeupdate", updateProgress);
+
+      return () => {
+        videoElement.removeEventListener("timeupdate", updateProgress);
+      };
+    }, [videoRef, setCurrentTime]);
+
+    const formattedTime = useMemo(() => formatTime(currentTime), [currentTime]);
 
     const handleVolumeChange = useCallback(
-      (e) => {
+      (e: React.ChangeEvent<HTMLInputElement>) => {
         setVolume(parseFloat(e.target.value));
       },
       [setVolume]
     );
 
     useEffect(() => {
-      if (videoRef?.current) {
+      if (videoRef.current) {
         videoRef.current.volume = volume;
       }
     }, [volume, videoRef]);
 
-    const handleTimeChange = (e) => {
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newTime = parseFloat(e.target.value);
-      videoRef.current.currentTime = newTime;
+      if (videoRef.current) {
+        videoRef.current.currentTime = newTime;
+      }
       setCurrentTime(newTime);
     };
 
@@ -199,30 +217,25 @@ const VideoControls = React.forwardRef(
       onSubtitleChange,
     ]);
 
-    const skipTime = (seconds) => {
-      videoRef.current.currentTime += seconds;
-      setCurrentTime(videoRef.current.currentTime);
-    };
-
     const maxVideoDuration = useMemo(
-      () => videoRef?.current?.duration || 100,
+      () => videoRef.current?.duration || 100,
       [videoRef]
     );
 
     const toggleMute = () => {
-      if (videoRef?.current) {
+      if (videoRef.current) {
         videoRef.current.muted = !videoRef.current.muted;
         setVolume(videoRef.current.muted ? 0 : 1);
       }
     };
 
-    const changeVolume = (delta) => {
+    const changeVolume = (delta: number) => {
       const newVolume = Math.max(0, Math.min(1, volume + delta));
       setVolume(newVolume);
     };
 
-    const seekTime = (seconds) => {
-      if (videoRef?.current) {
+    const seekTime = (seconds: number) => {
+      if (videoRef.current) {
         const newTime = Math.max(
           0,
           Math.min(
@@ -246,7 +259,7 @@ const VideoControls = React.forwardRef(
       }
     };
 
-    const jumpToPercentage = (percentage) => {
+    const jumpToPercentage = (percentage: number) => {
       if (videoRef.current) {
         const duration = videoRef.current.duration;
         const newTime = (percentage / 100) * duration;
@@ -255,9 +268,9 @@ const VideoControls = React.forwardRef(
     };
 
     return (
-      <ControlsWrapper $isVisible={showControls} ref={ref}>
+      <ControlsWrapper $isVisible={showControls}>
         <Timeline
-          min="0"
+          min={0}
           max={maxVideoDuration}
           value={currentTime}
           onChange={handleTimeChange}
@@ -268,18 +281,17 @@ const VideoControls = React.forwardRef(
               onClick={togglePlayPause}
               icon={isPlaying ? "pause" : "play_arrow"}
               tooltip={isPlaying ? "Pause" : "Play"}
-              hideTooltip={isSettingsPopupVisible}
             />
             <VolumeControlComponent
               volume={volume}
               setVolume={setVolume}
-              isSettingsPopupVisible={isSettingsPopupVisible}
               onMuteToggle={toggleMute}
-              onVolumeChange={changeVolume}
+              onVolumeChange={handleVolumeChange}
+              isSettingsPopupVisible={isSettingsPopupVisible} // Add this line
             />
             <TimeDisplayComponent
               currentTime={formattedTime}
-              duration={useFormattedTime(videoRef?.current?.duration || 0)}
+              duration={formatTime(videoRef.current?.duration || 0)}
             />
           </ControlGroup>
           <ControlGroup $position="right">
@@ -287,26 +299,22 @@ const VideoControls = React.forwardRef(
               onClick={() => seekTime(-10)}
               icon="replay_10"
               tooltip="-10s"
-              hideTooltip={isSettingsPopupVisible}
             />
             <SkipButton
               onClick={() => seekTime(10)}
               icon="forward_10"
               tooltip="+10s"
-              hideTooltip={isSettingsPopupVisible}
             />
             <SubtitlesButton
               onClick={toggleSubtitles}
               icon={subtitlesEnabled ? "closed_caption" : "closed_caption_off"}
               tooltip={subtitlesEnabled ? "Captions On" : "Captions Off"}
-              hideTooltip={isSettingsPopupVisible}
             />
             <div ref={settingsRef}>
               <SettingsButton
                 icon="settings"
                 tooltip="Settings"
                 onClick={toggleSettingsPopup}
-                hideTooltip={isSettingsPopupVisible}
               />
               <VideoSettings
                 isSettingsPopupVisible={isSettingsPopupVisible}
@@ -322,7 +330,6 @@ const VideoControls = React.forwardRef(
               onClick={toggleFullscreen}
               icon="fullscreen"
               tooltip="Fullscreen"
-              hideTooltip={isSettingsPopupVisible}
             />
           </ControlGroup>
         </MainControls>

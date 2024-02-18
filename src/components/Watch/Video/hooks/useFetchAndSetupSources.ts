@@ -1,52 +1,32 @@
-import { useEffect } from "react";
-import { fetchEpisodeVideoUrls } from "../../../../hooks/useApi";
+import { useEffect, RefObject } from "react";
+import { fetchAnimeStreamingLinks } from "../../../../hooks/useApi";
 
 const useFetchAndSetupSources = (
-  watchId,
-  shouldPreload,
-  id,
-  provider,
-  episodeNumber,
-  isLoading,
-  setIsLoading,
-  videoSources,
-  setVideoSources,
-  videoQualityOptions,
-  setVideoQualityOptions,
-  selectedSource,
-  setSelectedSource,
-  subtitleTracks,
-  setSubtitleTracks,
-  error,
-  setError,
-  currentTime,
-  setCurrentTime,
-  videoRef
+  episodeId: string,
+  setIsLoading: (isLoading: boolean) => void,
+  setVideoSources: (sources: VideoSource[]) => void,
+  setVideoQualityOptions: (options: string[]) => void,
+  setSelectedSource: (source: string) => void,
+  setSubtitleTracks: (tracks: SubtitleTrack[]) => void,  // Added this line
+  setCurrentTime: (time: number) => void,               // Added this line
+  setError: (error: string) => void,
+  videoRef: RefObject<HTMLVideoElement>
 ) => {
   useEffect(() => {
-    const deduplicateAndProxySources = (sources) => {
+    const deduplicateAndProcessSources = (sources: VideoSource[]): VideoSource[] => {
       const uniqueQualities = new Set();
-      const proxyBaseUrl = import.meta.env.VITE_PROXY_URL;
-
       return sources
-        .map((source) => {
-          if (source.quality === "default") {
-            source.quality = "auto"; // Change "default" to "auto"
-          }
-
+        .filter(source => {
           if (!uniqueQualities.has(source.quality)) {
             uniqueQualities.add(source.quality);
-            // Append the proxy base URL to M3U8 URLs
-            source.url = `${proxyBaseUrl}/api/m3u8?url=${encodeURIComponent(source.url)}`;
-            return source;
+            return true;
           }
-
-          return null; // Filter out duplicate qualities
+          return false;
         })
-        .filter(Boolean) // Remove null values from the result
         .sort((a, b) => {
+          if (!a || !b) return 0; // Null check for 'a' and 'b'
           // Extract numbers from the quality strings
-          const extractNumber = (str) => parseInt(str.match(/\d+/)[0], 10);
+          const extractNumber = (str: string) => parseInt(str.match(/\d+/)?.[0] ?? '0', 10);
           const qualityA = a.quality.toLowerCase();
           const qualityB = b.quality.toLowerCase();
 
@@ -64,7 +44,7 @@ const useFetchAndSetupSources = (
         });
     };
 
-    const addSubtitlesToVideo = (tracks) => {
+    const addSubtitlesToVideo = (tracks: SubtitleTrack[]): void => {
       if (!Array.isArray(tracks) && typeof tracks === "object") {
         tracks = [tracks];
       }
@@ -78,7 +58,9 @@ const useFetchAndSetupSources = (
           trackElement.label = track.label;
           trackElement.src = track.src;
           trackElement.default = track.label === "English";
-          videoRef.current.appendChild(trackElement);
+          if (videoRef.current) {
+            videoRef.current.appendChild(trackElement);
+          }
         });
       }
     };
@@ -86,36 +68,31 @@ const useFetchAndSetupSources = (
     const fetchAndSetupSources = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchEpisodeVideoUrls(
-          watchId,
-          shouldPreload,
-          id,
-          provider,
-          episodeNumber
-        );
+        const data = await fetchAnimeStreamingLinks(episodeId);
 
-        const uniqueSources = deduplicateAndProxySources(data.sources);
-
+        // Process and deduplicate sources
+        const uniqueSources = deduplicateAndProcessSources(data.sources);
         setVideoSources(uniqueSources);
         setVideoQualityOptions(uniqueSources.map((source) => source.quality));
-        const initialSource = `${import.meta.env.VITE_PROXY_URL}/api/m3u8?url=${uniqueSources[0]?.url
-          }`;
 
+        // Select the initial source
+        const initialSource = uniqueSources[0]?.url;
         setSelectedSource(initialSource);
 
-        const processedSubtitles = data.subtitles
-          .filter((sub) => sub.lang !== "Thumbnails")
-          .map((sub) => ({
+        /* const processedSubtitles = data.subtitles
+          .filter((sub: SubtitleTrack) => sub.lang !== "Thumbnails")
+          .map((sub: SubtitleTrack) => ({
             label: sub.lang,
             src: `/api/vtt?url=${sub.url}`,
             kind: "subtitles",
           }));
 
         setSubtitleTracks(processedSubtitles);
-        addSubtitlesToVideo(processedSubtitles);
+        addSubtitlesToVideo(processedSubtitles); */
 
-        const savedTime =
-          parseFloat(localStorage.getItem(`savedTime-${watchId}`)) || 0;
+        const savedTimeString = localStorage.getItem(`savedTime-${episodeId}`);
+        const savedTime = savedTimeString ? parseFloat(savedTimeString) : 0;
+
         setCurrentTime(savedTime);
         if (videoRef.current) {
           videoRef.current.currentTime = savedTime;
@@ -129,9 +106,23 @@ const useFetchAndSetupSources = (
     };
 
     fetchAndSetupSources();
-  }, [watchId, shouldPreload, id, provider, episodeNumber]);
+  }, [episodeId]);
 
   return {};
 };
 
 export default useFetchAndSetupSources;
+
+// Define the types for VideoSource and SubtitleTrack
+type VideoSource = {
+  quality: string;
+  url: string;
+};
+
+type SubtitleTrack = {
+  label: string;
+  src: string;
+  kind: string;
+  lang: string;
+  url: string;
+};

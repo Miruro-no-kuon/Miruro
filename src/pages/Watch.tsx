@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import { fetchAnimeEpisodes /* fetchAnimeInfo2 */ } from "../hooks/useApi";
+import { fetchAnimeEpisodes } from "../hooks/useApi";
 import WatchSkeleton from "../components/Skeletons/WatchSkeleton";
 
 const LOCAL_STORAGE_KEYS = {
@@ -46,20 +46,23 @@ const VideoPlayerContainer = styled.div`
 interface Episode {
   id: string;
   number: number;
+  title: string;
+  image: string;
 }
 
 interface CurrentEpisode {
-  id: string | null;
+  id: string;
   number: number;
+  image: string;
 }
 
 const Watch = () => {
-  const { animeId } = useParams();
+  const { animeId = "" } = useParams();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [provider, setProvider] = useState<any>(null);
   const [currentEpisode, setCurrentEpisode] = useState<CurrentEpisode>({
-    id: null,
+    id: "0",
     number: 1,
+    image: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -71,43 +74,43 @@ const Watch = () => {
         return;
       }
 
-      // Simulate loading delay
-      setTimeout(async () => {
-        setLoading(true);
-        try {
-          const providerData = await fetchAnimeEpisodes(animeId);
-          if (providerData && providerData.episodes) {
-            const { episodes: fetchedEpisodes, providerId } = providerData;
-            setEpisodes(fetchedEpisodes);
-            setProvider(providerId);
-            const savedEpisodeId =
-              localStorage.getItem(
-                LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
-              ) ||
-              fetchedEpisodes[0]?.id ||
-              null;
-            const matchedEpisode = fetchedEpisodes.find(
-              (episode: Episode) => episode.id === savedEpisodeId
-            );
-            const defaultEpisode = fetchedEpisodes[0] || {
-              id: null,
-              number: 1,
-            };
-            setCurrentEpisode({
-              id: savedEpisodeId,
-              number: matchedEpisode?.number || defaultEpisode.number,
-            });
-          }
-          //! fetchAnimeInfo2 TEMP REMOVED FOR CACHING 🐛 BUG PURPOSES
-          /*// Fetching additional anime information
-          const infoData = await fetchAnimeInfo2(animeId);
-          setAnimeInfo(infoData); // Store the fetched information in state */
-        } catch (error) {
-          console.error("Failed to fetch anime info:", error);
-        } finally {
-          setLoading(false);
+      setLoading(true);
+      try {
+        const animeData = await fetchAnimeEpisodes(animeId);
+        if (animeData) {
+          const transformedEpisodes = animeData.map((ep: Episode) => ({
+            id: ep.id,
+            number: ep.number,
+            title: ep.title,
+            image: ep.image, // Ensure image property is mapped
+          }));
+
+          setEpisodes(transformedEpisodes);
+          const savedEpisodeId =
+            localStorage.getItem(
+              LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
+            ) ||
+            transformedEpisodes[0]?.id ||
+            "0";
+          const matchedEpisode = transformedEpisodes.find(
+            (episode: Episode) => episode.id === savedEpisodeId
+          );
+          const defaultEpisode = transformedEpisodes[0] || {
+            id: "0",
+            number: 1,
+            image: "", // Set default image
+          };
+          setCurrentEpisode({
+            id: savedEpisodeId,
+            number: matchedEpisode?.number || defaultEpisode.number,
+            image: matchedEpisode?.image || defaultEpisode.image,
+          });
         }
-      }, 0);
+      } catch (error) {
+        console.error("Failed to fetch anime info:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -118,19 +121,22 @@ const Watch = () => {
       const selectedEpisode = episodes.find(
         (episode) => episode.id === episodeId
       );
-      setCurrentEpisode({
-        id: episodeId,
-        number: selectedEpisode?.number || 1,
-      });
-      localStorage.setItem(
-        LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
-        episodeId
-      );
+      if (selectedEpisode) {
+        setCurrentEpisode({
+          id: episodeId,
+          number: selectedEpisode.number,
+          image: selectedEpisode.image || "",
+        });
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
+          episodeId
+        );
+      }
     },
     [animeId, episodes]
   );
 
-  const shouldPreload = useMemo(() => episodes.length <= 20, [episodes]);
+  const shouldPreload = useMemo(() => episodes.length <= 26, [episodes]);
 
   if (loading) {
     return <WatchSkeleton />;
@@ -145,11 +151,11 @@ const Watch = () => {
       <VideoPlayerContainer>
         <VideoPlayer
           id={animeId}
-          watchId={currentEpisode.id}
+          episodeId={currentEpisode.id}
           episodeNumber={currentEpisode.number}
-          provider={provider}
+          provider={"gogoanime"} // You may need to determine how to set this
           shouldPreload={shouldPreload}
-          bannerImage={null} //! BANNER TEMP REMOVED FOR CACHING 🐛 BUG PURPOSES
+          bannerImage={currentEpisode.image} // Set the banner image here
         />
       </VideoPlayerContainer>
       <EpisodeListContainer>

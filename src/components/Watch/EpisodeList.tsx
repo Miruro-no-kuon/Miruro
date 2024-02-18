@@ -3,6 +3,19 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
+interface Episode {
+  id: string;
+  number: number;
+  title: string;
+  image: string;
+}
+
+interface Props {
+  episodes: Episode[];
+  selectedEpisodeId: string;
+  onEpisodeSelect: (id: string) => void;
+}
+
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
@@ -13,7 +26,7 @@ const ListContainer = styled.div`
   flex-direction: column;
 `;
 
-const EpisodeGrid = styled.div`
+const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   display: grid;
   grid-template-columns: ${({ $isRowLayout }) =>
     $isRowLayout ? "1fr" : "repeat(auto-fill, minmax(4rem, 1fr))"};
@@ -23,7 +36,7 @@ const EpisodeGrid = styled.div`
   flex-grow: 1;
 `;
 
-const ListItem = styled.button`
+const ListItem = styled.button<{ $isSelected: boolean; $isRowLayout: boolean }>`
   background-color: var(--global-tertiary-bg);
   border: none;
   border-radius: 0.2rem;
@@ -60,25 +73,35 @@ const EpisodeTitle = styled.span`
   padding: 0.5rem;
 `;
 
-const EpisodeList = ({ episodes, selectedEpisodeId, onEpisodeSelect }) => {
-  const [interval, setInterval] = useState([0, 99]);
-  const isRowLayout = episodes.length < 20;
+const EpisodeList: React.FC<Props> = ({
+  episodes,
+  selectedEpisodeId,
+  onEpisodeSelect,
+}) => {
+  const [interval, setInterval] = useState<[number, number]>([0, 99]);
+  const isRowLayout = episodes.length < 26;
 
   const intervalOptions = useMemo(() => {
-    return episodes.reduce((options, _, index) => {
-      if (index % 100 === 0) {
-        const start = index;
-        const end = Math.min(index + 99, episodes.length - 1);
-        options.push({ start, end });
-      }
-      return options;
-    }, []);
+    return episodes.reduce<{ start: number; end: number }[]>(
+      (options, _, index) => {
+        if (index % 100 === 0) {
+          const start = index;
+          const end = Math.min(index + 99, episodes.length - 1);
+          options.push({ start, end });
+        }
+        return options;
+      },
+      []
+    );
   }, [episodes]);
 
-  const handleIntervalChange = useCallback((e) => {
-    const [start, end] = e.target.value.split("-").map(Number);
-    setInterval([start, end]);
-  }, []);
+  const handleIntervalChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const [start, end] = e.target.value.split("-").map(Number);
+      setInterval([start, end]);
+    },
+    []
+  );
 
   return (
     <ListContainer>

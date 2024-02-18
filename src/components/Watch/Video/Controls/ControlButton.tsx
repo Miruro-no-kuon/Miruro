@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
-const ControlButton = styled.button`
+const ControlButton = styled.button<{ fontSize?: string }>`
   position: relative;
   background: none;
   border: none;
@@ -26,7 +26,9 @@ const ControlButton = styled.button`
   }
 `;
 
-const TooltipText = styled.span`
+const TooltipText = styled.span<{
+  $positionStyle: { left?: string; right?: string };
+}>`
   background-color: #ffffff;
   color: #000000;
   text-align: center;
@@ -39,39 +41,70 @@ const TooltipText = styled.span`
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s;
   bottom: 3.4rem;
-  ${({ $position }) => $position};
+  margin: 0 0 0 0;
+  ${({ $positionStyle }) => $positionStyle};
 `;
 
-const ControlButtonWithTooltip = styled(ControlButton)`
+const ControlButtonWithTooltip = styled(ControlButton)<{
+  $hideTooltip?: boolean;
+}>`
   &:hover ${TooltipText} {
     visibility: ${({ $hideTooltip }) => ($hideTooltip ? "hidden" : "visible")};
     opacity: ${({ $hideTooltip }) => ($hideTooltip ? 0 : 1)};
   }
 `;
 
-const ControlButtonComponent = ({
+interface ControlButtonProps {
+  onClick: () => void;
+  icon: string;
+  fontSize?: string;
+  tooltip?: string;
+  hideTooltip?: boolean;
+}
+
+const ControlButtonComponent: React.FC<ControlButtonProps> = ({
   onClick,
   icon,
   fontSize,
   tooltip,
   hideTooltip,
 }) => {
-  const buttonRef = useRef(null);
-  const [tooltipPosition, setTooltipPosition] = useState({});
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{
+    left?: string;
+    right?: string;
+  }>({});
+
+  const calculateTooltipPosition = useCallback(() => {
+    if (buttonRef.current) {
+      const buttonRect = buttonRef.current.getBoundingClientRect();
+      const distanceToLeft = buttonRect.left;
+      const distanceToRight = window.innerWidth - buttonRect.right;
+
+      let newPosition: { left?: string; right?: string } = {};
+      if (distanceToLeft < distanceToRight) {
+        newPosition.left = "0";
+      } else {
+        newPosition.right = "0";
+      }
+
+      // Check if newPosition is different from current tooltipPosition state
+      if (
+        newPosition.left !== tooltipPosition.left ||
+        newPosition.right !== tooltipPosition.right
+      ) {
+        setTooltipPosition(newPosition);
+      }
+    }
+  }, [tooltipPosition]);
 
   useEffect(() => {
-    const buttonRect = buttonRef.current.getBoundingClientRect();
-    const screenWidth = document.documentElement.clientWidth;
-    const threshold = 50; // Adjust this threshold value as needed
-
-    if (buttonRect.left < threshold) {
-      setTooltipPosition({ left: "0" });
-    } else if (screenWidth - buttonRect.right < threshold) {
-      setTooltipPosition({ right: "0" });
-    } else {
-      setTooltipPosition({});
-    }
-  }, []);
+    calculateTooltipPosition();
+    window.addEventListener("resize", calculateTooltipPosition);
+    return () => {
+      window.removeEventListener("resize", calculateTooltipPosition);
+    };
+  }, [calculateTooltipPosition]);
 
   return (
     <ControlButtonWithTooltip
@@ -82,7 +115,7 @@ const ControlButtonComponent = ({
     >
       <i className="material-icons">{icon}</i>
       {tooltip && (
-        <TooltipText $position={tooltipPosition}>{tooltip}</TooltipText>
+        <TooltipText $positionStyle={tooltipPosition}>{tooltip}</TooltipText>
       )}
     </ControlButtonWithTooltip>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import ControlButtonComponent from "./ControlButton";
-import { thumbStyle, trackStyle } from "./Timeline/Timeline";
+import { thumbStyle } from "./Timeline/Timeline";
 
 const VolumeControlWrapper = styled.div`
   position: relative;
@@ -9,7 +9,11 @@ const VolumeControlWrapper = styled.div`
   align-items: center;
 `;
 
-const VolumeControl = styled.input.attrs({ type: "range" })`
+interface VolumeControlProps {
+  $volume: number;
+}
+
+const VolumeControl = styled.input.attrs({ type: "range" })<VolumeControlProps>`
   position: relative;
   width: 5rem;
   cursor: pointer;
@@ -55,7 +59,15 @@ const VolumeControl = styled.input.attrs({ type: "range" })`
 
 const VolumeButton = styled(ControlButtonComponent)``;
 
-const VolumeControlComponent = ({
+interface VolumeControlComponentProps {
+  volume: number;
+  setVolume: React.Dispatch<React.SetStateAction<number>>;
+  isSettingsPopupVisible: boolean;
+  onMuteToggle: () => void; // Add this line
+  onVolumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Add this line
+}
+
+const VolumeControlComponent: React.FC<VolumeControlComponentProps> = ({
   volume,
   setVolume,
   isSettingsPopupVisible,

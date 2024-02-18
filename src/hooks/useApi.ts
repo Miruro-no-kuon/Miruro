@@ -1,15 +1,16 @@
 import axios from "axios";
 
 // Environment variables
+// Defining base URL and other constants from environment variables
 const BASE_URL = import.meta.env.VITE_BACKEND_URL as string;
-const BASE_URL_2 = import.meta.env.VITE_BACKEND_URL_2 as string;
-const API_KEY = import.meta.env.VITE_API_KEY as string;
+//! const API_KEY = import.meta.env.VITE_API_KEY as string; Not currently in use
 const PROXY_URL = import.meta.env.VITE_PROXY_URL as string;
 const IS_LOCAL = import.meta.env.VITE_IS_LOCAL as string;
 const LOCAL_IP = import.meta.env.VITE_LOCAL_IP as string || "localhost";
 const PORT: number = import.meta.env.PORT ? parseInt(import.meta.env.PORT) : 5173;
 
 // Axios instance
+// Creating axios instance with proxy server base URL
 const PROXY_SERVER_BASE_URL = IS_LOCAL == "true"
   ? `http://${LOCAL_IP}:${PORT}/api/json`
   : `${PROXY_URL}/api/json`;
@@ -20,6 +21,7 @@ const axiosInstance = axios.create({
 });
 
 // Error handling function
+// Function to handle errors and throw appropriately
 function handleError(error: any, context: string) {
   let errorMessage = "An error occurred";
 
@@ -49,6 +51,7 @@ function handleError(error: any, context: string) {
 }
 
 // Cache key generator
+// Function to generate cache key from arguments
 function generateCacheKey(...args: string[]) {
   return args.join("-");
 }
@@ -59,6 +62,7 @@ interface CacheItem {
 }
 
 // Session storage cache creation
+// Function to create a cache in session storage
 function createOptimizedSessionStorageCache(maxSize: number, maxAge: number, cacheKey: string) {
   const cache = new Map<string, CacheItem>(JSON.parse(sessionStorage.getItem(cacheKey) || '[]'));
   const keys = new Set<string>(cache.keys());
@@ -102,10 +106,12 @@ function createOptimizedSessionStorageCache(maxSize: number, maxAge: number, cac
 }
 
 // Constants for cache configuration
-const CACHE_SIZE = 10;
+// Cache size and max age constants
+const CACHE_SIZE = 5;
 const CACHE_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Factory function for cache creation
+// Function to create cache with given cache key
 function createCache(cacheKey: string) {
   return createOptimizedSessionStorageCache(
     CACHE_SIZE,
@@ -126,12 +132,14 @@ interface FetchOptions {
 }
 
 // Individual caches for different types of data
+// Creating caches for anime data, anime info, and video sources
 const animeDataCache = createCache("animeDataCache");
 const animeInfoCache = createCache("animeInfoCache");
 const animeEpisodesCache = createCache("animeEpisodesCache");
 const videoSourcesCache = createCache("videoSourcesCache");
 
 // Fetch data from proxy with caching
+// Function to fetch data from proxy with caching
 async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
   try {
     const cachedResponse = cache.get(cacheKey);
@@ -179,18 +187,58 @@ export async function fetchAnimeData(
 }
 
 // Fetch Anime Info Function
-export async function fetchAnimeInfo(animeId: string, provider: string = "gogoanime") {
-  const cacheKey = generateCacheKey("animeInfo", animeId, provider);
-  const url = `${BASE_URL}meta/anilist/info/${animeId}`;
-  const params = new URLSearchParams({ provider });
+export async function fetchAnimeInfo(animeId: string, provider: string = "zoro") {
+  const cacheKey = generateCacheKey('animeInfo', animeId, provider);
 
-  return fetchFromProxy(
-    `${url}?${params.toString()}`,
-    animeInfoCache,
-    cacheKey
-  );
+  try {
+    // Check if data is in cache
+    const cachedData = animeInfoCache.get(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // If not in cache, fetch the data
+    const url = `${BASE_URL}meta/anilist/info/${animeId}`;
+    const params = new URLSearchParams({ provider });
+    const response = await axiosInstance.get(`${url}?${params.toString()}`);
+    const data = response.data;
+
+    // Store data in cache
+    animeInfoCache.set(cacheKey, data);
+    return data;
+  } catch (error) {
+    handleError(error, "anime info");
+  }
 }
 
+// Fetch Anime Episodes Function
+export async function fetchAnimeEpisodes(animeId: string, provider: string = "gogoanime") {
+  const cacheKey = generateCacheKey('animeEpisodes', animeId, provider);
+
+  try {
+    // Check if data is in cache
+    const cachedData = animeEpisodesCache.get(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // If not in cache, fetch the data
+    const url = `${BASE_URL}meta/anilist/episodes/${animeId}`;
+    const params = new URLSearchParams({ provider });
+    const response = await axiosInstance.get(`${url}?${params.toString()}`);
+    const data = response.data;
+
+    // Store data in cache
+    animeEpisodesCache.set(cacheKey, data);
+    return data;
+  } catch (error) {
+    handleError(error, "anime episodes");
+  }
+}
+
+
+
+// Function to fetch list of anime based on type (Top, Trending, Popular)
 async function fetchList(type: string, page: number = 1, perPage: number = 16, options: FetchOptions = {}) {
   let cacheKey: string;
   let url: string;
@@ -218,75 +266,27 @@ async function fetchList(type: string, page: number = 1, perPage: number = 16, o
   return fetchFromProxy(`${url}?${params.toString()}`, specificCache, cacheKey);
 }
 
-
+// Functions to fetch top, trending, and popular anime
 export const fetchTopAnime = (page: number, perPage: number) => fetchList("Top", page, perPage);
 export const fetchTrendingAnime = (page: number, perPage: number) => fetchList("Trending", page, perPage);
 export const fetchPopularAnime = (page: number, perPage: number) => fetchList("Popular", page, perPage);
 
-// Fetch Anime Episodes Function
-export async function fetchAnimeEpisodes(id: string) {
-  const preferredProviders = ["gogoanime", "zoro", "animepache"];
 
-  for (const providerId of preferredProviders) {
-    const url = `${BASE_URL_2}episodes/${id}${API_KEY ? `?apiKey=${API_KEY}` : ""}`;
-    const cacheKey = generateCacheKey("animeEpisodes", id, providerId);
-
-    try {
-      const cachedData = animeEpisodesCache.get(cacheKey);
-      if (cachedData) return cachedData;
-
-      const response = await fetchFromProxy(url, animeEpisodesCache, cacheKey);
-      const providerData = response.find(
-        (provider: any) => provider.providerId === providerId
-      );
-      if (providerData) {
-        animeEpisodesCache.set(cacheKey, providerData);
-        return providerData;
-      }
-    } catch (error) {
-      handleError(error, "anime episodes");
-    }
-  }
-
-  throw new Error("No episodes found from the preferred providers.");
-}
-
-// Fetch Episode Video URLs Function
-export async function fetchEpisodeVideoUrls(
-  watchId: string,
-  partialPreload: boolean = false,
-  id: string,
-  provider: string,
-  episodeNumber: string
-) {
-  const cacheKey = generateCacheKey(
-    "videoSources",
-    id,
-    provider,
-    episodeNumber,
-    partialPreload ? "partial" : "full"
-  );
-
-  const params = new URLSearchParams({
-    providerId: provider,
-    watchId,
-    id,
-    episodeNumber,
-    subType: "sub",
-    ...(API_KEY && { apiKey: API_KEY }),
-  });
-
-  const url = `${BASE_URL_2}sources?${params.toString()}`;
+// Function to fetch anime streaming links
+export async function fetchAnimeStreamingLinks(episodeId: string) {
+  const url = `${BASE_URL}meta/anilist/watch/${episodeId}`;
+  const cacheKey = generateCacheKey('animeStreamingLinks', episodeId);
 
   try {
     const cachedData = videoSourcesCache.get(cacheKey);
     if (cachedData) return cachedData;
 
-    const response = await fetchFromProxy(url, videoSourcesCache, cacheKey);
-    sessionStorage.setItem(cacheKey, JSON.stringify(response));
+    const response = await axiosInstance.get(url);
+    const data = response.data;
 
-    return response;
+    videoSourcesCache.set(cacheKey, data);
+    return data;
   } catch (error) {
-    handleError(error, "episode video URLs");
+    handleError(error, 'anime streaming links');
   }
 }

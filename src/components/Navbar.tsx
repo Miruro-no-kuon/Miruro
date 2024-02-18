@@ -176,6 +176,28 @@ const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
   }
 `;
 
+interface ClearButtonMobileProps {
+  $query: string;
+  $isMobile: boolean;
+}
+
+const ClearButtonMobile = styled.button<ClearButtonMobileProps>`
+  background: transparent;
+  border: none;
+  color: ${colors.globalText};
+  font-size: 1.1rem;
+  padding: 0.2rem; // Similarly, reduce padding for mobile button
+  cursor: pointer;
+  opacity: ${({ $query }) => ($query ? 0.5 : 0)};
+  visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
+  transition: color 0.2s, opacity 0.2s;
+  display: ${({ $isMobile }) => ($isMobile ? "inline-block" : "none")};
+  &:hover {
+    color: ${colors.globalText};
+    opacity: 1;
+  }
+`;
+
 const detectUserTheme = () => {
   if (
     window.matchMedia &&
@@ -220,13 +242,13 @@ const Navbar = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
-  
+
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", isDarkMode);
   }, [isDarkMode]);
@@ -314,29 +336,6 @@ const Navbar = () => {
     saveThemePreference(newIsDarkMode);
   };
 
-  interface ClearButtonMobileProps {
-    $query: string;
-    isMobile: boolean;
-  }
-  
-  const ClearButtonMobile = styled.button<ClearButtonMobileProps>`
-    background: transparent;
-    border: none;
-    color: ${colors.globalText};
-    font-size: 1.1rem;
-    padding: 0.2rem; // Similarly, reduce padding for mobile button
-    cursor: pointer;
-    opacity: ${({ $query }) => ($query ? 0.5 : 0)};
-    visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
-    transition: color 0.2s, opacity 0.2s;
-    display: ${({ isMobile }) => (isMobile ? "inline-block" : "none")};
-  
-    &:hover {
-      color: ${colors.globalText};
-      opacity: 1;
-    }
-  `;
-  
   return (
     <StyledNavbar ref={navbarRef}>
       <TopContainer>
@@ -353,23 +352,22 @@ const Navbar = () => {
             onKeyDown={handleKeyDownOnInput}
             ref={inputRef}
           />
-          {
-            isMobile ?
-            (
-              <ClearButtonMobile
-                $query={search.searchQuery}
-                onClick={handleClearSearch}
-                isMobile={isMobile}
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </ClearButtonMobile>
-            ) :
-            (
-              <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>
-                <FontAwesomeIcon icon={faTimes} />
-              </ClearButton>
-            )
-          }
+          {isMobile ? (
+            <ClearButtonMobile
+              $query={search.searchQuery}
+              onClick={handleClearSearch}
+              $isMobile={isMobile}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </ClearButtonMobile>
+          ) : (
+            <ClearButton
+              $query={search.searchQuery}
+              onClick={handleClearSearch}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </ClearButton>
+          )}
           <SlashToggleBtn $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSlash} rotation={90} />
           </SlashToggleBtn>
