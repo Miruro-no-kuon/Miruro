@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "module": "server.js",
+  "module": "server.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
@@ -16,6 +16,10 @@
     "helmet": "^7.1.0",
     "ldrs": "^1.0.1",
     "morgan": "^1.10.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "@types/express": "^4.17.13",
+    "typescript": "^5.0.0",
+    "@types/node": "^16.7.13",
+    "winston": "^3.3.3"
   }
 }

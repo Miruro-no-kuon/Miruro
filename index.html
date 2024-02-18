@@ -11,17 +11,17 @@
     <link
       rel="icon"
       type="image/svg+xml"
-      href="src/assets/favicon notr/favicon-circular-miruro-512x512.png"
+      href="src/assets/favicons/favicon-miruro.webp"
     />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
     <title>Miruro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx" defer></script>
     <script>
       const themePreference = localStorage.getItem("themePreference");
 
@@ -42,5 +42,6 @@
         document.body.style.backgroundColor = "";
       });
     </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

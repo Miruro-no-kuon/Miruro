@@ -1,3 +1,12 @@
+## ⚠️ Heads Up:  
+### `JS` to `TS` Transition Branch Alert
+
+🔷 Hey, just so you know, this branch is in the middle of a big switcheroo from 📜 **JavaScript** to **TypeScript**. It's a work in progress, so expect some hiccups and weird stuff.
+
+⚠️ Better tread lightly if you're gonna use this branch for development. Changes are coming fast, and there might be some rough patches until we smooth things out.
+
+🚧 Thanks for rolling with us while we jazz up this template. Appreciate your patience!
+
 <p align="center">
   <a href="https://www.miruro.com" target="_blank">
     <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/main/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
@@ -12,7 +21,7 @@
 </h1>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/typescript-%23007acc.svg?style=for-the-badge&logo=typescript&logoColor=%23ffffff"/></a>
   <a href="#"><img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"/></a>
   <a href="#"><img src="https://img.shields.io/badge/vite-%239269fe.svg?style=for-the-badge&logo=vite&logoColor=yellow&border"/></a>
   <a href="#"><img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/></a>
