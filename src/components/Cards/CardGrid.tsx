@@ -1,29 +1,76 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import styled, { keyframes } from "styled-components";
+import styled /* keyframes */ from "styled-components";
+// Assuming CardItem and CardSkeleton are correctly typed elsewhere
 import CardItem from "./CardItem";
 import CardSkeleton from "../Skeletons/CardSkeleton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 
-const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
+// Define types for the props
+interface CardGridProps {
+  animeData: Anime[];
+  totalPages: number;
+  hasNextPage: boolean;
+  onLoadMore: () => void;
+}
+
+// Assuming you have a type for your anime data
+interface Anime {
+  id: string;
+  coverImage?: string;
+  image?: string;
+  title: {
+    romaji?: string;
+    english?: string;
+  };
+  rating?: {
+    anilist?: number;
+  };
+  color?: string;
+  format?: string;
+  type?: string;
+  totalEpisodes?: number;
+  currentEpisode?: number;
+  description?: string;
+  genres?: string[];
+  status?: string;
+  popularity?: {
+    anidb?: number;
+  };
+  releaseDate?: string;
+  year?: string;
+}
+
+const CardGrid: React.FC<CardGridProps> = ({
+  animeData,
+  // totalPages,
+  hasNextPage,
+  onLoadMore,
+}) => {
   const [loading, setLoading] = useState(true);
-  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
-  const [hoveredCardInstant, setHoveredCardInstant] = useState(null);
-  const [hoveredCardDelayed, setHoveredCardDelayed] = useState(null);
-  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
-  const hoverTimeouts = useRef({});
+  // const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+  const [hoveredCardInstant, setHoveredCardInstant] = useState<string | null>(
+    null
+  );
+  const [hoveredCardDelayed, setHoveredCardDelayed] = useState<string | null>(
+    null
+  );
+  // const [loadMoreClicked, setLoadMoreClicked] = useState(false);
+  const hoverTimeouts = useRef<{
+    [key: string]: ReturnType<typeof setTimeout>;
+  }>({});
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setLoading(false);
-      setShowLoadMoreButton(true);
-      setLoadMoreClicked(false);
+      // setShowLoadMoreButton(true);
+      // setLoadMoreClicked(false);
     }, 0);
     return () => clearTimeout(loadingTimeout);
   }, [animeData]);
 
   const handleCardHover = useMemo(
-    () => (animeId) => {
+    () => (animeId: string) => {
       setHoveredCardInstant(animeId); // Set instant hover state
 
       if (hoverTimeouts.current[animeId]) {
@@ -38,7 +85,7 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
   );
 
   const handleCardLeave = useMemo(
-    () => (animeId) => {
+    () => (animeId: string) => {
       setHoveredCardInstant(null); // Clear instant hover state
 
       if (hoverTimeouts.current[animeId]) {
@@ -49,27 +96,28 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
     []
   );
 
-  const handleLoadMoreClick = () => {
-    setLoadMoreClicked(true);
-    onLoadMore();
+  const handleLoadMore = () => {
+    if (!loading && hasNextPage) {
+      setLoading(true);
+      onLoadMore();
+    }
   };
 
-  const renderLoadMoreButton = () => {
-    if (hasNextPage && showLoadMoreButton) {
-      return (
-        <LoadMoreButton
-          onClick={handleLoadMoreClick}
-          disabled={loading || loadMoreClicked}
-        >
-          <FontAwesomeIcon icon={faArrowCircleDown} className="icon" />
-          <LoadMoreText>
-            {loading || loadMoreClicked ? "Loading..." : "Load More"}
-          </LoadMoreText>
-        </LoadMoreButton>
-      );
-    }
-    return null;
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        handleLoadMore();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading, hasNextPage]);
 
   return (
     <StyledCardGrid>
@@ -87,11 +135,11 @@ const CardGrid = ({ animeData, totalPages, hasNextPage, onLoadMore }) => {
               isHoveredDelayed={hoveredCardDelayed === anime.id}
             />
           ))}
-      {renderLoadMoreButton()}
     </StyledCardGrid>
   );
 };
 
+// No changes below this line, assuming Styled Components are correctly typed
 export const StyledCardGrid = styled.div`
   margin: 0 auto;
   display: grid;
@@ -102,32 +150,26 @@ export const StyledCardGrid = styled.div`
   transition: grid-template-columns 0.5s ease-in-out;
 
   @media (max-width: 1200px) {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(10rem, 1fr)
-    ); // smaller columns on tablets and smaller devices
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     gap: 1.5rem;
   }
 
   @media (max-width: 800px) {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(8rem, 1fr)
-    ); // even smaller columns on mobile devices
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 1rem;
   }
 `;
 
-const fadeIn = keyframes`
+/* const fadeIn = keyframes`
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
   }
-`;
+`; */
 
-const LoadMoreButton = styled.button`
+/* const LoadMoreButton = styled.button`
   display: flex;
   align-items: center;
   opacity: 0;
@@ -152,10 +194,10 @@ const LoadMoreButton = styled.button`
   .icon {
     margin-right: 0.8rem;
   }
-`;
+`; */
 
-const LoadMoreText = styled.span`
+/* const LoadMoreText = styled.span`
   font-size: 1rem;
-`;
+`; */
 
 export default CardGrid;

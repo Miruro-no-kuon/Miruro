@@ -1,10 +1,22 @@
-import React from "react";
+import { FC } from "react";
 import styled, { keyframes } from "styled-components";
 import { FaPlay } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { useNavigate } from "react-router-dom";
 import BannerNotFound from "/src/assets/miruro-banner-dark-bg.webp";
+
+// Correctly type your data
+interface SlideData {
+  id: string;
+  image: string;
+  cover: string;
+  title: {
+    native: string;
+    english: string;
+  };
+  description: string;
+}
 
 // Styled components for the Carousel
 
@@ -60,7 +72,7 @@ const SlideImageWrapper = styled.div`
   border-radius: 0.2rem;
 `;
 
-const SlideImage = styled.img`
+const SlideImage = styled.img<{ $cover: string; $image: string }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -104,8 +116,9 @@ const SlideTitle = styled.h2`
   }
 `;
 
-const SlideDescription = styled.p`
-  color: var(--white, #ccc);
+const SlideDescription = styled.p<{
+  $maxLines: boolean;
+}>`  color: var(--white, #ccc);
   background: var(--global-primary-bg)
   font-size: clamp(0.9rem, 1.5vw, 1rem);
   line-height: 1;
@@ -197,16 +210,15 @@ const PaginationStyle = styled.div`
   }
 `;
 
-// Carousel component
-
-const Carousel = ({ data = [] }) => {
+// Adjust the Carousel component to use correctly typed props and state
+const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   const navigate = useNavigate();
 
-  const handlePlayButtonClick = (id) => {
+  const handlePlayButtonClick = (id: string) => {
     navigate(`/watch/${id}`);
   };
 
-  const truncateTitle = (title, maxLength = 40) => {
+  const truncateTitle = (title: string, maxLength: number = 40): string => {
     return title.length > maxLength
       ? `${title.substring(0, maxLength)}...`
       : title;
@@ -242,9 +254,9 @@ const Carousel = ({ data = [] }) => {
             <SlideImageWrapper>
               <SlideImage
                 src={cover === image ? BannerNotFound : cover}
-                $cover={cover}
-                $image={image}
-                alt={title.native}
+                alt={title.english}
+                $cover={cover} // Managed outside, but kept for styled component
+                $image={image} // Managed outside, but kept for styled component
                 loading="lazy"
               />
               <ContentWrapper>

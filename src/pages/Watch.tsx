@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
@@ -65,6 +65,7 @@ const Watch = () => {
     image: "",
   });
   const [loading, setLoading] = useState(true);
+  const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,7 +118,9 @@ const Watch = () => {
   }, [animeId]);
 
   const handleEpisodeSelect = useCallback(
-    (episodeId: string) => {
+    async (episodeId: string) => {
+      setIsEpisodeChanging(true); // Start of episode change
+
       const selectedEpisode = episodes.find(
         (episode) => episode.id === episodeId
       );
@@ -131,12 +134,16 @@ const Watch = () => {
           LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
           episodeId
         );
+
+        // Simulate an asynchronous operation (e.g., fetching episode details)
+        // This is where you'd wait for any real async tasks related to changing the episode.
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Remove this line if you have actual async operations
       }
+
+      setIsEpisodeChanging(false); // End of episode change, after async operations
     },
     [animeId, episodes]
   );
-
-  const shouldPreload = useMemo(() => episodes.length <= 26, [episodes]);
 
   if (loading) {
     return <WatchSkeleton />;
@@ -150,12 +157,9 @@ const Watch = () => {
     <WatchContainer>
       <VideoPlayerContainer>
         <VideoPlayer
-          id={animeId}
           episodeId={currentEpisode.id}
-          episodeNumber={currentEpisode.number}
-          provider={"gogoanime"} // You may need to determine how to set this
-          shouldPreload={shouldPreload}
-          bannerImage={currentEpisode.image} // Set the banner image here
+          bannerImage={currentEpisode.image}
+          isEpisodeChanging={isEpisodeChanging}
         />
       </VideoPlayerContainer>
       <EpisodeListContainer>

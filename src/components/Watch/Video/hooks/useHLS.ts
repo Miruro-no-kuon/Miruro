@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, RefObject } from "react";
 import Hls from "hls.js";
 
-const useHLS = (videoRef, source) => {
+const useHLS = (videoRef: RefObject<HTMLVideoElement>, source: string) => {
   useEffect(() => {
     if (Hls.isSupported() && videoRef.current && source) {
       const hls = new Hls();

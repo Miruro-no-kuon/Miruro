@@ -7,7 +7,7 @@ const useFetchAndSetupSources = (
   setVideoSources: (sources: VideoSource[]) => void,
   setVideoQualityOptions: (options: string[]) => void,
   setSelectedSource: (source: string) => void,
-  setSubtitleTracks: (tracks: SubtitleTrack[]) => void,  // Added this line
+  // setSubtitleTracks: (tracks: SubtitleTrack[]) => void,  // Added this line
   setCurrentTime: (time: number) => void,               // Added this line
   setError: (error: string) => void,
   videoRef: RefObject<HTMLVideoElement>
@@ -16,9 +16,14 @@ const useFetchAndSetupSources = (
     const deduplicateAndProcessSources = (sources: VideoSource[]): VideoSource[] => {
       const uniqueQualities = new Set();
       return sources
+        .filter(source => source.quality.toLowerCase() !== "backup") // Remove "backup" sources
+        .map(source => ({
+          ...source,
+          quality: source.quality.toLowerCase() === "default" ? "auto" : source.quality // Rename "default" to "auto"
+        }))
         .filter(source => {
-          if (!uniqueQualities.has(source.quality)) {
-            uniqueQualities.add(source.quality);
+          if (!uniqueQualities.has(source.quality.toLowerCase())) {
+            uniqueQualities.add(source.quality.toLowerCase());
             return true;
           }
           return false;
@@ -43,8 +48,7 @@ const useFetchAndSetupSources = (
           return qualityA.localeCompare(qualityB);
         });
     };
-
-    const addSubtitlesToVideo = (tracks: SubtitleTrack[]): void => {
+    /* const addSubtitlesToVideo = (tracks: SubtitleTrack[]): void => {
       if (!Array.isArray(tracks) && typeof tracks === "object") {
         tracks = [tracks];
       }
@@ -63,7 +67,7 @@ const useFetchAndSetupSources = (
           }
         });
       }
-    };
+    }; */
 
     const fetchAndSetupSources = async () => {
       setIsLoading(true);
@@ -119,10 +123,10 @@ type VideoSource = {
   url: string;
 };
 
-type SubtitleTrack = {
+/* type SubtitleTrack = {
   label: string;
   src: string;
   kind: string;
   lang: string;
   url: string;
-};
+}; */

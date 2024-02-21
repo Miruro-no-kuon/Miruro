@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 // Shared styles for thumb elements
@@ -27,8 +26,11 @@ export const trackStyle = `
   transition: 0.1s;
 `;
 
-// Timeline slider with custom styles
-export const Timeline = styled.input.attrs({ type: "range" })`
+// Timeline slider with custom styles and a class name
+export const Timeline = styled.input.attrs(({ className }) => ({
+  type: "range",
+  className: className ? `${className} timeline-slider` : "timeline-slider",
+}))`
   width: 99%;
   background: transparent;
   cursor: pointer;

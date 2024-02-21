@@ -1,7 +1,8 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const aspectRatio = (width, height) => `calc(100% * ${width} / ${height})`;
+// This function was declared but never used. Either remove it or use it appropriately.
+// const aspectRatio = (width: number, height: number) => `calc(100% * ${width} / ${height})`;
 
 const pulseAnimation = keyframes`
   0%, 100% {
@@ -27,7 +28,11 @@ const popInAnimation = keyframes`
   }
 `;
 
-const SkeletonSlide = styled.div`
+interface SkeletonProps {
+  loading?: boolean;
+}
+
+const SkeletonSlide = styled.div<SkeletonProps>`
   width: 100%;
   max-width: 100%;
   height: 24rem;
@@ -42,24 +47,25 @@ const SkeletonSlide = styled.div`
     height: 18rem;
   }
 
-  ${(props) =>
+  ${({ loading }) =>
+    !loading &&
     css`
-      animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s
-        infinite;
+      animation: ${css`
+        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+      `};
     `}
 `;
 
 const SkeletonImage = styled.div`
   width: 100%;
   height: 100%;
-  background: var(--global-card-bg);
   border-radius: 0.2rem;
 `;
 
-const CarouselSkeleton = React.memo(({ loading }) => (
+const CarouselSkeleton: React.FC<SkeletonProps> = ({ loading }) => (
   <SkeletonSlide loading={loading}>
-    <SkeletonImage loading={loading} />
+    <SkeletonImage />
   </SkeletonSlide>
-));
+);
 
-export default CarouselSkeleton;
+export default React.memo(CarouselSkeleton);

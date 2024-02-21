@@ -162,18 +162,16 @@ const isMobileDevice = () => {
 
 // Define the type for your props
 type VideoPlayerProps = {
-  id: string;
   episodeId: string;
-  shouldPreload?: boolean;
-  provider: string;
-  episodeNumber: number;
   bannerImage: string;
+  isEpisodeChanging: boolean;
 };
 
 // Apply the props type to your component
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   episodeId,
   bannerImage,
+  isEpisodeChanging,
 }) => {
   interface VideoSource {
     quality: string;
@@ -183,8 +181,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [videoSources, setVideoSources] = useState<VideoSource[]>([]);
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedQuality, setSelectedQuality] = useState("auto");
-  const [videoQualityOptions, setVideoQualityOptions] = useState([]);
-  const [subtitleTracks, setSubtitleTracks] = useState([]);
+  const [videoQualityOptions, setVideoQualityOptions] = useState<string[]>([]);
+  const [subtitleTracks, setSubtitleTracks] = useState<string[]>([]);
   const [subtitlesEnabled, setSubtitlesEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -217,9 +215,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setVideoSources,
     setVideoQualityOptions,
     setSelectedSource,
-    setSubtitleTracks,
-    setError,
     setCurrentTime,
+    setError,
     videoRef
   );
 
@@ -254,8 +251,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       videoSources.find((s) => s.quality === selectedQuality)?.url ||
         videoSources[0]?.url
     );
-    setIsPlaying(false);
-    setHasPlayed(false);
+    if (isEpisodeChanging) {
+      setIsPlaying(false);
+      setHasPlayed(false);
+    }
   }, [videoSources, selectedQuality]);
 
   const handleQualityChange = () => {
@@ -267,8 +266,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     handleQualityChange();
-    setIsPlaying(false);
-    setHasPlayed(false);
+    if (isEpisodeChanging) {
+      setIsPlaying(false);
+      setHasPlayed(false);
+    }
 
     const savedTime = localStorage.getItem(`savedTime-${episodeId}`);
     if (savedTime) {
@@ -365,18 +366,33 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const changeQuality = (newQuality: string) => {
     if (videoRef.current) {
+      const wasPlaying = !videoRef.current.paused;
       const currentTime = videoRef.current.currentTime;
       setSelectedQuality(newQuality);
 
-      const handleCanPlay = () => {
+      // This function is modified to ensure playback resumes smoothly after source change.
+      const handleCanPlayAfterQualityChange = () => {
         if (videoRef.current) {
-          // Check added here
           videoRef.current.currentTime = currentTime;
-          videoRef.current.removeEventListener("canplay", handleCanPlay);
+          if (wasPlaying) {
+            videoRef.current
+              .play()
+              .catch((error) => console.error("Play error:", error));
+          }
+          videoRef.current.removeEventListener(
+            "canplay",
+            handleCanPlayAfterQualityChange
+          );
         }
       };
 
-      videoRef.current.addEventListener("canplay", handleCanPlay);
+      videoRef.current.addEventListener(
+        "canplay",
+        handleCanPlayAfterQualityChange
+      );
+
+      // This will trigger the useEffect that listens to selectedQuality changes,
+      // which in turn calls setSelectedSource, updating the video source.
     }
   };
 

@@ -26,7 +26,7 @@ const SearchResults = () => {
   const [page, setPage] = useState(1);
   const delayTimeout = useRef<NodeJS.Timeout | null>(null);
   const lastCachedPage = useRef(0);
-  const [loadingStates, setLoadingStates] = useState<boolean[]>([]);
+  const [/* loadingStates */, setLoadingStates] = useState<boolean[]>([]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -112,7 +112,7 @@ const SearchResults = () => {
     <Container>
       {
         <Title>
-          {animeData.length} Search Results found: <strong>{query}</strong>
+          {animeData.length} Search Results: <strong>{query}</strong>
         </Title>
       }
       {isLoading && page === 1 ? (
@@ -124,7 +124,7 @@ const SearchResults = () => {
       ) : (
         <CardGrid
           animeData={animeData}
-          loadingStates={loadingStates}
+          // loadingStates={loadingStates}
           totalPages={totalPages}
           hasNextPage={hasNextPage}
           onLoadMore={handleLoadMore}

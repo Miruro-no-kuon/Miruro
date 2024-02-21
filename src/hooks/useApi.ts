@@ -107,7 +107,7 @@ function createOptimizedSessionStorageCache(maxSize: number, maxAge: number, cac
 
 // Constants for cache configuration
 // Cache size and max age constants
-const CACHE_SIZE = 5;
+const CACHE_SIZE = 10;
 const CACHE_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Factory function for cache creation
@@ -211,33 +211,6 @@ export async function fetchAnimeInfo(animeId: string, provider: string = "zoro")
   }
 }
 
-// Fetch Anime Episodes Function
-export async function fetchAnimeEpisodes(animeId: string, provider: string = "gogoanime") {
-  const cacheKey = generateCacheKey('animeEpisodes', animeId, provider);
-
-  try {
-    // Check if data is in cache
-    const cachedData = animeEpisodesCache.get(cacheKey);
-    if (cachedData) {
-      return cachedData;
-    }
-
-    // If not in cache, fetch the data
-    const url = `${BASE_URL}meta/anilist/episodes/${animeId}`;
-    const params = new URLSearchParams({ provider });
-    const response = await axiosInstance.get(`${url}?${params.toString()}`);
-    const data = response.data;
-
-    // Store data in cache
-    animeEpisodesCache.set(cacheKey, data);
-    return data;
-  } catch (error) {
-    handleError(error, "anime episodes");
-  }
-}
-
-
-
 // Function to fetch list of anime based on type (Top, Trending, Popular)
 async function fetchList(type: string, page: number = 1, perPage: number = 16, options: FetchOptions = {}) {
   let cacheKey: string;
@@ -271,6 +244,31 @@ export const fetchTopAnime = (page: number, perPage: number) => fetchList("Top",
 export const fetchTrendingAnime = (page: number, perPage: number) => fetchList("Trending", page, perPage);
 export const fetchPopularAnime = (page: number, perPage: number) => fetchList("Popular", page, perPage);
 
+
+// Fetch Anime Episodes Function
+export async function fetchAnimeEpisodes(animeId: string, provider: string = "gogoanime") {
+  const cacheKey = generateCacheKey('animeEpisodes', animeId, provider);
+
+  try {
+    // Check if data is in cache
+    const cachedData = animeEpisodesCache.get(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // If not in cache, fetch the data
+    const url = `${BASE_URL}meta/anilist/episodes/${animeId}`;
+    const params = new URLSearchParams({ provider });
+    const response = await axiosInstance.get(`${url}?${params.toString()}`);
+    const data = response.data;
+
+    // Store data in cache
+    animeEpisodesCache.set(cacheKey, data);
+    return data;
+  } catch (error) {
+    handleError(error, "anime episodes");
+  }
+}
 
 // Function to fetch anime streaming links
 export async function fetchAnimeStreamingLinks(episodeId: string) {
