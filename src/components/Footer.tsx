@@ -98,7 +98,23 @@ const StyledLinkList = styled.div`
     margin-bottom: 1rem;
   }
 `;
-const FooterLink = styled(Link)``;
+
+const scrollToTop = () => {
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, 50); // Adjust the delay as needed
+};
+
+const FooterLink = ({ to, children }) => {
+  return (
+    <Link to={to} onClick={scrollToTop}>
+      {children}
+    </Link>
+  );
+};
 
 const CopyrightText = styled.p`
   font-size: 0.8rem;
@@ -168,7 +184,7 @@ function Footer() {
         </SocialIconsWrapper>
         <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
         <StyledLinkList>
-          <FooterLink to="/Info">FAQ</FooterLink>
+          <FooterLink to="Info">FAQ</FooterLink>
           <FooterLink to="Info">Policy</FooterLink>
           <FooterLink to="Info">Terms</FooterLink>
         </StyledLinkList>

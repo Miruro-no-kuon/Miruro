@@ -30,7 +30,6 @@ const StyledNavbar = styled.div`
   margin-right: -2rem;
   padding: 0.25rem 2rem;
   background-color: ${colors.globalPrimaryBgTr};
-  // backdrop-filter: blur(50px);
   transform: translateY(0);
   z-index: 4;
   width: calc(100%);
@@ -227,7 +226,6 @@ const Navbar = () => {
   const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
-  // * const delayTimeout = useRef(null);
 
   const [search, setSearch] = useState({
     isSearchFocused: false,
@@ -263,16 +261,14 @@ const Navbar = () => {
         inputRef.current.blur();
         setSearch({ ...search, isSearchFocused: false });
       } else if (e.shiftKey && e.key.toLowerCase() === "d") {
-        // Check if search bar is focused
         if (document.activeElement !== inputRef.current) {
-          // Listening for Shift + D or Shift + d and ensuring search bar is not focused
           e.preventDefault();
           toggleTheme();
         }
       }
     },
     [search, isDarkMode]
-  ); // Adding isDarkMode as a dependency
+  );
 
   useEffect(() => {
     const listener = handleKeyDown as EventListener;
@@ -317,7 +313,6 @@ const Navbar = () => {
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      // Use the current state value for navigation
       navigateWithQuery(search.searchQuery);
     }
   };

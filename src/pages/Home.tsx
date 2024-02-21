@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
 import CardGrid, { StyledCardGrid } from "../components/Cards/CardGrid";
@@ -19,20 +19,20 @@ const SimpleLayout = styled.div`
   border-radius: 0.2rem;
 `;
 
-const SectionHeading = styled.h2`
-  margin-top: 0;
-  color: var(--global-text);
-`;
-
 const TabContainer = styled.div`
   border-radius: 0.2rem;
   width: 100%;
 `;
 
-const Tab = styled.button`
+// Correcting the type for the $isActive prop
+interface TabProps {
+  $isActive: boolean;
+}
+
+const Tab = styled.button<TabProps>`
   background: transparent;
   margin: 0 1rem 0 0;
-  padding: 0.5rem;
+  padding: 0.5rem;StyledCardGrid
   border-radius: 0.2rem;
   border: none;
   cursor: pointer;
@@ -95,7 +95,7 @@ const Home = () => {
   const [trendingAnime, setTrendingAnime] = useState([]);
   const [popularAnime, setPopularAnime] = useState([]);
   const [topAnime, setTopAnime] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState({
     trending: true,
     popular: true,
@@ -105,17 +105,24 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Reset error state on new fetch attempt
+        setError(null);
+
         const [trending, popular, top] = await Promise.all([
-          fetchTrendingAnime(),
-          fetchPopularAnime(),
-          fetchTopAnime(),
+          fetchTrendingAnime(1, 16),
+          fetchPopularAnime(1, 16),
+          fetchTopAnime(1, 16),
         ]);
 
         setTrendingAnime(trending.results);
         setPopularAnime(popular.results);
         setTopAnime(top.results);
       } catch (fetchError) {
-        setError(fetchError.message);
+        if (fetchError instanceof Error) {
+          setError(fetchError.message);
+        } else {
+          setError("An unexpected error occurred");
+        }
       } finally {
         setLoading({ trending: false, popular: false, top: false });
       }
@@ -124,23 +131,32 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-
-  const renderCardGrid = (animeData, isLoading) => (
+  const renderCardGrid = (
+    animeData: any[],
+    isLoading: boolean,
+    hasError: boolean
+  ) => (
     <Section>
-      {isLoading ? (
+      {isLoading || hasError ? (
         <StyledCardGrid>
           {Array.from({ length: 16 }, (_, index) => (
-            <CardSkeleton key={index} isLoading={true} />
+            <CardSkeleton key={index} />
           ))}
         </StyledCardGrid>
       ) : (
-        <CardGrid animeData={animeData} />
+        <CardGrid
+          animeData={animeData}
+          totalPages={1} // Adjust as necessary
+          hasNextPage={false} // Adjust as necessary
+          onLoadMore={() => {}} // Placeholder for actual logic
+        />
       )}
     </Section>
   );
+
+  const handleTabClick = (tabName: string) => {
+    setActiveTab(tabName);
+  };
 
   return (
     <SimpleLayout>
@@ -149,7 +165,7 @@ const Home = () => {
           <p>Error: {error}</p>
         </ErrorMessage>
       )}
-      {loading.trending ? (
+      {loading.trending || error ? (
         <CarouselSkeleton />
       ) : (
         <Carousel data={trendingAnime} />
@@ -177,9 +193,10 @@ const Home = () => {
       </TabContainer>
 
       {activeTab === "trending" &&
-        renderCardGrid(trendingAnime, loading.trending)}
-      {activeTab === "popular" && renderCardGrid(popularAnime, loading.popular)}
-      {activeTab === "top" && renderCardGrid(topAnime, loading.top)}
+        renderCardGrid(trendingAnime, loading.trending, !!error)}
+      {activeTab === "popular" &&
+        renderCardGrid(popularAnime, loading.popular, !!error)}
+      {activeTab === "top" && renderCardGrid(topAnime, loading.top, !!error)}
     </SimpleLayout>
   );
 };

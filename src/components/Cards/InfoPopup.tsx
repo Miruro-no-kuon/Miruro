@@ -11,16 +11,14 @@ import backgroundImage from "/src/assets/miruro-black-resized.webp";
 
 // Utility functions
 
-const generateGradient = (color) => {
-  if (!color) return null;
+const generateGradient = (color: string) => {
   const darkenedColor = darken(0, color);
   const lightenedColor = lighten(0.1, color);
   return `linear-gradient(135deg, ${darkenedColor}, ${lightenedColor})`;
 };
 
-const calculateTextColor = (bgColor) => {
-  if (!bgColor) return null;
-  const luminance = bgColor ? parseInt(bgColor.slice(1), 16) : 0;
+const calculateTextColor = (bgColor: string) => {
+  const luminance = parseInt(bgColor.slice(1), 16);
   const mid = 0 * 65793;
   return luminance > mid
     ? "var(--global-text-dark)"
@@ -43,7 +41,10 @@ const popInAnimation = keyframes`
 
 // Styled components
 
-const InfoPopup = styled.div`
+const InfoPopup = styled.div<{
+  $isPositionedLeft?: boolean;
+  $cover?: string;
+}>`
   padding: 0.8rem;
   animation: ${popInAnimation} 0.3s ease forwards;
   pointer-events: none;
@@ -103,10 +104,10 @@ const PopUpContent = styled.div`
   }
 `;
 
-const GenreButton = styled.div`
+const GenreButton = styled.div<{ color?: string }>`
   display: inline-block;
   background: ${(props) =>
-    generateGradient(props.color) || "var(--global-genre-button-bg)"};
+    generateGradient(props.color || "") || "var(--global-genre-button-bg)"};
   padding: 0.25rem 0.3rem;
   border-radius: 0.2rem;
   font-weight: bold;
@@ -114,87 +115,99 @@ const GenreButton = styled.div`
   font-size: 0.6rem;
   transition: color 0.2s;
   color: ${(props) => {
-    const textColor = calculateTextColor(props.color);
-    return textColor
-      ? textColor === "var(--global-text-dark)"
-        ? darken(0.35, props.color)
-        : lighten(0.35, props.color)
-      : "var(--genre-button-color)";
+    const textColor = calculateTextColor(props.color || "var(--global-text)"); // Default color if none provided
+    return textColor === "var(--global-text-dark)"
+      ? darken(0.35, props.color || "var(--global-text)")
+      : lighten(0.35, props.color || "var(--global-text)");
   }};
 }`;
 
 // Function to strip HTML tags
-const stripHtmlTags = (html) => {
+const stripHtmlTags = (html: string) => {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = html;
   return tempDiv.textContent || tempDiv.innerText || "";
 };
 
+interface InfoPopupContentProps {
+  title?: string;
+  description?: string;
+  genres?: string[];
+  $isPositionedLeft?: boolean;
+  color?: string;
+  type?: string;
+  status?: string;
+  popularity?: number;
+  totalEpisodes?: number;
+  currentEpisode?: number;
+  releaseDate?: string;
+  cover?: string;
+  maxDescriptionLength?: number;
+}
+
 // InfoPopupContent component
 
-const InfoPopupContent = React.memo(
-  ({
-    title,
-    description,
-    genres,
-    $isPositionedLeft,
-    color,
-    type,
-    status,
-    totalEpisodes,
-    releaseDate,
-    cover,
-    maxDescriptionLength,
-  }) => {
-    const strippedDescription = stripHtmlTags(description);
+const InfoPopupContent: React.FC<InfoPopupContentProps> = ({
+  title,
+  description = "", // Default to an empty string if undefined
+  genres,
+  $isPositionedLeft,
+  color, // Default color if none provided
+  type,
+  status,
+  totalEpisodes,
+  releaseDate,
+  cover,
+  maxDescriptionLength = 100, // Default max length if none provided
+}) => {
+  const strippedDescription = stripHtmlTags(description);
 
-    const limitedGenres = genres.slice(0, 3);
-    const truncatedDescription =
-      strippedDescription?.length > maxDescriptionLength
-        ? `${strippedDescription.slice(0, maxDescriptionLength)}...`
-        : strippedDescription;
+  const limitedGenres = genres?.slice(0, 3) || [];
+  const truncatedDescription =
+    strippedDescription.length > maxDescriptionLength
+      ? `${strippedDescription.slice(0, maxDescriptionLength)}...`
+      : strippedDescription;
 
-    const uppercaseStatus = status?.toUpperCase() || "";
+  const uppercaseStatus = status?.toUpperCase() || "";
 
-    const iconMap = {
-      faTv: <FontAwesomeIcon icon={faTv} className="icon" />,
-      faClosedCaptioning: (
-        <FontAwesomeIcon icon={faClosedCaptioning} className="icon" />
-      ),
-      faCalendarAlt: <FontAwesomeIcon icon={faCalendarAlt} className="icon" />,
-    };
+  const iconMap = {
+    faTv: <FontAwesomeIcon icon={faTv} className="icon" />,
+    faClosedCaptioning: (
+      <FontAwesomeIcon icon={faClosedCaptioning} className="icon" />
+    ),
+    faCalendarAlt: <FontAwesomeIcon icon={faCalendarAlt} className="icon" />,
+  };
 
-    return (
-      <InfoPopup
-        $isPositionedLeft={$isPositionedLeft}
-        color={color}
-        $cover={cover}
-      >
-        <PopUpContent color={color}>
-          <div className="title-div">{title}</div>
-          {type && totalEpisodes && status && (
-            <p>
-              {iconMap.faTv}
-              {type} <span className="separator-span"> | </span>
-              {iconMap.faClosedCaptioning}
-              {totalEpisodes} <span className="separator-span"> | </span>
-              {uppercaseStatus} <span className="separator-span"> | </span>
-              {iconMap.faCalendarAlt}
-              {releaseDate}
-            </p>
-          )}
-          {truncatedDescription && <p>{truncatedDescription}</p>}
-          <div>
-            {limitedGenres.map((genre, index) => (
-              <GenreButton key={index} color={color}>
-                {genre}
-              </GenreButton>
-            ))}
-          </div>
-        </PopUpContent>
-      </InfoPopup>
-    );
-  }
-);
+  return (
+    <InfoPopup
+      $isPositionedLeft={$isPositionedLeft}
+      color={color}
+      $cover={cover}
+    >
+      <PopUpContent color={color}>
+        <div className="title-div">{title}</div>
+        {type && totalEpisodes && status && (
+          <p>
+            {iconMap.faTv}
+            {type} <span className="separator-span"> | </span>
+            {iconMap.faClosedCaptioning}
+            {totalEpisodes} <span className="separator-span"> | </span>
+            {uppercaseStatus} <span className="separator-span"> | </span>
+            {iconMap.faCalendarAlt}
+            {releaseDate}
+          </p>
+        )}
+        {truncatedDescription && <p>{truncatedDescription}</p>}
+        <div>
+          {limitedGenres.map((genre, index) => (
+            <GenreButton key={index} color={color}>
+              {genre}
+            </GenreButton>
+          ))}
+        </div>
+      </PopUpContent>
+    </InfoPopup>
+  );
+};
 
 export default InfoPopupContent;

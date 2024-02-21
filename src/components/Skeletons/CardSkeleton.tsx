@@ -1,7 +1,12 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const aspectRatio = (width, height) => `calc(100% * ${width} / ${height})`;
+interface SkeletonProps {
+  loading?: boolean;
+}
+
+const aspectRatio = (width: number, height: number): string =>
+  `calc(100% * ${width} / ${height})`;
 
 const pulseAnimation = keyframes`
   0%, 100% {
@@ -13,9 +18,9 @@ const pulseAnimation = keyframes`
 `;
 
 const popInAnimation = keyframes`
-  0%, 100%{
+  0%, 100% {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   50% {
     opacity: 1;
@@ -27,7 +32,8 @@ const popInAnimation = keyframes`
   }
 `;
 
-const SkeletonCard = styled.div`
+// Update your styled components to use the css helper for animations
+const SkeletonCard = styled.div<SkeletonProps>`
   width: 100%;
   max-width: 100%;
   height: 0;
@@ -36,12 +42,16 @@ const SkeletonCard = styled.div`
   border-radius: 0.2rem;
   margin-bottom: 2.5rem;
 
-  ${(props) => css`
-    animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s infinite;;
-  `}
+  ${({ loading }) =>
+    !loading &&
+    css`
+      animation: ${css`
+        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+      `};
+    `}
 `;
 
-const SkeletonTitle = styled.div`
+const SkeletonTitle = styled.div<SkeletonProps>`
   width: 80%;
   height: 1.3rem;
   background: var(--global-card-bg);
@@ -49,15 +59,21 @@ const SkeletonTitle = styled.div`
   margin-top: 0.5rem;
   margin-left: 0.3rem;
 
-  ${(props) => css`
-    animation: ${props.loading ? "none" : pulseAnimation && popInAnimation} 1s infinite;;
-  `}
+  ${({ loading }) =>
+    !loading &&
+    css`
+      animation: ${css`
+        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+      `};
+    `}
 `;
 
-const CardSkeleton = React.memo(({ loading }) => (
-  <SkeletonCard loading={loading}>
-    <SkeletonTitle loading={loading} />
-  </SkeletonCard>
-));
+const CardSkeleton: React.FC<SkeletonProps> = React.memo(
+  ({ loading = false }) => (
+    <SkeletonCard loading={loading}>
+      <SkeletonTitle loading={loading} />
+    </SkeletonCard>
+  )
+);
 
 export default CardSkeleton;
