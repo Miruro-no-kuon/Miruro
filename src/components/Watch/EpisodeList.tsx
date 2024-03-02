@@ -1,7 +1,12 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faThList,
+  faTh,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Episode {
   id: string;
@@ -24,6 +29,11 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  max-height: 45rem;
+
+  @media (max-width: 1000px) {
+    max-height: 30rem;
+  }
 `;
 
 const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
@@ -40,7 +50,7 @@ const ListItem = styled.button<{ $isSelected: boolean; $isRowLayout: boolean }>`
   background-color: var(--global-tertiary-bg);
   border: none;
   border-radius: 0.2rem;
-  color: ${({ $isSelected }) => ($isSelected ? "white" : "grey")};
+  color: ${({ $isSelected }) => ($isSelected ? "var(--global-text)" : "grey")};
   padding: ${({ $isRowLayout }) =>
     $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
   text-align: ${({ $isRowLayout }) => ($isRowLayout ? "left" : "center")};
@@ -56,16 +66,74 @@ const ListItem = styled.button<{ $isSelected: boolean; $isRowLayout: boolean }>`
   }
 `;
 
+const ControlsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: var(--global-secondary-bg);
+  border-bottom: 1px solid var(--global-shadow);
+  padding: 0.25rem 0;
+`;
+
 const SelectInterval = styled.select`
-  width: 100%;
   padding: 0.75rem;
-  margin-bottom: 10px;
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
+  border: none;
+  border-radius: 0.2rem;
+`;
+
+const LayoutToggle = styled.button`
+  background-color: var(--global-secondary-bg);
   border: 1px solid var(--global-shadow);
-  border-top: none;
-  border-right: none;
-  border-left: none;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  color: var(--global-text);
+  border-radius: 0.2rem;
+  transition: background-color 0.15s, color 0.15s;
+
+  &:hover {
+    background-color: var(--global-button-hover-bg);
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: var(--global-secondary-bg);
+  border: 1px solid var(--global-shadow);
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  border-radius: 0.2rem;
+  transition: background-color 0.15s, color 0.15s;
+
+  &:hover {
+    background-color: var(--global-button-hover-bg);
+  }
+`;
+
+const SearchInput = styled.input`
+  border: none;
+  background-color: transparent;
+  color: var(--global-text);
+  margin-left: 0.5rem;
+  outline: none;
+  width: 100%;
+
+  &::placeholder {
+    color: var(--global-placeholder);
+  }
+`;
+
+const Icon = styled.div`
+  color: var(--global-text);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  transition: opacity 0.2s;
+
+  @media (max-width: 768px) {
+    display: none; /* Hide on mobile */
+  }
 `;
 
 const EpisodeNumber = styled.span``;
@@ -73,13 +141,29 @@ const EpisodeTitle = styled.span`
   padding: 0.5rem;
 `;
 
+// The updated EpisodeList component
 const EpisodeList: React.FC<Props> = ({
   episodes,
   selectedEpisodeId,
   onEpisodeSelect,
 }) => {
   const [interval, setInterval] = useState<[number, number]>([0, 99]);
-  const isRowLayout = episodes.length < 26;
+  const [isRowLayout, setIsRowLayout] = useState(true);
+  const [userLayoutPreference, setUserLayoutPreference] = useState<
+    boolean | null
+  >(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter episodes based on search input
+  const filteredEpisodes = useMemo(() => {
+    return episodes.filter((episode) => {
+      const searchQuery = searchTerm.toLowerCase();
+      return (
+        episode.title?.toLowerCase().includes(searchQuery) ||
+        episode.number.toString().includes(searchQuery)
+      );
+    });
+  }, [episodes, searchTerm]);
 
   const intervalOptions = useMemo(() => {
     return episodes.reduce<{ start: number; end: number }[]>(
@@ -103,18 +187,76 @@ const EpisodeList: React.FC<Props> = ({
     []
   );
 
+  // Toggle layout preference
+  const toggleLayoutPreference = useCallback(() => {
+    setUserLayoutPreference((prev) => !prev);
+  }, []);
+
+  // Determine layout based on episodes and user preference
+  useEffect(() => {
+    const allTitlesNull = episodes.every((episode) => episode.title === null);
+    const defaultLayout = episodes.length <= 26 && !allTitlesNull;
+
+    setIsRowLayout(
+      userLayoutPreference !== null ? userLayoutPreference : defaultLayout
+    );
+
+    // Find the selected episode
+    const selectedEpisode = episodes.find(
+      (episode) => episode.id === selectedEpisodeId
+    );
+    if (selectedEpisode) {
+      // Find the interval containing the selected episode
+      for (let i = 0; i < intervalOptions.length; i++) {
+        const { start, end } = intervalOptions[i];
+        if (
+          selectedEpisode.number >= start + 1 &&
+          selectedEpisode.number <= end + 1
+        ) {
+          setInterval([start, end]);
+          break;
+        }
+      }
+    }
+  }, [episodes, userLayoutPreference, selectedEpisodeId, intervalOptions]);
+
   return (
     <ListContainer>
-      <SelectInterval onChange={handleIntervalChange}>
-        {intervalOptions.map(({ start, end }, index) => (
-          <option key={index} value={`${start}-${end}`}>
-            Episodes {start + 1} - {end + 1}
-          </option>
-        ))}
-      </SelectInterval>
+      <ControlsContainer>
+        <SelectInterval
+          onChange={handleIntervalChange}
+          value={`${interval[0]}-${interval[1]}`}
+        >
+          {intervalOptions.map(({ start, end }, index) => (
+            <option key={index} value={`${start}-${end}`}>
+              Episodes {start + 1} - {end + 1}
+            </option>
+          ))}
+        </SelectInterval>
+
+        <SearchContainer>
+          <Icon>
+            <FontAwesomeIcon icon={faSearch} />
+          </Icon>
+          <SearchInput
+            type="text"
+            placeholder="Search episodes..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </SearchContainer>
+
+        <LayoutToggle onClick={toggleLayoutPreference}>
+          {isRowLayout ? (
+            <FontAwesomeIcon icon={faTh} />
+          ) : (
+            <FontAwesomeIcon icon={faThList} />
+          )}
+        </LayoutToggle>
+      </ControlsContainer>
 
       <EpisodeGrid $isRowLayout={isRowLayout}>
-        {episodes.slice(interval[0], interval[1] + 1).map((episode) => {
+        {filteredEpisodes.slice(interval[0], interval[1] + 1).map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
 
           return (

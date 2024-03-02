@@ -1,8 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
+import { Link, LinkProps } from "react-router-dom";
 const theme = {
   primaryBackgroundColor: "var(--global-secondary-bg)",
   textColor: "var(--global-text)",
@@ -103,12 +101,12 @@ const scrollToTop = () => {
   setTimeout(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
-  }, 50); // Adjust the delay as needed
+  }, 50);
 };
 
-const FooterLink = ({ to, children }) => {
+const FooterLink: React.FC<LinkProps> = ({ to, children }) => {
   return (
     <Link to={to} onClick={scrollToTop}>
       {children}

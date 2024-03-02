@@ -47,7 +47,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/watch/:animeId" element={<Watch />} />
-        <Route path="/Info" element={<Info />} /> {/* Corrected the path */}
+        <Route path="/watch/:animeId/:animeTitle/:episodeNumber" element={<Watch />} />
+        <Route path="/info" element={<Info />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />

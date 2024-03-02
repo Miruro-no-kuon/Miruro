@@ -12,7 +12,7 @@ interface SlideData {
   image: string;
   cover: string;
   title: {
-    native: string;
+    romaji: string;
     english: string;
   };
   description: string;

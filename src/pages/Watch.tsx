@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
@@ -56,8 +56,13 @@ interface CurrentEpisode {
   image: string;
 }
 
-const Watch = () => {
-  const { animeId = "" } = useParams();
+const Watch: React.FC = () => {
+  const { animeId, animeTitle, episodeNumber } = useParams<{
+    animeId: string;
+    animeTitle?: string;
+    episodeNumber?: string;
+  }>();
+  const navigate = useNavigate();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisode, setCurrentEpisode] = useState<CurrentEpisode>({
     id: "0",
@@ -83,29 +88,63 @@ const Watch = () => {
             id: ep.id,
             number: ep.number,
             title: ep.title,
-            image: ep.image, // Ensure image property is mapped
+            image: ep.image,
           }));
 
           setEpisodes(transformedEpisodes);
-          const savedEpisodeId =
-            localStorage.getItem(
+
+          // Check if animeTitle and episodeNumber are provided in the URL
+          if (animeTitle && episodeNumber) {
+            const episodeId = `${animeTitle}-episode-${episodeNumber}`;
+            const matchingEpisode = transformedEpisodes.find(
+              (ep: Episode) => ep.id === episodeId
+            );
+            if (matchingEpisode) {
+              setCurrentEpisode({
+                id: matchingEpisode.id,
+                number: matchingEpisode.number,
+                image: matchingEpisode.image,
+              });
+            } else {
+              // Fallback to the first episode or saved episode
+              navigate(`/watch/${animeId}`);
+            }
+          } else {
+            let savedEpisodeData = localStorage.getItem(
               LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
-            ) ||
-            transformedEpisodes[0]?.id ||
-            "0";
-          const matchedEpisode = transformedEpisodes.find(
-            (episode: Episode) => episode.id === savedEpisodeId
-          );
-          const defaultEpisode = transformedEpisodes[0] || {
-            id: "0",
-            number: 1,
-            image: "", // Set default image
-          };
-          setCurrentEpisode({
-            id: savedEpisodeId,
-            number: matchedEpisode?.number || defaultEpisode.number,
-            image: matchedEpisode?.image || defaultEpisode.image,
-          });
+            );
+            let savedEpisode = savedEpisodeData
+              ? JSON.parse(savedEpisodeData)
+              : null;
+
+            if (savedEpisode && savedEpisode.number) {
+              const animeTitle = savedEpisode.id.split("-episode")[0];
+              navigate(
+                `/watch/${animeId}/${animeTitle}/${savedEpisode.number}`,
+                { replace: true }
+              );
+              setCurrentEpisode({
+                id: savedEpisode.id || "",
+                number: savedEpisode.number,
+                image: "", // Find the episode by number to get the image
+              });
+            } else {
+              // Navigate to the first episode if no saved episode data is found
+              const firstEpisode = transformedEpisodes[0];
+              if (firstEpisode) {
+                const animeTitle = firstEpisode.id.split("-episode")[0];
+                navigate(
+                  `/watch/${animeId}/${animeTitle}/${firstEpisode.number}`,
+                  { replace: true }
+                );
+                setCurrentEpisode({
+                  id: firstEpisode.id,
+                  number: firstEpisode.number,
+                  image: firstEpisode.image,
+                });
+              }
+            }
+          }
         }
       } catch (error) {
         console.error("Failed to fetch anime info:", error);
@@ -115,34 +154,40 @@ const Watch = () => {
     };
 
     fetchData();
-  }, [animeId]);
+  }, [animeId, animeTitle, episodeNumber, navigate]);
 
   const handleEpisodeSelect = useCallback(
-    async (episodeId: string) => {
-      setIsEpisodeChanging(true); // Start of episode change
+    async (selectedEpisode: Episode) => {
+      setIsEpisodeChanging(true);
 
-      const selectedEpisode = episodes.find(
-        (episode) => episode.id === episodeId
-      );
-      if (selectedEpisode) {
-        setCurrentEpisode({
-          id: episodeId,
+      // Extract the anime title from the episode ID
+      const animeTitle = selectedEpisode.id.split("-episode")[0];
+
+      setCurrentEpisode({
+        id: selectedEpisode.id,
+        number: selectedEpisode.number,
+        image: selectedEpisode.image,
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
+        JSON.stringify({
+          id: selectedEpisode.id,
+          title: selectedEpisode.title,
           number: selectedEpisode.number,
-          image: selectedEpisode.image || "",
-        });
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
-          episodeId
-        );
+        })
+      );
 
-        // Simulate an asynchronous operation (e.g., fetching episode details)
-        // This is where you'd wait for any real async tasks related to changing the episode.
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Remove this line if you have actual async operations
-      }
+      navigate(`/watch/${animeId}/${animeTitle}/${selectedEpisode.number}`, {
+        replace: true,
+      });
 
-      setIsEpisodeChanging(false); // End of episode change, after async operations
+      // Simulate a delay or wait for an actual async operation if needed
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Remove or adjust based on real async operations
+
+      setIsEpisodeChanging(false);
     },
-    [animeId, episodes]
+    [animeId, navigate]
   );
 
   if (loading) {
@@ -166,7 +211,12 @@ const Watch = () => {
         <EpisodeList
           episodes={episodes}
           selectedEpisodeId={currentEpisode.id}
-          onEpisodeSelect={handleEpisodeSelect}
+          onEpisodeSelect={(episodeId: string) => {
+            const episode = episodes.find((e) => e.id === episodeId);
+            if (episode) {
+              handleEpisodeSelect(episode);
+            }
+          }}
         />
       </EpisodeListContainer>
     </WatchContainer>

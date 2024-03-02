@@ -116,7 +116,7 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
         <StyledCardItem ref={cardRef}>
           <ImageDisplay
             imageSrc={imageSrc}
-            altText={anime.title?.romaji || anime.title?.english || ""}
+            altText={anime.title?.english || anime.title?.english || ""}
             type={anime.format || anime.type || ""}
             totalEpisodes={anime.totalEpisodes}
             rating={
@@ -127,11 +127,11 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
             color={animeColor}
             $ishovered={isHoveredInstant}
           />
-          <TitleComponent $ishovered={isHoveredInstant} anime={anime} />
+          <TitleComponent isHovered={isHoveredInstant} anime={anime} />{" "}
         </StyledCardItem>
         {!isMobile && isHoveredDelayed && (
           <InfoPopupContent
-            title={anime.title?.romaji || anime.title?.english || ""}
+            title={anime.title?.english || anime.title?.romaji || ""}
             description={anime.description || ""}
             genres={anime.genres || []}
             $isPositionedLeft={
