@@ -190,6 +190,20 @@ const Watch: React.FC = () => {
     [animeId, navigate]
   );
 
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   if (loading) {
     return <WatchSkeleton />;
   }

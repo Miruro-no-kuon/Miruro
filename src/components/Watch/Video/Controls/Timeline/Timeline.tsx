@@ -43,14 +43,15 @@ export const Timeline = styled.input.attrs(({ className }) => ({
       visibility: visible;
     }
 
-    &::-webkit-slider-runnable-track,
-    &::-moz-range-track {
-      height: 0.5rem;
+    &::-webkit-slider-runnable-track {
+      height: 0.5rem; /* Increase height on hover for Chromium browsers */
     }
   }
 
   &::-webkit-slider-thumb {
     ${thumbStyle}
+    background-color: #007bff; /* Color of thumb for Chromium browsers */
+    border-radius: 50%; /* Rounded shape for thumb */
   }
 
   &::-moz-range-thumb {
@@ -63,6 +64,34 @@ export const Timeline = styled.input.attrs(({ className }) => ({
 
   &::-moz-range-track {
     ${trackStyle}
+  }
+
+  /* Styles for Chromium */
+  @supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee)) {
+    &::-webkit-slider-thumb {
+      // Chromium thumb style
+    }
+
+    &::-webkit-slider-runnable-track {
+      background: linear-gradient(
+        to right,
+        #fff 0%,
+        #fff var(--progress-percentage, 50%),
+        rgb(117, 117, 117) var(--progress-percentage, 50%),
+        rgb(117, 117, 117) 100%
+      );
+    }
+  }
+
+  /* Styles for other browsers including Firefox */
+  @supports not ((-webkit-appearance:none) and (not (overflow:-webkit-marquee))) {
+    &::-webkit-slider-thumb {
+      // Other browser thumb style
+    }
+
+    &::-webkit-slider-runnable-track {
+      // Other browser track style
+    }
   }
 `;
 
