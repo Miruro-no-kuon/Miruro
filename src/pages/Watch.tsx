@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import { fetchAnimeEpisodes } from "../hooks/useApi";
+import { fetchAnimeEpisodes, fetchAnimeInfo } from "../hooks/useApi";
 import WatchSkeleton from "../components/Skeletons/WatchSkeleton";
+import CardSkeleton from "../components/Skeletons/CardSkeleton"; // Import CardSkeleton
 
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
@@ -18,28 +19,79 @@ const WatchContainer = styled.div`
   background-color: var(--global-primary-bg);
   color: var(--global-text);
 
+  @media (min-width: 1200px) {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+`;
+
+const VideoPlayerContainer = styled.div`
+  width: 100%;
+  max-width: 600px;
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 1000px) {
+    width: 70%;
+    max-width: none;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+`;
+const VideoPlayerImageWrapper = styled.div`
+  border-radius: 0.8rem; // Same radius as videplayer
+  overflow: hidden; /* Add overflow property */
+`;
+
+const AnimeInfoContainer = styled.div`
+  border-radius: 0.8rem;
+  margin-top: 0.8rem;
+  padding: 0.6rem;
+  background-color: var(--global-secondary-bg);
+  color: var(--global-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   @media (min-width: 1000px) {
     flex-direction: row;
     align-items: flex-start;
   }
 `;
 
-const EpisodeListContainer = styled.div`
-  width: 100%;
-
+const AnimeInfoImage = styled.img`
+  border-radius: 0.8rem;
+  max-height: 120px;
+  margin-right: 1rem;
   @media (min-width: 1000px) {
-    flex: 1 1 500px;
+    max-height: 200px;
+    margin-bottom: 0;
   }
 `;
 
-const VideoPlayerContainer = styled.div`
-  position: relative;
+const AnimeInfoText = styled.div`
+  text-align: left;
+`;
+const DescriptionText = styled.p`
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const EpisodeListContainer = styled.div`
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 0.2rem;
+  overflow-y: auto; // Allows scrolling only when needed
 
   @media (min-width: 1000px) {
-    flex: 3 1 auto;
+    aspect-ratio: 2 / 3;
+    flex: 1 1 500px;
+    max-height: 100%; // Ensures it doesn't exceed the parent's height
+    overflow-y: auto; // Scroll if content overflows
   }
 `;
 
@@ -69,8 +121,16 @@ const Watch: React.FC = () => {
     number: 1,
     image: "",
   });
+  const [animeInfo, setAnimeInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
+  const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
+  const [clickedEpisodes, setClickedEpisodes] = useState<string[]>([]);
+  const [showTrailer, setShowTrailer] = useState(false);
+
+  const toggleTrailer = () => {
+    setShowTrailer(!showTrailer);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,6 +142,9 @@ const Watch: React.FC = () => {
 
       setLoading(true);
       try {
+        const info = await fetchAnimeInfo(animeId);
+        setAnimeInfo(info);
+
         const animeData = await fetchAnimeEpisodes(animeId);
         if (animeData) {
           const transformedEpisodes = animeData.map((ep: Episode) => ({
@@ -93,7 +156,6 @@ const Watch: React.FC = () => {
 
           setEpisodes(transformedEpisodes);
 
-          // Check if animeTitle and episodeNumber are provided in the URL
           if (animeTitle && episodeNumber) {
             const episodeId = `${animeTitle}-episode-${episodeNumber}`;
             const matchingEpisode = transformedEpisodes.find(
@@ -106,7 +168,6 @@ const Watch: React.FC = () => {
                 image: matchingEpisode.image,
               });
             } else {
-              // Fallback to the first episode or saved episode
               navigate(`/watch/${animeId}`);
             }
           } else {
@@ -126,10 +187,9 @@ const Watch: React.FC = () => {
               setCurrentEpisode({
                 id: savedEpisode.id || "",
                 number: savedEpisode.number,
-                image: "", // Find the episode by number to get the image
+                image: "",
               });
             } else {
-              // Navigate to the first episode if no saved episode data is found
               const firstEpisode = transformedEpisodes[0];
               if (firstEpisode) {
                 const animeTitle = firstEpisode.id.split("-episode")[0];
@@ -160,7 +220,6 @@ const Watch: React.FC = () => {
     async (selectedEpisode: Episode) => {
       setIsEpisodeChanging(true);
 
-      // Extract the anime title from the episode ID
       const animeTitle = selectedEpisode.id.split("-episode")[0];
 
       setCurrentEpisode({
@@ -178,12 +237,16 @@ const Watch: React.FC = () => {
         })
       );
 
+      setClickedEpisodes((prevClickedEpisodes) => [
+        ...prevClickedEpisodes,
+        selectedEpisode.id,
+      ]);
+
       navigate(`/watch/${animeId}/${animeTitle}/${selectedEpisode.number}`, {
         replace: true,
       });
 
-      // Simulate a delay or wait for an actual async operation if needed
-      await new Promise((resolve) => setTimeout(resolve, 100)); // Remove or adjust based on real async operations
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       setIsEpisodeChanging(false);
     },
@@ -191,6 +254,11 @@ const Watch: React.FC = () => {
   );
 
   useEffect(() => {
+    if (animeInfo) {
+      document.title = "Miruro - " + animeInfo.title.english;
+    } else {
+      document.title = "Miruro";
+    }
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.code === "Space") {
         event.preventDefault();
@@ -202,24 +270,114 @@ const Watch: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, []);
+  }, [animeInfo]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (loading && (!episodes || episodes.length === 0)) {
+        setShowNoEpisodesMessage(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeoutId);
+  }, [loading, episodes]);
+
+  const removeHTMLTags = (description: string): string => {
+    return description.replace(/<[^>]+>/g, "");
+  };
 
   if (loading) {
-    return <WatchSkeleton />;
+    return (
+      <WatchContainer>
+        <CardSkeleton loading={loading} />{" "}
+        {/* CardSkeleton for recommendations */}
+        <WatchSkeleton />
+      </WatchContainer>
+    );
   }
 
-  if (!episodes || episodes.length === 0) {
+  if (showNoEpisodesMessage) {
     return <div>No episodes found.</div>;
   }
 
   return (
     <WatchContainer>
       <VideoPlayerContainer>
-        <VideoPlayer
-          episodeId={currentEpisode.id}
-          bannerImage={currentEpisode.image}
-          isEpisodeChanging={isEpisodeChanging}
-        />
+        <VideoPlayerImageWrapper>
+          <VideoPlayer
+            episodeId={currentEpisode.id}
+            bannerImage={animeInfo && animeInfo.cover}
+            isEpisodeChanging={isEpisodeChanging}
+          />
+        </VideoPlayerImageWrapper>
+        {animeInfo && (
+          <AnimeInfoContainer>
+            <AnimeInfoImage src={animeInfo.image} alt="Anime Title Image" />
+            <AnimeInfoText>
+              <h2>{animeInfo.title.english}</h2>
+              <DescriptionText>
+                <strong>Description: </strong>
+                {removeHTMLTags(animeInfo.description)}
+              </DescriptionText>
+              <p>
+                <strong>Genres: </strong> {animeInfo.genres.join(", ")}
+              </p>
+              <p>
+                <strong>Released: </strong>{" "}
+                {animeInfo.releaseDate ? animeInfo.releaseDate : "Unknown"}
+              </p>
+              <p>
+                <strong>Status: </strong>
+                {animeInfo.status}
+              </p>
+              <p>
+                <strong>Rating: </strong>
+                {animeInfo.rating}/100
+              </p>
+              {animeInfo.trailer && (
+                <button
+                  onClick={toggleTrailer}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#cc4b00",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "0.8rem",
+                    cursor: "pointer",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                    transition: "background-color 0.3s ease",
+                    outline: "none",
+                  }}
+                >
+                  {showTrailer ? "Hide Trailer" : "Show Trailer"}
+                </button>
+              )}
+              {showTrailer && (
+                <div
+                  style={{
+                    overflow: "hidden",
+                    paddingTop: "56.25%",
+                    position: "relative",
+                  }}
+                >
+                  <iframe
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </AnimeInfoText>
+          </AnimeInfoContainer>
+        )}
       </VideoPlayerContainer>
       <EpisodeListContainer>
         <EpisodeList
@@ -231,6 +389,7 @@ const Watch: React.FC = () => {
               handleEpisodeSelect(episode);
             }
           }}
+          clickedEpisodes={clickedEpisodes}
         />
       </EpisodeListContainer>
     </WatchContainer>

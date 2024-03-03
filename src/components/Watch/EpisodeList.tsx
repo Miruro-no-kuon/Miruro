@@ -24,15 +24,15 @@ interface Props {
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
-  border-radius: 0.2rem;
+  border-radius: 0.8rem;
   overflow: hidden;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 45rem;
+  max-height: 42rem;
 
   @media (max-width: 1000px) {
-    max-height: 30rem;
+    max-height: 22rem;
   }
 `;
 
@@ -41,13 +41,18 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   grid-template-columns: ${({ $isRowLayout }) =>
     $isRowLayout ? "1fr" : "repeat(auto-fill, minmax(4rem, 1fr))"};
   gap: 0.4rem;
-  padding: 0.75rem;
+  padding: 0.6rem;
   overflow-y: auto;
   flex-grow: 1;
 `;
 
-const ListItem = styled.button<{ $isSelected: boolean; $isRowLayout: boolean }>`
-  background-color: var(--global-tertiary-bg);
+const ListItem = styled.button<{
+  $isSelected: boolean;
+  $isRowLayout: boolean;
+  $isClicked: boolean;
+}>`
+  background-color: ${({ $isClicked }) =>
+    $isClicked ? "rgba(255, 0, 0, 0.1)" : "var(--global-tertiary-bg)"};
   border: none;
   border-radius: 0.2rem;
   color: ${({ $isSelected }) => ($isSelected ? "var(--global-text)" : "grey")};
@@ -141,7 +146,6 @@ const EpisodeTitle = styled.span`
   padding: 0.5rem;
 `;
 
-// The updated EpisodeList component
 const EpisodeList: React.FC<Props> = ({
   episodes,
   selectedEpisodeId,
@@ -149,12 +153,40 @@ const EpisodeList: React.FC<Props> = ({
 }) => {
   const [interval, setInterval] = useState<[number, number]>([0, 99]);
   const [isRowLayout, setIsRowLayout] = useState(true);
+  console.log(isRowLayout);
   const [userLayoutPreference, setUserLayoutPreference] = useState<
     boolean | null
   >(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [clickedEpisodes, setClickedEpisodes] = useState<string[]>([]);
 
-  // Filter episodes based on search input
+  useEffect(() => {
+    const savedClickedEpisodes = localStorage.getItem("clickedEpisodes");
+    console.log("Loaded from localStorage:", savedClickedEpisodes); // Debug log
+    if (savedClickedEpisodes) {
+      setClickedEpisodes(JSON.parse(savedClickedEpisodes));
+    }
+  }, []);
+
+  const saveClickedEpisodes = useCallback(() => {
+    localStorage.setItem("clickedEpisodes", JSON.stringify(clickedEpisodes));
+  }, [clickedEpisodes]);
+
+  const handleEpisodeClick = useCallback((id: string) => {
+    setClickedEpisodes((prevClickedEpisodes) => {
+      if (!prevClickedEpisodes.includes(id)) {
+        const updatedClickedEpisodes = [...prevClickedEpisodes, id];
+        return updatedClickedEpisodes;
+      }
+      return prevClickedEpisodes;
+    });
+  }, []);
+
+  // This useEffect hook will watch for changes in clickedEpisodes and save them to localStorage accordingly.
+  useEffect(() => {
+    localStorage.setItem("clickedEpisodes", JSON.stringify(clickedEpisodes));
+  }, [clickedEpisodes]);
+
   const filteredEpisodes = useMemo(() => {
     return episodes.filter((episode) => {
       const searchQuery = searchTerm.toLowerCase();
@@ -187,12 +219,13 @@ const EpisodeList: React.FC<Props> = ({
     []
   );
 
-  // Toggle layout preference
   const toggleLayoutPreference = useCallback(() => {
-    setUserLayoutPreference((prev) => !prev);
+    setIsRowLayout((prevLayout) => {
+      const newLayout = !prevLayout;
+      setUserLayoutPreference(newLayout);
+      return newLayout;
+    });
   }, []);
-
-  // Determine layout based on episodes and user preference
   useEffect(() => {
     const allTitlesNull = episodes.every((episode) => episode.title === null);
     const defaultLayout = episodes.length <= 26 && !allTitlesNull;
@@ -201,12 +234,10 @@ const EpisodeList: React.FC<Props> = ({
       userLayoutPreference !== null ? userLayoutPreference : defaultLayout
     );
 
-    // Find the selected episode
     const selectedEpisode = episodes.find(
       (episode) => episode.id === selectedEpisodeId
     );
     if (selectedEpisode) {
-      // Find the interval containing the selected episode
       for (let i = 0; i < intervalOptions.length; i++) {
         const { start, end } = intervalOptions[i];
         if (
@@ -258,13 +289,18 @@ const EpisodeList: React.FC<Props> = ({
       <EpisodeGrid $isRowLayout={isRowLayout}>
         {filteredEpisodes.slice(interval[0], interval[1] + 1).map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
+          const isClicked = clickedEpisodes.includes(episode.id);
 
           return (
             <ListItem
               key={episode.id}
               $isSelected={$isSelected}
               $isRowLayout={isRowLayout}
-              onClick={() => onEpisodeSelect(episode.id)}
+              $isClicked={isClicked}
+              onClick={() => {
+                handleEpisodeClick(episode.id);
+                onEpisodeSelect(episode.id);
+              }}
               aria-selected={$isSelected}
             >
               {isRowLayout ? (

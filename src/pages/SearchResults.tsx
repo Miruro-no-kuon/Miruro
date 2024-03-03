@@ -10,7 +10,7 @@ const Container = styled.div`
   min-height: 85vh;
 `;
 
-const Title = styled.h2`
+const SearchTitle = styled.h2`
   text-align: left;
   margin-bottom: 2rem;
   font-weight: 400;
@@ -26,7 +26,16 @@ const SearchResults = () => {
   const [page, setPage] = useState(1);
   const delayTimeout = useRef<NodeJS.Timeout | null>(null);
   const lastCachedPage = useRef(0);
-  const [/* loadingStates */, setLoadingStates] = useState<boolean[]>([]);
+  const [, /* loadingStates */ setLoadingStates] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = query ? `${query} - Miruro` : "Miruro";
+    return () => {
+      // Reset the title to the previous one when the component unmounts
+      document.title = previousTitle;
+    };
+  }, [animeData.length, query]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -110,11 +119,9 @@ const SearchResults = () => {
 
   return (
     <Container>
-      {
-        <Title>
-          {animeData.length} Search Results: <strong>{query}</strong>
-        </Title>
-      }
+      <SearchTitle>
+        {animeData.length} Search Results: <strong>{query}</strong>
+      </SearchTitle>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 20 }).map((_, index) => (
@@ -124,7 +131,6 @@ const SearchResults = () => {
       ) : (
         <CardGrid
           animeData={animeData}
-          // loadingStates={loadingStates}
           totalPages={totalPages}
           hasNextPage={hasNextPage}
           onLoadMore={handleLoadMore}

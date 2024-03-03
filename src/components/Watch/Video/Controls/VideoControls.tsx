@@ -22,6 +22,7 @@ const ControlsWrapper = styled.div<{ $isVisible: boolean }>`
   align-items: center;
   padding: 0 0.25rem 0.25rem 0.25rem;
   color: white;
+  border-radius: 0.8rem; //SAME BORDER RADIUS AS VIDEPLAYER.
   background: linear-gradient(0deg, rgba(0, 0, 0, 1) -100%, transparent 100%);
   transition: 0.3s;
   display: ${({ $isVisible }) => ($isVisible ? "flex" : "none")};
@@ -305,11 +306,11 @@ const VideoControls: React.FC<VideoControlsProps> = React.memo(
               icon="forward_10"
               tooltip="+10s"
             />
-            <SubtitlesButton
+            {/* <SubtitlesButton
               onClick={toggleSubtitles}
               icon={subtitlesEnabled ? "closed_caption" : "closed_caption_off"}
               tooltip={subtitlesEnabled ? "Captions On" : "Captions Off"}
-            />
+            /> */}
             <div ref={settingsRef}>
               <SettingsButton
                 icon="settings"

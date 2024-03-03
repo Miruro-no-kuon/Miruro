@@ -12,20 +12,12 @@ ring2.register();
 
 const VideoPlayerContainer = styled.div`
   background: var(--global-secondary-bg);
-  padding-bottom: 2rem;
-  border-radius: 0.2rem;
+  border-radius: 0.8rem; //same as video
   user-select: none;
+  border: 0.6rem solid var(--global-secondary-bg);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-`;
-
-const VideoBorderWrapper = styled.div`
-  position: relative;
-  border: 0.5rem solid var(--global-secondary-bg);
-  border-radius: 0.2rem;
-  border-top: none;
-  border-bottom: none;
 `;
 
 type VideoPlayerWrapperProps = {
@@ -36,6 +28,7 @@ type VideoPlayerWrapperProps = {
 
 const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
   position: relative;
+  border-radius: 1rem;
   padding-top: 56.25%;
   height: 0;
   cursor: ${({ $isCursorIdle, $isLoading, $isVideoChanging }) =>
@@ -52,12 +45,11 @@ const StyledVideo = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 0.8rem;
+  overflow: hidden; /* This ensures the content respects the border-radius */
 
   &:fullscreen {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
+    border-radius: 0rem;
   }
 `;
 
@@ -84,7 +76,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   z-index: 2;
   background-size: cover; // Optional: if you want the image to cover the whole area
   background-position: center; // Optional: for centering the image
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
   color: #eeeeee;
   top: 50%;
   left: 50%;
@@ -105,7 +97,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   &:hover {
     border: 0.3rem solid #ffffff;
     color: #ffffff;
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
+    transform: translate(-50%, -50%) scaleX(1.1) scale(1.15);
   }
 `;
 
@@ -471,83 +463,76 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   return (
     <VideoPlayerContainer id="video-player-wrapper" ref={playerWrapperRef}>
-      <VideoBorderWrapper>
-        <VideoPlayerWrapper
-          $isCursorIdle={isCursorIdle}
-          $isLoading={isLoading}
-          $isVideoChanging={isVideoChanging}
-          ref={videoPlayerWrapperRef}
-        >
-          {isLoading && !isVideoChanging ? (
-            <Loader>
-              <l-ring-2
-                size="60"
-                speed="0.8"
-                stroke="2"
-                color="white"
-              ></l-ring-2>
-            </Loader>
-          ) : (
-            <>
-              {isVideoChanging && (
-                <Loader>
-                  <img className="pikachuLoader" src={pikachuLoader} />
-                </Loader>
-              )}
-              {!isMobile && hasPlayed && (
-                <PlayPauseOverlay
-                  onClick={() => {
-                    togglePlayPause();
-                    handlePlay();
-                  }}
+      <VideoPlayerWrapper
+        $isCursorIdle={isCursorIdle}
+        $isLoading={isLoading}
+        $isVideoChanging={isVideoChanging}
+        ref={videoPlayerWrapperRef}
+      >
+        {isLoading && !isVideoChanging ? (
+          <Loader>
+            <l-ring-2 size="60" speed="0.8" stroke="2" color="white"></l-ring-2>
+          </Loader>
+        ) : (
+          <>
+            {isVideoChanging && (
+              <Loader>
+                <img className="pikachuLoader" src={pikachuLoader} />
+              </Loader>
+            )}
+            {!isMobile && hasPlayed && (
+              <PlayPauseOverlay
+                onClick={() => {
+                  togglePlayPause();
+                  handlePlay();
+                }}
+              />
+            )}
+            {!isPlaying && !hasPlayed && !isVideoChanging && (
+              <LargePlayIcon $isPlaying={isPlaying} onClick={handlePlay}>
+                <i className="material-icons" style={{ fontSize: "4rem" }}>
+                  play_arrow
+                </i>
+              </LargePlayIcon>
+            )}
+            {!isPlaying && !hasPlayed && !isVideoChanging && (
+              <BannerOverlay $bannerImage={bannerImage} />
+            )}
+
+            <StyledVideo ref={videoRef} controls={isMobile} />
+
+            {!isMobile &&
+              videoRef.current &&
+              hasPlayed &&
+              !isLoading &&
+              !isVideoChanging && (
+                <VideoControls
+                  videoRef={videoRef}
+                  videoControlsRef={videoControlsRef}
+                  isPlaying={isPlaying}
+                  setIsPlaying={setIsPlaying}
+                  togglePlayPause={togglePlayPause}
+                  toggleFullscreen={toggleFullscreen}
+                  currentTime={currentTime}
+                  setCurrentTime={setCurrentTime}
+                  showControls={showControls}
+                  qualityOptions={videoQualityOptions}
+                  changeQuality={changeQuality}
+                  selectedQuality={selectedQuality}
+                  subtitlesEnabled={subtitlesEnabled}
+                  onToggleSubtitles={() =>
+                    setSubtitlesEnabled(!subtitlesEnabled)
+                  }
+                  subtitleTracks={subtitleTracks}
+                  setSubtitlesEnabled={setSubtitlesEnabled}
+                  onSubtitleChange={handleSubtitleChange}
+                  volume={volume}
+                  setVolume={setVolume}
                 />
               )}
-              {!isPlaying && !hasPlayed && !isVideoChanging && (
-                <LargePlayIcon $isPlaying={isPlaying} onClick={handlePlay}>
-                  <i className="material-icons" style={{ fontSize: "4rem" }}>
-                    play_arrow
-                  </i>
-                </LargePlayIcon>
-              )}
-              {!isPlaying && !hasPlayed && !isVideoChanging && (
-                <BannerOverlay $bannerImage={bannerImage} />
-              )}
-
-              <StyledVideo ref={videoRef} controls={isMobile} />
-
-              {!isMobile &&
-                videoRef.current &&
-                hasPlayed &&
-                !isLoading &&
-                !isVideoChanging && (
-                  <VideoControls
-                    videoRef={videoRef}
-                    videoControlsRef={videoControlsRef}
-                    isPlaying={isPlaying}
-                    setIsPlaying={setIsPlaying}
-                    togglePlayPause={togglePlayPause}
-                    toggleFullscreen={toggleFullscreen}
-                    currentTime={currentTime}
-                    setCurrentTime={setCurrentTime}
-                    showControls={showControls}
-                    qualityOptions={videoQualityOptions}
-                    changeQuality={changeQuality}
-                    selectedQuality={selectedQuality}
-                    subtitlesEnabled={subtitlesEnabled}
-                    onToggleSubtitles={() =>
-                      setSubtitlesEnabled(!subtitlesEnabled)
-                    }
-                    subtitleTracks={subtitleTracks}
-                    setSubtitlesEnabled={setSubtitlesEnabled}
-                    onSubtitleChange={handleSubtitleChange}
-                    volume={volume}
-                    setVolume={setVolume}
-                  />
-                )}
-            </>
-          )}
-        </VideoPlayerWrapper>
-      </VideoBorderWrapper>
+          </>
+        )}
+      </VideoPlayerWrapper>
     </VideoPlayerContainer>
   );
 };

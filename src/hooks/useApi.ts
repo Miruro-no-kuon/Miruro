@@ -186,7 +186,7 @@ export async function fetchAnimeData(
   return fetchFromProxy(url, animeDataCache, cacheKey);
 }
 
-// Fetch Anime Info Function
+// Fetch Anime INFO//DATA Function
 export async function fetchAnimeInfo(animeId: string, provider: string = "zoro") {
   const cacheKey = generateCacheKey('animeInfo', animeId, provider);
 
@@ -198,7 +198,7 @@ export async function fetchAnimeInfo(animeId: string, provider: string = "zoro")
     }
 
     // If not in cache, fetch the data
-    const url = `${BASE_URL}meta/anilist/info/${animeId}`;
+    const url = `${BASE_URL}meta/anilist/data/${animeId}`;
     const params = new URLSearchParams({ provider });
     const response = await axiosInstance.get(`${url}?${params.toString()}`);
     const data = response.data;

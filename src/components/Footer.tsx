@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
-import { Link, LinkProps } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const theme = {
   primaryBackgroundColor: "var(--global-secondary-bg)",
   textColor: "var(--global-text)",
@@ -10,137 +11,93 @@ const theme = {
 
 const PageWrapper = styled.div`
   padding: 1rem;
-  margin-top: 1.5em;
+  padding-bottom: 0rem;
+  margin-top: 1.5rem;
 `;
 
 const FooterContainer = styled.footer`
   color: ${theme.textColor};
-  padding: 0;
-  margin: 0.5rem 0;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   border-top: 0.125rem solid ${theme.primaryBackgroundColor};
-  position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-`;
 
-const SocialIconsWrapper = styled.div`
-  display: flex;
-  margin-top: 4rem;
-  gap: 0.5rem;
-  justify-content: center;
-
-  a {
-    color: ${theme.textColor};
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.1s ease, transform 0.2s ease;
-
-    &:hover {
-      color: ${theme.buttonTextColor};
-      transform: scale(1.15);
-      text-decoration: underline;
-    }
-  }
-`;
-
-const FooterLogoImage = styled.img`
-  max-width: 6rem;
-  content: ${theme.footerLogo};
-  height: auto;
-  display: block;
-  position: absolute;
-  top: -3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  opacity: 0;
-  animation: fadeIn 1s ease forwards;
-
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
+  @media (max-width: 550px) {
+    flex-direction: column;
+    text-align: center;
   }
 `;
 
 const StyledLinkList = styled.div`
   display: flex;
-  font-weight: bold;
-  padding: 1rem;
-  padding-bottom: 2rem;
-  margin: 0;
-  justify-content: center;
-  align-items: center;
   gap: 1rem;
-
-  a {
-    color: ${theme.textColor};
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: ${theme.buttonTextColor};
-      text-decoration: underline;
-    }
-  }
-  h3 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-
-  p {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
+  margin: auto; /* Center the content horizontally */
 `;
 
 const scrollToTop = () => {
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, 50);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 };
 
-const FooterLink: React.FC<LinkProps> = ({ to, children }) => {
-  return (
-    <Link to={to} onClick={scrollToTop}>
-      {children}
-    </Link>
-  );
-};
+const FooterLink = styled(Link)`
+  padding-top: 1rem;
+  color: grey;
+  text-decoration: none;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    color: ${theme.buttonTextColor};
+    transform: scale(1.1);
+    text-decoration: underline;
+  }
+`;
+
+const SocialIconsWrapper = styled.div`
+  padding-top: 1rem;
+  display: flex;
+  gap: 1rem;
+`;
+
+const FooterLogoImage = styled.img`
+  max-width: 3rem;
+  content: ${theme.footerLogo};
+  height: auto;
+`;
 
 const CopyrightText = styled.p`
-  font-size: 0.8rem;
   text-align: center;
-  margin: 0.5rem 0;
-  padding-top: 0.5rem;
-  border-top: 0.0625rem solid ${theme.primaryBackgroundColor};
+  color: grey;
+  font-size: 0.8rem;
+  margin: 0;
 `;
 
 const DisclaimerText = styled.p`
-  font-size: 0.8rem;
+  padding-top: 1rem;
   text-align: center;
+  color: grey;
+  font-size: 0.8rem;
   margin: 0;
-  padding-top: 0.5rem;
 `;
 
 const ShareButton = styled.a`
   display: inline-block;
-  color: inherit;
+  color: grey;
   text-decoration: none;
+  transition: transform 0.2s ease-in-out;
 
   svg {
-    font-size: 1.1rem;
-    transition: transform 0.2s ease;
+    font-size: 1.4rem;
   }
 
   &:hover {
-    transform: scale(1.15);
+    transform: scale(1.25);
+    color: ${theme.buttonTextColor};
+    text-decoration: underline;
   }
 `;
 
@@ -150,6 +107,22 @@ function Footer() {
   return (
     <PageWrapper>
       <FooterContainer>
+        <CopyrightText>
+          <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
+          <br></br>
+          &copy; {currentYear} Miruro no Kuon.
+        </CopyrightText>
+        <StyledLinkList>
+          <FooterLink to="About" onClick={scrollToTop}>
+            About
+          </FooterLink>
+          <FooterLink to="Policy" onClick={scrollToTop}>
+            Policy
+          </FooterLink>
+          <FooterLink to="Terms" onClick={scrollToTop}>
+            Terms
+          </FooterLink>
+        </StyledLinkList>
         <SocialIconsWrapper>
           <ShareButton
             href="https://twitter.com/miruro_official"
@@ -180,19 +153,9 @@ function Footer() {
             <FaReddit />
           </ShareButton>
         </SocialIconsWrapper>
-        <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
-        <StyledLinkList>
-          <FooterLink to="Info">FAQ</FooterLink>
-          <FooterLink to="Info">Policy</FooterLink>
-          <FooterLink to="Info">Terms</FooterLink>
-        </StyledLinkList>
       </FooterContainer>
-      <CopyrightText>
-        &copy; {currentYear} Miruro no Kuon. All Rights Reserved.
-      </CopyrightText>
       <DisclaimerText>
-        This site does not store any files on its server. All contents are
-        provided by non-affiliated third parties.
+        This site does not store any files on its server.
       </DisclaimerText>
     </PageWrapper>
   );
