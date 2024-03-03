@@ -3,9 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import { fetchAnimeEpisodes, fetchAnimeInfo } from "../hooks/useApi";
-import WatchSkeleton from "../components/Skeletons/WatchSkeleton";
-import CardSkeleton from "../components/Skeletons/CardSkeleton"; // Import CardSkeleton
+import { fetchAnimeInfo2, fetchAnimeInfo } from "../hooks/useApi";
 
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
@@ -13,34 +11,32 @@ const LOCAL_STORAGE_KEYS = {
 };
 
 const WatchContainer = styled.div`
+  /* margin-right: 5rem;
+  margin-left: 5rem; */
+  gap: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
   background-color: var(--global-primary-bg);
   color: var(--global-text);
 
   @media (min-width: 1200px) {
-    margin-right: 2rem;
-    margin-left: 2rem;
     flex-direction: row;
     align-items: flex-start;
+    margin-right: 5rem;
+    margin-left: 5rem;
   }
 `;
 
 const VideoPlayerContainer = styled.div`
+  position: relative;
   width: 100%;
-  max-width: 600px;
-  border-radius: var(--global-border-radius);
-  margin-bottom: 1rem;
-
+  border-radius: 0.2rem;
   @media (min-width: 1000px) {
-    width: 70%;
-    max-width: none;
-    margin-bottom: 0;
-    margin-right: 1rem;
+    flex: 3 1 auto;
   }
 `;
+
 const VideoPlayerImageWrapper = styled.div`
   border-radius: var(--global-border-radius); // Same radius as videplayer
   overflow: hidden; /* Add overflow property */
@@ -86,13 +82,11 @@ const DescriptionText = styled.p`
 
 const EpisodeListContainer = styled.div`
   width: 100%;
-  overflow-y: auto; // Allows scrolling only when needed
 
   @media (min-width: 1000px) {
     aspect-ratio: 2 / 3;
     flex: 1 1 500px;
     max-height: 100%; // Ensures it doesn't exceed the parent's height
-    overflow-y: auto; // Scroll if content overflows
   }
 `;
 
@@ -126,7 +120,7 @@ const Watch: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
-  const [clickedEpisodes, setClickedEpisodes] = useState<string[]>([]);
+
   const [showTrailer, setShowTrailer] = useState(false);
 
   const toggleTrailer = () => {
@@ -146,7 +140,7 @@ const Watch: React.FC = () => {
         const info = await fetchAnimeInfo(animeId);
         setAnimeInfo(info);
 
-        const animeData = await fetchAnimeEpisodes(animeId);
+        const animeData = await fetchAnimeInfo2(animeId);
         if (animeData) {
           const transformedEpisodes = animeData.map((ep: Episode) => ({
             id: ep.id,
@@ -290,16 +284,6 @@ const Watch: React.FC = () => {
   const removeHTMLTags = (description: string): string => {
     return description.replace(/<[^>]+>/g, "");
   };
-
-  if (loading) {
-    return (
-      <WatchContainer>
-        <CardSkeleton loading={loading} />{" "}
-        {/* CardSkeleton for recommendations */}
-        <WatchSkeleton />
-      </WatchContainer>
-    );
-  }
 
   if (showNoEpisodesMessage) {
     return <div>No episodes found.</div>;

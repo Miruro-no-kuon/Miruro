@@ -41,10 +41,10 @@ const PlayerSkeleton = styled.div`
     ${popInAnimation} 0.5s ease-out;
 `;
 
-const WatchSkeleton = () => (
+const VideoPlayerSkeleton = () => (
   <SkeletonContainer>
     <PlayerSkeleton />
   </SkeletonContainer>
 );
 
-export default WatchSkeleton;
+export default VideoPlayerSkeleton;

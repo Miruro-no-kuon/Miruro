@@ -186,8 +186,8 @@ export async function fetchAnimeData(
   return fetchFromProxy(url, animeDataCache, cacheKey);
 }
 
-// Fetch Anime INFO//DATA Function
-export async function fetchAnimeInfo(animeId: string, provider: string = "zoro") {
+// Fetch Anime DATA Function
+export async function fetchAnimeInfo(animeId: string, provider: string = "gogoanime") {
   const cacheKey = generateCacheKey('animeInfo', animeId, provider);
 
   try {
@@ -210,6 +210,33 @@ export async function fetchAnimeInfo(animeId: string, provider: string = "zoro")
     handleError(error, "anime info");
   }
 }
+
+// Fetch Anime INFO Function
+export async function fetchAnimeInfo2(animeId: string, provider: string = "gogoanime") {
+  const cacheKey = generateCacheKey('animeInfo', animeId, provider);
+
+  try {
+
+        // Check if data is in cache
+        const cachedData = animeEpisodesCache.get(cacheKey);
+        if (cachedData) {
+          return cachedData;
+        }
+
+    // If not in cache, fetch the data
+    const url = `${BASE_URL}meta/anilist/info/${animeId}`;
+    const params = new URLSearchParams({ provider });
+    const response = await axiosInstance.get(`${url}?${params.toString()}`);
+    const data = response.data;
+
+    // Store data in cache
+    animeEpisodesCache.set(cacheKey, data.episodes);
+    return data.episodes;
+  } catch (error) {
+    handleError(error, "anime info");
+  }
+}
+
 
 // Function to fetch list of anime based on type (Top, Trending, Popular)
 async function fetchList(type: string, page: number = 1, perPage: number = 16, options: FetchOptions = {}) {

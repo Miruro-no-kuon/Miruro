@@ -7,6 +7,7 @@ import pikachuLoader from "/src/assets/load-gif-Pikachu_Runnin.gif";
 import useHLS from "./hooks/useHLS";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { ring2 } from "ldrs";
+import VideoPlayerSkeleton from "../../../components/Skeletons/VideoPlayerSkeleton";
 
 ring2.register();
 
@@ -28,7 +29,7 @@ type VideoPlayerWrapperProps = {
 
 const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
   position: relative;
-  border-radius: 1rem;
+  border-radius: var(--global-border-radius);
   padding-top: 56.25%;
   height: 0;
   cursor: ${({ $isCursorIdle, $isLoading, $isVideoChanging }) =>
@@ -70,34 +71,30 @@ type LargePlayIconProps = {
 
 const LargePlayIcon = styled.div<LargePlayIconProps>`
   position: absolute;
-  border: 0.35rem solid #eeeeee;
-  border-radius: 50%;
-  backdrop-filter: blur(10px);
+  border-radius: var(--global-border-radius);
   z-index: 2;
+  background-color: var(--global-secondary-bg);
   background-size: cover; // Optional: if you want the image to cover the whole area
   background-position: center; // Optional: for centering the image
   box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
-  color: #eeeeee;
+  color: white;
   top: 50%;
   left: 50%;
-  padding: 0.12rem;
+  padding: 0.12rem 2rem;
   transform: translate(-50%, -50%) scaleX(1.1);
-  z-index: 2;
-  opacity: ${({ $isPlaying }) => ($isPlaying ? "0" : "1")};
+  opacity: 1; /* Set opacity to 1 */
   visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
+  transition: transform 0.2s ease-in-out;
+
   ${({ $isPlaying }) =>
     !$isPlaying &&
     css`
       animation: ${fadeIn} 1s;
     `}
-  cursor: pointer;
-  transition: border 0.15s ease-in-out, color 0.15s ease-in-out,
-    transform 0.15s ease-in-out;
-
   &:hover {
-    border: 0.3rem solid #ffffff;
-    color: #ffffff;
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.15);
+    /* color: var(--primary-accent-bg); */
+    background-color: var(--primary-accent-bg);
+    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
   }
 `;
 
@@ -461,6 +458,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  if (isLoading) {
+    return <VideoPlayerSkeleton />;
+  }
+
   return (
     <VideoPlayerContainer id="video-player-wrapper" ref={playerWrapperRef}>
       <VideoPlayerWrapper
@@ -480,7 +481,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 <img className="pikachuLoader" src={pikachuLoader} />
               </Loader>
             )}
-            {!isMobile && hasPlayed && (
+            {!isMobile && (
               <PlayPauseOverlay
                 onClick={() => {
                   togglePlayPause();
