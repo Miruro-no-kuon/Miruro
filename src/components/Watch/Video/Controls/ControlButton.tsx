@@ -10,7 +10,7 @@ const ControlButton = styled.button<{ fontSize?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   transition: background-color 0.2s, color 0.2s;
   padding: 0.25rem;
   margin: 0 0.25rem;
@@ -32,7 +32,7 @@ const TooltipText = styled.span<{
   background-color: #ffffff;
   color: #000000;
   text-align: center;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   padding: 5px 10px;
   position: absolute;
   z-index: 0;

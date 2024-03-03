@@ -65,7 +65,7 @@ const GlobalStyles = createGlobalStyle`
   --global-filter: rgba(0, 0, 0, 0.60);
   --global-secondary-bg: #e0e0e0;
   --global-tertiary-bg: #eaeaea;
-
+  --global-border-radius: 0.4rem;
   --primary-accent: #8080cf;
   --primary-accent-bg: #aeaee4;
   --primary-accent-bg-tr: rgba(255, 0, 81, 0.99);

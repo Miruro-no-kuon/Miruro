@@ -56,7 +56,7 @@ const InfoPopup = styled.div<{
   width: 100%;
   max-width: 100%;
   overflow-y: auto;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -109,7 +109,7 @@ const GenreButton = styled.div<{ color?: string }>`
   background: ${(props) =>
     generateGradient(props.color || "") || "var(--global-genre-button-bg)"};
   padding: 0.25rem 0.3rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   font-weight: bold;
   margin-right: 0.25rem;
   font-size: 0.6rem;

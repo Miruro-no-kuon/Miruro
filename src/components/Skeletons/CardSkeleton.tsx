@@ -39,7 +39,7 @@ const SkeletonCard = styled.div<SkeletonProps>`
   height: 0;
   padding-top: ${aspectRatio(184, 133)};
   background: var(--global-card-bg);
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   margin-bottom: 2.5rem;
 
   ${({ loading }) =>
@@ -55,7 +55,7 @@ const SkeletonTitle = styled.div<SkeletonProps>`
   width: 80%;
   height: 1.3rem;
   background: var(--global-card-bg);
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   margin-top: 0.5rem;
   margin-left: 0.3rem;
 

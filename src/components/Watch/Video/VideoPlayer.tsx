@@ -12,7 +12,7 @@ ring2.register();
 
 const VideoPlayerContainer = styled.div`
   background: var(--global-secondary-bg);
-  border-radius: 0.8rem; //same as video
+  border-radius: var(--global-border-radius); //same as video
   user-select: none;
   border: 0.6rem solid var(--global-secondary-bg);
   -webkit-user-select: none;
@@ -45,7 +45,7 @@ const StyledVideo = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 0.8rem;
+  border-radius: var(--global-border-radius);
   overflow: hidden; /* This ensures the content respects the border-radius */
 
   &:fullscreen {

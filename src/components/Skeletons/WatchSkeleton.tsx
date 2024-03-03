@@ -36,7 +36,7 @@ const PlayerSkeleton = styled.div`
   padding-top: 56.25%; // Aspect ratio for 16:9 videos
   width: 100%;
   height: 0;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   animation: ${SkeletonPulse} 2.5s ease-in-out infinite,
     ${popInAnimation} 0.5s ease-out;
 `;

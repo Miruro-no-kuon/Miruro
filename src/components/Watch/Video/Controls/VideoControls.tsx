@@ -22,7 +22,9 @@ const ControlsWrapper = styled.div<{ $isVisible: boolean }>`
   align-items: center;
   padding: 0 0.25rem 0.25rem 0.25rem;
   color: white;
-  border-radius: 0.8rem; //SAME BORDER RADIUS AS VIDEPLAYER.
+  border-radius: var(
+    --global-border-radius
+  ); //SAME BORDER RADIUS AS VIDEPLAYER.
   background: linear-gradient(0deg, rgba(0, 0, 0, 1) -100%, transparent 100%);
   transition: 0.3s;
   display: ${({ $isVisible }) => ($isVisible ? "flex" : "none")};

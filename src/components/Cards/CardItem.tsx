@@ -62,7 +62,7 @@ const StyledCardWrapper = styled.div`
 
 const StyledCardItem = styled.div`
   max-width: 100%;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   cursor: pointer;
   transform: scale(1);
   transition: 0.2s;

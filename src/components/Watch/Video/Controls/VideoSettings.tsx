@@ -9,7 +9,7 @@ const SettingsContainer = styled.div`
   right: 0;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(10px);
-  border-radius: 0.2rem 0.2rem 0 0;
+  border-radius: var(--global-border-radius) 0.2rem 0 0;
   margin: 0.2rem 0.3rem;
   padding: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -61,7 +61,7 @@ const ContentContainer = styled.div`
 const QualityOption = styled.div`
   padding: 0.35rem;
   font-size: 0.8rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   color: ${({ $isSelected }) => ($isSelected ? "#fff" : "#aaa")};
   font-weight: ${({ $isSelected }) => ($isSelected ? "bold" : "thin")};
   cursor: pointer;

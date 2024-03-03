@@ -37,7 +37,7 @@ const SkeletonSlide = styled.div<SkeletonProps>`
   max-width: 100%;
   height: 24rem;
   background: var(--global-card-bg);
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   margin-bottom: 2rem;
 
   @media (max-width: 1000px) {
@@ -59,7 +59,7 @@ const SkeletonSlide = styled.div<SkeletonProps>`
 const SkeletonImage = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 const CarouselSkeleton: React.FC<SkeletonProps> = ({ loading }) => (

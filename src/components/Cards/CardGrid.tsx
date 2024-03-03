@@ -178,7 +178,7 @@ export const StyledCardGrid = styled.div`
   text-align: center;
   color: var(--global-card-button-shadow);
   border: 1px solid var(--global-card-button-shadow);
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   margin: 0 0 2.5rem 0;
   padding: 1rem 1rem;
   background: transparent;

@@ -30,7 +30,7 @@ const WatchContainer = styled.div`
 const VideoPlayerContainer = styled.div`
   width: 100%;
   max-width: 600px;
-  border-radius: 0.8rem;
+  border-radius: var(--global-border-radius);
   margin-bottom: 1rem;
 
   @media (min-width: 1000px) {
@@ -41,12 +41,12 @@ const VideoPlayerContainer = styled.div`
   }
 `;
 const VideoPlayerImageWrapper = styled.div`
-  border-radius: 0.8rem; // Same radius as videplayer
+  border-radius: var(--global-border-radius); // Same radius as videplayer
   overflow: hidden; /* Add overflow property */
 `;
 
 const AnimeInfoContainer = styled.div`
-  border-radius: 0.8rem;
+  border-radius: var(--global-border-radius);
   margin-top: 0.8rem;
   padding: 0.6rem;
   background-color: var(--global-secondary-bg);
@@ -62,7 +62,7 @@ const AnimeInfoContainer = styled.div`
 `;
 
 const AnimeInfoImage = styled.img`
-  border-radius: 0.8rem;
+  border-radius: var(--global-border-radius);
   max-height: 120px;
   margin-right: 1rem;
   @media (min-width: 1000px) {
@@ -339,10 +339,10 @@ const Watch: React.FC = () => {
                   onClick={toggleTrailer}
                   style={{
                     padding: "0.5rem 1rem",
-                    backgroundColor: "#cc4b00",
+                    backgroundColor: "var(--primary-accent-bg)",
                     color: "white",
                     border: "none",
-                    borderRadius: "0.8rem",
+                    borderRadius: "var(--global-border-radius)",
                     cursor: "pointer",
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     transition: "background-color 0.3s ease",

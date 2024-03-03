@@ -24,7 +24,7 @@ interface Props {
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
-  border-radius: 0.8rem;
+  border-radius: var(--global-border-radius);
   overflow: hidden;
   flex-grow: 1;
   display: flex;
@@ -54,7 +54,7 @@ const ListItem = styled.button<{
   background-color: ${({ $isClicked }) =>
     $isClicked ? "rgba(255, 0, 0, 0.1)" : "var(--global-tertiary-bg)"};
   border: none;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   color: ${({ $isSelected }) => ($isSelected ? "var(--global-text)" : "grey")};
   padding: ${({ $isRowLayout }) =>
     $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
@@ -84,7 +84,7 @@ const SelectInterval = styled.select`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   border: none;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 const LayoutToggle = styled.button`
@@ -94,7 +94,7 @@ const LayoutToggle = styled.button`
   margin-right: 0.5rem;
   cursor: pointer;
   color: var(--global-text);
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   transition: background-color 0.15s, color 0.15s;
 
   &:hover {
@@ -109,7 +109,7 @@ const SearchContainer = styled.div`
   border: 1px solid var(--global-shadow);
   padding: 0.5rem;
   margin: 0 0.5rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   transition: background-color 0.15s, color 0.15s;
 
   &:hover {

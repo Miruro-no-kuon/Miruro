@@ -24,7 +24,7 @@ const AnimeImage = styled.div`
   position: relative;
   text-align: left;
   overflow: hidden;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   padding-top: calc(100% * 184 / 133);
   background: var(--global-card-bg);
   box-shadow: 2px 2px 10px var(--global-card-shadow);
@@ -63,7 +63,7 @@ const ImageWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 0.2rem;
+    border-radius: var(--global-border-radius);
     font-weight: bold;
     font-size: 12px;
     transition: 0.3s ease-in;
@@ -104,7 +104,7 @@ const Button = styled.span`
   backdrop-filter: blur(10px);
   padding: 4px;
   margin: 0;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   font-size: 0.7rem;
   font-weight: bold;
   cursor: pointer;

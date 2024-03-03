@@ -16,11 +16,11 @@ const SimpleLayout = styled.div`
   gap: 1rem;
   margin: 0 auto;
   max-width: 125rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 const TabContainer = styled.div`
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   width: 100%;
 `;
 
@@ -33,7 +33,7 @@ const Tab = styled.button<TabProps>`
   background: transparent;
   margin: 0 1rem 0 0;
   padding: 0.5rem;StyledCardGrid
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
   font-weight: bold;
@@ -72,7 +72,7 @@ const Tab = styled.button<TabProps>`
 
 const Section = styled.section`
   padding: 0rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 // Styled component for error messages
@@ -82,7 +82,7 @@ const ErrorMessage = styled.div`
   background-color: #ffdddd;
   border-left: 4px solid #f44336;
   color: #f44336;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 
   p {
     margin: 0;
@@ -130,6 +130,13 @@ const Home = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(`Changing title because activeTab is now: ${activeTab}`);
+    document.title = `Miruro - ${activeTab
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase())}`;
+  }, [activeTab]);
 
   const renderCardGrid = (
     animeData: any[],

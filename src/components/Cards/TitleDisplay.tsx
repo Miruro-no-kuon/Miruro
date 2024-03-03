@@ -22,7 +22,7 @@ const TitleContainer = styled.div<{ isHovered: boolean }>`
   align-items: center;
   padding: 0.5rem;
   margin-top: 0.35rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   cursor: pointer;
   transition: background 0.2s ease;
 

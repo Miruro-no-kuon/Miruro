@@ -25,7 +25,7 @@ const StyledSwiperContainer = styled(Swiper)`
   max-width: 100%;
   height: 24rem;
   margin-bottom: 2rem;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   cursor: grab;
 
   @media (max-width: 1000px) {
@@ -60,7 +60,7 @@ const DarkOverlay = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   z-index: 1;
   background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 55%);
 `;
@@ -69,14 +69,14 @@ const SlideImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 const SlideImage = styled.img<{ $cover: string; $image: string }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   position: absolute;
   content: ${(props) =>
     props.$cover === props.$image ? BannerNotFound : props.$cover};

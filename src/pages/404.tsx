@@ -14,7 +14,7 @@ const CenteredContent = styled.div`
   text-align: center;
   font-size: large;
   & img {
-    border-radius: 0.2rem;
+    border-radius: var(--global-border-radius);
     max-width: 100%; /* Ensures the image doesn't exceed its container */
   }
   h3 {
