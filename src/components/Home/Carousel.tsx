@@ -25,7 +25,7 @@ const StyledSwiperContainer = styled(Swiper)`
   max-width: 100%;
   height: 24rem;
   margin-bottom: 2rem;
-  border-radius: var(--global-border-radius);
+  border-radius: 0.2rem;
   cursor: grab;
 
   @media (max-width: 1000px) {
@@ -60,7 +60,7 @@ const DarkOverlay = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: var(--global-border-radius);
+  border-radius: 0.2rem;
   z-index: 1;
   background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 55%);
 `;
@@ -69,14 +69,14 @@ const SlideImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: var(--global-border-radius);
+  border-radius: 0.2rem;
 `;
 
 const SlideImage = styled.img<{ $cover: string; $image: string }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--global-border-radius);
+  border-radius: 0.2rem;
   position: absolute;
   content: ${(props) =>
     props.$cover === props.$image ? BannerNotFound : props.$cover};
@@ -92,7 +92,7 @@ const ContentWrapper = styled.div`
 const SlideContent = styled.div`
   position: absolute;
   left: 2rem;
-  bottom: 3rem;
+  bottom: 1.5rem;
   z-index: 5;
   max-width: 60%;
 
@@ -147,7 +147,7 @@ const SlideDescription = styled.p<{
 const PlayButtonWrapper = styled.div`
   position: absolute;
   right: 2rem;
-  bottom: 3rem;
+  bottom: 1.5rem;
   z-index: 5;
   display: flex;
   align-items: center; /* Center vertically */
@@ -164,11 +164,11 @@ const PlayButton = styled.button`
   color: var(--global-text);
   border: none;
   border-radius: 0.4rem;
-  font-size: 1.2rem; /* Increased font size */
+  font-size: 1rem; /* Increased font size */
   font-weight: bold;
   cursor: pointer;
   transition: 0.2s ease;
-  padding: 1.2rem 2.4rem; /* Increased padding */
+  padding: 1.2rem 2rem; /* Increased padding */
   display: flex;
   align-items: center;
 

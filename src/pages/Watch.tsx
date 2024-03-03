@@ -9,6 +9,7 @@ import CardSkeleton from "../components/Skeletons/CardSkeleton"; // Import CardS
 
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
+  WATCHED_EPISODES: "watched-episodes-", // Key for storing array of watched episodes
 };
 
 const WatchContainer = styled.div`
@@ -219,7 +220,7 @@ const Watch: React.FC = () => {
   const handleEpisodeSelect = useCallback(
     async (selectedEpisode: Episode) => {
       setIsEpisodeChanging(true);
-
+      // Ensure animeTitle is extracted correctly if needed here, or use selectedEpisode.title directly
       const animeTitle = selectedEpisode.id.split("-episode")[0];
 
       setCurrentEpisode({
@@ -228,25 +229,29 @@ const Watch: React.FC = () => {
         image: selectedEpisode.image,
       });
 
+      // Update last watched episode, ensure title is not null here
       localStorage.setItem(
         LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
         JSON.stringify({
           id: selectedEpisode.id,
-          title: selectedEpisode.title,
+          title: selectedEpisode.title, // Make sure this is correctly set
           number: selectedEpisode.number,
         })
       );
 
-      setClickedEpisodes((prevClickedEpisodes) => [
-        ...prevClickedEpisodes,
-        selectedEpisode.id,
-      ]);
+      // Update watched episodes list
+      updateWatchedEpisodes(selectedEpisode);
+      console.log(selectedEpisode);
 
-      navigate(`/watch/${animeId}/${animeTitle}/${selectedEpisode.number}`, {
-        replace: true,
-      });
+      // Use title in navigation if necessary. Here, we're assuming animeTitle is needed in the URL, adjust as necessary.
+      navigate(
+        `/watch/${animeId}/${encodeURI(animeTitle)}/${selectedEpisode.number}`,
+        {
+          replace: true,
+        }
+      );
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate delay
 
       setIsEpisodeChanging(false);
     },
@@ -299,6 +304,25 @@ const Watch: React.FC = () => {
   if (showNoEpisodesMessage) {
     return <div>No episodes found.</div>;
   }
+
+  const updateWatchedEpisodes = (episode: Episode) => {
+    // Retrieve the existing watched episodes array
+    const watchedEpisodesJson = localStorage.getItem(
+      LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId
+    );
+    const watchedEpisodes: Episode[] = watchedEpisodesJson
+      ? JSON.parse(watchedEpisodesJson)
+      : [];
+
+    // Add the current episode to the array if it's not already included
+    if (!watchedEpisodes.some((ep) => ep.id === episode.id)) {
+      watchedEpisodes.push(episode);
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
+        JSON.stringify(watchedEpisodes)
+      );
+    }
+  };
 
   return (
     <WatchContainer>
@@ -381,6 +405,7 @@ const Watch: React.FC = () => {
       </VideoPlayerContainer>
       <EpisodeListContainer>
         <EpisodeList
+          animeId={animeId}
           episodes={episodes}
           selectedEpisodeId={currentEpisode.id}
           onEpisodeSelect={(episodeId: string) => {
@@ -389,7 +414,6 @@ const Watch: React.FC = () => {
               handleEpisodeSelect(episode);
             }
           }}
-          clickedEpisodes={clickedEpisodes}
         />
       </EpisodeListContainer>
     </WatchContainer>
