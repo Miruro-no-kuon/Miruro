@@ -1,0 +1,84 @@
+{
+  "background_color": "#080808",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Miruro",
+  "short_name": "Miruro",
+  "description": "🍜 Miruro is an Anime Streaming Site with minimal UI. Made with ⚡ Vite & 🍞 Bun!",
+  "lang": "en",
+  "categories": [
+    "Action",
+    "Adventure",
+    "Comedy",
+    "Drama",
+    "Fantasy",
+    "Horror",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Slice of Life",
+    "Supernatural",
+    "Thriller",
+    "Psychological",
+    "Magic",
+    "Mecha",
+    "Music",
+    "Sports",
+    "Historical",
+    "School",
+    "Shounen",
+    "Shoujo",
+    "Seinen",
+    "Josei",
+    "Martial Arts",
+    "Space",
+    "Super Power",
+    "Game",
+    "Military",
+    "Police",
+    "Vampire",
+    "Demons",
+    "Samurai",
+    "Cyberpunk",
+    "Post-Apocalyptic",
+    "Parody",
+    "Ecchi",
+    "Harem",
+    "Reverse Harem",
+    "Isekai",
+    "Time Travel",
+    "Virtual Reality",
+    "Gore",
+    "Psychological",
+    "Thriller",
+    "Supernatural"
+  ],
+  "icons": [
+    {
+      "src": "./src/assets/favicons/favicon-miruro.webp",
+      "sizes": "148x148",
+      "type": "image/webp",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/src/assets/favicons/favicon-circular-miruro-512x512.png",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/homepage.png",
+      "sizes": "1024x768",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/read-view.png",
+      "sizes": "1024x768",
+      "type": "image/png"
+    }
+  ]
+}
