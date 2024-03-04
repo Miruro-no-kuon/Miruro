@@ -3,8 +3,6 @@
 
 🔷 Hey, just so you know, this branch is in the middle of a big switcheroo from 📜 **JavaScript** to **TypeScript**. It's a work in progress, so expect some hiccups and weird stuff.
 
-⚠️ Better tread lightly if you're gonna use this branch for development. Changes are coming fast, and there might be some rough patches until we smooth things out.
-
 🚧 Thanks for rolling with us while we jazz up this template. Appreciate your patience!
 
 <p align="center">
