@@ -27,6 +27,36 @@ type VideoPlayerWrapperProps = {
   $isVideoChanging: boolean;
 };
 
+const LargePlayIcon = styled.div<LargePlayIconProps>`
+  position: absolute;
+  border-radius: 0.8rem; //var(--global-border-radius);
+  z-index: 2;
+  background-color: rgba(24, 24, 24, 0.836);
+  opacity: 0.5;
+  background-size: cover; // Optional: if you want the image to cover the whole area
+  background-position: center; // Optional: for centering the image
+  box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
+  color: white;
+  top: 50%;
+  left: 50%;
+  padding: 0.3rem 1rem;
+  transform: translate(-50%, -50%) scaleX(1.1);
+  opacity: 1; /* Set opacity to 1 */
+  visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
+  transition: transform 0.2s ease-in-out;
+
+  ${({ $isPlaying }) =>
+    !$isPlaying &&
+    css`
+      animation: ${fadeIn} 1s;
+    `}
+  &:hover {
+    /* color: var(--primary-accent-bg); */
+    background-color: var(--primary-accent-bg);
+    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
+  }
+`;
+
 const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
   position: relative;
   border-radius: var(--global-border-radius);
@@ -38,6 +68,9 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
       : $isCursorIdle
       ? "none"
       : "pointer"};
+  &:hover ${LargePlayIcon} {
+    background-color: var(--primary-accent-bg);
+  }
 `;
 
 const StyledVideo = styled.video`
@@ -68,35 +101,6 @@ const fadeIn = keyframes`
 type LargePlayIconProps = {
   $isPlaying: boolean;
 };
-
-const LargePlayIcon = styled.div<LargePlayIconProps>`
-  position: absolute;
-  border-radius: var(--global-border-radius);
-  z-index: 2;
-  background-color: var(--global-secondary-bg);
-  background-size: cover; // Optional: if you want the image to cover the whole area
-  background-position: center; // Optional: for centering the image
-  box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
-  color: white;
-  top: 50%;
-  left: 50%;
-  padding: 0.12rem 2rem;
-  transform: translate(-50%, -50%) scaleX(1.1);
-  opacity: 1; /* Set opacity to 1 */
-  visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
-  transition: transform 0.2s ease-in-out;
-
-  ${({ $isPlaying }) =>
-    !$isPlaying &&
-    css`
-      animation: ${fadeIn} 1s;
-    `}
-  &:hover {
-    /* color: var(--primary-accent-bg); */
-    background-color: var(--primary-accent-bg);
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
-  }
-`;
 
 const Loader = styled.div`
   position: absolute;
@@ -491,7 +495,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             )}
             {!isPlaying && !hasPlayed && !isVideoChanging && (
               <LargePlayIcon $isPlaying={isPlaying} onClick={handlePlay}>
-                <i className="material-icons" style={{ fontSize: "4rem" }}>
+                <i className="material-icons" style={{ fontSize: "2.3rem" }}>
                   play_arrow
                 </i>
               </LargePlayIcon>

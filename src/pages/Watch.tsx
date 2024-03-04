@@ -3,7 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import { fetchAnimeInfo2, fetchAnimeInfo } from "../hooks/useApi";
+import {
+  fetchAnimeInfo2,
+  fetchAnimeInfo,
+  fetchAnimeEpisodes,
+} from "../hooks/useApi";
 
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
@@ -276,7 +280,7 @@ const Watch: React.FC = () => {
       if (loading && (!episodes || episodes.length === 0)) {
         setShowNoEpisodesMessage(true);
       }
-    }, 5000);
+    }, 10000);
 
     return () => clearTimeout(timeoutId);
   }, [loading, episodes]);
@@ -286,7 +290,17 @@ const Watch: React.FC = () => {
   };
 
   if (showNoEpisodesMessage) {
-    return <div>No episodes found.</div>;
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "10rem",
+          marginBottom: "10rem",
+        }}
+      >
+        <h2>No episodes found :(</h2>
+      </div>
+    );
   }
 
   const updateWatchedEpisodes = (episode: Episode) => {
