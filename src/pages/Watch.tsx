@@ -35,7 +35,7 @@ const WatchContainer = styled.div`
 const VideoPlayerContainer = styled.div`
   position: relative;
   width: 100%;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   @media (min-width: 1000px) {
     flex: 3 1 auto;
   }
@@ -76,9 +76,45 @@ const AnimeInfoImage = styled.img`
   margin-right: 1rem;
 `;
 
+const AnimeCharacterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 0.6rem;
+`;
+
+const CharacterCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 150px;
+  gap: 10px;
+  padding: 0.6rem;
+`;
+
+const CharacterImages = styled.img`
+  max-height: 150px;
+  height: auto;
+  border-radius: var(--global-border-radius);
+`;
+
+const CharacterName = styled.div`
+  text-align: center;
+  word-wrap: break-word;
+`;
+
 const AnimeInfoText = styled.div`
   text-align: left;
+  line-height: 1rem; /* Adjust the line height as needed */
+  h3,
+  h4,
+  p {
+    margin-top: 0rem; /* Reset margin */
+  }
 `;
+
 const DescriptionText = styled.p`
   text-align: left;
   display: -webkit-box;
@@ -371,7 +407,9 @@ const Watch: React.FC = () => {
                 {episodes.find((episode) => episode.id === currentEpisode.id)
                   ?.title || `Episode ${currentEpisode.number}`}
               </h3>
-              <h4>{animeInfo.title.english}</h4>
+              <p>
+                <strong>{animeInfo.title.english}</strong>
+              </p>
               <p>
                 <strong>Released: </strong>{" "}
                 {animeInfo.releaseDate ? animeInfo.releaseDate : "Unknown"}
@@ -379,23 +417,56 @@ const Watch: React.FC = () => {
               <p>
                 <strong>Genres: </strong> {animeInfo.genres.join(", ")}
               </p>
+              <p>
+                <strong>Rating: </strong>
+                {animeInfo.rating}/100
+              </p>
             </AnimeInfoText>
           </AnimeInfoContainer>
         )}
         {animeInfo && (
           <AnimeInfoContainer2>
-            <p>
-              <strong>Status: </strong>
-              {animeInfo.status}
-            </p>
-            <p>
-              <strong>Rating: </strong>
-              {animeInfo.rating}/100
-            </p>
-            <DescriptionText>
-              <strong>Description: </strong>
-              {removeHTMLTags(animeInfo.description)}
-            </DescriptionText>
+            <AnimeInfoText>
+              <p>
+                <strong>Status: </strong>
+                {animeInfo.status}
+              </p>
+              <p>
+                <strong>Studios: </strong>
+                {animeInfo.studios}
+              </p>
+              <p>
+                <strong>Start Date: </strong>
+                {animeInfo.startDate.month}-{animeInfo.startDate.year}
+                <strong> || End Date: </strong>
+                {animeInfo.endDate?.month && animeInfo.endDate?.year
+                  ? `${animeInfo.endDate.month}-${animeInfo.endDate.year}`
+                  : "Ongoing"}
+              </p>
+              <p>
+                <strong>Main Characters: </strong>
+                <AnimeCharacterContainer>
+                  {animeInfo.characters
+                    .filter((character) => character.role === "MAIN")
+                    .map((character) => (
+                      <CharacterCard
+                        key={character.id}
+                        style={{ textAlign: "center" }}
+                      >
+                        <CharacterImages
+                          src={character.image}
+                          alt={character.name.full}
+                        />
+                        <CharacterName>{character.name.full}</CharacterName>
+                      </CharacterCard>
+                    ))}
+                </AnimeCharacterContainer>
+              </p>
+              <DescriptionText>
+                <strong>Description: </strong>
+                {removeHTMLTags(animeInfo.description)}
+              </DescriptionText>
+            </AnimeInfoText>
             {animeInfo.trailer && (
               <button
                 onClick={toggleTrailer}
