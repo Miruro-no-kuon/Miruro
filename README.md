@@ -7,7 +7,7 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.COM</a> // 
+    MIRURO<a href="https://www.miruro.com">.COM</a> ||
     MIRURO<a href="https://www.miruro.tv">.TV</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
