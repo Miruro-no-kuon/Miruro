@@ -53,23 +53,27 @@ const AnimeInfoContainer = styled.div`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+`;
 
-  @media (min-width: 1000px) {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+const AnimeInfoContainer2 = styled.div`
+  border-radius: var(--global-border-radius);
+  margin-top: 0.8rem;
+  padding: 0.6rem;
+  background-color: var(--global-secondary-bg);
+  color: var(--global-text);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const AnimeInfoImage = styled.img`
   border-radius: var(--global-border-radius);
-  max-height: 120px;
+  max-height: 150px;
   margin-right: 1rem;
-  @media (min-width: 1000px) {
-    max-height: 200px;
-    margin-bottom: 0;
-  }
 `;
 
 const AnimeInfoText = styled.div`
@@ -82,6 +86,33 @@ const DescriptionText = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const VideoTrailer = styled.div`
+  overflow: hidden;
+  position: relative;
+  width: 50%; // Default to full width to maintain responsiveness
+  height: auto; // Attempt to maintain aspect ratio based on width
+  border: none; // Remove quotation marks from "none"
+  @media (max-width: 1000px) {
+    aspect-ratio: 16/9; /* 16:9 aspect ratio (change as needed) */
+    width: 100%; // Ensure full width on larger screens
+    height: 100%;
+  }
+`;
+
+const IframeTrailer = styled.iframe`
+  aspect-ratio: 16/9; /* 16:9 aspect ratio (change as needed) */
+  position: relative;
+  border: none; // Remove quotation marks from "none"
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @media (max-width: 1000px) {
+    width: 100%; // Ensure full width on larger screens
+    height: 100%;
+  }
 `;
 
 const EpisodeListContainer = styled.div`
@@ -336,69 +367,63 @@ const Watch: React.FC = () => {
           <AnimeInfoContainer>
             <AnimeInfoImage src={animeInfo.image} alt="Anime Title Image" />
             <AnimeInfoText>
-              <h2>{animeInfo.title.english}</h2>
-              <DescriptionText>
-                <strong>Description: </strong>
-                {removeHTMLTags(animeInfo.description)}
-              </DescriptionText>
-              <p>
-                <strong>Genres: </strong> {animeInfo.genres.join(", ")}
-              </p>
+              <h3>
+                {episodes.find((episode) => episode.id === currentEpisode.id)
+                  ?.title || `Episode ${currentEpisode.number}`}
+              </h3>
+              <h4>{animeInfo.title.english}</h4>
               <p>
                 <strong>Released: </strong>{" "}
                 {animeInfo.releaseDate ? animeInfo.releaseDate : "Unknown"}
               </p>
               <p>
-                <strong>Status: </strong>
-                {animeInfo.status}
+                <strong>Genres: </strong> {animeInfo.genres.join(", ")}
               </p>
-              <p>
-                <strong>Rating: </strong>
-                {animeInfo.rating}/100
-              </p>
-              {animeInfo.trailer && (
-                <button
-                  onClick={toggleTrailer}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    backgroundColor: "var(--primary-accent-bg)",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "var(--global-border-radius)",
-                    cursor: "pointer",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                    transition: "background-color 0.3s ease",
-                    outline: "none",
-                  }}
-                >
-                  {showTrailer ? "Hide Trailer" : "Show Trailer"}
-                </button>
-              )}
-              {showTrailer && (
-                <div
-                  style={{
-                    overflow: "hidden",
-                    paddingTop: "56.25%",
-                    position: "relative",
-                  }}
-                >
-                  <iframe
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              )}
             </AnimeInfoText>
           </AnimeInfoContainer>
+        )}
+        {animeInfo && (
+          <AnimeInfoContainer2>
+            <p>
+              <strong>Status: </strong>
+              {animeInfo.status}
+            </p>
+            <p>
+              <strong>Rating: </strong>
+              {animeInfo.rating}/100
+            </p>
+            <DescriptionText>
+              <strong>Description: </strong>
+              {removeHTMLTags(animeInfo.description)}
+            </DescriptionText>
+            {animeInfo.trailer && (
+              <button
+                onClick={toggleTrailer}
+                style={{
+                  padding: "0.5rem 1rem",
+                  backgroundColor: "var(--primary-accent-bg)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "var(--global-border-radius)",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s ease",
+                  outline: "none",
+                }}
+              >
+                {showTrailer ? "Hide Trailer" : "Show Trailer"}
+              </button>
+            )}
+            {showTrailer && (
+              <VideoTrailer>
+                <IframeTrailer
+                  src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </VideoTrailer>
+            )}
+          </AnimeInfoContainer2>
         )}
       </VideoPlayerContainer>
       <EpisodeListContainer>
