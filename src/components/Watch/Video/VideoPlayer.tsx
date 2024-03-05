@@ -29,19 +29,16 @@ type VideoPlayerWrapperProps = {
 
 const LargePlayIcon = styled.div<LargePlayIconProps>`
   position: absolute;
-  border-radius: 0.8rem; //var(--global-border-radius);
+  border-radius: 3rem; //var(--global-border-radius);
   z-index: 2;
-  background-color: rgba(24, 24, 24, 0.836);
-  opacity: 0.5;
+  background-color: rgba(24, 24, 24, 0.85);
   background-size: cover; // Optional: if you want the image to cover the whole area
   background-position: center; // Optional: for centering the image
-  box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
   color: white;
   top: 50%;
   left: 50%;
-  padding: 0.3rem 1rem;
+  padding: 0.7rem 0.8rem;
   transform: translate(-50%, -50%) scaleX(1.1);
-  opacity: 1; /* Set opacity to 1 */
   visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
   transition: transform 0.2s ease-in-out;
 
@@ -70,6 +67,9 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
       : "pointer"};
   &:hover ${LargePlayIcon} {
     background-color: var(--primary-accent-bg);
+  }
+  ${LargePlayIcon} {
+    transition: background-color 0.3s ease; /* Same timing and easing as above */
   }
 `;
 
