@@ -37,22 +37,14 @@ const StyledLinkList = styled.div`
   margin: auto; /* Center the content horizontally */
 `;
 
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
-
 const FooterLink = styled(Link)`
   padding-top: 1rem;
   color: grey;
   text-decoration: none;
-  transition: transform 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out;
 
   &:hover {
     color: ${theme.buttonTextColor};
-    transform: scale(1.1);
     text-decoration: underline;
   }
 `;
@@ -88,14 +80,14 @@ const ShareButton = styled.a`
   display: inline-block;
   color: grey;
   text-decoration: none;
-  transition: transform 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
 
   svg {
     font-size: 1.4rem;
   }
 
   &:hover {
-    transform: scale(1.25);
+    transform: scale(1.15);
     color: ${theme.buttonTextColor};
     text-decoration: underline;
   }
@@ -113,15 +105,9 @@ function Footer() {
           &copy; {currentYear} Miruro no Kuon.
         </CopyrightText>
         <StyledLinkList>
-          <FooterLink to="About" onClick={scrollToTop}>
-            About
-          </FooterLink>
-          <FooterLink to="PolicyTerms" onClick={scrollToTop}>
-            Policy
-          </FooterLink>
-          <FooterLink to="PolicyTerms" onClick={scrollToTop}>
-            Terms
-          </FooterLink>
+          <FooterLink to="About">About</FooterLink>
+          <FooterLink to="PolicyTerms">Policy</FooterLink>
+          <FooterLink to="PolicyTerms">Terms</FooterLink>
         </StyledLinkList>
         <SocialIconsWrapper>
           <ShareButton

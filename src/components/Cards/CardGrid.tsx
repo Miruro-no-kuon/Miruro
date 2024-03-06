@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import styled /* keyframes */ from "styled-components";
 // Assuming CardItem and CardSkeleton are correctly typed elsewhere
 import CardItem from "./CardItem";
-import CardSkeleton from "../Skeletons/CardSkeleton";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 
@@ -105,10 +104,15 @@ const CardGrid: React.FC<CardGridProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      ) {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.offsetHeight;
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+
+      // Adjust this threshold as needed
+      const threshold = 1000;
+
+      if (windowHeight + scrollTop >= documentHeight - threshold) {
         handleLoadMore();
       }
     };
@@ -121,20 +125,16 @@ const CardGrid: React.FC<CardGridProps> = ({
 
   return (
     <StyledCardGrid>
-      {loading
-        ? Array.from({ length: animeData.length }).map((_, index) => (
-            <CardSkeleton key={index} />
-          ))
-        : animeData.map((anime) => (
-            <CardItem
-              key={anime.id}
-              anime={anime}
-              onHover={() => handleCardHover(anime.id)}
-              onLeave={() => handleCardLeave(anime.id)}
-              isHoveredInstant={hoveredCardInstant === anime.id}
-              isHoveredDelayed={hoveredCardDelayed === anime.id}
-            />
-          ))}
+      {animeData.map((anime) => (
+        <CardItem
+          key={anime.id}
+          anime={anime}
+          onHover={() => handleCardHover(anime.id)}
+          onLeave={() => handleCardLeave(anime.id)}
+          isHoveredInstant={hoveredCardInstant === anime.id}
+          isHoveredDelayed={hoveredCardDelayed === anime.id}
+        />
+      ))}
     </StyledCardGrid>
   );
 };
@@ -147,7 +147,7 @@ export const StyledCardGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
   grid-template-rows: auto;
   gap: 1.75rem;
-  transition: grid-template-columns 0.5s ease-in-out;
+  transition: grid-template-columns 0.2s ease-in-out;
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
@@ -157,6 +157,14 @@ export const StyledCardGrid = styled.div`
   @media (max-width: 800px) {
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 1rem;
+  }
+  @media (max-width: 650px) {
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+    gap: 1rem;
+  }
+  @media (max-width: 450px) {
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    gap: 0.5rem;
   }
 `;
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import CardGrid from "../components/Cards/CardGrid";
 import { StyledCardGrid } from "../components/Cards/CardGrid";
-import { fetchAnimeData } from "../hooks/useApi";
+import { fetchAdvancedSearch } from "../hooks/useApi";
 import CardSkeleton from "../components/Skeletons/CardSkeleton";
 
 const Container = styled.div`
@@ -43,21 +43,21 @@ const SearchResults = () => {
     lastCachedPage.current = 0;
   }, [query]);
 
-  const initiateFetchAnimeData = async () => {
+  const initiatefetchAdvancedSearch = async () => {
     setIsLoading(true);
 
     if (page > 1) {
       setLoadingStates((prev) => [
         ...prev,
-        ...Array.from({ length: 20 }, () => true),
+        ...Array.from({ length: 16 }, () => true),
       ]);
     }
 
     try {
-      const fetchedData = await fetchAnimeData(
+      const fetchedData = await fetchAdvancedSearch(
         query,
         page,
-        20,
+        16,
         (isCached: boolean) => {
           if (!isCached) {
             preloadNextPage(page + 1);
@@ -97,7 +97,7 @@ const SearchResults = () => {
       nextPage > lastCachedPage.current &&
       hasNextPage
     ) {
-      fetchAnimeData(query, nextPage, 25, (isCached: boolean) => {
+      fetchAdvancedSearch(query, nextPage, 25, (isCached: boolean) => {
         if (!isCached) {
           lastCachedPage.current = nextPage;
           preloadNextPage(nextPage + 1);
@@ -109,7 +109,7 @@ const SearchResults = () => {
   useEffect(() => {
     if (delayTimeout.current) clearTimeout(delayTimeout.current);
     delayTimeout.current = setTimeout(() => {
-      initiateFetchAnimeData();
+      initiatefetchAdvancedSearch();
     }, 0);
 
     return () => {
@@ -124,7 +124,7 @@ const SearchResults = () => {
       </SearchTitle>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
-          {Array.from({ length: 20 }).map((_, index) => (
+          {Array.from({ length: 16 }).map((_, index) => (
             <CardSkeleton key={index} {...{ isLoading: true }} />
           ))}
         </StyledCardGrid>

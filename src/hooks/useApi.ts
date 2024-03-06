@@ -133,10 +133,10 @@ interface FetchOptions {
 
 // Individual caches for different types of data
 // Creating caches for anime data, anime info, and video sources
-const animeDataCache = createCache("animeDataCache");
-const animeInfoCache = createCache("animeInfoCache");
-const animeEpisodesCache = createCache("animeEpisodesCache");
-const videoSourcesCache = createCache("videoSourcesCache");
+const advancedSearchCache = createCache("Advanced Search");
+const animeDataCache = createCache("Data");
+const animeEpisodesCache = createCache("Episodes");
+const videoSourcesCache = createCache("Video Sources");
 
 // Fetch data from proxy with caching
 // Function to fetch data from proxy with caching
@@ -160,7 +160,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
 }
 
 // Function to fetch anime data
-export async function fetchAnimeData(
+export async function fetchAdvancedSearch(
   searchQuery: string = "",
   page: number = 1,
   perPage: number = 16,
@@ -181,18 +181,18 @@ export async function fetchAnimeData(
   });
 
   const url = `${BASE_URL}meta/anilist/advanced-search?${queryParams.toString()}`;
-  const cacheKey = generateCacheKey("animeData", queryParams.toString());
+  const cacheKey = generateCacheKey("advancedSearch", queryParams.toString());
 
-  return fetchFromProxy(url, animeDataCache, cacheKey);
+  return fetchFromProxy(url, advancedSearchCache, cacheKey);
 }
 
 // Fetch Anime DATA Function
-export async function fetchAnimeInfo(animeId: string, provider: string = "gogoanime") {
-  const cacheKey = generateCacheKey('animeInfo', animeId, provider);
+export async function fetchAnimeData(animeId: string, provider: string = "gogoanime") {
+  const cacheKey = generateCacheKey('animeData', animeId, provider);
 
   try {
     // Check if data is in cache
-    const cachedData = animeInfoCache.get(cacheKey);
+    const cachedData = animeDataCache.get(cacheKey);
     if (cachedData) {
       return cachedData;
     }
@@ -204,7 +204,7 @@ export async function fetchAnimeInfo(animeId: string, provider: string = "gogoan
     const data = response.data;
 
     // Store data in cache
-    animeInfoCache.set(cacheKey, data);
+    animeDataCache.set(cacheKey, data);
     return data;
   } catch (error) {
     handleError(error, "anime info");
@@ -212,7 +212,7 @@ export async function fetchAnimeInfo(animeId: string, provider: string = "gogoan
 }
 
 // Fetch Anime INFO Function
-export async function fetchAnimeInfo2(animeId: string, provider: string = "gogoanime") {
+/* export async function fetchAnimeInfo(animeId: string, provider: string = "gogoanime") {
   const cacheKey = generateCacheKey('animeInfo', animeId, provider);
 
   try {
@@ -235,7 +235,7 @@ export async function fetchAnimeInfo2(animeId: string, provider: string = "gogoa
   } catch (error) {
     handleError(error, "anime info");
   }
-}
+} */
 
 
 // Function to fetch list of anime based on type (Top, Trending, Popular)
@@ -262,7 +262,7 @@ async function fetchList(type: string, page: number = 1, perPage: number = 16, o
     // params already defined above
   }
 
-  const specificCache = createCache(`${type.toLowerCase()}AnimeCache`);
+  const specificCache = createCache(`${type}`);
   return fetchFromProxy(`${url}?${params.toString()}`, specificCache, cacheKey);
 }
 

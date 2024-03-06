@@ -18,20 +18,26 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const animeId = pathname.split("/")[2]; //
+    // Pattern to match the specific route to ignore
+    const ignoreRoutePattern = /^\/watch\/[^/]+\/[^/]+\/[^/]+$/;
 
-    // Scroll to top only when the animeId changes - Preventing double scrollup.
-    if (animeId !== localStorage.getItem("animeId")) {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-      localStorage.setItem("animeId", animeId);
+    // Only scroll to top if the current pathname does not match the ignore pattern
+    if (!ignoreRoutePattern.test(pathname)) {
+      // Delay the scroll to top to allow content to render
+      const timer = setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }, 0); // Adjust the delay as needed
+
+      return () => clearTimeout(timer); // Cleanup the timer
     }
   }, [pathname]);
 
   return null;
 }
+
 function App() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

@@ -4,20 +4,18 @@ import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
 import CardGrid from "../components/Cards/CardGrid";
-import {
-  fetchAnimeInfo2,
-  fetchAnimeInfo,
-  fetchAnimeEpisodes,
-} from "../hooks/useApi";
+import { fetchAnimeEpisodes, fetchAnimeData } from "../hooks/useApi";
 
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: "last-watched-",
   WATCHED_EPISODES: "watched-episodes-", // Key for storing array of watched episodes
 };
 
-const WatchContainer = styled.div`
+const WatchContainer = styled.div``;
+
+const WatchWrapper = styled.div`
   /* margin-right: 5rem;
-  margin-left: 5rem; */
+margin-left: 5rem; */
   font-size: 0.9rem;
   gap: 0.8rem;
   display: flex;
@@ -29,8 +27,6 @@ const WatchContainer = styled.div`
   @media (min-width: 1200px) {
     flex-direction: row;
     align-items: flex-start;
-    margin-right: 5rem;
-    margin-left: 5rem;
   }
 `;
 
@@ -79,12 +75,69 @@ const AnimeInfoContainer2 = styled.div`
   border-radius: var(--global-border-radius);
   margin-top: 0.8rem;
   padding: 0.6rem;
+  padding-bottom: 0rem;
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   display: flex;
   align-items: center;
   flex-direction: column;
   align-items: flex-start;
+`;
+
+const ShowTrailerButton = styled.button`
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--primary-accent-bg);
+  color: white;
+  border: none;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+
+  &:hover {
+    background-color: var(--primary-accent);
+  }
+  @media (max-width: 1000px) {
+    display: block; /* Ensure the button is displayed as a block element */
+    margin: 0 auto; /* Center the button horizontally */
+    margin-bottom: 0.5rem;
+  }
+`;
+
+const ShowMoreButton = styled.button`
+  padding: 0.5rem 0.6rem;
+  background-color: var(--primary-accent-bg);
+  color: white;
+  border: none;
+  /* border-radius: var(--global-border-radius); */
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline: none;
+  margin-left: 15rem;
+  margin-right: 15rem;
+  display: block;
+
+  &:hover {
+    background-color: var(--primary-accent);
+  }
+  @media (max-width: 1000px) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    display: block; /* Ensure the button is displayed as a block element */
+  }
+`;
+
+const AnimeInfoContainer3 = styled.div`
+  margin-top: 0.8rem;
+  padding: 0.6rem;
+  background-color: var(--global-secondary-bg);
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 0.6rem;
 `;
 
 const AnimeRecommendations = styled.div`
@@ -148,6 +201,8 @@ const DescriptionText = styled.p`
 `;
 
 const VideoTrailer = styled.div`
+  margin-top: 0.5rem;
+  margin-bottom: -1.5rem;
   overflow: hidden;
   position: relative;
   width: 50%; // Default to full width to maintain responsiveness
@@ -157,11 +212,13 @@ const VideoTrailer = styled.div`
     aspect-ratio: 16/9; /* 16:9 aspect ratio (change as needed) */
     width: 100%; // Ensure full width on larger screens
     height: 100%;
+    margin-bottom: 0.5rem;
   }
 `;
 
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9; /* 16:9 aspect ratio (change as needed) */
+  margin-bottom: 2rem;
   position: relative;
   border: none; // Remove quotation marks from "none"
   top: 0;
@@ -183,6 +240,8 @@ const EpisodeListContainer = styled.div`
     max-height: 100%; // Ensures it doesn't exceed the parent's height
   }
 `;
+
+const DataThing = styled.div``;
 
 const GoToHomePageButton = styled.a`
   position: absolute;
@@ -251,7 +310,7 @@ const Watch: React.FC = () => {
       }
 
       try {
-        const info = await fetchAnimeInfo(animeId);
+        const info = await fetchAnimeData(animeId);
         if (isMounted) {
           setAnimeInfo(info);
           // Do not set loading to false here to allow for independent loading states
@@ -275,7 +334,7 @@ const Watch: React.FC = () => {
       if (!animeId) return;
 
       try {
-        const animeData = await fetchAnimeInfo2(animeId);
+        const animeData = await fetchAnimeEpisodes(animeId);
         if (isMounted && animeData) {
           const transformedEpisodes = animeData.map((ep: Episode) => ({
             id: ep.id,
@@ -438,11 +497,13 @@ const Watch: React.FC = () => {
     [animeId, navigate]
   );
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
-
+  const [showCharacters, setShowCharacters] = useState(false);
   // Function to toggle the description expanded state
   const toggleDescription = () => {
     setDescriptionExpanded(!isDescriptionExpanded);
+    setShowCharacters(!isDescriptionExpanded); // Toggle the state for showing characters
   };
+
   useEffect(() => {
     if (animeInfo) {
       document.title = "Miruro - " + animeInfo.title.english;
@@ -479,7 +540,7 @@ const Watch: React.FC = () => {
   }, [loading, episodes]);
 
   const removeHTMLTags = (description: string): string => {
-    return description.replace(/<[^>]+>/g, "");
+    return description.replace(/<[^>]+>/g, "").replace(/\([^)]*\)/g, "");
   };
 
   if (showNoEpisodesMessage) {
@@ -539,14 +600,31 @@ const Watch: React.FC = () => {
 
   return (
     <WatchContainer>
-      <VideoPlayerContainer>
-        <VideoPlayerImageWrapper>
-          <VideoPlayer
-            episodeId={currentEpisode.id}
-            bannerImage={selectedBackgroundImage} // Use the determined image
-            isEpisodeChanging={isEpisodeChanging}
+      <WatchWrapper>
+        <VideoPlayerContainer>
+          <VideoPlayerImageWrapper>
+            <VideoPlayer
+              episodeId={currentEpisode.id}
+              bannerImage={selectedBackgroundImage} // Use the determined image
+              isEpisodeChanging={isEpisodeChanging}
+            />
+          </VideoPlayerImageWrapper>
+        </VideoPlayerContainer>
+        <EpisodeListContainer>
+          <EpisodeList
+            animeId={animeId}
+            episodes={episodes}
+            selectedEpisodeId={currentEpisode.id}
+            onEpisodeSelect={(episodeId: string) => {
+              const episode = episodes.find((e) => e.id === episodeId);
+              if (episode) {
+                handleEpisodeSelect(episode);
+              }
+            }}
           />
-        </VideoPlayerImageWrapper>
+        </EpisodeListContainer>
+      </WatchWrapper>
+      <DataThing>
         {animeInfo && (
           <AnimeInfoContainer>
             <AnimeInfoImage src={animeInfo.image} alt="Anime Title Image" />
@@ -607,46 +685,12 @@ const Watch: React.FC = () => {
                 Studios: <strong>{animeInfo.studios}</strong>
               </p>
               <p>
-                <DescriptionText>
-                  <strong>Description: </strong>
-                  {isDescriptionExpanded
-                    ? removeHTMLTags(animeInfo.description || "")
-                    : `${removeHTMLTags(animeInfo.description || "").substring(
-                        0,
-                        300
-                      )}...`}
-                  <button
-                    onClick={toggleDescription}
-                    style={{
-                      backgroundColor: "var(--primary-accent-bg)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "var(--global-border-radius)",
-                      cursor: "pointer",
-                      transition: "background-color 0.3s ease",
-                      outline: "none",
-                    }}
-                  >
-                    {isDescriptionExpanded ? "Show Less" : "Show More"}
-                  </button>
-                </DescriptionText>
                 {animeInfo.trailer && (
-                  <button
-                    onClick={toggleTrailer}
-                    style={{
-                      padding: "0.5rem 0.6rem",
-                      backgroundColor: "var(--primary-accent-bg)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "var(--global-border-radius)",
-                      cursor: "pointer",
-                      transition: "background-color 0.3s ease",
-                      outline: "none",
-                    }}
-                  >
+                  <ShowTrailerButton onClick={toggleTrailer}>
                     {showTrailer ? "Hide Trailer" : "Show Trailer"}
-                  </button>
+                  </ShowTrailerButton>
                 )}
+
                 {showTrailer && (
                   <VideoTrailer>
                     <IframeTrailer
@@ -657,96 +701,104 @@ const Watch: React.FC = () => {
                     />
                   </VideoTrailer>
                 )}
-                <br></br>
-                <br></br>
-                {animeInfo &&
-                  animeInfo.relations.filter((relation: any) =>
-                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
-                      relation.type
-                    )
-                  ).length > 0 && (
-                    <>
-                      <strong>Seasons/Related: </strong>
-                      <AnimeRelations>
-                        <CardGrid
-                          animeData={animeInfo.relations.filter(
-                            (relation: any) =>
-                              ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
-                                relation.type
-                              )
-                          )}
-                          totalPages={0}
-                          hasNextPage={false}
-                        />
-                      </AnimeRelations>
-                    </>
-                  )}
-
-                <br></br>
-                {animeInfo &&
-                  animeInfo.recommendations.filter((recommendation: any) =>
-                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
-                      recommendation.type
-                    )
-                  ).length > 0 && (
-                    <>
-                      <strong>Recommendations: </strong>
-                      <AnimeRecommendations>
-                        <CardGrid
-                          animeData={animeInfo.recommendations.filter(
-                            (recommendation: any) =>
-                              ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
-                                recommendation.type
-                              )
-                          )}
-                          totalPages={0}
-                          hasNextPage={false}
-                        />
-                      </AnimeRecommendations>
-                    </>
-                  )}
-
-                <br></br>
-                <br></br>
-                <strong>Characters: </strong>
-                <AnimeCharacterContainer>
-                  {animeInfo.characters
-                    .filter(
-                      (character: any) =>
-                        character.role === "MAIN" ||
-                        character.role === "SUPPORTING"
-                    )
-                    .map((character: any) => (
-                      <CharacterCard
-                        key={character.id}
-                        style={{ textAlign: "center" }}
-                      >
-                        <CharacterImages
-                          src={character.image}
-                          alt={character.name.full}
-                        />
-                        <CharacterName>{character.name.full}</CharacterName>
-                      </CharacterCard>
-                    ))}
-                </AnimeCharacterContainer>
+                <DescriptionText>
+                  <strong>Description: </strong>
+                  {isDescriptionExpanded
+                    ? removeHTMLTags(animeInfo.description || "")
+                    : `${removeHTMLTags(animeInfo.description || "").substring(
+                        0,
+                        300
+                      )}...`}
+                  <br></br>
+                  <br></br>
+                  <ShowMoreButton onClick={toggleDescription}>
+                    {isDescriptionExpanded ? "Show Less" : "Show More"}
+                  </ShowMoreButton>
+                </DescriptionText>
+                {showCharacters && (
+                  <>
+                    <strong>Characters: </strong>
+                    <AnimeCharacterContainer>
+                      {animeInfo.characters
+                        .filter(
+                          (character: any) =>
+                            character.role === "MAIN" ||
+                            character.role === "SUPPORTING"
+                        )
+                        .map((character: any) => (
+                          <CharacterCard
+                            key={character.id}
+                            style={{ textAlign: "center" }}
+                          >
+                            <CharacterImages
+                              src={character.image}
+                              alt={character.name.full}
+                            />
+                            <CharacterName>{character.name.full}</CharacterName>
+                          </CharacterCard>
+                        ))}
+                    </AnimeCharacterContainer>
+                  </>
+                )}
               </p>
             </AnimeInfoText>
           </AnimeInfoContainer2>
         )}
-      </VideoPlayerContainer>
-      <EpisodeListContainer>
-        <EpisodeList
-          animeId={animeId}
-          episodes={episodes}
-          selectedEpisodeId={currentEpisode.id}
-          onEpisodeSelect={(episodeId: string) => {
-            const episode = episodes.find((e) => e.id === episodeId);
-            if (episode) {
-              handleEpisodeSelect(episode);
-            }
-          }}
-        />
-      </EpisodeListContainer>
+        {animeInfo && (
+          <AnimeInfoContainer3>
+            <AnimeInfoText>
+              <p>
+                {animeInfo && animeInfo.relations.length > 0 && (
+                  <>
+                    <strong>Seasons/Related: </strong>
+                    <AnimeRelations>
+                      <CardGrid
+                        animeData={animeInfo.relations
+                          .filter((relation: any) =>
+                            [
+                              "OVA",
+                              "SPECIAL",
+                              "TV",
+                              "MOVIE",
+                              "ONA",
+                              "NOVEL",
+                            ].includes(relation.type)
+                          )
+                          .slice(0, 6)}
+                        totalPages={0}
+                        hasNextPage={false}
+                      />
+                    </AnimeRelations>
+                  </>
+                )}
+                {animeInfo && animeInfo.recommendations.length > 0 && (
+                  <>
+                    <strong>Recommendations: </strong>
+                    <AnimeRecommendations>
+                      <CardGrid
+                        animeData={animeInfo.recommendations
+                          .filter((recommendation: any) =>
+                            [
+                              "OVA",
+                              "SPECIAL",
+                              "TV",
+                              "MOVIE",
+                              "ONA",
+                              "NOVEL",
+                            ].includes(recommendation.type)
+                          )
+                          .slice(0, 10)}
+                        totalPages={0}
+                        hasNextPage={false}
+                      />
+                    </AnimeRecommendations>
+                  </>
+                )}
+              </p>
+            </AnimeInfoText>
+          </AnimeInfoContainer3>
+        )}
+      </DataThing>
     </WatchContainer>
   );
 };
