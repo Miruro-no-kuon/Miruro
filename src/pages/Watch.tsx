@@ -292,7 +292,7 @@ const Watch: React.FC = () => {
           if (animeTitle && episodeNumber) {
             const episodeId = `${animeTitle}-episode-${episodeNumber}`;
             const matchingEpisode = transformedEpisodes.find(
-              (ep) => ep.id === episodeId
+              (ep: any) => ep.id === episodeId
             );
             if (matchingEpisode) {
               setCurrentEpisode({
@@ -314,7 +314,7 @@ const Watch: React.FC = () => {
 
             if (savedEpisode && savedEpisode.number) {
               const foundEpisode = transformedEpisodes.find(
-                (ep) => ep.number === savedEpisode.number
+                (ep: any) => ep.number === savedEpisode.number
               );
               if (foundEpisode) {
                 setCurrentEpisode({
@@ -660,11 +660,10 @@ const Watch: React.FC = () => {
                 <br></br>
                 <br></br>
                 {animeInfo &&
-                  animeInfo.relations.filter(
-                    (relation: any) =>
-                      relation.type !== "MANGA" &&
-                      relation.type !== "NOVEL" &&
-                      relation.type !== "MUSIC"
+                  animeInfo.relations.filter((relation: any) =>
+                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
+                      relation.type
+                    )
                   ).length > 0 && (
                     <>
                       <strong>Seasons/Related: </strong>
@@ -672,9 +671,9 @@ const Watch: React.FC = () => {
                         <CardGrid
                           animeData={animeInfo.relations.filter(
                             (relation: any) =>
-                              relation.type !== "MANGA" &&
-                              relation.type !== "NOVEL" &&
-                              relation.type !== "MUSIC"
+                              ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
+                                relation.type
+                              )
                           )}
                           totalPages={0}
                           hasNextPage={false}
@@ -685,18 +684,20 @@ const Watch: React.FC = () => {
 
                 <br></br>
                 {animeInfo &&
-                  animeInfo.recommendations.filter(
-                    (relation: any) =>
-                      relation.type !== "MANGA" && relation.type !== "NOVEL"
+                  animeInfo.recommendations.filter((recommendation: any) =>
+                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
+                      recommendation.type
+                    )
                   ).length > 0 && (
                     <>
                       <strong>Recommendations: </strong>
                       <AnimeRecommendations>
                         <CardGrid
                           animeData={animeInfo.recommendations.filter(
-                            (relation: any) =>
-                              relation.type !== "MANGA" &&
-                              relation.type !== "NOVEL"
+                            (recommendation: any) =>
+                              ["OVA", "SPECIAL", "TV", "MOVIE", "ONA"].includes(
+                                recommendation.type
+                              )
                           )}
                           totalPages={0}
                           hasNextPage={false}

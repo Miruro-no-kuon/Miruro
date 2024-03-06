@@ -248,6 +248,9 @@ const EpisodeList: React.FC<Props> = ({
       if (!selectionInitiatedByUser) {
         setSelectionInitiatedByUser(true);
       }
+      // Add scroll to top behavior here
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
       const updatedWatchedEpisodes = [...watchedEpisodes];
       const selectedEpisodeIndex = updatedWatchedEpisodes.findIndex(
         (episode) => episode.id === id

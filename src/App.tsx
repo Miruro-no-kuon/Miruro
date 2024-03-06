@@ -18,15 +18,20 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const animeId = pathname.split("/")[2]; //
+
+    // Scroll to top only when the animeId changes - Preventing double scrollup.
+    if (animeId !== localStorage.getItem("animeId")) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      localStorage.setItem("animeId", animeId);
+    }
   }, [pathname]);
 
   return null;
 }
-
 function App() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

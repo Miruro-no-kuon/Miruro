@@ -40,7 +40,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   padding: 0.7rem 0.8rem;
   transform: translate(-50%, -50%) scaleX(1.1);
   visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
-  transition: transform 0.2s ease-in-out;
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out; // Define the transition in the default state
 
   ${({ $isPlaying }) =>
     !$isPlaying &&
@@ -67,9 +67,7 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
       : "pointer"};
   &:hover ${LargePlayIcon} {
     background-color: var(--primary-accent-bg);
-  }
-  ${LargePlayIcon} {
-    transition: background-color 0.3s ease; /* Same timing and easing as above */
+    // No need to repeat the transition here if it's already defined in LargePlayIcon
   }
 `;
 
