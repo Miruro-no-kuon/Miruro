@@ -19,6 +19,9 @@ const VideoPlayerContainer = styled.div`
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  @media (max-width: 1000px) {
+    border: 0; // no border on phone
+  }
 `;
 
 type VideoPlayerWrapperProps = {
