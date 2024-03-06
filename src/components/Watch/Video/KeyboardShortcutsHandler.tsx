@@ -1,7 +1,22 @@
 import React from "react";
 import useKeyboardShortcut from "../../../hooks/useKeyboardShortcut";
 
-const KeyboardShortcutsHandler = ({
+interface KeyboardShortcutsHandlerProps {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  togglePlayPause: () => void;
+  toggleFullscreen: () => void;
+  toggleMute: () => void;
+  increaseVolume: () => void;
+  decreaseVolume: () => void;
+  seekBackward: () => void;
+  seekForward: () => void;
+  toggleSubtitles: () => void;
+  cycleSubtitleTracks: () => void;
+  jumpToPercentage: (percentage: number) => void;
+  changePlaybackSpeed: (speed: number) => void;
+}
+
+const KeyboardShortcutsHandler: React.FC<KeyboardShortcutsHandlerProps> = ({
   videoRef,
   togglePlayPause,
   toggleFullscreen,
@@ -17,7 +32,7 @@ const KeyboardShortcutsHandler = ({
 }) => {
   const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-  const shortcuts = {
+  let shortcuts: Record<string, () => void> = {
     k: togglePlayPause,
     j: seekBackward,
     l: seekForward,
@@ -30,28 +45,28 @@ const KeyboardShortcutsHandler = ({
     ArrowLeft: seekBackward,
     c: toggleSubtitles,
     t: cycleSubtitleTracks,
-
-    ...Array.from({ length: 10 }, (_, i) => ({
-      [`${i}`]: () => jumpToPercentage(i * 10),
-    })),
-
     ">": () => {
-      const currentSpeed = videoRef.current.playbackRate;
-      const currentIndex = speeds.indexOf(currentSpeed);
+      const currentSpeed = videoRef.current?.playbackRate;
+      const currentIndex = currentSpeed ? speeds.indexOf(currentSpeed) : -1;
       if (currentIndex < speeds.length - 1) {
         const newSpeed = speeds[currentIndex + 1];
         changePlaybackSpeed(newSpeed);
       }
     },
     "<": () => {
-      const currentSpeed = videoRef.current.playbackRate;
-      const currentIndex = speeds.indexOf(currentSpeed);
+      const currentSpeed = videoRef.current?.playbackRate;
+      const currentIndex = currentSpeed ? speeds.indexOf(currentSpeed) : -1;
       if (currentIndex > 0) {
         const newSpeed = speeds[currentIndex - 1];
         changePlaybackSpeed(newSpeed);
       }
     },
   };
+
+  // Dynamically assign number keys for percentage-based seeking
+  for (let i = 0; i <= 9; i++) {
+    shortcuts[i.toString()] = () => jumpToPercentage(i * 10);
+  }
 
   Object.entries(shortcuts).forEach(([key, callback]) => {
     useKeyboardShortcut(key, callback, videoRef);

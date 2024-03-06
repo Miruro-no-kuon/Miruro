@@ -116,10 +116,10 @@ function Footer() {
           <FooterLink to="About" onClick={scrollToTop}>
             About
           </FooterLink>
-          <FooterLink to="Policy" onClick={scrollToTop}>
+          <FooterLink to="PolicyTerms" onClick={scrollToTop}>
             Policy
           </FooterLink>
-          <FooterLink to="Terms" onClick={scrollToTop}>
+          <FooterLink to="PolicyTerms" onClick={scrollToTop}>
             Terms
           </FooterLink>
         </StyledLinkList>

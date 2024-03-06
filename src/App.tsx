@@ -18,7 +18,10 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [pathname]);
 
   return null;
@@ -48,10 +51,12 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/watch/:animeId" element={<Watch />} />
-        <Route path="/watch/:animeId/:animeTitle/:episodeNumber" element={<Watch />} />
+        <Route
+          path="/watch/:animeId/:animeTitle/:episodeNumber"
+          element={<Watch />}
+        />
         <Route path="/about" element={<About />} />
-        <Route path="/policy" element={<PolicyTerms />} />
-        <Route path="/terms" element={<PolicyTerms />} />
+        <Route path="/policyterms" element={<PolicyTerms />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />

@@ -142,7 +142,6 @@ const DescriptionText = styled.p`
   text-align: left;
   line-height: 1.2rem;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -182,6 +181,23 @@ const EpisodeListContainer = styled.div`
     aspect-ratio: 2 / 3;
     flex: 1 1 500px;
     max-height: 100%; // Ensures it doesn't exceed the parent's height
+  }
+`;
+
+const GoToHomePageButton = styled.a`
+  position: absolute;
+  color: black;
+  border-radius: var(--global-border-radius);
+  background-color: var(--primary-accent-bg);
+  margin-top: 1rem;
+  padding: 0.7rem 0.8rem;
+  transform: translate(-50%, -50%) scaleX(1.1);
+  transition: transform 0.2s ease-in-out;
+  text-decoration: none; /* Remove underline */
+
+  &:hover {
+    /* color: var(--primary-accent-bg); */
+    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
   }
 `;
 
@@ -341,6 +357,16 @@ const Watch: React.FC = () => {
     };
   }, [animeId, animeTitle, episodeNumber, navigate]);
 
+  // Right after your existing useEffect hooks
+  useEffect(() => {
+    // Automatically show the "No episodes found" message if loading is done and no episodes are available
+    if (!loading && episodes.length === 0) {
+      setShowNoEpisodesMessage(true);
+    } else {
+      setShowNoEpisodesMessage(false);
+    }
+  }, [loading, episodes]); // This useEffect depends on the loading and episodes states
+
   useEffect(() => {
     const updateBackgroundImage = () => {
       const episodeImage = currentEpisode.image;
@@ -396,7 +422,6 @@ const Watch: React.FC = () => {
 
       // Update watched episodes list
       updateWatchedEpisodes(selectedEpisode);
-      console.log(selectedEpisode);
 
       // Use title in navigation if necessary. Here, we're assuming animeTitle is needed in the URL, adjust as necessary.
       navigate(
@@ -412,15 +437,26 @@ const Watch: React.FC = () => {
     },
     [animeId, navigate]
   );
+  const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
 
+  // Function to toggle the description expanded state
+  const toggleDescription = () => {
+    setDescriptionExpanded(!isDescriptionExpanded);
+  };
   useEffect(() => {
     if (animeInfo) {
       document.title = "Miruro - " + animeInfo.title.english;
     } else {
       document.title = "Miruro";
     }
+
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
+      // Check if the target element is an input of type "text" or "search"
+      const isSearchBox =
+        event.target instanceof HTMLInputElement &&
+        (event.target.type === "text" || event.target.type === "search");
+
+      if (event.code === "Space" && !isSearchBox) {
         event.preventDefault();
       }
     };
@@ -434,7 +470,7 @@ const Watch: React.FC = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (loading && (!episodes || episodes.length === 0)) {
+      if (!episodes || episodes.length === 0) {
         setShowNoEpisodesMessage(true);
       }
     }, 10000);
@@ -456,27 +492,11 @@ const Watch: React.FC = () => {
         }}
       >
         <h2>No episodes found :(</h2>
+        <GoToHomePageButton href="/home">HomePage</GoToHomePageButton>
       </div>
     );
   }
 
-  function getMonthName(monthNumber: any) {
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    return monthNames[monthNumber - 1];
-  }
   function getDateString(date: any) {
     const monthNames = [
       "Jan",
@@ -589,13 +609,32 @@ const Watch: React.FC = () => {
               <p>
                 <DescriptionText>
                   <strong>Description: </strong>
-                  {removeHTMLTags(animeInfo.description)}
+                  {isDescriptionExpanded
+                    ? removeHTMLTags(animeInfo.description || "")
+                    : `${removeHTMLTags(animeInfo.description || "").substring(
+                        0,
+                        300
+                      )}...`}
+                  <button
+                    onClick={toggleDescription}
+                    style={{
+                      backgroundColor: "var(--primary-accent-bg)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "var(--global-border-radius)",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s ease",
+                      outline: "none",
+                    }}
+                  >
+                    {isDescriptionExpanded ? "Show Less" : "Show More"}
+                  </button>
                 </DescriptionText>
                 {animeInfo.trailer && (
                   <button
                     onClick={toggleTrailer}
                     style={{
-                      padding: "0.5rem 1rem",
+                      padding: "0.5rem 0.6rem",
                       backgroundColor: "var(--primary-accent-bg)",
                       color: "white",
                       border: "none",
@@ -623,7 +662,9 @@ const Watch: React.FC = () => {
                 {animeInfo &&
                   animeInfo.relations.filter(
                     (relation: any) =>
-                      relation.type !== "MANGA" && relation.type !== "NOVEL"
+                      relation.type !== "MANGA" &&
+                      relation.type !== "NOVEL" &&
+                      relation.type !== "MUSIC"
                   ).length > 0 && (
                     <>
                       <strong>Seasons/Related: </strong>
@@ -632,7 +673,8 @@ const Watch: React.FC = () => {
                           animeData={animeInfo.relations.filter(
                             (relation: any) =>
                               relation.type !== "MANGA" &&
-                              relation.type !== "NOVEL"
+                              relation.type !== "NOVEL" &&
+                              relation.type !== "MUSIC"
                           )}
                           totalPages={0}
                           hasNextPage={false}
