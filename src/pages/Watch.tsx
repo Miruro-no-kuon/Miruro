@@ -11,7 +11,15 @@ const LOCAL_STORAGE_KEYS = {
   WATCHED_EPISODES: "watched-episodes-", // Key for storing array of watched episodes
 };
 
-const WatchContainer = styled.div``;
+const WatchContainer = styled.div`
+  //just comment these two lines if you dont want margin while developing.
+  margin-left: 12rem;
+  margin-right: 12rem;
+  @media (max-width: 1500px) {
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
+`;
 
 const WatchWrapper = styled.div`
   /* margin-right: 5rem;
@@ -23,8 +31,7 @@ margin-left: 5rem; */
   align-items: center;
   background-color: var(--global-primary-bg);
   color: var(--global-text);
-
-  @media (min-width: 1200px) {
+  @media (min-width: 1000px) {
     flex-direction: row;
     align-items: flex-start;
   }
@@ -42,6 +49,17 @@ const VideoPlayerContainer = styled.div`
 const VideoPlayerImageWrapper = styled.div`
   border-radius: var(--global-border-radius); // Same radius as videplayer
   overflow: hidden; /* Add overflow property */
+`;
+
+const EpisodeListContainer = styled.div`
+  width: 100%;
+  max-height: 100%;
+
+  @media (min-width: 1000px) {
+    aspect-ratio: 2 / 3;
+    flex: 1 1 500px;
+    max-height: 100%; // Ensures it doesn't exceed the parent's height
+  }
 `;
 
 const AnimeInfoContainer = styled.div`
@@ -228,16 +246,6 @@ const IframeTrailer = styled.iframe`
   @media (max-width: 1000px) {
     width: 100%; // Ensure full width on larger screens
     height: 100%;
-  }
-`;
-
-const EpisodeListContainer = styled.div`
-  width: 100%;
-
-  @media (min-width: 1000px) {
-    aspect-ratio: 2 / 3;
-    flex: 1 1 500px;
-    max-height: 100%; // Ensures it doesn't exceed the parent's height
   }
 `;
 

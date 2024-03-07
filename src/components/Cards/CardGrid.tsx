@@ -158,14 +158,6 @@ export const StyledCardGrid = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 1rem;
   }
-  @media (max-width: 650px) {
-    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
-    gap: 1rem;
-  }
-  @media (max-width: 450px) {
-    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
-    gap: 0.5rem;
-  }
 `;
 
 /* const fadeIn = keyframes`

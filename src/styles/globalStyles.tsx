@@ -86,7 +86,7 @@ body {
   color: var(--global-text);
   transition: 0.1s ease;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1000px) {
     padding: 0 0.5rem 0.5rem 0.5rem;
   }
 }

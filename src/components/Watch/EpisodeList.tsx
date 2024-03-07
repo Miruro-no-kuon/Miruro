@@ -32,10 +32,12 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 42rem;
-
+  max-height: 38.75rem;
+  @media (max-width: 1500px) {
+    max-height: 28rem;
+  }
   @media (max-width: 1000px) {
-    max-height: 22rem;
+    max-height: 18rem;
   }
 `;
 
