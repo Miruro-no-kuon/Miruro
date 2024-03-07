@@ -32,10 +32,7 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 38.75rem;
-  @media (max-width: 1500px) {
-    max-height: 28rem;
-  }
+  max-height: 35rem;
   @media (max-width: 1000px) {
     max-height: 18rem;
   }
@@ -189,27 +186,79 @@ const EpisodeList: React.FC<Props> = ({
   const [watchedEpisodes, setWatchedEpisodes] = useState<Episode[]>([]);
   const [selectionInitiatedByUser, setSelectionInitiatedByUser] =
     useState(false);
-
-  // Filter episodes based on search input
-  const filteredEpisodes = useMemo(() => {
-    return episodes.filter((episode) => {
-      const searchQuery = searchTerm.toLowerCase();
-      return (
-        episode.title?.toLowerCase().includes(searchQuery) ||
-        episode.number.toString().includes(searchQuery)
+  // Update local storage when watched episodes change
+  useEffect(() => {
+    if (animeId && watchedEpisodes.length > 0) {
+      localStorage.setItem(
+        `watched-episodes-${animeId}`,
+        JSON.stringify(watchedEpisodes)
       );
-    });
-  }, [episodes, searchTerm]);
-
+    }
+  }, [animeId, watchedEpisodes]);
   // Load watched episodes from local storage when animeId changes
   useEffect(() => {
     if (animeId) {
-      const watched = localStorage.getItem(`watched-episodes-${animeId}`);
+      const watched = localStorage.getItem("watched-episodes");
       if (watched) {
-        setWatchedEpisodes(JSON.parse(watched));
+        const watchedEpisodesObject = JSON.parse(watched);
+        const watchedEpisodesForAnime = watchedEpisodesObject[animeId];
+        if (watchedEpisodesForAnime) {
+          setWatchedEpisodes(watchedEpisodesForAnime);
+        }
       }
     }
   }, [animeId]);
+
+  // Function to handle episode selection
+  // Function to mark an episode as watched
+  const markEpisodeAsWatched = useCallback(
+    (id: string) => {
+      if (animeId) {
+        setWatchedEpisodes((prevWatchedEpisodes) => {
+          const updatedWatchedEpisodes = [...prevWatchedEpisodes];
+          const selectedEpisodeIndex = updatedWatchedEpisodes.findIndex(
+            (episode) => episode.id === id
+          );
+          if (selectedEpisodeIndex === -1) {
+            const selectedEpisode = episodes.find(
+              (episode) => episode.id === id
+            );
+            if (selectedEpisode) {
+              updatedWatchedEpisodes.push(selectedEpisode);
+              // Update the watched episodes object in local storage
+              localStorage.setItem(
+                "watched-episodes",
+                JSON.stringify({
+                  ...JSON.parse(
+                    localStorage.getItem("watched-episodes") || "{}"
+                  ),
+                  [animeId]: updatedWatchedEpisodes,
+                })
+              );
+              return updatedWatchedEpisodes;
+            }
+          }
+          return prevWatchedEpisodes;
+        });
+      }
+    },
+    [episodes, animeId]
+  );
+  const handleEpisodeSelect = useCallback(
+    (id: string) => {
+      setSelectionInitiatedByUser(true);
+      markEpisodeAsWatched(id); // Mark the episode as watched
+      onEpisodeSelect(id);
+    },
+    [onEpisodeSelect, markEpisodeAsWatched]
+  );
+
+  // Update watched episodes when a new episode is selected or visited
+  useEffect(() => {
+    if (selectedEpisodeId && !selectionInitiatedByUser) {
+      markEpisodeAsWatched(selectedEpisodeId);
+    }
+  }, [selectedEpisodeId, selectionInitiatedByUser, markEpisodeAsWatched]);
 
   // Generate interval options
   const intervalOptions = useMemo(() => {
@@ -244,40 +293,16 @@ const EpisodeList: React.FC<Props> = ({
     });
   }, []);
 
-  // Update watched episodes when a new episode is selected
-  const handleEpisodeSelect = useCallback(
-    (id: string) => {
-      if (!selectionInitiatedByUser) {
-        setSelectionInitiatedByUser(true);
-      }
-      // Add scroll to top behavior here
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      const updatedWatchedEpisodes = [...watchedEpisodes];
-      const selectedEpisodeIndex = updatedWatchedEpisodes.findIndex(
-        (episode) => episode.id === id
+  // Filter episodes based on search input
+  const filteredEpisodes = useMemo(() => {
+    return episodes.filter((episode) => {
+      const searchQuery = searchTerm.toLowerCase();
+      return (
+        episode.title?.toLowerCase().includes(searchQuery) ||
+        episode.number.toString().includes(searchQuery)
       );
-      if (selectedEpisodeIndex === -1) {
-        const selectedEpisode = episodes.find((episode) => episode.id === id);
-        if (selectedEpisode) {
-          updatedWatchedEpisodes.push(selectedEpisode);
-          setWatchedEpisodes(updatedWatchedEpisodes);
-          localStorage.setItem(
-            `watched-episodes-${animeId}`,
-            JSON.stringify(updatedWatchedEpisodes)
-          );
-        }
-      }
-      onEpisodeSelect(id);
-    },
-    [
-      episodes,
-      watchedEpisodes,
-      onEpisodeSelect,
-      animeId,
-      selectionInitiatedByUser,
-    ]
-  );
+    });
+  }, [episodes, searchTerm]);
 
   // Determine layout based on episodes and user preference
   useEffect(() => {

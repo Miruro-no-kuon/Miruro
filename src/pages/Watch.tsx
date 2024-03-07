@@ -13,8 +13,8 @@ const LOCAL_STORAGE_KEYS = {
 
 const WatchContainer = styled.div`
   //just comment these two lines if you dont want margin while developing.
-  margin-left: 12rem;
-  margin-right: 12rem;
+  margin-left: 10rem;
+  margin-right: 10rem;
   @media (max-width: 1500px) {
     margin-left: 0rem;
     margin-right: 0rem;
@@ -22,10 +22,7 @@ const WatchContainer = styled.div`
 `;
 
 const WatchWrapper = styled.div`
-  /* margin-right: 5rem;
-margin-left: 5rem; */
   font-size: 0.9rem;
-  gap: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +39,10 @@ const VideoPlayerContainer = styled.div`
   width: 100%;
   border-radius: var(--global-border-radius);
   @media (min-width: 1000px) {
-    flex: 3 1 auto;
+    flex: 1 1 auto;
+  }
+  @media (max-width: 1000px) {
+    padding-bottom: 0.8rem;
   }
 `;
 
@@ -52,13 +52,25 @@ const VideoPlayerImageWrapper = styled.div`
 `;
 
 const EpisodeListContainer = styled.div`
+  padding-left: 0.8rem;
   width: 100%;
   max-height: 100%;
-
   @media (min-width: 1000px) {
     aspect-ratio: 2 / 3;
     flex: 1 1 500px;
     max-height: 100%; // Ensures it doesn't exceed the parent's height
+  }
+  @media (max-width: 1000px) {
+    padding-left: 0rem;
+  }
+`;
+
+const SideContainer = styled.div``;
+
+const AnimeInfoContainers = styled.div`
+  width: 100%;
+  @media (max-width: 1000px) {
+    width: 100%;
   }
 `;
 
@@ -148,6 +160,19 @@ const ShowMoreButton = styled.button`
 `;
 
 const AnimeInfoContainer3 = styled.div`
+  border-radius: var(--global-border-radius);
+  margin-top: 0.8rem;
+  padding: 0.6rem;
+  background-color: var(--global-secondary-bg);
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 0.6rem;
+`;
+
+const AnimeInfoContainer4 = styled.div`
+  border-radius: var(--global-border-radius);
   margin-top: 0.8rem;
   padding: 0.6rem;
   background-color: var(--global-secondary-bg);
@@ -248,8 +273,6 @@ const IframeTrailer = styled.iframe`
     height: 100%;
   }
 `;
-
-const DataThing = styled.div``;
 
 const GoToHomePageButton = styled.a`
   position: absolute;
@@ -631,8 +654,9 @@ const Watch: React.FC = () => {
             }}
           />
         </EpisodeListContainer>
+        <SideContainer></SideContainer>
       </WatchWrapper>
-      <DataThing>
+      <AnimeInfoContainers>
         {animeInfo && (
           <AnimeInfoContainer>
             <AnimeInfoImage src={animeInfo.image} alt="Anime Title Image" />
@@ -754,59 +778,59 @@ const Watch: React.FC = () => {
         )}
         {animeInfo && (
           <AnimeInfoContainer3>
-            <AnimeInfoText>
-              <p>
-                {animeInfo && animeInfo.relations.length > 0 && (
-                  <>
-                    <strong>Seasons/Related: </strong>
-                    <AnimeRelations>
-                      <CardGrid
-                        animeData={animeInfo.relations
-                          .filter((relation: any) =>
-                            [
-                              "OVA",
-                              "SPECIAL",
-                              "TV",
-                              "MOVIE",
-                              "ONA",
-                              "NOVEL",
-                            ].includes(relation.type)
-                          )
-                          .slice(0, 6)}
-                        totalPages={0}
-                        hasNextPage={false}
-                      />
-                    </AnimeRelations>
-                  </>
-                )}
-                {animeInfo && animeInfo.recommendations.length > 0 && (
-                  <>
-                    <strong>Recommendations: </strong>
-                    <AnimeRecommendations>
-                      <CardGrid
-                        animeData={animeInfo.recommendations
-                          .filter((recommendation: any) =>
-                            [
-                              "OVA",
-                              "SPECIAL",
-                              "TV",
-                              "MOVIE",
-                              "ONA",
-                              "NOVEL",
-                            ].includes(recommendation.type)
-                          )
-                          .slice(0, 10)}
-                        totalPages={0}
-                        hasNextPage={false}
-                      />
-                    </AnimeRecommendations>
-                  </>
-                )}
-              </p>
-            </AnimeInfoText>
+            {animeInfo && animeInfo.relations.length > 0 && (
+              <>
+                <strong>Seasons/Related: </strong>
+                <AnimeRelations>
+                  <CardGrid
+                    animeData={animeInfo.relations
+                      .filter((relation: any) =>
+                        [
+                          "OVA",
+                          "SPECIAL",
+                          "TV",
+                          "MOVIE",
+                          "ONA",
+                          "NOVEL",
+                        ].includes(relation.type)
+                      )
+                      .slice(0, 6)}
+                    totalPages={0}
+                    hasNextPage={false}
+                  />
+                </AnimeRelations>
+              </>
+            )}
           </AnimeInfoContainer3>
         )}
-      </DataThing>
+        {animeInfo && (
+          <AnimeInfoContainer4>
+            {animeInfo && animeInfo.recommendations.length > 0 && (
+              <>
+                <strong>Recommendations: </strong>
+                <AnimeRecommendations>
+                  <CardGrid
+                    animeData={animeInfo.recommendations
+                      .filter((recommendation: any) =>
+                        [
+                          "OVA",
+                          "SPECIAL",
+                          "TV",
+                          "MOVIE",
+                          "ONA",
+                          "NOVEL",
+                        ].includes(recommendation.type)
+                      )
+                      .slice(0, 6)}
+                    totalPages={0}
+                    hasNextPage={false}
+                  />
+                </AnimeRecommendations>
+              </>
+            )}
+          </AnimeInfoContainer4>
+        )}
+      </AnimeInfoContainers>
     </WatchContainer>
   );
 };

@@ -41,7 +41,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   top: 50%;
   left: 50%;
   padding: 0.7rem 0.8rem;
-  transform: translate(-50%, -50%) scaleX(1.1);
+  transform: translate(-50%, -50%) scaleX(1);
   visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
   transition: background-color 0.3s ease, transform 0.2s ease-in-out; // Define the transition in the default state
 
@@ -53,7 +53,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   &:hover {
     /* color: var(--primary-accent-bg); */
     background-color: var(--primary-accent-bg);
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.1);
   }
 `;
 
