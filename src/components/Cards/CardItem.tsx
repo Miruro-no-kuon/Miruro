@@ -93,7 +93,7 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
       // In a real application, this might be replaced with an API call
       const timer = setTimeout(() => {
         setLoading(false); // Set loading to false after data is "loaded"
-      }, 500); // Simulate a loading time
+      }, 50); // Simulate a loading time
 
       return () => clearTimeout(timer);
     }, [anime.id]); // Dependency array includes anime.id to re-run effect if it changes
@@ -143,7 +143,7 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
                 color={animeColor}
                 $ishovered={isHoveredInstant}
               />
-              <TitleComponent isHovered={isHoveredInstant} anime={anime} /> 
+              <TitleComponent isHovered={isHoveredInstant} anime={anime} />
             </StyledCardItem>
             {!isMobile && isHoveredDelayed && (
               <InfoPopupContent
