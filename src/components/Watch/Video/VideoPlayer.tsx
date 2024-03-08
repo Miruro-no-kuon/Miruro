@@ -474,6 +474,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         $isLoading={isLoading}
         $isVideoChanging={isVideoChanging}
         ref={videoPlayerWrapperRef}
+        onDoubleClick={handleDoubleClick}
       >
         {isLoading && !isVideoChanging ? (
           <Loader>

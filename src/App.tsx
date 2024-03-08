@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -16,23 +16,23 @@ import PolicyTerms from "./pages/PolicyTerms";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
+  const prevPathnameRef = useRef(pathname);
 
   useEffect(() => {
-    // Pattern to match the specific route to ignore
     const ignoreRoutePattern = /^\/watch\/[^/]+\/[^/]+\/[^/]+$/;
-
-    // Only scroll to top if the current pathname does not match the ignore pattern
-    if (!ignoreRoutePattern.test(pathname)) {
-      // Delay the scroll to top to allow content to render
-      const timer = setTimeout(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      }, 0); // Adjust the delay as needed
-
-      return () => clearTimeout(timer); // Cleanup the timer
+    // Only scroll to if pathname has changed and does not match the ignore pattern
+    if (
+      prevPathnameRef.current !== pathname &&
+      !ignoreRoutePattern.test(pathname)
+    ) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
+
+    // Update the previous pathname reference for the next render
+    prevPathnameRef.current = pathname;
   }, [pathname]);
 
   return null;

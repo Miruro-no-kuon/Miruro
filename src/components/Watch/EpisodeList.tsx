@@ -295,14 +295,23 @@ const EpisodeList: React.FC<Props> = ({
 
   // Filter episodes based on search input
   const filteredEpisodes = useMemo(() => {
-    return episodes.filter((episode) => {
-      const searchQuery = searchTerm.toLowerCase();
-      return (
+    const searchQuery = searchTerm.toLowerCase();
+    return episodes.filter(
+      (episode) =>
         episode.title?.toLowerCase().includes(searchQuery) ||
         episode.number.toString().includes(searchQuery)
-      );
-    });
+    );
   }, [episodes, searchTerm]);
+
+  // Apply the interval to the filtered episodes
+  const displayedEpisodes = useMemo(() => {
+    if (!searchTerm) {
+      // If there's no search term, apply interval to all episodes
+      return episodes.slice(interval[0], interval[1] + 1);
+    }
+    // If there is a search term, display filtered episodes without applying interval
+    return filteredEpisodes;
+  }, [episodes, filteredEpisodes, interval, searchTerm]);
 
   // Determine layout based on episodes and user preference
   useEffect(() => {
@@ -377,7 +386,7 @@ const EpisodeList: React.FC<Props> = ({
       </ControlsContainer>
 
       <EpisodeGrid $isRowLayout={isRowLayout}>
-        {filteredEpisodes.slice(interval[0], interval[1] + 1).map((episode) => {
+        {displayedEpisodes.map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
           const $isWatched = watchedEpisodes.some((e) => e.id === episode.id);
 

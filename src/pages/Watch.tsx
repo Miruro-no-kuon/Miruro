@@ -13,8 +13,8 @@ const LOCAL_STORAGE_KEYS = {
 
 const WatchContainer = styled.div`
   //just comment these two lines if you dont want margin while developing.
-  margin-left: 10rem;
-  margin-right: 10rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
   @media (max-width: 1500px) {
     margin-left: 0rem;
     margin-right: 0rem;
@@ -369,9 +369,15 @@ const Watch: React.FC = () => {
         if (isMounted && animeData) {
           const transformedEpisodes = animeData.map((ep: Episode) => ({
             id: ep.id,
-            number: ep.number,
             title: ep.title,
             image: ep.image,
+            // Convert decimal episode numbers to dash-separated format do avoid crashing.
+            number:
+              ep.number % 1 === 0
+                ? ep.number
+                : `${Math.floor(ep.number)}-${
+                    ep.number.toString().split(".")[1]
+                  }`,
           }));
 
           setEpisodes(transformedEpisodes);
@@ -683,153 +689,164 @@ const Watch: React.FC = () => {
             </AnimeInfoText>
           </AnimeInfoContainer>
         )}
-        {animeInfo && (
-          <AnimeInfoContainer2>
-            <AnimeInfoText>
-              <p>
-                Genres: <strong>{animeInfo.genres.join(", ")}</strong>
-              </p>
-              <p>
-                Date aired:{" "}
-                <strong>
-                  {getDateString(animeInfo.startDate)}
-                  {animeInfo.endDate
-                    ? ` to ${
-                        animeInfo.endDate.month && animeInfo.endDate.year
-                          ? getDateString(animeInfo.endDate)
-                          : "?"
-                      }`
-                    : animeInfo.status === "Ongoing"
-                    ? ""
-                    : " to ?"}
-                </strong>
-              </p>
-
-              {/* <p>
-                <strong>Start Date: </strong>
-                {animeInfo.startDate.month}-{animeInfo.startDate.year}
-                <strong> || End Date: </strong>
-                {animeInfo.endDate?.month && animeInfo.endDate?.year
-                  ? `${animeInfo.endDate.month}-${animeInfo.endDate.year}`
-                  : "Ongoing"}
-              </p> */}
-              <p>
-                Studios: <strong>{animeInfo.studios}</strong>
-              </p>
-              <p>
+        {animeInfo &&
+          (animeInfo.genres.length > 0 ||
+            animeInfo.startDate ||
+            animeInfo.endDate ||
+            animeInfo.studios ||
+            animeInfo.trailer ||
+            animeInfo.description ||
+            (animeInfo.characters && animeInfo.characters.length > 0)) && (
+            <AnimeInfoContainer2>
+              <AnimeInfoText>
+                {animeInfo.genres.length > 0 && (
+                  <p>
+                    Genres: <strong>{animeInfo.genres.join(", ")}</strong>
+                  </p>
+                )}
+                {animeInfo.startDate && (
+                  <p>
+                    Date aired:{" "}
+                    <strong>
+                      {getDateString(animeInfo.startDate)}
+                      {animeInfo.endDate
+                        ? ` to ${
+                            animeInfo.endDate.month && animeInfo.endDate.year
+                              ? getDateString(animeInfo.endDate)
+                              : "?"
+                          }`
+                        : animeInfo.status === "Ongoing"
+                        ? ""
+                        : " to ?"}
+                    </strong>
+                  </p>
+                )}
+                {animeInfo.studios && (
+                  <p>
+                    Studios: <strong>{animeInfo.studios}</strong>
+                  </p>
+                )}
                 {animeInfo.trailer && (
-                  <ShowTrailerButton onClick={toggleTrailer}>
-                    {showTrailer ? "Hide Trailer" : "Show Trailer"}
-                  </ShowTrailerButton>
-                )}
-
-                {showTrailer && (
-                  <VideoTrailer>
-                    <IframeTrailer
-                      src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </VideoTrailer>
-                )}
-                <DescriptionText>
-                  <strong>Description: </strong>
-                  {isDescriptionExpanded
-                    ? removeHTMLTags(animeInfo.description || "")
-                    : `${removeHTMLTags(animeInfo.description || "").substring(
-                        0,
-                        300
-                      )}...`}
-                  <br></br>
-                  <br></br>
-                  <ShowMoreButton onClick={toggleDescription}>
-                    {isDescriptionExpanded ? "Show Less" : "Show More"}
-                  </ShowMoreButton>
-                </DescriptionText>
-                {showCharacters && (
                   <>
-                    <strong>Characters: </strong>
-                    <AnimeCharacterContainer>
-                      {animeInfo.characters
-                        .filter(
-                          (character: any) =>
-                            character.role === "MAIN" ||
-                            character.role === "SUPPORTING"
-                        )
-                        .map((character: any) => (
-                          <CharacterCard
-                            key={character.id}
-                            style={{ textAlign: "center" }}
-                          >
-                            <CharacterImages
-                              src={character.image}
-                              alt={character.name.full}
-                            />
-                            <CharacterName>{character.name.full}</CharacterName>
-                          </CharacterCard>
-                        ))}
-                    </AnimeCharacterContainer>
+                    <ShowTrailerButton onClick={toggleTrailer}>
+                      {showTrailer ? "Hide Trailer" : "Show Trailer"}
+                    </ShowTrailerButton>
+                    {showTrailer && (
+                      <VideoTrailer>
+                        <IframeTrailer
+                          src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
+                          title="YouTube video player"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </VideoTrailer>
+                    )}
                   </>
                 )}
-              </p>
-            </AnimeInfoText>
-          </AnimeInfoContainer2>
-        )}
-        {animeInfo && (
-          <AnimeInfoContainer3>
-            {animeInfo && animeInfo.relations.length > 0 && (
-              <>
-                <strong>Seasons/Related: </strong>
-                <AnimeRelations>
-                  <CardGrid
-                    animeData={animeInfo.relations
-                      .filter((relation: any) =>
-                        [
-                          "OVA",
-                          "SPECIAL",
-                          "TV",
-                          "MOVIE",
-                          "ONA",
-                          "NOVEL",
-                        ].includes(relation.type)
-                      )
-                      .slice(0, 6)}
-                    totalPages={0}
-                    hasNextPage={false}
-                  />
-                </AnimeRelations>
-              </>
-            )}
-          </AnimeInfoContainer3>
-        )}
-        {animeInfo && (
-          <AnimeInfoContainer4>
-            {animeInfo && animeInfo.recommendations.length > 0 && (
-              <>
-                <strong>Recommendations: </strong>
-                <AnimeRecommendations>
-                  <CardGrid
-                    animeData={animeInfo.recommendations
-                      .filter((recommendation: any) =>
-                        [
-                          "OVA",
-                          "SPECIAL",
-                          "TV",
-                          "MOVIE",
-                          "ONA",
-                          "NOVEL",
-                        ].includes(recommendation.type)
-                      )
-                      .slice(0, 6)}
-                    totalPages={0}
-                    hasNextPage={false}
-                  />
-                </AnimeRecommendations>
-              </>
-            )}
-          </AnimeInfoContainer4>
-        )}
+                {animeInfo.description && (
+                  <DescriptionText>
+                    <strong>Description: </strong>
+                    {isDescriptionExpanded
+                      ? removeHTMLTags(animeInfo.description || "")
+                      : `${removeHTMLTags(
+                          animeInfo.description || ""
+                        ).substring(0, 300)}...`}
+                    <br></br>
+                    <br></br>
+                    <ShowMoreButton onClick={toggleDescription}>
+                      {isDescriptionExpanded ? "Show Less" : "Show More"}
+                    </ShowMoreButton>
+                  </DescriptionText>
+                )}
+                {animeInfo.characters &&
+                  animeInfo.characters.length > 0 &&
+                  showCharacters && (
+                    <>
+                      <strong>Characters: </strong>
+                      <AnimeCharacterContainer>
+                        {animeInfo.characters
+                          .filter(
+                            (character: any) =>
+                              character.role === "MAIN" ||
+                              character.role === "SUPPORTING"
+                          )
+                          .map((character: any) => (
+                            <CharacterCard
+                              key={character.id}
+                              style={{ textAlign: "center" }}
+                            >
+                              <CharacterImages
+                                src={character.image}
+                                alt={character.name.full}
+                              />
+                              <CharacterName>
+                                {character.name.full}
+                              </CharacterName>
+                            </CharacterCard>
+                          ))}
+                      </AnimeCharacterContainer>
+                    </>
+                  )}
+              </AnimeInfoText>
+            </AnimeInfoContainer2>
+          )}
+        {animeInfo &&
+          animeInfo.relations.filter((relation: any) =>
+            ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+              relation.type
+            )
+          ).length > 0 && (
+            <AnimeInfoContainer3>
+              <strong>Seasons/Related: </strong>
+              <AnimeRelations>
+                <CardGrid
+                  animeData={animeInfo.relations
+                    .filter((relation: any) =>
+                      [
+                        "OVA",
+                        "SPECIAL",
+                        "TV",
+                        "MOVIE",
+                        "ONA",
+                        "NOVEL",
+                      ].includes(relation.type)
+                    )
+                    .slice(0, 6)}
+                  totalPages={0}
+                  hasNextPage={false}
+                />
+              </AnimeRelations>
+            </AnimeInfoContainer3>
+          )}
+
+        {animeInfo &&
+          animeInfo.recommendations.filter((recommendation: any) =>
+            ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+              recommendation.type
+            )
+          ).length > 0 && (
+            <AnimeInfoContainer4>
+              <strong>Recommendations: </strong>
+              <AnimeRecommendations>
+                <CardGrid
+                  animeData={animeInfo.recommendations
+                    .filter((recommendation: any) =>
+                      [
+                        "OVA",
+                        "SPECIAL",
+                        "TV",
+                        "MOVIE",
+                        "ONA",
+                        "NOVEL",
+                      ].includes(recommendation.type)
+                    )
+                    .slice(0, 6)}
+                  totalPages={0}
+                  hasNextPage={false}
+                />
+              </AnimeRecommendations>
+            </AnimeInfoContainer4>
+          )}
       </AnimeInfoContainers>
     </WatchContainer>
   );
