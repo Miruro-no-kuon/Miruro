@@ -1,7 +1,22 @@
 import React from "react";
 import useKeyboardShortcut from "../../../hooks/useKeyboardShortcut";
 
-const KeyboardShortcutsHandler = ({
+interface KeyboardShortcutsHandlerProps {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  togglePlayPause: () => void;
+  toggleFullscreen: () => void;
+  toggleMute: () => void;
+  increaseVolume: () => void;
+  decreaseVolume: () => void;
+  seekBackward: () => void;
+  seekForward: () => void;
+  toggleSubtitles: () => void;
+  cycleSubtitleTracks: () => void;
+  jumpToPercentage: (percentage: number) => void;
+  changePlaybackSpeed: (speed: number) => void;
+}
+
+const KeyboardShortcutsHandler: React.FC<KeyboardShortcutsHandlerProps> = ({
   videoRef,
   togglePlayPause,
   toggleFullscreen,
@@ -17,10 +32,30 @@ const KeyboardShortcutsHandler = ({
 }) => {
   const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-  const shortcuts = {
+  const handleArrowKey = (event: KeyboardEvent) => {
+    // Prevent default arrow key behavior if video is focused
+    if (
+      event.key.startsWith("Arrow") &&
+      document.activeElement === videoRef.current
+    ) {
+      event.preventDefault();
+    }
+  };
+
+  const shortcuts: Record<string, () => void> = {
     k: togglePlayPause,
-    j: seekBackward,
-    l: seekForward,
+    j: () => {
+      const video = videoRef.current;
+      if (video) {
+        video.currentTime -= 10;
+      }
+    },
+    l: () => {
+      const video = videoRef.current;
+      if (video) {
+        video.currentTime += 10;
+      }
+    },
     " ": togglePlayPause,
     f: toggleFullscreen,
     m: toggleMute,
@@ -30,22 +65,17 @@ const KeyboardShortcutsHandler = ({
     ArrowLeft: seekBackward,
     c: toggleSubtitles,
     t: cycleSubtitleTracks,
-
-    ...Array.from({ length: 10 }, (_, i) => ({
-      [`${i}`]: () => jumpToPercentage(i * 10),
-    })),
-
     ">": () => {
-      const currentSpeed = videoRef.current.playbackRate;
-      const currentIndex = speeds.indexOf(currentSpeed);
+      const currentSpeed = videoRef.current?.playbackRate;
+      const currentIndex = currentSpeed ? speeds.indexOf(currentSpeed) : -1;
       if (currentIndex < speeds.length - 1) {
         const newSpeed = speeds[currentIndex + 1];
         changePlaybackSpeed(newSpeed);
       }
     },
     "<": () => {
-      const currentSpeed = videoRef.current.playbackRate;
-      const currentIndex = speeds.indexOf(currentSpeed);
+      const currentSpeed = videoRef.current?.playbackRate;
+      const currentIndex = currentSpeed ? speeds.indexOf(currentSpeed) : -1;
       if (currentIndex > 0) {
         const newSpeed = speeds[currentIndex - 1];
         changePlaybackSpeed(newSpeed);
@@ -53,9 +83,34 @@ const KeyboardShortcutsHandler = ({
     },
   };
 
+  // Dynamically assign number keys for percentage-based seeking
+  for (let i = 0; i <= 9; i++) {
+    shortcuts[i.toString()] = () => jumpToPercentage(i * 10);
+  }
+
   Object.entries(shortcuts).forEach(([key, callback]) => {
-    useKeyboardShortcut(key, callback, videoRef);
+    useKeyboardShortcut(key, callback, videoRef, { when: "keydown" });
+    // Also listen for capitalized letter shortcuts when Caps Lock is on
+    if (key.length === 1 && key.toUpperCase() !== key) {
+      useKeyboardShortcut(
+        key.toUpperCase(),
+        callback,
+        videoRef,
+        { when: "keydown" },
+        (event) => event.getModifierState("CapsLock")
+      );
+    }
   });
+
+  // Listen for arrow key events to prevent default scrolling if the video is focused
+  document.addEventListener("keydown", handleArrowKey);
+
+  // Cleanup function to remove event listener when component unmounts
+  React.useEffect(() => {
+    return () => {
+      document.removeEventListener("keydown", handleArrowKey);
+    };
+  }, []);
 
   return null;
 };

@@ -1,9 +1,4 @@
-## ⚠️ Heads Up:  
-### `JS` to `TS` Transition Branch Alert
 
-🔷 Hey, just so you know, this branch is in the middle of a big switcheroo from 📜 **JavaScript** to **TypeScript**. It's a work in progress, so expect some hiccups and weird stuff.
-
-🚧 Thanks for rolling with us while we jazz up this template. Appreciate your patience!
 
 <p align="center">
   <a href="https://www.miruro.com" target="_blank">
@@ -12,7 +7,8 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.com</a>
+    MIRURO<a href="https://www.miruro.com">.COM</a> ||
+    MIRURO<a href="https://www.miruro.tv">.TV</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
   </p>
@@ -26,9 +22,13 @@
   <a href="#"><img src="https://img.shields.io/badge/cloudflare-white.svg?style=for-the-badge&logo=cloudflare&logoColor=orange"/></a>
 </p>
 
+### ⚠️ Heads Up:
+####  `JS` to `TS` codebase transition alert; It's a work in progress, so expect some hiccups and weird stuff :)
+
+
 ## What is Miruro?
 
-<p><a href="https://www.miruro.com">Miruro</a> is an anime streaming website made possible by the <a href="https://github.com/consumet">Consumet API</a>, built with  <a href="https://react.dev/">React⚛️</a> and <a href="https://vitejs.dev/">Vite⚡</a>, featuring a sleek and modern design. It offers Anilist integration to help you keep track of your favorite anime series. Your Website Name is entirely free and does not display any ads, making it a great option for those who want an uninterrupted viewing experience.</p>
+<p><a href="https://www.miruro.com">Miruro</a> is a cutting-edge anime streaming platform powered by the <a href="https://github.com/consumet">Consumet API</a>. Crafted using <a href="https://react.dev/">React</a> and <a href="https://vitejs.dev/">Vite</a>, it boasts a stylish and contemporary interface. Our platform, Miruro.com, is completely ad-free, ensuring an immersive viewing journey without interruptions.</p>
 
 ## Features 🪴
 
@@ -71,7 +71,7 @@
 
 ### Before starting installation ⚠️
 
-> Before we proceed with the installation, we strongly recommend using `Bun` for a seamless and efficient setup. While `Node.js` is an alternative, Bun provides a comprehensive solution tailored for our project.
+> Before we proceed with the installation, we strongly recommend using `bun` for a seamless and efficient setup. While `Node.js` is an alternative, Bun provides a comprehensive solution tailored for our project.
 
 ### 1. Clone this repository using
 
@@ -176,7 +176,7 @@ If you have any questions or feedback, please reach out to us at [miruro@proton.
 
 ## Support & Contributions 🤲
 
-⭐️ [Star this project](https://github.com/Miruro-no-kuon/Miruro-no-Kuon) ⭐️
+⭐️ [Star this project](https://github.com/Miruro-no-kuon/Miruro) ⭐️
 
 Feel free to contribute to this project! Whether you're an experienced developer or have been in the field for a while, your help is valuable.
 

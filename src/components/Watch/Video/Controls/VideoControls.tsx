@@ -308,11 +308,11 @@ const VideoControls: React.FC<VideoControlsProps> = React.memo(
               icon="forward_10"
               tooltip="+10s"
             />
-            {/* <SubtitlesButton
+            <SubtitlesButton
               onClick={toggleSubtitles}
               icon={subtitlesEnabled ? "closed_caption" : "closed_caption_off"}
               tooltip={subtitlesEnabled ? "Captions On" : "Captions Off"}
-            /> */}
+            />
             <div ref={settingsRef}>
               <SettingsButton
                 icon="settings"

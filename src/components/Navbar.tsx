@@ -64,7 +64,7 @@ const LogoLink = styled(Link)`
   transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 
   &:hover {
-    color: #someHoverColor; // Replace with your hover color
+    color: black; // Replace with your hover color
     transform: scale(1.05);
   }
 `;
@@ -314,6 +314,9 @@ const Navbar = () => {
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       navigateWithQuery(search.searchQuery);
+      if (inputRef.current) {
+        inputRef.current.blur(); // Add this line to blur the input
+      }
     }
   };
 

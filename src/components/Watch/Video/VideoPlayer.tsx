@@ -19,6 +19,9 @@ const VideoPlayerContainer = styled.div`
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  @media (max-width: 1000px) {
+    border: 0; // no border on phone
+  }
 `;
 
 type VideoPlayerWrapperProps = {
@@ -29,21 +32,18 @@ type VideoPlayerWrapperProps = {
 
 const LargePlayIcon = styled.div<LargePlayIconProps>`
   position: absolute;
-  border-radius: 0.8rem; //var(--global-border-radius);
+  border-radius: 3rem; //var(--global-border-radius);
   z-index: 2;
-  background-color: rgba(24, 24, 24, 0.836);
-  opacity: 0.5;
+  background-color: rgba(24, 24, 24, 0.85);
   background-size: cover; // Optional: if you want the image to cover the whole area
   background-position: center; // Optional: for centering the image
-  box-shadow: 0 0 10px rgba(0, 0, 0, 3.5);
   color: white;
   top: 50%;
   left: 50%;
-  padding: 0.3rem 1rem;
-  transform: translate(-50%, -50%) scaleX(1.1);
-  opacity: 1; /* Set opacity to 1 */
+  padding: 0.7rem 0.8rem;
+  transform: translate(-50%, -50%) scaleX(1);
   visibility: ${({ $isPlaying }) => ($isPlaying ? "hidden" : "visible")};
-  transition: transform 0.2s ease-in-out;
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out; // Define the transition in the default state
 
   ${({ $isPlaying }) =>
     !$isPlaying &&
@@ -53,7 +53,7 @@ const LargePlayIcon = styled.div<LargePlayIconProps>`
   &:hover {
     /* color: var(--primary-accent-bg); */
     background-color: var(--primary-accent-bg);
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.1);
   }
 `;
 
@@ -70,6 +70,7 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
       : "pointer"};
   &:hover ${LargePlayIcon} {
     background-color: var(--primary-accent-bg);
+    // No need to repeat the transition here if it's already defined in LargePlayIcon
   }
 `;
 
@@ -473,6 +474,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         $isLoading={isLoading}
         $isVideoChanging={isVideoChanging}
         ref={videoPlayerWrapperRef}
+        onDoubleClick={handleDoubleClick}
       >
         {isLoading && !isVideoChanging ? (
           <Loader>

@@ -108,7 +108,7 @@ async function fetchFromProxy(url) {
 
 //? Consumet* | miruro-api.vercel.app/
 
-export async function fetchAnimeData(
+export async function fetchAdvancedSearch(
   searchQuery = "",
   page = 1,
   perPage = 16,
@@ -167,7 +167,7 @@ export async function fetchAnimeData(
   }
 }
 
-export async function fetchAnimeInfo(animeId, provider = "gogoanime") {
+export async function fetchAnimeData(animeId, provider = "gogoanime") {
   const cacheKey = generateCacheKey("animeInfo", animeId, provider);
   const cachedData = cachedResults.get(cacheKey);
   if (cachedData) {
@@ -192,7 +192,7 @@ export async function fetchTopAnime(page = 1, perPage = 16) {
     type: "ANIME",
     sort: ["SCORE_DESC"],
   };
-  return fetchAnimeData("", page, perPage, options);
+  return fetchAdvancedSearch("", page, perPage, options);
 }
 
 export async function fetchTrendingAnime(page = 1, perPage = 16) {
@@ -264,7 +264,7 @@ export async function fetchWatchInfo(episodeId) {
 
 //? Anify* | localhost:3060/
 
-export async function fetchAnimeInfo2(id, fields = []) {
+export async function fetchAnimeInfo(id, fields = []) {
   const cacheKey = generateCacheKey("animeInfo", id, fields.join("-"));
   const cachedData = cachedResults.get(cacheKey);
   if (cachedData) {
