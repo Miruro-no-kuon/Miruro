@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@apollo/client": "^3.9.4",
-    "@cloudflare/workers-types": "2023-07-01",
     "@cloudflare/wrangler": "^1.21.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
