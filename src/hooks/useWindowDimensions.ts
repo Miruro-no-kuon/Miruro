@@ -25,7 +25,7 @@ export function useWindowDimensions() {
   return windowDimensions;
 }
 
-export function getElementPosition(element) {
+export function getElementPosition(element:any) {
   const rect = element.getBoundingClientRect();
   const { scrollX, scrollY } = window;
 

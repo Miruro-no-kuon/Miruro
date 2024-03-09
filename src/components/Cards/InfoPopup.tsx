@@ -120,7 +120,7 @@ const GenreButton = styled.div<{ color?: string }>`
       ? darken(0.35, props.color || "var(--global-text)")
       : lighten(0.35, props.color || "var(--global-text)");
   }};
-}`;
+`;
 
 // Function to strip HTML tags
 const stripHtmlTags = (html: string) => {

@@ -32,7 +32,7 @@ interface TabProps {
 const Tab = styled.button<TabProps>`
   background: transparent;
   margin: 0 1rem 0 0;
-  padding: 0.5rem;StyledCardGrid
+  padding: 0.5rem;
   border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
@@ -51,8 +51,8 @@ const Tab = styled.button<TabProps>`
     height: 2px;
     background-color: var(--primary-accent-bg);
     transform-origin: left center;
-    transform: scaleX(0);
     transition: transform 0.2s ease;
+    /* Removed duplicate transform property */
     transform: scaleX(${({ $isActive }) => ($isActive ? 1 : 0)});
   }
 
@@ -63,7 +63,7 @@ const Tab = styled.button<TabProps>`
   }
 
   border-bottom: ${({ $isActive }) =>
-    $isActive ? "2px solid transparent" : "none"};
+    $isActive ? "2px solid var(--primary-accent-bg)" : "none"};
 
   &:focus {
     outline: none;

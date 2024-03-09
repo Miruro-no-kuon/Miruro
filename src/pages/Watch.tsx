@@ -814,6 +814,7 @@ const Watch: React.FC = () => {
                     .slice(0, 6)}
                   totalPages={0}
                   hasNextPage={false}
+                  onLoadMore={() => {}}
                 />
               </AnimeRelations>
             </AnimeInfoContainer3>
@@ -843,6 +844,7 @@ const Watch: React.FC = () => {
                     .slice(0, 6)}
                   totalPages={0}
                   hasNextPage={false}
+                  onLoadMore={() => {}}
                 />
               </AnimeRecommendations>
             </AnimeInfoContainer4>

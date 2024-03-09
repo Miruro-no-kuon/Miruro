@@ -118,8 +118,9 @@ const SlideTitle = styled.h2`
 
 const SlideDescription = styled.p<{
   $maxLines: boolean;
-}>`  color: var(--white, #ccc);
-  background: var(--global-primary-bg)
+}>`
+  color: var(--white, #ccc);
+  background: transparent;
   font-size: clamp(0.9rem, 1.5vw, 1rem);
   line-height: 1;
   margin-bottom: 0;
