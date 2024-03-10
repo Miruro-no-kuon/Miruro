@@ -24,7 +24,7 @@ const SearchResults = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(1);
-  const delayTimeout = useRef<NodeJS.Timeout | null>(null);
+  const delayTimeout = useRef<number | null>(null);
   const lastCachedPage = useRef(0);
   const [, /* loadingStates */ setLoadingStates] = useState<boolean[]>([]);
 
@@ -54,16 +54,7 @@ const SearchResults = () => {
     }
 
     try {
-      const fetchedData = await fetchAdvancedSearch(
-        query,
-        page,
-        16,
-        (isCached: boolean) => {
-          if (!isCached) {
-            preloadNextPage(page + 1);
-          }
-        }
-      );
+      const fetchedData = await fetchAdvancedSearch(query, page, 16);
 
       if (page === 1) {
         setAnimeData(fetchedData.results);
@@ -91,29 +82,32 @@ const SearchResults = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const preloadNextPage = (nextPage: number) => {
+  const preloadNextPage = async (nextPage: number) => {
     if (
       nextPage <= totalPages &&
       nextPage > lastCachedPage.current &&
       hasNextPage
     ) {
-      fetchAdvancedSearch(query, nextPage, 25, (isCached: boolean) => {
-        if (!isCached) {
+      try {
+        const fetchedData = await fetchAdvancedSearch(query, nextPage, 25);
+        if (!fetchedData.cached) {
           lastCachedPage.current = nextPage;
           preloadNextPage(nextPage + 1);
         }
-      });
+      } catch (error) {
+        console.error("Error preloading next page:", error);
+      }
     }
   };
 
   useEffect(() => {
-    if (delayTimeout.current) clearTimeout(delayTimeout.current);
-    delayTimeout.current = setTimeout(() => {
+    if (delayTimeout.current !== null) clearTimeout(delayTimeout.current);
+    delayTimeout.current = window.setTimeout(() => {
       initiatefetchAdvancedSearch();
     }, 0);
 
     return () => {
-      if (delayTimeout.current) clearTimeout(delayTimeout.current);
+      if (delayTimeout.current !== null) clearTimeout(delayTimeout.current);
     };
   }, [query, page]);
 

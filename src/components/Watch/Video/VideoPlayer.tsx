@@ -7,13 +7,11 @@ import pikachuLoader from "/src/assets/load-gif-Pikachu_Runnin.gif";
 import useHLS from "./hooks/useHLS";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { ring2 } from "ldrs";
-import VideoPlayerSkeleton from "../../../components/Skeletons/VideoPlayerSkeleton";
-
 ring2.register();
 
 const VideoPlayerContainer = styled.div`
   background: var(--global-secondary-bg);
-  border-radius: var(--global-border-radius); //same as video
+  border-radius: var(--global-border-radius);
   user-select: none;
   border: 0.6rem solid var(--global-secondary-bg);
   -webkit-user-select: none;
@@ -28,11 +26,12 @@ type VideoPlayerWrapperProps = {
   $isCursorIdle: boolean;
   $isLoading: boolean;
   $isVideoChanging: boolean;
+  onDoubleClick: (event: MouseEvent) => void;
 };
 
 const LargePlayIcon = styled.div<LargePlayIconProps>`
   position: absolute;
-  border-radius: 3rem; //var(--global-border-radius);
+  border-radius: 50%; //var(--global-border-radius);
   z-index: 2;
   background-color: rgba(24, 24, 24, 0.85);
   background-size: cover; // Optional: if you want the image to cover the whole area
@@ -141,6 +140,7 @@ const BannerOverlay = styled.div<BannerOverlayProps>`
   width: 100%;
   height: 100%;
   background-image: url(${({ $bannerImage }) => $bannerImage});
+  border-radius: var(--global-border-radius);
   background-size: cover; // Adjust this as needed
   background-position: center;
   z-index: 1; // Make sure this is below the play button but above the video
@@ -462,10 +462,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       togglePlayPause();
     }
   };
-
-  if (isLoading) {
-    return <VideoPlayerSkeleton />;
-  }
 
   return (
     <VideoPlayerContainer id="video-player-wrapper" ref={playerWrapperRef}>

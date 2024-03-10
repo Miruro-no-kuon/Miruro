@@ -62,9 +62,6 @@ const Tab = styled.button<TabProps>`
     transform: scaleX(1);
   }
 
-  border-bottom: ${({ $isActive }) =>
-    $isActive ? "2px solid var(--primary-accent-bg)" : "none"};
-
   &:focus {
     outline: none;
   }
@@ -91,7 +88,20 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
-  const [activeTab, setActiveTab] = useState("trending");
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedData = localStorage.getItem("home tab");
+    if (savedData) {
+      const { tab, timestamp } = JSON.parse(savedData);
+      const now = new Date().getTime();
+      // Check if the saved tab is older than 24 hours
+      if (now - timestamp < 5 * 1000) {
+        return tab;
+      } else {
+        localStorage.removeItem("home tab"); // Clear expired data
+      }
+    }
+    return "trending"; // Default tab if no/invalid saved data
+  });
   const [trendingAnime, setTrendingAnime] = useState([]);
   const [popularAnime, setPopularAnime] = useState([]);
   const [topAnime, setTopAnime] = useState([]);
@@ -132,10 +142,13 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`Changing title because activeTab is now: ${activeTab}`);
-    document.title = `Miruro - ${activeTab
-      .toLowerCase()
-      .replace(/\b\w/g, (c) => c.toUpperCase())}`;
+    document.title = `Miruro | Blazing Fast HD Anime Streaming`;
+  }, [activeTab]);
+
+  useEffect(() => {
+    const now = new Date().getTime();
+    const tabData = JSON.stringify({ tab: activeTab, timestamp: now });
+    localStorage.setItem("home tab", tabData);
   }, [activeTab]);
 
   const renderCardGrid = (

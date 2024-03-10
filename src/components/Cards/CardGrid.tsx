@@ -154,50 +154,19 @@ export const StyledCardGrid = styled.div`
     gap: 1.5rem;
   }
 
+  @media (max-width: 1000px) {
+    gap: 1rem;
+  }
+
   @media (max-width: 800px) {
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 1rem;
   }
+
+  @media (max-width: 450px) {
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+  }
 `;
-
-/* const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`; */
-
-/* const LoadMoreButton = styled.button`
-  display: flex;
-  align-items: center;
-  opacity: 0;
-  animation: ${fadeIn} 0.5s ease-in-out forwards;
-  justify-content: center;
-  text-align: center;
-  color: var(--global-card-button-shadow);
-  border: 1px solid var(--global-card-button-shadow);
-  border-radius: var(--global-border-radius);
-  margin: 0 0 2.5rem 0;
-  padding: 1rem 1rem;
-  background: transparent;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s ease;
-
-  &:hover {
-    border: 1px solid var(--global-text);
-    color: var(--global-text);
-  }
-
-  .icon {
-    margin-right: 0.8rem;
-  }
-`; */
-
-/* const LoadMoreText = styled.span`
-  font-size: 1rem;
-`; */
 
 export default CardGrid;

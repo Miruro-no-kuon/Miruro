@@ -13,6 +13,7 @@ import SearchResults from "./pages/SearchResults";
 import PageNotFound from "./pages/404";
 import About from "./pages/About";
 import PolicyTerms from "./pages/PolicyTerms";
+import ShortcutsPopup from "./components/ShortcutsPopup";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -25,10 +26,12 @@ function ScrollToTop() {
       prevPathnameRef.current !== pathname &&
       !ignoreRoutePattern.test(pathname)
     ) {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }, 100);
     }
 
     // Update the previous pathname reference for the next render
@@ -56,6 +59,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <ShortcutsPopup />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -67,7 +71,7 @@ function App() {
           element={<Watch />}
         />
         <Route path="/about" element={<About />} />
-        <Route path="/policyterms" element={<PolicyTerms />} />
+        <Route path="/pptos" element={<PolicyTerms />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />

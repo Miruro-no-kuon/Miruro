@@ -1,149 +1,156 @@
 import styled from "styled-components";
-import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
 
-const theme = {
-  primaryBackgroundColor: "var(--global-secondary-bg)",
-  textColor: "var(--global-text)",
-  buttonTextColor: "var(--global-button-text)",
-  footerLogo: "var(--logo-transparent)",
-};
-
-const PageWrapper = styled.div`
-  padding: 1rem;
-  padding-bottom: 0rem;
+// Styled components
+const Wrapper = styled.div`
+  padding-bottom: 0;
   margin-top: 1.5rem;
-`;
+  transition: 0.1s ease-in-out;
 
-const FooterContainer = styled.footer`
-  color: ${theme.textColor};
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-top: 0.125rem solid ${theme.primaryBackgroundColor};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: 550px) {
-    flex-direction: column;
-    text-align: center;
+  @media (max-width: 1000px) {
+    padding: 1rem;
   }
 `;
 
-const StyledLinkList = styled.div`
+const Container = styled.footer`
+  color: var(--global-text);
+  padding: 1rem 0;
+  border-top: 0.125rem solid var(--global-secondary-bg);
   display: flex;
-  gap: 1rem;
-  margin: auto; /* Center the content horizontally */
-`;
-
-const FooterLink = styled(Link)`
-  padding-top: 1rem;
-  color: grey;
-  text-decoration: none;
-  transition: color 0.1s ease-in-out;
-
-  &:hover {
-    color: ${theme.buttonTextColor};
-    text-decoration: underline;
-  }
-`;
-
-const SocialIconsWrapper = styled.div`
-  padding-top: 1rem;
-  display: flex;
-  gap: 1rem;
+  flex-direction: column;
 `;
 
 const FooterLogoImage = styled.img`
-  max-width: 3rem;
-  content: ${theme.footerLogo};
+  width: 5rem;
+  content: var(--logo-transparent);
+  margin: 0 0 0.5rem -0.25rem;
   height: auto;
 `;
 
-const CopyrightText = styled.p`
-  text-align: center;
+const LinkContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0 0;
+`;
+
+const FooterLink = styled(Link)`
   color: grey;
-  font-size: 0.8rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.05s ease-in-out;
+
+  &:hover {
+    color: var(--global-text);
+  }
+`;
+
+const SocialMediaWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+`;
+
+const TextGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const HighLight = styled.p`
+  color: var(--global-text);
+  font-weight: 500;
+  display: inline;
+  font-size: 0.7rem;
+`;
+
+const Text = styled.div`
+  color: grey;
+  font-size: 0.7rem;
   margin: 0;
 `;
 
-const DisclaimerText = styled.p`
-  padding-top: 1rem;
-  text-align: center;
-  color: grey;
-  font-size: 0.8rem;
-  margin: 0;
+const SubText = styled(Text)`
+  font-size: 0.6rem;
 `;
 
-const ShareButton = styled.a`
+const IconButton = styled.a`
   display: inline-block;
   color: grey;
   text-decoration: none;
-  transition: 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 
   svg {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   &:hover {
     transform: scale(1.15);
-    color: ${theme.buttonTextColor};
-    text-decoration: underline;
+    color: var(--global-text);
   }
 `;
 
-const currentYear = new Date().getFullYear();
-
+// Footer component
 function Footer() {
   return (
-    <PageWrapper>
-      <FooterContainer>
-        <CopyrightText>
-          <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
-          <br></br>
-          &copy; {currentYear} Miruro no Kuon.
-        </CopyrightText>
-        <StyledLinkList>
-          <FooterLink to="About">About</FooterLink>
-          <FooterLink to="PolicyTerms">Policy</FooterLink>
-          <FooterLink to="PolicyTerms">Terms</FooterLink>
-        </StyledLinkList>
-        <SocialIconsWrapper>
-          <ShareButton
+    <Wrapper>
+      <Container>
+        <FooterLogoImage alt="Footer Logo" />
+        <TextGroup>
+          <SubText>
+            This site does not store any files on our server, we only link to
+            media hosted on third-party services.
+          </SubText>
+        </TextGroup>
+        <LinkContainer>
+          <FooterLink to="/about">About</FooterLink>
+          <FooterLink to="/pptos">Privacy Policy</FooterLink>
+          <FooterLink to="/pptos">Terms of Service</FooterLink>
+        </LinkContainer>
+        <LinkContainer>
+          <FooterLink to="/home">Home</FooterLink>
+        </LinkContainer>
+      </Container>
+      <Container>
+        <Text>
+          &copy; {new Date().getFullYear()} miruro.tv | Website Made by{" "}
+          <HighLight>Miruro no Kuon</HighLight>{" "}
+        </Text>
+
+        <SocialMediaWrapper>
+          <IconButton
             href="https://twitter.com/miruro_official"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaTwitter />
-          </ShareButton>
-          <ShareButton
+          </IconButton>
+          <IconButton
             href="https://discord.gg/4kfypZ96K4"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaDiscord />
-          </ShareButton>
-          <ShareButton
+          </IconButton>
+          <IconButton
             href="https://github.com/Miruro-no-kuon/Miruro-no-Kuon"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaGithub />
-          </ShareButton>
-          <ShareButton
+          </IconButton>
+          <IconButton
             href="https://www.reddit.com/r/miruro"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaReddit />
-          </ShareButton>
-        </SocialIconsWrapper>
-      </FooterContainer>
-      <DisclaimerText>
-        This site does not store any files on its server.
-      </DisclaimerText>
-    </PageWrapper>
+          </IconButton>
+        </SocialMediaWrapper>
+      </Container>
+    </Wrapper>
   );
 }
 

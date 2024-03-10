@@ -129,6 +129,14 @@ const Button = styled.span<{ $ishovered?: boolean; color?: string }>`
     color: ${({ $ishovered, color }) =>
       $ishovered ? color : "var(--global-button-text)"};
   }
+  @media (max-width: 1000px) {
+    font-size: 0.6rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.5rem;
+    gap: 2px;
+    padding: 3px;
+  }
 `;
 
 const Icon = styled.span<{ $ishovered?: boolean; color?: string }>`

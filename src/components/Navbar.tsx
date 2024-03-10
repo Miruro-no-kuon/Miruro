@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DropDownSearch from "./DropDownSearch";
+import { fetchAdvancedSearch } from "../hooks/useApi"; // Adjust the path as necessary
 import {
   faSun,
   faMoon,
@@ -10,36 +12,31 @@ import {
   faSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
-const colors = {
-  globalPrimaryBgTr: "var(--global-primary-bg-tr)",
-  globalText: "var(--global-text)",
-  globalInputDiv: "var(--global-input-div)",
-};
-
-const fadeInAnimation = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
+// Define keyframe animation
+const fadeInAnimation = (color: string) => keyframes`
+  from { background-color: transparent; }
+  to { background-color: ${color}; }
 `;
 
+// Styled components
 const StyledNavbar = styled.div`
   position: sticky;
   top: 0;
   height: 3.5rem;
   text-align: center;
-  margin-left: -2rem;
-  margin-right: -2rem;
-  padding: 0.25rem 2rem;
-  background-color: ${colors.globalPrimaryBgTr};
+  margin: 0 -2rem;
+  padding: 0.5rem 2rem 0 2rem;
+  background-color: var(--global-primary-bg-tr);
+  backdrop-filter: blur(10px);
   transform: translateY(0);
   z-index: 4;
   width: calc(100%);
-  animation: ${fadeInAnimation} 0.5s ease-out;
+  animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
-  @media (max-width: 768px) {
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-    padding: 0.25rem 0.5rem;
+  @media (max-width: 1000px) {
+    margin: 0 -0.5rem;
+    padding: 0.5rem 0.5rem 0 0.5rem;
   }
 `;
 
@@ -50,15 +47,13 @@ const TopContainer = styled.div`
   transition: 0.2s ease;
 `;
 
-const LogoLink = styled(Link)`
-  max-width: 7rem;
-  padding: 0;
+const LogoImg = styled(Link)`
+  width: 7rem;
   font-size: 1.25rem;
   font-weight: bold;
   margin-right: 1rem;
-  padding: 0.5rem 0;
   text-decoration: none;
-  color: ${colors.globalText};
+  color: var(--global-text);
   content: var(--logo-text-transparent);
   cursor: pointer;
   transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
@@ -71,14 +66,15 @@ const LogoLink = styled(Link)`
 
 const InputContainer = styled.div`
   display: flex;
-  flex: 1; // Take up remaining space next to the logo
+  flex: 1;
   max-width: 40%;
   height: 1rem;
   border: 1px solid var(--global-input-border);
   align-items: center;
   padding: 0.8rem;
   border-radius: var(--global-border-radius);
-  background-color: ${colors.globalInputDiv};
+  background-color: var(--global-input-div);
+  animation: ${fadeInAnimation("var(--global-input-div)")} 0.5s ease-out;
 
   @media (min-width: 1000px) {
     min-width: 25rem;
@@ -92,20 +88,16 @@ interface IconProps {
 
 const Icon = styled.div<IconProps>`
   margin-right: 0.7rem;
-  color: ${colors.globalText};
+  color: var(--global-text);
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
   font-size: ${({ $fontSize }) => $fontSize || "0.8rem"};
   transition: opacity 0.2s;
-
-  @media (max-width: 768px) {
-    display: none; /* Hide on mobile */
-  }
 `;
 
 const SearchInput = styled.input`
-  background: 0;
+  background: transparent;
   border: none;
-  color: ${colors.globalText};
+  color: var(--global-text);
   display: inline-block;
   font-size: 0.9rem;
   outline: 0;
@@ -122,7 +114,7 @@ interface ClearButtonProps {
 const ClearButton = styled.button<ClearButtonProps>`
   background: transparent;
   border: none;
-  color: ${colors.globalText};
+  color: var(--global-text);
   font-size: 1.1rem;
   cursor: pointer;
   opacity: ${({ $query }) => ($query ? 0.5 : 0)};
@@ -130,7 +122,7 @@ const ClearButton = styled.button<ClearButtonProps>`
   transition: color 0.2s, opacity 0.2s;
 
   &:hover {
-    color: ${colors.globalText};
+    color: var(--global-text);
     opacity: 1;
   }
 `;
@@ -138,11 +130,12 @@ const ClearButton = styled.button<ClearButtonProps>`
 const ThemeToggleBtn = styled.button`
   background: transparent;
   border: none;
-  color: ${colors.globalText};
+  border-radius: 0.2rem;
+  color: var(--global-text);
+  padding: 0.5rem;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-left: 1rem;
-  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
   transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
 
   &:hover {
@@ -156,10 +149,10 @@ interface SlashToggleBtnProps {
 
 const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
   background: transparent;
-  border: 2px solid ${colors.globalText};
+  border: 2px solid var(--global-text);
   border-radius: var(--global-border-radius);
   padding: 0.3rem;
-  color: ${colors.globalText};
+  color: var(--global-text);
   font-size: 0.5rem;
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
@@ -170,30 +163,8 @@ const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
     opacity: 1;
   }
 
-  @media (max-width: 768px) {
-    display: none; /* Hide on mobile */
-  }
-`;
-
-interface ClearButtonMobileProps {
-  $query: string;
-  $isMobile: boolean;
-}
-
-const ClearButtonMobile = styled.button<ClearButtonMobileProps>`
-  background: transparent;
-  border: none;
-  color: ${colors.globalText};
-  font-size: 1.1rem;
-  padding: 0.2rem; // Similarly, reduce padding for mobile button
-  cursor: pointer;
-  opacity: ${({ $query }) => ($query ? 0.5 : 0)};
-  visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
-  transition: color 0.2s, opacity 0.2s;
-  display: ${({ $isMobile }) => ($isMobile ? "inline-block" : "none")};
-  &:hover {
-    color: ${colors.globalText};
-    opacity: 1;
+  @media (max-width: 1000px) {
+    display: none;
   }
 `;
 
@@ -221,31 +192,87 @@ const getInitialThemePreference = () => {
   return detectUserTheme();
 };
 
+interface Anime {
+  id: string;
+  coverImage?: string;
+  image?: string;
+  title: {
+    romaji?: string;
+    english?: string;
+  };
+  rating?: {
+    anilist?: number;
+  };
+  color?: string;
+  format?: string;
+  type?: string;
+  totalEpisodes?: number;
+  currentEpisode?: number;
+  description?: string;
+  genres?: string[];
+  status?: string;
+  popularity?: {
+    anidb?: number;
+  };
+  releaseDate?: string;
+  year?: string;
+}
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
-
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown container
+  const [searchResults, setSearchResults] = useState([]);
+  const debounceTimeout = useRef<Timer | null>(null);
   const [search, setSearch] = useState({
     isSearchFocused: false,
     searchQuery: searchParams.get("query") || "",
+    isDropdownOpen: false,
   });
 
-  const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const fetchSearchResults = async (query: string) => {
+    if (!query.trim()) return;
+
+    try {
+      const fetchedData = await fetchAdvancedSearch(query, 1, 5); // Fetch first 5 results for the dropdown
+      const formattedResults = fetchedData.results.map((anime: Anime) => ({
+        id: anime.id, // Make sure to include the ID field
+        title: anime.title,
+        image: anime.image, // Adjust these property names based on your API response
+      }));
+      setSearchResults(formattedResults);
+    } catch (error) {
+      console.error("Failed to fetch search results:", error);
+      setSearchResults([]);
+    }
+  };
+
+  const handleCloseDropdown = () => {
+    setSearch((prevState) => ({
+      ...prevState,
+      isDropdownOpen: false,
+    }));
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      handleCloseDropdown();
+    }
+  };
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", isDarkMode);
@@ -256,10 +283,17 @@ const Navbar = () => {
       if (e.key === "/" && inputRef.current) {
         e.preventDefault();
         inputRef.current.focus();
-        setSearch({ ...search, isSearchFocused: true });
+        setSearch((prevState) => ({
+          ...prevState,
+          isSearchFocused: true,
+        }));
       } else if (e.key === "Escape" && inputRef.current) {
         inputRef.current.blur();
-        setSearch({ ...search, isSearchFocused: false });
+        setSearch((prevState) => ({
+          ...prevState,
+          isSearchFocused: false,
+        }));
+        handleCloseDropdown(); // Close dropdown on Escape key
       } else if (e.shiftKey && e.key.toLowerCase() === "d") {
         if (document.activeElement !== inputRef.current) {
           e.preventDefault();
@@ -282,23 +316,6 @@ const Navbar = () => {
     setSearch({ ...search, searchQuery: searchParams.get("query") || "" });
   }, [searchParams]);
 
-  //? AUTOMATIC LOAD ON QUERY CHANGE FOR PREVIEWS LOGIC
-  /*const navigateWithQuery = useCallback(
-    (value, delay = 1000) => {
-      clearTimeout(delayTimeout.current);
-      delayTimeout.current = setTimeout(() => {
-        navigate(value ? `/search?query=${value}` : "/search");
-      }, delay);
-    },
-    [navigate]
-  );
-
-  const handleInputChange = (e) => {
-    const newValue = e.target.value;
-    setSearch({ ...search, searchQuery: newValue });
-    navigateWithQuery(newValue, e.key === "Enter" ? 0 : 1000);
-  }; */
-
   const navigateWithQuery = useCallback(
     (value: string) => {
       navigate(value ? `/search?query=${value}` : "/search");
@@ -309,6 +326,22 @@ const Navbar = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearch({ ...search, searchQuery: newValue });
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      if (newValue.trim()) {
+        fetchSearchResults(newValue);
+        setSearch((prevState) => ({
+          ...prevState,
+          isDropdownOpen: true, // Open dropdown on input change
+        }));
+      } else {
+        setSearchResults([]);
+        setSearch((prevState) => ({
+          ...prevState,
+          isDropdownOpen: false, // Close dropdown if input is empty
+        }));
+      }
+    }, 200); // Debounce for 200ms
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -321,8 +354,15 @@ const Navbar = () => {
   };
 
   const handleClearSearch = () => {
-    setSearch({ ...search, searchQuery: "" });
-    navigateWithQuery("");
+    setSearch((prevState) => ({
+      ...prevState,
+      searchQuery: "",
+    }));
+    setSearchResults([]);
+    setSearch((prevState) => ({
+      ...prevState,
+      isDropdownOpen: false, // Close dropdown when search is cleared
+    }));
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -337,7 +377,8 @@ const Navbar = () => {
   return (
     <StyledNavbar ref={navbarRef}>
       <TopContainer>
-        <LogoLink to="/home">見るろ の 久遠</LogoLink>
+        <LogoImg to="/home">見るろ の 久遠</LogoImg>
+
         <InputContainer>
           <Icon $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSearch} />
@@ -350,22 +391,14 @@ const Navbar = () => {
             onKeyDown={handleKeyDownOnInput}
             ref={inputRef}
           />
-          {isMobile ? (
-            <ClearButtonMobile
-              $query={search.searchQuery}
-              onClick={handleClearSearch}
-              $isMobile={isMobile}
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </ClearButtonMobile>
-          ) : (
-            <ClearButton
-              $query={search.searchQuery}
-              onClick={handleClearSearch}
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </ClearButton>
-          )}
+          <DropDownSearch
+            searchResults={searchResults}
+            onClose={handleCloseDropdown}
+            isVisible={search.isDropdownOpen}
+          />
+          <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>
+            <FontAwesomeIcon icon={faTimes} />
+          </ClearButton>
           <SlashToggleBtn $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSlash} rotation={90} />
           </SlashToggleBtn>
