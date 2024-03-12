@@ -63,7 +63,7 @@ const ListItem = styled.button<{
       : "var(--global-tertiary-bg)"};
 
   border: none;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched

@@ -134,7 +134,7 @@ const Button = styled.span<{ $ishovered?: boolean; color?: string }>`
   }
   @media (max-width: 500px) {
     font-size: 0.5rem;
-    gap: 2px;
+    gap: 0px;
     padding: 3px;
   }
 `;

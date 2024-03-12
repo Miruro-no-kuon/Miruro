@@ -4,12 +4,23 @@ import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
 import AnimeData from "../components/Watch/WatchAnimeData";
-import { fetchAnimeEpisodes, fetchAnimeData } from "../hooks/useApi";
+import {
+  fetchAnimeEpisodes,
+  fetchAnimeData,
+  fetchAnimeInfo,
+} from "../hooks/useApi";
 import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
 
 // Styled Components
 
-const WatchContainer = styled.div``;
+const WatchContainer = styled.div`
+  margin-left: 5rem;
+  margin-right: 5rem;
+  @media (max-width: 1000px) {
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
+`;
 
 const WatchWrapper = styled.div`
   font-size: 0.9rem;
@@ -126,14 +137,33 @@ const Watch: React.FC = () => {
         return;
       }
 
+      setLoading(true); // Indicate that loading has started
+
       try {
         const info = await fetchAnimeData(animeId);
         if (isMounted) {
           setAnimeInfo(info);
+          // setLoading(false); // Data fetched successfully, loading complete
         }
       } catch (error) {
-        console.error("Failed to fetch anime info:", error);
-        if (isMounted) setLoading(false);
+        console.error(
+          "Failed to fetch anime data, trying fetchAnimeInfo as a fallback:",
+          error
+        );
+        try {
+          const fallbackInfo = await fetchAnimeInfo(animeId);
+          if (isMounted) {
+            setAnimeInfo(fallbackInfo);
+          }
+        } catch (fallbackError) {
+          console.error(
+            "Also failed to fetch anime info as a fallback:",
+            fallbackError
+          );
+          // If this fails too, consider showing an error message to the user
+        } finally {
+          if (isMounted) setLoading(false); // Ensure loading is set to false after all attempts
+        }
       }
     };
 
@@ -373,21 +403,6 @@ const Watch: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, [loading, episodes]);
 
-  if (showNoEpisodesMessage) {
-    return (
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "10rem",
-          marginBottom: "10rem",
-        }}
-      >
-        <h2>No episodes found :(</h2>
-        <GoToHomePageButton href="/home">Home</GoToHomePageButton>
-      </div>
-    );
-  }
-
   const updateWatchedEpisodes = (episode: Episode) => {
     const watchedEpisodesJson = localStorage.getItem(
       LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId
@@ -407,35 +422,52 @@ const Watch: React.FC = () => {
 
   return (
     <WatchContainer>
+      {showNoEpisodesMessage && (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "10rem",
+            marginBottom: "10rem",
+          }}
+        >
+          <h2>No episodes found :(</h2>
+          <GoToHomePageButton href="/home">Home</GoToHomePageButton>
+        </div>
+      )}
       <WatchWrapper>
-        <VideoPlayerContainer>
-          {loading ? (
-            <VideoPlayerSkeleton />
-          ) : (
-            <VideoPlayer
-              episodeId={currentEpisode.id}
-              bannerImage={selectedBackgroundImage}
-              isEpisodeChanging={isEpisodeChanging}
-            />
-          )}
-        </VideoPlayerContainer>
-        <EpisodeListContainer>
-          {loading ? (
-            <VideoPlayerSkeleton />
-          ) : (
-            <EpisodeList
-              animeId={animeId}
-              episodes={episodes}
-              selectedEpisodeId={currentEpisode.id}
-              onEpisodeSelect={(episodeId: string) => {
-                const episode = episodes.find((e) => e.id === episodeId);
-                if (episode) {
-                  handleEpisodeSelect(episode);
-                }
-              }}
-            />
-          )}
-        </EpisodeListContainer>
+        {/* Render WatchWrapper content conditionally based on showNoEpisodesMessage or other state */}
+        {!showNoEpisodesMessage && (
+          <>
+            <VideoPlayerContainer>
+              {loading ? (
+                <VideoPlayerSkeleton />
+              ) : (
+                <VideoPlayer
+                  episodeId={currentEpisode.id}
+                  bannerImage={selectedBackgroundImage}
+                  isEpisodeChanging={isEpisodeChanging}
+                />
+              )}
+            </VideoPlayerContainer>
+            <EpisodeListContainer>
+              {loading ? (
+                <VideoPlayerSkeleton />
+              ) : (
+                <EpisodeList
+                  animeId={animeId}
+                  episodes={episodes}
+                  selectedEpisodeId={currentEpisode.id}
+                  onEpisodeSelect={(episodeId: string) => {
+                    const episode = episodes.find((e) => e.id === episodeId);
+                    if (episode) {
+                      handleEpisodeSelect(episode);
+                    }
+                  }}
+                />
+              )}
+            </EpisodeListContainer>
+          </>
+        )}
       </WatchWrapper>
       {animeInfo && <AnimeData animeData={animeInfo} />}
     </WatchContainer>

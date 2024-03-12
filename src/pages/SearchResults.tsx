@@ -24,7 +24,7 @@ const SearchResults = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(1);
-  const delayTimeout = useRef<number | null>(null);
+  const delayTimeout = useRef<NodeJS.Timeout | null>(null);
   const lastCachedPage = useRef(0);
   const [, /* loadingStates */ setLoadingStates] = useState<boolean[]>([]);
 
@@ -49,12 +49,21 @@ const SearchResults = () => {
     if (page > 1) {
       setLoadingStates((prev) => [
         ...prev,
-        ...Array.from({ length: 16 }, () => true),
+        ...Array.from({ length: 20 }, () => true),
       ]);
     }
 
     try {
-      const fetchedData = await fetchAdvancedSearch(query, page, 16);
+      const fetchedData = await fetchAdvancedSearch(
+        query,
+        page,
+        20,
+        (isCached: boolean) => {
+          if (!isCached) {
+            preloadNextPage(page + 1);
+          }
+        }
+      );
 
       if (page === 1) {
         setAnimeData(fetchedData.results);
@@ -82,32 +91,29 @@ const SearchResults = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const preloadNextPage = async (nextPage: number) => {
+  const preloadNextPage = (nextPage: number) => {
     if (
       nextPage <= totalPages &&
       nextPage > lastCachedPage.current &&
       hasNextPage
     ) {
-      try {
-        const fetchedData = await fetchAdvancedSearch(query, nextPage, 25);
-        if (!fetchedData.cached) {
+      fetchAdvancedSearch(query, nextPage, 25, (isCached: boolean) => {
+        if (!isCached) {
           lastCachedPage.current = nextPage;
           preloadNextPage(nextPage + 1);
         }
-      } catch (error) {
-        console.error("Error preloading next page:", error);
-      }
+      });
     }
   };
 
   useEffect(() => {
-    if (delayTimeout.current !== null) clearTimeout(delayTimeout.current);
-    delayTimeout.current = window.setTimeout(() => {
+    if (delayTimeout.current) clearTimeout(delayTimeout.current);
+    delayTimeout.current = setTimeout(() => {
       initiatefetchAdvancedSearch();
     }, 0);
 
     return () => {
-      if (delayTimeout.current !== null) clearTimeout(delayTimeout.current);
+      if (delayTimeout.current) clearTimeout(delayTimeout.current);
     };
   }, [query, page]);
 
@@ -118,7 +124,7 @@ const SearchResults = () => {
       </SearchTitle>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
-          {Array.from({ length: 16 }).map((_, index) => (
+          {Array.from({ length: 20 }).map((_, index) => (
             <CardSkeleton key={index} {...{ isLoading: true }} />
           ))}
         </StyledCardGrid>

@@ -1,14 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import ImageDisplay from "../components/Cards/ImageDisplay.tsx";
 
 interface Anime {
   id: string;
-  image: string;
+  coverImage?: string;
+  image?: string;
   title: {
-    english?: string;
     romaji?: string;
+    english?: string;
   };
+  rating?: number;
+  color?: string;
+  format?: string;
+  type?: string;
+  totalEpisodes?: number;
+  currentEpisode?: number;
+  description?: string;
+  genres?: string[];
+  status?: string;
+  popularity?: {
+    anidb?: number;
+  };
+  releaseDate?: string;
+  year?: string;
 }
 
 interface DropdownContainerProps {
@@ -18,9 +34,9 @@ interface DropdownContainerProps {
 const DropdownContainer = styled.div<DropdownContainerProps>`
   display: ${(props) => (props.isVisible ? "block" : "none")};
   position: absolute;
-  top: 80%;
+  top: 79.5%;
   width: 40%;
-  margin-left: -0.8rem;
+  margin-left: -0.85rem;
   overflow-y: auto;
   background-color: var(--global-input-div);
   border: 0.0625rem solid var(--global-input-border);
@@ -28,11 +44,11 @@ const DropdownContainer = styled.div<DropdownContainerProps>`
   border-radius: var(--global-border-radius);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-
-  @media (max-width: 62.5rem) {
-    width: 41.9%;
+  @media (max-width: 500px) {
+    /* margin-right: 45%; */
+    width: 55%;
+    top: 82%;
   }
-
   /* Hide scrollbar */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
@@ -55,10 +71,13 @@ const ResultItem = styled.div<{ isSelected: boolean }>`
 `;
 
 const AnimeImage = styled.img`
-  width: 2.125rem;
-  border-radius: 0.2rem;
+  width: 3.5rem;
+  border-radius: var(--global-border-radius);
   height: auto;
   object-fit: cover;
+  @media (max-width: 1000px) {
+    width: 2.125rem;
+  }
 `;
 
 const AnimeTitle = styled.p`
@@ -66,6 +85,10 @@ const AnimeTitle = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const ImageDisplayWrapper = styled.div`
+  width: 5rem;
 `;
 
 interface DropDownSearchProps {
@@ -81,11 +104,39 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
 }) => {
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleResultClick = (animeId: string) => {
     onClose();
     navigate(`/watch/${animeId}`);
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isVisible, onClose]);
+
+  useEffect(() => {
+    // Reset selectedIndex when dropdown becomes invisible
+    if (!isVisible) {
+      setSelectedIndex(null);
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -107,6 +158,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
         );
       } else if (e.key === "Enter" && selectedIndex !== null) {
         handleResultClick(searchResults[selectedIndex].id);
+        e.preventDefault(); // To prevent the form from submitting if wrapped in a form
       }
     };
 
@@ -117,7 +169,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
   }, [isVisible, searchResults, selectedIndex, onClose, navigate]);
 
   return (
-    <DropdownContainer isVisible={isVisible}>
+    <DropdownContainer isVisible={isVisible} ref={dropdownRef}>
       {searchResults.map((result, index) => (
         <ResultItem
           key={index}
@@ -131,6 +183,13 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           <AnimeTitle>
             {result.title?.english || result.title?.romaji || "n/a"}
           </AnimeTitle>
+          {/* <ImageDisplayWrapper>
+            <ImageDisplay
+              type={result.type}
+              totalEpisodes={result.totalEpisodes}
+              rating={result.rating}
+            />
+          </ImageDisplayWrapper> */}
         </ResultItem>
       ))}
     </DropdownContainer>

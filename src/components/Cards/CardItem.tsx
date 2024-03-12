@@ -22,6 +22,8 @@ interface Anime {
     anilist?: number;
   };
   color?: string;
+  episodes?: number;
+
   format?: string;
   type?: string;
   totalEpisodes?: number;
@@ -142,7 +144,11 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
                   imageSrc={imageSrc}
                   altText={anime.title?.english || anime.title?.romaji || ""}
                   type={anime.format || anime.type || ""}
-                  totalEpisodes={anime.currentEpisode ||anime.totalEpisodes}
+                  totalEpisodes={
+                    anime.currentEpisode ||
+                    anime.totalEpisodes ||
+                    anime.episodes
+                  }
                   rating={
                     typeof anime.rating === "number"
                       ? anime.rating

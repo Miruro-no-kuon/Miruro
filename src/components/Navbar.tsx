@@ -34,9 +34,10 @@ const StyledNavbar = styled.div`
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
     margin: 0 -0.5rem;
     padding: 0.5rem 0.5rem 0 0.5rem;
+    height: 3rem;
   }
 `;
 
@@ -51,7 +52,6 @@ const LogoImg = styled(Link)`
   width: 7rem;
   font-size: 1.25rem;
   font-weight: bold;
-  margin-right: 1rem;
   text-decoration: none;
   color: var(--global-text);
   content: var(--logo-text-transparent);
@@ -61,6 +61,11 @@ const LogoImg = styled(Link)`
   &:hover {
     color: black; // Replace with your hover color
     transform: scale(1.05);
+  }
+  @media (max-width: 500px) {
+    max-width: 6rem;
+    margin-right: 1rem;
+    /* padding: 0rem; */
   }
 `;
 
@@ -75,9 +80,9 @@ const InputContainer = styled.div`
   border-radius: var(--global-border-radius);
   background-color: var(--global-input-div);
   animation: ${fadeInAnimation("var(--global-input-div)")} 0.5s ease-out;
-
-  @media (min-width: 1000px) {
-    min-width: 25rem;
+  @media (max-width: 500px) {
+    height: 0.6rem;
+    max-width: 100%;
   }
 `;
 
@@ -130,16 +135,19 @@ const ClearButton = styled.button<ClearButtonProps>`
 const ThemeToggleBtn = styled.button`
   background: transparent;
   border: none;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   color: var(--global-text);
   padding: 0.5rem;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-left: 0.5rem;
   transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
 
   &:hover {
     transform: rotate(-45deg);
+  }
+  @media (max-width: 500px) {
+    margin-left: 0.7rem;
+    padding-right: 0.7rem;
   }
 `;
 
@@ -162,7 +170,6 @@ const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
   &:hover {
     opacity: 1;
   }
-
   @media (max-width: 1000px) {
     display: none;
   }
@@ -226,6 +233,7 @@ const Navbar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown container
   const [searchResults, setSearchResults] = useState([]);
   const debounceTimeout = useRef<Timer | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [search, setSearch] = useState({
     isSearchFocused: false,
     searchQuery: searchParams.get("query") || "",
@@ -240,7 +248,10 @@ const Navbar = () => {
       const formattedResults = fetchedData.results.map((anime: Anime) => ({
         id: anime.id, // Make sure to include the ID field
         title: anime.title,
-        image: anime.image, // Adjust these property names based on your API response
+        image: anime.image,
+        type: anime.type,
+        totalEpisodes: anime.totalEpisodes,
+        rating: anime.rating,
       }));
       setSearchResults(formattedResults);
     } catch (error) {
@@ -322,33 +333,50 @@ const Navbar = () => {
     },
     [navigate]
   );
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearch({ ...search, searchQuery: newValue });
+
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+
     debounceTimeout.current = setTimeout(() => {
-      if (newValue.trim()) {
-        fetchSearchResults(newValue);
-        setSearch((prevState) => ({
-          ...prevState,
-          isDropdownOpen: true, // Open dropdown on input change
-        }));
-      } else {
-        setSearchResults([]);
-        setSearch((prevState) => ({
-          ...prevState,
-          isDropdownOpen: false, // Close dropdown if input is empty
-        }));
-      }
-    }, 200); // Debounce for 200ms
+      // Before executing the delayed search, check if the enter key was recently pressed
+      // You might set a flag when the enter key is pressed and check it here
+      // For example, using a state or ref like `enterPressedRecently`
+      // if (!enterPressedRecently) {
+      fetchSearchResults(newValue);
+      setSearch((prevState) => ({
+        ...prevState,
+        isDropdownOpen: true,
+      }));
+      // } else {
+      // Optionally reset the flag here if you're using one
+      // enterPressedRecently = false;
+      // }
+    }, 300); // Debounce for 300ms
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      navigateWithQuery(search.searchQuery);
+      e.preventDefault(); // Prevent default form submission behavior
+      if (selectedIndex !== null && searchResults.length > 0) {
+        // Navigate to the selected search result
+        const animeId = searchResults[selectedIndex].id;
+        navigate(`/watch/${animeId}`);
+        handleCloseDropdown();
+      } else {
+        // Existing logic for handling enter without a selection
+        navigateWithQuery(search.searchQuery);
+      }
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+      setSearch((prevState) => ({
+        ...prevState,
+        isDropdownOpen: false,
+      }));
       if (inputRef.current) {
-        inputRef.current.blur(); // Add this line to blur the input
+        inputRef.current.blur();
       }
     }
   };
@@ -378,7 +406,6 @@ const Navbar = () => {
     <StyledNavbar ref={navbarRef}>
       <TopContainer>
         <LogoImg to="/home">見るろ の 久遠</LogoImg>
-
         <InputContainer>
           <Icon $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSearch} />
@@ -389,12 +416,22 @@ const Navbar = () => {
             value={search.searchQuery}
             onChange={handleInputChange}
             onKeyDown={handleKeyDownOnInput}
+            onFocus={() => {
+              setSearch((prevState) => ({
+                ...prevState,
+                isDropdownOpen: true,
+                isSearchFocused: true,
+              }));
+            }}
             ref={inputRef}
           />
+
           <DropDownSearch
             searchResults={searchResults}
             onClose={handleCloseDropdown}
             isVisible={search.isDropdownOpen}
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
           />
           <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>
             <FontAwesomeIcon icon={faTimes} />

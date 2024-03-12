@@ -26,6 +26,7 @@ interface Anime {
     anilist?: number;
   };
   color?: string;
+  episodes?: number;
   format?: string;
   type?: string;
   totalEpisodes?: number;

@@ -51,6 +51,10 @@ const SocialMediaWrapper = styled.div`
   display: flex;
   gap: 1rem;
   margin: 1rem 0;
+  margin-bottom: -1.5rem;
+  @media (max-width: 1000px) {
+    margin-bottom: -0.5rem;
+  }
 `;
 
 const TextGroup = styled.div`
@@ -83,7 +87,7 @@ const IconButton = styled.a`
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 
   svg {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   &:hover {
@@ -135,7 +139,7 @@ function Footer() {
             <FaDiscord />
           </IconButton>
           <IconButton
-            href="https://github.com/Miruro-no-kuon/Miruro-no-Kuon"
+            href="https://github.com/Miruro-no-kuon/Miruro"
             target="_blank"
             rel="noopener noreferrer"
           >

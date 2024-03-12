@@ -148,6 +148,8 @@ const ShortcutsPopup = () => {
       if (e.shiftKey && e.key === "?") {
         e.preventDefault(); // Prevent the default action of the key press
         setShowPopup(!showPopup);
+      } else if (e.key === "Escape") {
+        setShowPopup(false); // Close the popup when Escape key is pressed
       }
     };
 
