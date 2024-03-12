@@ -136,6 +136,7 @@ interface FetchOptions {
 const advancedSearchCache = createCache("Advanced Search");
 const animeDataCache = createCache("Data");
 const animeEpisodesCache = createCache("Episodes");
+const fetchAnimeEmbeddedEpisodesCache = createCache("Episodes");
 const videoSourcesCache = createCache("Video Sources");
 
 // Fetch data from proxy with caching
@@ -279,14 +280,21 @@ export const fetchPopularAnime = (page: number, perPage: number) => fetchList("P
 
 // Fetch Anime Episodes Function
 export async function fetchAnimeEpisodes(animeId: string, provider: string = "gogoanime", dub: boolean = false) {
-  const params = new URLSearchParams({ provider, dub: dub.toString() });
+  const params = new URLSearchParams({ provider, dub: dub ? "true" : "false" });
   const url = `${BASE_URL}meta/anilist/episodes/${animeId}?${params.toString()}`;
-  const cacheKey = generateCacheKey('animeEpisodes', animeId, provider);
+  const cacheKey = generateCacheKey('animeEpisodes', animeId, provider, dub ? "dub" : "sub");
 
   return fetchFromProxy(url, animeEpisodesCache, cacheKey);
 }
 
+//Fetch Embedded Anime Episodes Servers
+export async function fetchAnimeEmbeddedEpisodes(animeId: string, provider: string = "gogoanime", dub: boolean = false) {
+  const params = new URLSearchParams({ provider, dub: dub.toString() });
+  const url = `${BASE_URL}meta/anilist/servers/${animeId}?${params.toString()}`;
+  const cacheKey = generateCacheKey('fetchAnimeEmbeddedServers', animeId, provider);
 
+  return fetchFromProxy(url, fetchAnimeEmbeddedEpisodesCache, cacheKey);
+}
 
 // Function to fetch anime streaming links
 export async function fetchAnimeStreamingLinks(episodeId: string) {

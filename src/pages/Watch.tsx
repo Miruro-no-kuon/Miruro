@@ -4,7 +4,9 @@ import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
 import AnimeData from "../components/Watch/WatchAnimeData";
+import VideoSourceSelector from "../components/Watch/VideSourceSelector";
 import {
+  fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
   fetchAnimeData,
   fetchAnimeInfo,
@@ -63,6 +65,16 @@ const EpisodeListContainer = styled.div`
 
   @media (max-width: 1000px) {
     padding-left: 0rem;
+  }
+`;
+
+const NoEpsFoundDiv = styled.div`
+  text-align: center;
+  margin-top: 15rem;
+  margin-bottom: 15rem;
+  @media (max-width: 1000px) {
+    margin-top: 10rem;
+    margin-bottom: 10rem;
   }
 `;
 
@@ -126,7 +138,10 @@ const Watch: React.FC = () => {
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
-
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem("languagePreference") || "sub"; // 'sub' or 'dub'
+  });
+  const [languageChanged, setLanguageChanged] = useState(false);
   useEffect(() => {
     let isMounted = true;
 
@@ -182,7 +197,8 @@ const Watch: React.FC = () => {
       if (!animeId) return;
 
       try {
-        const animeData = await fetchAnimeEpisodes(animeId);
+        const isDub = language === "dub";
+        const animeData = await fetchAnimeEpisodes(animeId, undefined, isDub);
         if (isMounted && animeData) {
           const transformedEpisodes = animeData.map((ep: Episode) => ({
             id: ep.id,
@@ -191,69 +207,64 @@ const Watch: React.FC = () => {
             number:
               ep.number % 1 === 0
                 ? ep.number
-                : `${Math.floor(ep.number)}-${
-                    ep.number.toString().split(".")[1]
-                  }`,
+                : Math.floor(ep.number) +
+                  "-" +
+                  ep.number.toString().split(".")[1],
           }));
 
           setEpisodes(transformedEpisodes);
 
-          let navigateToEpisode = transformedEpisodes[0];
-
-          if (animeTitle && episodeNumber) {
-            const episodeId = `${animeTitle}-episode-${episodeNumber}`;
-            const matchingEpisode = transformedEpisodes.find(
-              (ep: any) => ep.id === episodeId
-            );
-            if (matchingEpisode) {
-              setCurrentEpisode({
-                id: matchingEpisode.id,
-                number: matchingEpisode.number,
-                image: matchingEpisode.image,
-              });
-              navigateToEpisode = matchingEpisode;
-            } else {
-              navigate(`/watch/${animeId}`, { replace: true });
-            }
-          } else {
-            let savedEpisodeData = localStorage.getItem(
-              LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
-            );
-            let savedEpisode = savedEpisodeData
-              ? JSON.parse(savedEpisodeData)
-              : null;
-
-            if (savedEpisode && savedEpisode.number) {
-              const foundEpisode = transformedEpisodes.find(
-                (ep: any) => ep.number === savedEpisode.number
+          // Navigate based on language change, URL parameters, or saved episode
+          const navigateToEpisode = (() => {
+            if (languageChanged) {
+              const currentEpisodeNumber =
+                parseInt(episodeNumber) || currentEpisode.number;
+              // Try to find the current episode in the new language or default to the last available episode
+              return (
+                transformedEpisodes.find(
+                  (ep) => ep.number === currentEpisodeNumber
+                ) || transformedEpisodes[transformedEpisodes.length - 1]
               );
-              if (foundEpisode) {
-                setCurrentEpisode({
-                  id: foundEpisode.id,
-                  number: foundEpisode.number,
-                  image: foundEpisode.image,
-                });
-                navigateToEpisode = foundEpisode;
-              }
+            } else if (animeTitle && episodeNumber) {
+              // Navigate based on URL parameters
+              const episodeId = `${animeTitle}-episode-${episodeNumber}`;
+              return (
+                transformedEpisodes.find((ep) => ep.id === episodeId) ||
+                navigate(`/watch/${animeId}`, { replace: true })
+              );
             } else {
-              setCurrentEpisode({
-                id: navigateToEpisode.id,
-                number: navigateToEpisode.number,
-                image: navigateToEpisode.image,
-              });
+              // Navigate based on the last watched episode saved in localStorage
+              const savedEpisodeData = localStorage.getItem(
+                LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
+              );
+              const savedEpisode = savedEpisodeData
+                ? JSON.parse(savedEpisodeData)
+                : null;
+              return savedEpisode
+                ? transformedEpisodes.find(
+                    (ep) => ep.number === savedEpisode.number
+                  ) || transformedEpisodes[0]
+                : transformedEpisodes[0];
             }
-          }
+          })();
 
-          if (isMounted && navigateToEpisode) {
-            const newAnimeTitle = navigateToEpisode.id.split("-episode")[0];
+          if (navigateToEpisode) {
+            setCurrentEpisode({
+              id: navigateToEpisode.id,
+              number: navigateToEpisode.number,
+              image: navigateToEpisode.image,
+            });
+
+            const newAnimeTitle = navigateToEpisode.id.split("-episode-")[0];
             navigate(
               `/watch/${animeId}/${newAnimeTitle}/${navigateToEpisode.number}`,
               { replace: true }
             );
+            setLanguageChanged(false); // Reset the languageChanged flag after handling the navigation
           }
         }
       } catch (error) {
-        console.error("Failed to fetch additional anime data:", error);
+        console.error("Failed to fetch episodes:", error);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -264,7 +275,15 @@ const Watch: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [animeId, animeTitle, episodeNumber, navigate]);
+  }, [
+    animeId,
+    animeTitle,
+    episodeNumber,
+    navigate,
+    language,
+    languageChanged,
+    currentEpisode.number,
+  ]);
 
   useEffect(() => {
     if (!loading && episodes.length === 0) {
@@ -419,20 +438,27 @@ const Watch: React.FC = () => {
       );
     }
   };
+  useEffect(() => {
+    localStorage.setItem("languagePreference", language);
+    console.log("Current language setting:", language); // Debug log to check the current language setting
+  }, [language]);
+
+  const handleSetLanguage = (newLanguage: string) => {
+    console.log("Changing language to:", newLanguage); // Debug log
+    setLanguage(newLanguage); // Update state
+    // localStorage update is handled by useEffect
+  };
+  const handleLanguageChange = useCallback((newLanguage) => {
+    setLanguage(newLanguage); // This will trigger the useEffect above to re-fetch episodes based on the new language
+  }, []);
 
   return (
     <WatchContainer>
       {showNoEpisodesMessage && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "10rem",
-            marginBottom: "10rem",
-          }}
-        >
+        <NoEpsFoundDiv>
           <h2>No episodes found :(</h2>
           <GoToHomePageButton href="/home">Home</GoToHomePageButton>
-        </div>
+        </NoEpsFoundDiv>
       )}
       <WatchWrapper>
         {/* Render WatchWrapper content conditionally based on showNoEpisodesMessage or other state */}
@@ -469,6 +495,12 @@ const Watch: React.FC = () => {
           </>
         )}
       </WatchWrapper>
+      <VideoSourceSelector
+        // sourceType={sourceType}
+        // setSourceType={setSourceType}
+        language={language}
+        setLanguage={setLanguage}
+      />
       {animeInfo && <AnimeData animeData={animeInfo} />}
     </WatchContainer>
   );
