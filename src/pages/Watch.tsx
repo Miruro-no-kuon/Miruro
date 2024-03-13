@@ -58,7 +58,6 @@ const EpisodeListContainer = styled.div`
   max-height: 100%;
 
   @media (min-width: 1000px) {
-    aspect-ratio: 2 / 3;
     flex: 1 1 500px;
     max-height: 100%;
   }
@@ -138,8 +137,9 @@ const Watch: React.FC = () => {
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
+  const LANGUAGE_PREFERENCE_PREFIX = "language-preference-";
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("languagePreference") || "sub"; // 'sub' or 'dub'
+    return localStorage.getItem(LANGUAGE_PREFERENCE_PREFIX + animeId) || "sub"; // Fallback to 'sub' if not set
   });
   const [languageChanged, setLanguageChanged] = useState(false);
   useEffect(() => {
@@ -438,19 +438,11 @@ const Watch: React.FC = () => {
       );
     }
   };
+  //Saving language preference to cache.
   useEffect(() => {
-    localStorage.setItem("languagePreference", language);
-    console.log("Current language setting:", language); // Debug log to check the current language setting
-  }, [language]);
-
-  const handleSetLanguage = (newLanguage: string) => {
-    console.log("Changing language to:", newLanguage); // Debug log
-    setLanguage(newLanguage); // Update state
-    // localStorage update is handled by useEffect
-  };
-  const handleLanguageChange = useCallback((newLanguage) => {
-    setLanguage(newLanguage); // This will trigger the useEffect above to re-fetch episodes based on the new language
-  }, []);
+    localStorage.setItem(LANGUAGE_PREFERENCE_PREFIX + animeId, language);
+    console.log("Current language setting for anime", animeId, ":", language);
+  }, [language, animeId]);
 
   return (
     <WatchContainer>
