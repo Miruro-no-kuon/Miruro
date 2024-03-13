@@ -8,7 +8,7 @@ interface AnimeTitle {
 }
 
 interface TitleComponentProps {
-  isHovered: boolean; // Renamed from $ishovered to isHovered for consistency with TypeScript naming conventions
+  isHovered: boolean; // Renamed from $isHovered to $isHovered for consistency with TypeScript naming conventions
   anime: {
     title: AnimeTitle;
     status?: string;
@@ -17,7 +17,7 @@ interface TitleComponentProps {
 }
 
 // Adjusting styled components to accept props correctly
-const TitleContainer = styled.div<{ isHovered: boolean }>`
+const TitleContainer = styled.div<{ $isHovered: boolean }>`
   display: flex;
   align-items: center;
   padding: 0.5rem;
@@ -48,12 +48,12 @@ const CompletedIndicator = styled(IndicatorDot)`
   flex-shrink: 0; /* Prevent shrinking */
 `;
 
-const Title = styled.h5<{ isHovered: boolean; color?: string }>`
+const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
   margin: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: ${(props) => (props.isHovered ? props.color : "var(--title-color)")};
+  color: ${(props) => (props.$isHovered ? props.color : "var(--title-color)")};
 
   &:hover {
     transition: 0.1s ease;
@@ -71,12 +71,12 @@ const TitleComponent: React.FC<TitleComponentProps> = ({
   const displayTitle = anime.title.english || anime.title.romaji || "No Title";
 
   return (
-    <TitleContainer isHovered={isHovered}>
+    <TitleContainer $isHovered={isHovered}>
       {(anime.status === "Ongoing" || anime.status === "RELEASING") && <Dot />}
       {(anime.status === "Completed" || anime.status === "FINISHED") && (
         <CompletedIndicator />
       )}
-      <Title isHovered={isHovered} color={anime.color}>
+      <Title $isHovered={isHovered} color={anime.color}>
         {truncateTitle(displayTitle, 35)}
       </Title>
     </TitleContainer>

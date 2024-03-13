@@ -7,77 +7,62 @@
       name="description"
       content="Miruro no Kuon - Anime Streaming Site with minimal UI 🍜. Enjoy HD fast streaming of your favorite anime, manga reading, and explore anime-related forums on www.miruro.tv. Discover a world of anime entertainment at Miruro no Kuon!"
     />
+    <!-- Link to web app manifest -->
     <link rel="manifest" href="manifest.json" />
+    <!-- Favicon -->
     <link
       rel="icon"
-      type="image/webp"
-      href="./src/assets/favicons/favicon-miruro.webp"
+      type="image/png"
+      href="./src/assets/favicons/android-chrome-512x512.png"
     />
+    <!-- Apple touch icon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./src/assets/favicons/apple-touch-icon.png"
+    />
+    <!-- Set status bar style for Apple devices -->
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- Import Google Material Icons -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
+    <!-- Title of the website -->
     <title>Miruro</title>
+    <!-- Disable zooming -->
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <style>
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 5px; /* Set the width of the scrollbar */
-      }
-
-      /* Track */
-      ::-webkit-scrollbar-track {
-        background: transparent; /* Make scrollbar track transparent */
-      }
-
-      /* Handle */
-      ::-webkit-scrollbar-thumb {
-        background: #888; /* Color of the scrollbar handle */
-        border-radius: 10px; /* Roundness of the scrollbar handle */
-      }
-
-      /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555; /* Color of the scrollbar handle on hover */
-      }
-
-      /* Define your theme styles here */
-      body[data-theme="dark"] {
-        background-color: #080808;
-        color: #fff; /* Adjust text color for dark theme */
-      }
-
-      body[data-theme="light"] {
-        background-color: #f5f5f5;
-        color: #000; /* Adjust text color for light theme */
-      }
-    </style>
+    <!-- Internal styles -->
+    <link rel="stylesheet" href="/src/styles/globals.css" />
   </head>
   <body data-simplebar>
+    <!-- Root element for the React app -->
     <div id="root"></div>
-    <script>
-      const themePreference = localStorage.getItem("themePreference");
-
-      if (themePreference === "dark") {
-        document.body.style.backgroundColor = "#080808";
-      } else if (themePreference === "light") {
-        document.body.style.backgroundColor = "#f5f5f5";
-      } else if (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
-        document.body.style.backgroundColor = "#080808"; // Set to dark if user prefers dark theme
-      } else {
-        document.body.style.backgroundColor = "#f5f5f5"; // Set to light if none of the above conditions match
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        document.body.style.backgroundColor = "";
-      });
-    </script>
+    <!-- Main JavaScript file -->
     <script type="module" src="/src/main.tsx"></script>
+    <!-- JavaScript to toggle dark mode -->
+    <script>
+      // Check user's theme preference or default to system preference
+      const themePreference =
+        localStorage.getItem("themePreference") ||
+        (window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      // Get the root HTML element
+      const rootElement = document.documentElement;
+      // Apply dark mode class if preferred theme is dark
+      if (themePreference === "dark") {
+        rootElement.classList.add("dark-mode");
+      } else {
+        rootElement.classList.remove("dark-mode");
+      }
+    </script>
   </body>
 </html>

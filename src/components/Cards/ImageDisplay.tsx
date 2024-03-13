@@ -7,7 +7,16 @@ import {
   faStar,
   faPlay,
 } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
+
+interface ImageDisplayProps {
+  imageSrc: string;
+  altText?: string;
+  type?: string;
+  totalEpisodes?: number;
+  rating?: number;
+  color?: string;
+  $ishovered?: boolean;
+}
 
 const popInAnimation = keyframes`
   0% {
@@ -20,7 +29,10 @@ const popInAnimation = keyframes`
   }
 `;
 
-const AnimeImage = styled.div`
+const AnimeImage = styled.div<{
+  $ishovered?: boolean;
+  color?: string;
+}>`
   position: relative;
   text-align: left;
   overflow: hidden;
@@ -90,7 +102,7 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const InfoButtons = styled.div`
+const InfoButtons = styled.div<{ $ishovered?: boolean }>`
   position: absolute;
   bottom: 7px;
   left: 7px;
@@ -99,7 +111,7 @@ const InfoButtons = styled.div`
   gap: 2px;
 `;
 
-const Button = styled.span`
+const Button = styled.span<{ $ishovered?: boolean; color?: string }>`
   background-color: var(--global-button-shadow);
   backdrop-filter: blur(10px);
   padding: 4px;
@@ -117,22 +129,30 @@ const Button = styled.span`
     color: ${({ $ishovered, color }) =>
       $ishovered ? color : "var(--global-button-text)"};
   }
+  @media (max-width: 1000px) {
+    font-size: 0.6rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.5rem;
+    gap: 2px;
+    padding: 3px;
+  }
 `;
 
-const Icon = styled.span`
+const Icon = styled.span<{ $ishovered?: boolean; color?: string }>`
   color: ${({ $ishovered, color }) =>
     $ishovered ? color : "var(--global-button-text)"};
   transition: color 0.2s;
 `;
 
-const ImageDisplay = ({
+const ImageDisplay: React.FC<ImageDisplayProps> = ({
   imageSrc,
   altText,
   type,
   totalEpisodes,
   rating,
   color,
-  $ishovered,
+  $ishovered = false,
 }) => (
   <AnimeImage $ishovered={$ishovered} color={color}>
     <ImageWrapper>
@@ -161,15 +181,5 @@ const ImageDisplay = ({
     </InfoButtons>
   </AnimeImage>
 );
-
-ImageDisplay.propTypes = {
-  imageSrc: PropTypes.string.isRequired,
-  altText: PropTypes.string,
-  type: PropTypes.string,
-  totalEpisodes: PropTypes.number,
-  rating: PropTypes.number,
-  color: PropTypes.string,
-  $ishovered: PropTypes.bool,
-};
 
 export default ImageDisplay;

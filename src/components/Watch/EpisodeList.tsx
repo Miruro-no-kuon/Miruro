@@ -32,7 +32,13 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 35rem;
+  max-height: 46rem;
+  @media (max-width: 1900px) {
+    max-height: 35rem;
+  }
+  @media (max-width: 1400px) {
+    max-height: 24rem;
+  }
   @media (max-width: 1000px) {
     max-height: 18rem;
   }
@@ -63,7 +69,7 @@ const ListItem = styled.button<{
       : "var(--global-tertiary-bg)"};
 
   border: none;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched

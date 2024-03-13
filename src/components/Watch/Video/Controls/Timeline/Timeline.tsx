@@ -9,7 +9,7 @@ export const thumbStyle = `
   transform: scale(0.25);
   opacity: 0;
   visibility: hidden;
-  transition: 0.1s;
+  transition: 0.1s ease-in-out;
 `;
 
 // Shared styles for track elements
@@ -23,7 +23,7 @@ export const trackStyle = `
     rgba(255, 255, 255, 0.5) var(--progress-percentage, 50%),
     rgba(255, 255, 255, 0.5) 100%
   );
-  transition: 0.1s;
+  transition: 0.1s ease-in-out;
 `;
 
 // Timeline slider with custom styles and a class name
@@ -35,7 +35,8 @@ export const Timeline = styled.input.attrs(({ className }) => ({
   background: transparent;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     &::-webkit-slider-thumb,
     &::-moz-range-thumb {
       transform: scale(1);
@@ -67,7 +68,7 @@ export const Timeline = styled.input.attrs(({ className }) => ({
   }
 
   /* Styles for Chromium */
-  @supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee)) {
+  @supports (-webkit-appearance: none) and (not (overflow: -webkit-marquee)) {
     &::-webkit-slider-thumb {
       // Chromium thumb style
     }
@@ -84,7 +85,9 @@ export const Timeline = styled.input.attrs(({ className }) => ({
   }
 
   /* Styles for other browsers including Firefox */
-  @supports not ((-webkit-appearance:none) and (not (overflow:-webkit-marquee))) {
+  @supports not (
+    (-webkit-appearance: none) and (not (overflow: -webkit-marquee))
+  ) {
     &::-webkit-slider-thumb {
       // Other browser thumb style
     }

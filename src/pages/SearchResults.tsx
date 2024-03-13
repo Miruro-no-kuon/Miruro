@@ -49,7 +49,7 @@ const SearchResults = () => {
     if (page > 1) {
       setLoadingStates((prev) => [
         ...prev,
-        ...Array.from({ length: 16 }, () => true),
+        ...Array.from({ length: 20 }, () => true),
       ]);
     }
 
@@ -57,7 +57,7 @@ const SearchResults = () => {
       const fetchedData = await fetchAdvancedSearch(
         query,
         page,
-        16,
+        20,
         (isCached: boolean) => {
           if (!isCached) {
             preloadNextPage(page + 1);
@@ -124,7 +124,7 @@ const SearchResults = () => {
       </SearchTitle>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
-          {Array.from({ length: 16 }).map((_, index) => (
+          {Array.from({ length: 20 }).map((_, index) => (
             <CardSkeleton key={index} {...{ isLoading: true }} />
           ))}
         </StyledCardGrid>

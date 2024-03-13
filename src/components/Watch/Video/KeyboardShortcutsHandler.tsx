@@ -89,16 +89,10 @@ const KeyboardShortcutsHandler: React.FC<KeyboardShortcutsHandlerProps> = ({
   }
 
   Object.entries(shortcuts).forEach(([key, callback]) => {
-    useKeyboardShortcut(key, callback, videoRef, { when: "keydown" });
+    useKeyboardShortcut(key, callback, videoRef);
     // Also listen for capitalized letter shortcuts when Caps Lock is on
     if (key.length === 1 && key.toUpperCase() !== key) {
-      useKeyboardShortcut(
-        key.toUpperCase(),
-        callback,
-        videoRef,
-        { when: "keydown" },
-        (event) => event.getModifierState("CapsLock")
-      );
+      useKeyboardShortcut(key.toUpperCase(), callback);
     }
   });
 

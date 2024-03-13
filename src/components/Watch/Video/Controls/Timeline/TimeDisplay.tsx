@@ -34,8 +34,15 @@ const BoldTimeDisplayText = styled.span`
   font-weight: bold;
   opacity: 1;
 `;
+interface TimeDisplayProps {
+  currentTime: any;
+  duration: any;
+}
 
-const TimeDisplayComponent = ({ currentTime, duration }) => (
+const TimeDisplayComponent: React.FC<TimeDisplayProps> = ({
+  currentTime,
+  duration,
+}) => (
   <TimeDisplayWrapper>
     <BoldTimeDisplayText>{currentTime}</BoldTimeDisplayText>
     <TimeDisplayText>{duration}</TimeDisplayText>

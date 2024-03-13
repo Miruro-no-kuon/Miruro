@@ -22,6 +22,8 @@ interface Anime {
     anilist?: number;
   };
   color?: string;
+  episodes?: number;
+
   format?: string;
   type?: string;
   totalEpisodes?: number;
@@ -66,7 +68,14 @@ const StyledCardItem = styled.div`
   border-radius: var(--global-border-radius);
   cursor: pointer;
   transform: scale(1);
-  transition: 0.2s;
+  transition: 0.2s ease-in-out;
+`;
+
+const ImageDisplayWrapper = styled.div`
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-10px); /* Move card up by 10 pixels on hover */
+  }
 `;
 
 const CardItemContent: React.FC<CardItemContentProps> = React.memo(
@@ -130,22 +139,28 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
             color={animeColor}
           >
             <StyledCardItem ref={cardRef}>
-              <ImageDisplay
-                imageSrc={imageSrc}
-                altText={anime.title?.english || anime.title?.romaji || ""}
-                type={anime.format || anime.type || ""}
-                totalEpisodes={anime.totalEpisodes}
-                rating={
-                  typeof anime.rating === "number"
-                    ? anime.rating
-                    : anime.rating?.anilist ?? undefined
-                }
-                color={animeColor}
-                $ishovered={isHoveredInstant}
-              />
+              <ImageDisplayWrapper>
+                <ImageDisplay
+                  imageSrc={imageSrc}
+                  altText={anime.title?.english || anime.title?.romaji || ""}
+                  type={anime.format || anime.type || ""}
+                  totalEpisodes={
+                    anime.currentEpisode ||
+                    anime.totalEpisodes ||
+                    anime.episodes
+                  }
+                  rating={
+                    typeof anime.rating === "number"
+                      ? anime.rating
+                      : anime.rating?.anilist ?? undefined
+                  }
+                  color={animeColor}
+                  $ishovered={isHoveredInstant}
+                />
+              </ImageDisplayWrapper>
               <TitleComponent isHovered={isHoveredInstant} anime={anime} />
             </StyledCardItem>
-            {!isMobile && isHoveredDelayed && (
+            {/* {!isMobile && isHoveredDelayed && (
               <InfoPopupContent
                 title={anime.title?.english || anime.title?.romaji || ""}
                 description={anime.description || ""}
@@ -166,7 +181,7 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
                 cover={anime.image || anime.coverImage || ""}
                 maxDescriptionLength={100}
               />
-            )}
+            )} */}
           </StyledCardWrapper>
         )}
       </>

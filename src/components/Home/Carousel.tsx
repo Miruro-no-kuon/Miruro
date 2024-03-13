@@ -24,12 +24,13 @@ const StyledSwiperContainer = styled(Swiper)`
   position: relative;
   max-width: 100%;
   height: 24rem;
-  margin-bottom: 2rem;
-  border-radius: 0.2rem;
+  margin-bottom: 1rem;
+  border-radius: var(--global-border-radius);
   cursor: grab;
 
   @media (max-width: 1000px) {
     height: 20rem;
+    margin-bottom: 0.5rem;
   }
   @media (max-width: 500px) {
     height: 18rem;
@@ -60,7 +61,7 @@ const DarkOverlay = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   z-index: 1;
   background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 55%);
 `;
@@ -69,14 +70,14 @@ const SlideImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
 `;
 
 const SlideImage = styled.img<{ $cover: string; $image: string }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0.2rem;
+  border-radius: var(--global-border-radius);
   position: absolute;
   content: ${(props) =>
     props.$cover === props.$image ? BannerNotFound : props.$cover};
@@ -118,14 +119,16 @@ const SlideTitle = styled.h2`
 
 const SlideDescription = styled.p<{
   $maxLines: boolean;
-}>`  color: var(--white, #ccc);
-  background: var(--global-primary-bg)
+}>`
+  color: var(--white, #ccc);
+  background: transparent;
   font-size: clamp(0.9rem, 1.5vw, 1rem);
-  line-height: 1;
+  line-height: 1.2;
   margin-bottom: 0;
   max-width: 50%;
-  max-height: 4rem;
+  max-height: 5rem;
   overflow: hidden;
+  -webkit-line-clamp: 3;
 
   @media (max-width: 1000px) {
     line-height: 1.2;
@@ -270,7 +273,7 @@ const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
                 <PlayButtonWrapper>
                   <PlayButton onClick={() => handlePlayButtonClick(id)}>
                     <PlayIcon />
-                    <span>Play Now</span>
+                    <span>Watch Now</span>
                   </PlayButton>
                 </PlayButtonWrapper>
               </ContentWrapper>
