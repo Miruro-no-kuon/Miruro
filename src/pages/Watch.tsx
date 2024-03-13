@@ -441,7 +441,7 @@ const Watch: React.FC = () => {
   //Saving language preference to cache.
   useEffect(() => {
     localStorage.setItem(LANGUAGE_PREFERENCE_PREFIX + animeId, language);
-    console.log("Current language setting for anime", animeId, ":", language);
+    // console.log("Current language setting for anime", animeId, ":", language);
   }, [language, animeId]);
 
   return (

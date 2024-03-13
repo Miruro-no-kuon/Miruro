@@ -462,6 +462,59 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       togglePlayPause();
     }
   };
+  // Function to generate a storage key that is shared between sub and dub
+  const generateStorageKey = (episodeId) => {
+    // Remove '-dub' from the episodeId to unify the key for both versions
+    return `savedTime-${episodeId.replace("-dub", "")}`;
+  };
+
+  // When saving the playback time
+  useEffect(() => {
+    const updatePlaybackTime = () => {
+      if (videoRef.current) {
+        const currentTime = videoRef.current.currentTime;
+        const storageKey = generateStorageKey(episodeId);
+        localStorage.setItem(storageKey, currentTime.toString());
+      }
+    };
+
+    // Save playback time periodically or when certain events occur
+    const playbackTimeIntervalId = setInterval(updatePlaybackTime, 1000);
+
+    return () => {
+      clearInterval(playbackTimeIntervalId);
+      updatePlaybackTime(); // Ensure to save the time when component unmounts or episode changes
+    };
+  }, [episodeId]);
+
+  // When loading the playback time
+  useEffect(() => {
+    const video = videoRef.current;
+    const storageKey = generateStorageKey(episodeId);
+    const savedTime = localStorage.getItem(storageKey);
+
+    const onLoadedMetadata = () => {
+      if (savedTime) {
+        const time = parseFloat(savedTime);
+        if (video) {
+          video.currentTime = time;
+          setCurrentTime(time); // Update your state if needed
+        }
+      }
+    };
+
+    if (video) {
+      video.addEventListener("loadedmetadata", onLoadedMetadata);
+    }
+
+    return () => {
+      if (video) {
+        video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      }
+    };
+  }, [episodeId]); // Make sure to include other dependencies as necessary
+
+  // Dependency array includes isPlaying to react to play/pause changes
 
   return (
     <VideoPlayerContainer id="video-player-wrapper" ref={playerWrapperRef}>
