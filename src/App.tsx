@@ -29,9 +29,9 @@ function ScrollToTop() {
       window.setTimeout(() => {
         window.scrollTo({
           top: 0,
-          behavior: "smooth",
+          // behavior: "smooth",
         });
-      }, 100);
+      });
     }
 
     // Update the previous pathname reference for the next render

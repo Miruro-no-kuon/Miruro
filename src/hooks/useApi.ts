@@ -146,7 +146,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     // Attempt to retrieve the cached response using the cacheKey
     const cachedResponse = cache.get(cacheKey);
     if (cachedResponse) {
-      console.log(`Serving from cache for key: ${cacheKey}`); // Debugging: Confirming cache hit
+      // console.log(`Serving from cache for key: ${cacheKey}`); // Debugging: Confirming cache hit
       return cachedResponse; // Return the cached response if available
     }
 
@@ -161,7 +161,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
 
     // Assuming response data is valid, store it in the cache
     cache.set(cacheKey, response.data); // Cache the new data using the cacheKey
-    console.log(`Caching new data for key: ${cacheKey}`); // Debugging: Confirming new data is cached
+    // console.log(`Caching new data for key: ${cacheKey}`); // Debugging: Confirming new data is cached
 
     return response.data; // Return the newly fetched data
   } catch (error) {
