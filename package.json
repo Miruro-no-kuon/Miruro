@@ -43,7 +43,7 @@
     "node-fetch": "^3.3.2",
     "plyr": "^3.7.8",
     "polished": "^4.2.2",
-    "query-string": "^8.2.0",
+    "query-string": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
