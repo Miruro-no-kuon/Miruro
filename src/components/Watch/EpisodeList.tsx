@@ -86,9 +86,10 @@ const ListItem = styled.button<{
   justify-content: ${({ $isRowLayout }) =>
     $isRowLayout ? "space-between" : "center"};
   align-items: center;
-  transition: 0.15s;
+  transition: transform 0.2s ease-in-out, background-color 0.15s, filter 0.15s;
 
   &:hover {
+    transform: scale(1.02); // Scale up on hover for a slight zoom effect
     ${({ $isSelected, $isWatched }) =>
       $isSelected
         ? $isWatched

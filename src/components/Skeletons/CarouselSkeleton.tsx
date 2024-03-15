@@ -38,7 +38,7 @@ const SkeletonSlide = styled.div<SkeletonProps>`
   height: 24rem;
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   @media (max-width: 1000px) {
     height: 20rem;

@@ -13,7 +13,6 @@ const VideoPlayerContainer = styled.div`
   background: var(--global-secondary-bg);
   border-radius: var(--global-border-radius);
   user-select: none;
-  border: 0.6rem solid var(--global-secondary-bg);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -159,6 +158,7 @@ type VideoPlayerProps = {
   episodeId: string;
   bannerImage: string;
   isEpisodeChanging: boolean;
+  setDownloadLink: (link: string) => void;
 };
 
 // Apply the props type to your component
@@ -166,6 +166,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   episodeId,
   bannerImage,
   isEpisodeChanging,
+  setDownloadLink,
 }) => {
   interface VideoSource {
     quality: string;
@@ -211,7 +212,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setSelectedSource,
     setCurrentTime,
     setError,
-    videoRef
+    videoRef,
+    setDownloadLink 
   );
 
   const { handleSubtitleChange } = useSubtitleLogic(

@@ -7,7 +7,7 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.COM</a> ||
+    MIRURO<a href="https://www.miruro.com">.COM</a> //
     MIRURO<a href="https://www.miruro.tv">.TV</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
@@ -21,10 +21,6 @@
   <a href="#"><img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/></a>
   <a href="#"><img src="https://img.shields.io/badge/cloudflare-white.svg?style=for-the-badge&logo=cloudflare&logoColor=orange"/></a>
 </p>
-
-### ⚠️ Heads Up:
-####  `JS` to `TS` codebase transition alert; It's a work in progress, so expect some hiccups and weird stuff :)
-
 
 ## What is Miruro?
 
