@@ -54,6 +54,14 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   overflow-y: auto;
   flex-grow: 1;
 `;
+const EpisodeImage = styled.img`
+  max-width: 100%;
+  height: auto;
+  margin-top: 0.5rem;
+@media (max-width: 1000px) {
+  max-height: 75px; /* Adjust this value to control the image size */
+}
+`;
 
 const ListItem = styled.button<{
   $isSelected: boolean;
@@ -310,8 +318,6 @@ const EpisodeList: React.FC<Props> = ({
     });
   }, [animeId]);
 
-
-
   // Filter episodes based on search input
   const filteredEpisodes = useMemo(() => {
     const searchQuery = searchTerm.toLowerCase();
@@ -433,7 +439,7 @@ const EpisodeList: React.FC<Props> = ({
         </LayoutToggle>
 
       </ControlsContainer>
-      <EpisodeGrid $isRowLayout={displayMode === 'list' || displayMode === 'imageList'} ref={episodeGridRef}>
+      <EpisodeGrid key={`episode-grid-${displayMode}`} $isRowLayout={displayMode === 'list' || displayMode === 'imageList'} ref={episodeGridRef}>
         {displayedEpisodes.map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
           const $isWatched = watchedEpisodes.some((e) => e.id === episode.id);
@@ -453,7 +459,7 @@ const EpisodeList: React.FC<Props> = ({
                     <EpisodeNumber>{episode.number}. </EpisodeNumber>
                     <EpisodeTitle>{episode.title}</EpisodeTitle>
                   </div>
-                  <img src={episode.image} alt={`Episode ${episode.number} - ${episode.title}`} style={{ maxWidth: '100%', marginTop: '0.5rem' }} />
+                  <EpisodeImage src={episode.image} alt={`Episode ${episode.number} - ${episode.title}`} />
                 </>
               ) : displayMode === 'grid' ? (
                 <>
