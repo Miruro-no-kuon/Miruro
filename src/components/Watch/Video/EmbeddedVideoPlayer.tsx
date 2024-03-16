@@ -11,6 +11,9 @@ const Container = styled.div`
   height: 0;
   padding-bottom: 56.25%; /* 16:9 aspect ratio (height / width * 100) */
   position: relative;
+  @media (max-width: 1000px) {
+    padding-bottom:18rem; /* Adjust aspect ratio for smaller screens */
+  }
 `;
 
 const Iframe = styled.iframe`
@@ -27,11 +30,11 @@ const Iframe = styled.iframe`
 const EmbeddedVideoPlayer: React.FC<EmbeddedVideoPlayerProps> = ({ src }) => {
   return (
     <Container>
-    <Iframe
-      src={src}
-      frameBorder="0"
-      allowFullScreen
-    ></Iframe>
+      <Iframe
+        src={src}
+        frameBorder="0"
+        allowFullScreen
+      ></Iframe>
     </Container>
   );
 };

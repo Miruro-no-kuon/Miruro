@@ -16,9 +16,6 @@ const VideoPlayerContainer = styled.div`
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  @media (max-width: 1000px) {
-    border: 0; // no border on phone
-  }
 `;
 
 type VideoPlayerWrapperProps = {
@@ -64,8 +61,8 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
     $isLoading || $isVideoChanging
       ? "default"
       : $isCursorIdle
-      ? "none"
-      : "pointer"};
+        ? "none"
+        : "pointer"};
   &:hover ${LargePlayIcon} {
     background-color: var(--primary-accent-bg);
     // No need to repeat the transition here if it's already defined in LargePlayIcon
@@ -213,7 +210,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setCurrentTime,
     setError,
     videoRef,
-    setDownloadLink 
+    setDownloadLink
   );
 
   const { handleSubtitleChange } = useSubtitleLogic(
@@ -245,7 +242,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     setSelectedSource(
       videoSources.find((s) => s.quality === selectedQuality)?.url ||
-        videoSources[0]?.url
+      videoSources[0]?.url
     );
     if (isEpisodeChanging) {
       setIsPlaying(false);
@@ -256,7 +253,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleQualityChange = () => {
     setSelectedSource(
       videoSources.find((s) => s.quality === selectedQuality)?.url ||
-        videoSources[0]?.url
+      videoSources[0]?.url
     );
   };
 

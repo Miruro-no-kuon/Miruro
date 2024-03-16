@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -65,8 +65,8 @@ const ListItem = styled.button<{
         ? "var(--primary-accent-bg)" // Selected and watched
         : "var(--primary-accent-bg)" // Selected but not watched
       : $isWatched
-      ? "var(--primary-accent-bg); filter: brightness(0.8);" // Not selected but watched
-      : "var(--global-tertiary-bg)"};
+        ? "var(--primary-accent-bg); filter: brightness(0.8);" // Not selected but watched
+        : "var(--global-tertiary-bg)"};
 
   border: none;
   border-radius: var(--global-border-radius);
@@ -76,8 +76,8 @@ const ListItem = styled.button<{
         ? "var(--global-text)" // Selected and watched
         : "var(--global-text)" // Selected but not watched
       : $isWatched
-      ? "var(--primary-accent); filter: brightness(0.8);" // Not selected but watched
-      : "grey"}; // Not selected and not watched
+        ? "var(--primary-accent); filter: brightness(0.8);" // Not selected but watched
+        : "grey"}; // Not selected and not watched
 
   padding: ${({ $isRowLayout }) =>
     $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
@@ -86,16 +86,14 @@ const ListItem = styled.button<{
   justify-content: ${({ $isRowLayout }) =>
     $isRowLayout ? "space-between" : "center"};
   align-items: center;
-  transition: transform 0.2s ease-in-out, background-color 0.15s, filter 0.15s;
 
   &:hover {
-    transform: scale(1.02); // Scale up on hover for a slight zoom effect
     ${({ $isSelected, $isWatched }) =>
-      $isSelected
-        ? $isWatched
-          ? "filter: brightness(1.1)" // Selected and watched
-          : "filter: brightness(1.1)" // Selected but not watched
-        : $isWatched
+    $isSelected
+      ? $isWatched
+        ? "filter: brightness(1.1)" // Selected and watched
+        : "filter: brightness(1.1)" // Selected but not watched
+      : $isWatched
         ? "filter: brightness(1.1)" // Not selected but watched
         : "background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff"};
   }
@@ -184,6 +182,8 @@ const EpisodeList: React.FC<Props> = ({
   onEpisodeSelect,
 }) => {
   // State for interval, layout, user layout preference, search term, and watched episodes
+  const episodeGridRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [interval, setInterval] = useState<[number, number]>([0, 99]);
   const [isRowLayout, setIsRowLayout] = useState(true);
   const [userLayoutPreference, setUserLayoutPreference] = useState<
@@ -191,6 +191,12 @@ const EpisodeList: React.FC<Props> = ({
   >(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [watchedEpisodes, setWatchedEpisodes] = useState<Episode[]>([]);
+  const defaultLayoutMode = episodes.every(episode => episode.title) ? 'list' : 'grid';
+  const [displayMode, setDisplayMode] = useState<'list' | 'grid' | 'imageList'>(() => {
+    const savedMode = animeId ? localStorage.getItem(`layout-preference-${animeId}`) : null;
+    return savedMode as 'list' | 'grid' | 'imageList' || defaultLayoutMode;
+  });
+
   const [selectionInitiatedByUser, setSelectionInitiatedByUser] =
     useState(false);
   // Update local storage when watched episodes change
@@ -205,6 +211,7 @@ const EpisodeList: React.FC<Props> = ({
   // Load watched episodes from local storage when animeId changes
   useEffect(() => {
     if (animeId) {
+      localStorage.setItem(`layout-preference-${animeId}`, displayMode);
       const watched = localStorage.getItem("watched-episodes");
       if (watched) {
         const watchedEpisodesObject = JSON.parse(watched);
@@ -293,12 +300,16 @@ const EpisodeList: React.FC<Props> = ({
 
   // Toggle layout preference
   const toggleLayoutPreference = useCallback(() => {
-    setIsRowLayout((prevLayout) => {
-      const newLayout = !prevLayout;
-      setUserLayoutPreference(newLayout);
-      return newLayout;
+    setDisplayMode(prevMode => {
+      const nextMode = prevMode === 'list' ? 'grid' : prevMode === 'grid' ? 'imageList' : 'list';
+      if (animeId) {
+        localStorage.setItem(`layout-preference-${animeId}`, nextMode);
+      }
+      return nextMode;
     });
-  }, []);
+  }, [animeId]);
+
+
 
   // Filter episodes based on search input
   const filteredEpisodes = useMemo(() => {
@@ -356,6 +367,38 @@ const EpisodeList: React.FC<Props> = ({
     selectionInitiatedByUser,
   ]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (animeId && episodeGridRef.current) {
+        const scroll = episodeGridRef.current.scrollTop;
+        localStorage.setItem(`scroll-position-${animeId}`, scroll.toString());
+      }
+    };
+
+    const savedScrollPosition = animeId ? localStorage.getItem(`scroll-position-${animeId}`) : null;
+    if (savedScrollPosition) {
+      setScrollPosition(parseInt(savedScrollPosition, 10));
+    }
+
+    const grid = episodeGridRef.current;
+    if (grid) {
+      grid.addEventListener('scroll', handleScroll);
+      grid.scrollTo(0, scrollPosition);
+    }
+
+    return () => {
+      if (grid) {
+        grid.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [animeId, scrollPosition]);
+  useEffect(() => {
+    if (episodeGridRef.current) {
+      episodeGridRef.current.scrollTo(0, scrollPosition);
+    }
+  }, [scrollPosition]);
+
+
   // Render the EpisodeList component
   return (
     <ListContainer>
@@ -391,8 +434,7 @@ const EpisodeList: React.FC<Props> = ({
           )}
         </LayoutToggle>
       </ControlsContainer>
-
-      <EpisodeGrid $isRowLayout={isRowLayout}>
+      <EpisodeGrid $isRowLayout={displayMode === 'list' || displayMode === 'imageList'} ref={episodeGridRef}>
         {displayedEpisodes.map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
           const $isWatched = watchedEpisodes.some((e) => e.id === episode.id);
@@ -401,21 +443,36 @@ const EpisodeList: React.FC<Props> = ({
             <ListItem
               key={episode.id}
               $isSelected={$isSelected}
-              $isRowLayout={isRowLayout}
+              $isRowLayout={displayMode === 'list' || displayMode === 'imageList'}
               $isWatched={$isWatched}
               onClick={() => handleEpisodeSelect(episode.id)}
               aria-selected={$isSelected}
             >
-              {isRowLayout ? (
+              {displayMode === 'imageList' ? (
                 <>
-                  <EpisodeNumber>{episode.number}</EpisodeNumber>
+                  <div>
+                    <EpisodeNumber>{episode.number}. </EpisodeNumber>
+                    <EpisodeTitle>{episode.title}</EpisodeTitle>
+                  </div>
+                  <img src={episode.image} alt={`Episode ${episode.number} - ${episode.title}`} style={{ maxWidth: '100%', marginTop: '0.5rem' }} />
+                </>
+              ) : displayMode === 'grid' ? (
+                <>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    {$isSelected ? (
+                      <FontAwesomeIcon icon={faPlay} />
+                    ) : (
+                      <EpisodeNumber>{episode.number}</EpisodeNumber>
+                    )}
+                  </div>
+                </>
+              ) : (
+                // Render for 'list' layout
+                <>
+                  <EpisodeNumber>{episode.number}. </EpisodeNumber>
                   <EpisodeTitle>{episode.title}</EpisodeTitle>
                   {$isSelected && <FontAwesomeIcon icon={faPlay} />}
                 </>
-              ) : $isSelected ? (
-                <FontAwesomeIcon icon={faPlay} />
-              ) : (
-                <EpisodeNumber>{episode.number}</EpisodeNumber>
               )}
             </ListItem>
           );

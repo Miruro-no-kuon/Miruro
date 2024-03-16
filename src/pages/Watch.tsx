@@ -146,7 +146,7 @@ const Watch: React.FC = () => {
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
   const LANGUAGE_PREFERENCE_PREFIX = "language-preference-";
   const [sourceType, setSourceType] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "regular"
+    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "default"
   );
   const [embeddedVideoUrl, setEmbeddedVideoUrl] = useState("");
   const [language, setLanguage] = useState(
@@ -154,7 +154,7 @@ const Watch: React.FC = () => {
   );
   const [downloadLink, setDownloadLink] = useState("");
   useEffect(() => {
-    const defaultSourceType = "regular";
+    const defaultSourceType = "default";
     const defaultLanguage = "sub";
 
     // Optionally, you can implement logic here to decide if you want to reset to defaults
@@ -243,8 +243,8 @@ const Watch: React.FC = () => {
               ep.number % 1 === 0
                 ? ep.number
                 : Math.floor(ep.number) +
-                  "-" +
-                  ep.number.toString().split(".")[1],
+                "-" +
+                ep.number.toString().split(".")[1],
           }));
 
           setEpisodes(transformedEpisodes);
@@ -277,8 +277,8 @@ const Watch: React.FC = () => {
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                    (ep) => ep.number === savedEpisode.number
-                  ) || transformedEpisodes[0]
+                  (ep) => ep.number === savedEpisode.number
+                ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
           })();
@@ -487,7 +487,7 @@ const Watch: React.FC = () => {
       if (embeddedServers && embeddedServers.length > 0) {
         // Attempt to find the "Gogo server" in the list of servers
         const gogoServer = embeddedServers.find(
-          (server) => server.name === "Gogo server"
+          (server: any) => server.name === "Gogo server"
         );
         // If "Gogo server" is found, use it; otherwise, use the first server
         const selectedServer = gogoServer || embeddedServers[0];
@@ -495,16 +495,41 @@ const Watch: React.FC = () => {
       }
     } catch (error) {
       console.error(
-        "Error fetching embedded servers for episode ID:",
+        "Error fetching gogo servers for episode ID:",
         episodeId,
         error
       );
     }
   };
 
+  const fetchVidstreamingUrl = async (episodeId: string) => {
+    try {
+      // Fetch embedded servers for the episode
+      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
+      if (embeddedServers && embeddedServers.length > 0) {
+        // Attempt to find the "Vidstreaming" server in the list of servers
+        const vidstreamingServer = embeddedServers.find(
+          (server: any) => server.name === "Vidstreaming"
+        );
+        // If "Vidstreaming" server is found, use it; otherwise, use the first server
+        const selectedServer = vidstreamingServer || embeddedServers[0];
+        setEmbeddedVideoUrl(selectedServer.url); // Use the URL of the selected server
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching Vidstreaming servers for episode ID:",
+        episodeId,
+        error
+      );
+    }
+  };
+
+
   // Call this function with the appropriate episode ID when an episode is selected
   useEffect(() => {
-    if (sourceType === "embedded" && currentEpisode.id) {
+    if (sourceType === "vidstreaming" && currentEpisode.id) {
+      fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
+    } else if (sourceType === "gogo" && currentEpisode.id) {
       fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
     }
   }, [sourceType, currentEpisode.id]);
@@ -524,7 +549,7 @@ const Watch: React.FC = () => {
             <VideoPlayerContainer>
               {loading ? (
                 <VideoPlayerSkeleton />
-              ) : sourceType === "regular" ? (
+              ) : sourceType === "default" ? (
                 <VideoPlayer
                   episodeId={currentEpisode.id}
                   bannerImage={selectedBackgroundImage}
@@ -555,15 +580,13 @@ const Watch: React.FC = () => {
           </>
         )}
       </WatchWrapper>
-      {!showNoEpisodesMessage && (
-        <VideoSourceSelector
-          sourceType={sourceType}
-          setSourceType={setSourceType}
-          language={language}
-          setLanguage={setLanguage}
-          downloadLink={downloadLink}
-        />
-      )}
+      <VideoSourceSelector
+        sourceType={sourceType}
+        setSourceType={setSourceType}
+        language={language}
+        setLanguage={setLanguage}
+        downloadLink={downloadLink}
+      />
       {animeInfo && <AnimeData animeData={animeInfo} />}
     </WatchContainer>
   );
