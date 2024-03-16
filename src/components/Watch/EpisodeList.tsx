@@ -6,6 +6,7 @@ import {
   faThList,
   faTh,
   faSearch,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Define TypeScript interfaces for episode and props
@@ -425,14 +426,12 @@ const EpisodeList: React.FC<Props> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </SearchContainer>
-
         <LayoutToggle onClick={toggleLayoutPreference}>
-          {isRowLayout ? (
-            <FontAwesomeIcon icon={faTh} />
-          ) : (
-            <FontAwesomeIcon icon={faThList} />
-          )}
+          {displayMode === 'list' && <FontAwesomeIcon icon={faThList} />}
+          {displayMode === 'grid' && <FontAwesomeIcon icon={faTh} />}
+          {displayMode === 'imageList' && <FontAwesomeIcon icon={faImage} />}
         </LayoutToggle>
+
       </ControlsContainer>
       <EpisodeGrid $isRowLayout={displayMode === 'list' || displayMode === 'imageList'} ref={episodeGridRef}>
         {displayedEpisodes.map((episode) => {
