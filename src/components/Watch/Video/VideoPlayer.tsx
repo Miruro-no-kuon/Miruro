@@ -13,13 +13,9 @@ const VideoPlayerContainer = styled.div`
   background: var(--global-secondary-bg);
   border-radius: var(--global-border-radius);
   user-select: none;
-  border: 0.6rem solid var(--global-secondary-bg);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  @media (max-width: 1000px) {
-    border: 0; // no border on phone
-  }
 `;
 
 type VideoPlayerWrapperProps = {
@@ -65,8 +61,8 @@ const VideoPlayerWrapper = styled.div<VideoPlayerWrapperProps>`
     $isLoading || $isVideoChanging
       ? "default"
       : $isCursorIdle
-      ? "none"
-      : "pointer"};
+        ? "none"
+        : "pointer"};
   &:hover ${LargePlayIcon} {
     background-color: var(--primary-accent-bg);
     // No need to repeat the transition here if it's already defined in LargePlayIcon
@@ -159,6 +155,7 @@ type VideoPlayerProps = {
   episodeId: string;
   bannerImage: string;
   isEpisodeChanging: boolean;
+  setDownloadLink: (link: string) => void;
 };
 
 // Apply the props type to your component
@@ -166,6 +163,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   episodeId,
   bannerImage,
   isEpisodeChanging,
+  setDownloadLink,
 }) => {
   interface VideoSource {
     quality: string;
@@ -211,7 +209,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setSelectedSource,
     setCurrentTime,
     setError,
-    videoRef
+    videoRef,
+    setDownloadLink
   );
 
   const { handleSubtitleChange } = useSubtitleLogic(
@@ -243,7 +242,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     setSelectedSource(
       videoSources.find((s) => s.quality === selectedQuality)?.url ||
-        videoSources[0]?.url
+      videoSources[0]?.url
     );
     if (isEpisodeChanging) {
       setIsPlaying(false);
@@ -254,7 +253,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleQualityChange = () => {
     setSelectedSource(
       videoSources.find((s) => s.quality === selectedQuality)?.url ||
-        videoSources[0]?.url
+      videoSources[0]?.url
     );
   };
 

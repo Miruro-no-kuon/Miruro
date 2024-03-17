@@ -405,7 +405,7 @@ const Navbar = () => {
   return (
     <StyledNavbar ref={navbarRef}>
       <TopContainer>
-        <LogoImg to="/home">見るろ の 久遠</LogoImg>
+        <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>見るろ の 久遠</LogoImg>
         <InputContainer>
           <Icon $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSearch} />

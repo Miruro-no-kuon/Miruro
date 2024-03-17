@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
 import VideoPlayer from "../components/Watch/Video/VideoPlayer";
+import EmbeddedVideoPlayer from "../components/Watch/Video/EmbeddedVideoPlayer";
 import AnimeData from "../components/Watch/WatchAnimeData";
 import VideoSourceSelector from "../components/Watch/VideSourceSelector";
 import {
@@ -16,8 +17,8 @@ import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
 // Styled Components
 
 const WatchContainer = styled.div`
-  margin-left: 5rem;
-  margin-right: 5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   @media (max-width: 1000px) {
     margin-left: 0rem;
     margin-right: 0rem;
@@ -116,13 +117,19 @@ interface CurrentEpisode {
 }
 
 // Main Component
-
+const getSourceTypeKey = (animeId) => `sourceType-${animeId}`;
+const getLanguageKey = (animeId) => `language-${animeId}`;
 const Watch: React.FC = () => {
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
     animeTitle?: string;
     episodeNumber?: string;
   }>();
+  const STORAGE_KEYS = {
+    SOURCE_TYPE: `sourceType-${animeId}`,
+    LANGUAGE: `language-${animeId}`,
+  };
+
   const navigate = useNavigate();
   const [selectedBackgroundImage, setSelectedBackgroundImage] =
     useState<string>("");
@@ -138,9 +145,37 @@ const Watch: React.FC = () => {
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
   const LANGUAGE_PREFERENCE_PREFIX = "language-preference-";
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem(LANGUAGE_PREFERENCE_PREFIX + animeId) || "sub"; // Fallback to 'sub' if not set
-  });
+  const [sourceType, setSourceType] = useState(
+    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "default"
+  );
+  const [embeddedVideoUrl, setEmbeddedVideoUrl] = useState("");
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || "sub"
+  );
+  const [downloadLink, setDownloadLink] = useState("");
+  useEffect(() => {
+    const defaultSourceType = "default";
+    const defaultLanguage = "sub";
+
+    // Optionally, you can implement logic here to decide if you want to reset to defaults
+    // or maintain the setting from the previous anime. This example resets to defaults.
+
+    setSourceType(
+      localStorage.getItem(getSourceTypeKey(animeId)) || defaultSourceType
+    );
+    setLanguage(
+      localStorage.getItem(getLanguageKey(animeId)) || defaultLanguage
+    );
+  }, [animeId]);
+
+  // Effects to save settings to localStorage
+  useEffect(() => {
+    localStorage.setItem(getSourceTypeKey(animeId), sourceType);
+  }, [sourceType, animeId]);
+
+  useEffect(() => {
+    localStorage.setItem(getLanguageKey(animeId), language);
+  }, [language, animeId]);
   const [languageChanged, setLanguageChanged] = useState(false);
   useEffect(() => {
     let isMounted = true;
@@ -208,8 +243,8 @@ const Watch: React.FC = () => {
               ep.number % 1 === 0
                 ? ep.number
                 : Math.floor(ep.number) +
-                  "-" +
-                  ep.number.toString().split(".")[1],
+                "-" +
+                ep.number.toString().split(".")[1],
           }));
 
           setEpisodes(transformedEpisodes);
@@ -242,8 +277,8 @@ const Watch: React.FC = () => {
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                    (ep) => ep.number === savedEpisode.number
-                  ) || transformedEpisodes[0]
+                  (ep) => ep.number === savedEpisode.number
+                ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
           })();
@@ -356,6 +391,7 @@ const Watch: React.FC = () => {
     },
     [animeId, navigate]
   );
+
   //next episode shortcut with 500ms delay.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -389,8 +425,9 @@ const Watch: React.FC = () => {
   }, [episodes, currentEpisode, handleEpisodeSelect, lastKeypressTime]);
 
   useEffect(() => {
-    if (animeInfo) {
-      document.title = "Miruro | " + animeInfo.title.english;
+    if (animeInfo && animeInfo.title) {
+      document.title =
+        "Miruro | " + (animeInfo.title.english || animeInfo.title.romaji || "");
     } else {
       document.title = "Miruro";
     }
@@ -441,8 +478,61 @@ const Watch: React.FC = () => {
   //Saving language preference to cache.
   useEffect(() => {
     localStorage.setItem(LANGUAGE_PREFERENCE_PREFIX + animeId, language);
-    // console.log("Current language setting for anime", animeId, ":", language);
   }, [language, animeId]);
+
+  // Assuming you need to determine which episode's URL to use
+  const fetchEmbeddedUrl = async (episodeId: string) => {
+    try {
+      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
+      if (embeddedServers && embeddedServers.length > 0) {
+        // Attempt to find the "Gogo server" in the list of servers
+        const gogoServer = embeddedServers.find(
+          (server: any) => server.name === "Gogo server"
+        );
+        // If "Gogo server" is found, use it; otherwise, use the first server
+        const selectedServer = gogoServer || embeddedServers[0];
+        setEmbeddedVideoUrl(selectedServer.url); // Use the URL of the selected server
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching gogo servers for episode ID:",
+        episodeId,
+        error
+      );
+    }
+  };
+
+  const fetchVidstreamingUrl = async (episodeId: string) => {
+    try {
+      // Fetch embedded servers for the episode
+      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
+      if (embeddedServers && embeddedServers.length > 0) {
+        // Attempt to find the "Vidstreaming" server in the list of servers
+        const vidstreamingServer = embeddedServers.find(
+          (server: any) => server.name === "Vidstreaming"
+        );
+        // If "Vidstreaming" server is found, use it; otherwise, use the first server
+        const selectedServer = vidstreamingServer || embeddedServers[0];
+        setEmbeddedVideoUrl(selectedServer.url); // Use the URL of the selected server
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching Vidstreaming servers for episode ID:",
+        episodeId,
+        error
+      );
+    }
+  };
+
+
+  // Call this function with the appropriate episode ID when an episode is selected
+  useEffect(() => {
+    if (sourceType === "vidstreaming" && currentEpisode.id) {
+      fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
+    } else if (sourceType === "gogo" && currentEpisode.id) {
+      fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
+    }
+  }, [sourceType, currentEpisode.id]);
 
   return (
     <WatchContainer>
@@ -459,12 +549,15 @@ const Watch: React.FC = () => {
             <VideoPlayerContainer>
               {loading ? (
                 <VideoPlayerSkeleton />
-              ) : (
+              ) : sourceType === "default" ? (
                 <VideoPlayer
                   episodeId={currentEpisode.id}
                   bannerImage={selectedBackgroundImage}
                   isEpisodeChanging={isEpisodeChanging}
+                  setDownloadLink={setDownloadLink}
                 />
+              ) : (
+                <EmbeddedVideoPlayer src={embeddedVideoUrl} />
               )}
             </VideoPlayerContainer>
             <EpisodeListContainer>
@@ -488,10 +581,11 @@ const Watch: React.FC = () => {
         )}
       </WatchWrapper>
       <VideoSourceSelector
-        // sourceType={sourceType}
-        // setSourceType={setSourceType}
+        sourceType={sourceType}
+        setSourceType={setSourceType}
         language={language}
         setLanguage={setLanguage}
+        downloadLink={downloadLink}
       />
       {animeInfo && <AnimeData animeData={animeInfo} />}
     </WatchContainer>

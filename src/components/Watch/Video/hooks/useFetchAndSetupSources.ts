@@ -10,7 +10,8 @@ const useFetchAndSetupSources = (
   // setSubtitleTracks: (tracks: SubtitleTrack[]) => void,  // Added this line
   setCurrentTime: (time: number) => void,               // Added this line
   setError: (error: string) => void,
-  videoRef: RefObject<HTMLVideoElement>
+  videoRef: RefObject<HTMLVideoElement>,
+  setDownloadLink: (link: string) => void
 ) => {
   useEffect(() => {
     const deduplicateAndProcessSources = (sources: VideoSource[]): VideoSource[] => {
@@ -73,7 +74,7 @@ const useFetchAndSetupSources = (
       setIsLoading(true);
       try {
         const data = await fetchAnimeStreamingLinks(episodeId);
-
+        setDownloadLink(data.download); // Assuming the API response has a 'download' property with the link
         // Process and deduplicate sources
         const uniqueSources = deduplicateAndProcessSources(data.sources);
         setVideoSources(uniqueSources);

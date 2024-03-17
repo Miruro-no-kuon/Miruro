@@ -7,7 +7,6 @@ const AnimeDataContainer = styled.div``;
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  margin-top: 0.8rem;
   padding: 0.6rem;
   color: var(--global-text);
   align-items: center;
@@ -220,7 +219,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           <AnimeDataContainerTop>
             <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
             <AnimeDataText className="bio">
-              <p className="anime-title">{animeData.title.english}</p>
+            <p className="anime-title">{animeData.title.english ? animeData.title.english : animeData.title.romaji}</p>
               <p>
                 <strong>Type:</strong> {animeData.type}
               </p>

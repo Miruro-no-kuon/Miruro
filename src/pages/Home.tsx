@@ -168,7 +168,7 @@ const Home = () => {
           animeData={animeData}
           totalPages={1} // Adjust as necessary
           hasNextPage={false} // Adjust as necessary
-          onLoadMore={() => {}} // Placeholder for actual logic
+          onLoadMore={() => { }} // Placeholder for actual logic
         />
       )}
     </Section>

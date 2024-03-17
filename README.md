@@ -1,5 +1,3 @@
-
-
 <p align="center">
   <a href="https://www.miruro.com" target="_blank">
     <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/main/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
@@ -7,7 +5,7 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.COM</a> ||
+    MIRURO<a href="https://www.miruro.com">.COM</a> //
     MIRURO<a href="https://www.miruro.tv">.TV</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
@@ -22,32 +20,27 @@
   <a href="#"><img src="https://img.shields.io/badge/cloudflare-white.svg?style=for-the-badge&logo=cloudflare&logoColor=orange"/></a>
 </p>
 
-### ⚠️ Heads Up:
-####  `JS` to `TS` codebase transition alert; It's a work in progress, so expect some hiccups and weird stuff :)
-
-
 ## What is Miruro?
 
-<p><a href="https://www.miruro.com">Miruro</a> is a cutting-edge anime streaming platform powered by the <a href="https://github.com/consumet">Consumet API</a>. Crafted using <a href="https://react.dev/">React</a> and <a href="https://vitejs.dev/">Vite</a>, it boasts a stylish and contemporary interface. Our platform, Miruro.com, is completely ad-free, ensuring an immersive viewing journey without interruptions.</p>
+<p><a href="https://www.miruro.com">Miruro</a> is a anime streaming platform powered by the <a href="https://github.com/consumet">Consumet API</a>. Crafted using <a href="https://react.dev/">React</a> and <a href="https://vitejs.dev/">Vite</a>, it boasts a stylish and contemporary interface. Miruro.com offers an immersive anime streaming experience where you can enjoy a vast library of anime titles in HD. Watch your favorite shows with English subtitles or dubbing, and conveniently download any anime without the need for registration.</p>
 
 ## Features 🪴
 
 - General
-  - Free ad-supported streaming service
   - Dub Anime support
   - User-friendly interface
-  - Add Anime/Manga to your AniList
   - Mobile responsive
   - Fast page load
+  - White/Dark theme
 - Watch Page
   - Player
     - Autoplay next episode
     - Skip op/ed button
     - Theater mode
+- Coming Soon
+  - Profile page to see your watch list
+  - Profile page to see your continue watching
   - Comment section
-- Profile page to see your watch list
-- Profile page to see your continue watching
-- Check new commits to see new features and changes!
 
 <div style="text-align: left;">
   <h3>Home Page</h3>
@@ -71,7 +64,7 @@
 
 ### Before starting installation ⚠️
 
-> Before we proceed with the installation, we strongly recommend using `bun` for a seamless and efficient setup. While `Node.js` is an alternative, Bun provides a comprehensive solution tailored for our project.
+> Before we proceed with the installation, we strongly recommend using `bun` for a seamless and efficient setup.
 
 ### 1. Clone this repository using
 
@@ -87,42 +80,19 @@ cd Miruro
 
 ### Basic Pre-Requisites
 
-As you might expect, Miruro relies on Node.js. However, for optimal performance, Miruro leverages Bun to achieve the fastest response times possible.
+This platform is built on <a href="https://nodejs.org/">`Node.js`</a> and utilizes <a href="https://bun.sh/">`bun`</a> to ensure the quickest response times achievable. While `npm` can also be used, the commands for npm would mirror those of bun, simply substituting the specific commands accordingly.
 
-#### Download and install Bun
-
-```bash
-curl -fsSL https://bun.sh/install | bash
-```
-
-#### Download and install Node.js
-
-- [Download Node.js](https://nodejs.org/)
-
-#### Verify the installation
+### Verify installations
 
 ```bash
-bun -v
 node -v
-npm -v
+bun -v
 ```
 
-### Install Dependencies
-
-The following are custom installation commands, you can allways do it manually.
+### Install Dependencies (npm also works)
 
 ```bash
-npm iu
-or
-npm install && cd server && npm install
-```
-
-or
-
-```bash
-bun iu
-or
-bun install && cd server && npm install
+bun install && cd server && bun install
 ```
 
 ### Copy the `.env.example` contents to `.env` in the root folder
@@ -131,17 +101,19 @@ bun install && cd server && npm install
 cp .env.example .env
 ```
 
-### 3. Run on development &/or production
+#### ⚠ Please remember to change the value of VITE_BACKEND_URL to a consumet deployment that is functional.⚠
 
-```bash
-npm run dev
-npm start
-```
+### 3. Run on development &/or production (npm also works)
 
-or
+#### Start development version
 
 ```bash
 bun run dev
+```
+
+#### Start production version
+
+```bash
 bun start
 ```
 
@@ -151,7 +123,7 @@ Please be aware that self-hosting this application is strictly limited to person
 
 ## License 📝
 
-This project is licensed under the Custom BY-NC [License](LICENSE). You are free to use, share, and modify the code for non-commercial purposes with proper attribution to the original author(s). Commercial use is not allowed. For details, see the [LICENSE](LICENSE) file. Feel free to contact the author(s) for questions or additional permissions.
+This project is licensed under the Custom BY-NC [License](LICENSE). You are free to use, share, and modify the code for non-commercial purposes with proper attribution to our platform miruro.com. Commercial use is not allowed. For details, see the [LICENSE](LICENSE) file. Feel free to contact the author(s) for questions or additional permissions.
 
 ## Bug Report 🐞
 
@@ -171,7 +143,7 @@ If you have any questions or feedback, please reach out to us at [miruro@proton.
 
 <a href="https://discord.com/invite/Uaaw6R8y">
 
-  ![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)
+![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)
 </a>
 
 ## Support & Contributions 🤲
@@ -185,7 +157,3 @@ Feel free to contribute to this project! Whether you're an experienced developer
 <div align="left">
     <img src="https://api.star-history.com/svg?repos=Miruro-no-kuon/Miruro&type=Date" alt="Star History Chart" style="max-width: 70%;" />
 </div>
-
-### Note for Beginners 💬
-
-> If you're new to JavaScript or programming in general, no worries! Take some time to familiarize yourself with the basics before diving into this project. I'm here to help answer any questions you might have along the way. Don't hesitate to reach out, and let's learn and build together! 😊

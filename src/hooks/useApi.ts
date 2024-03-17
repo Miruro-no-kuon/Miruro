@@ -136,7 +136,7 @@ interface FetchOptions {
 const advancedSearchCache = createCache("Advanced Search");
 const animeDataCache = createCache("Data");
 const animeEpisodesCache = createCache("Episodes");
-const fetchAnimeEmbeddedEpisodesCache = createCache("Episodes");
+const fetchAnimeEmbeddedEpisodesCache = createCache("Video Embedded Sources");
 const videoSourcesCache = createCache("Video Sources");
 
 // Fetch data from proxy with caching
@@ -287,13 +287,14 @@ export async function fetchAnimeEpisodes(animeId: string, provider: string = "go
   return fetchFromProxy(url, animeEpisodesCache, cacheKey);
 }
 
-//Fetch Embedded Anime Episodes Servers
-export async function fetchAnimeEmbeddedEpisodes(animeId: string, provider: string = "gogoanime", dub: boolean = false) {
-  const params = new URLSearchParams({ provider, dub: dub.toString() });
-  const url = `${BASE_URL}meta/anilist/servers/${animeId}?${params.toString()}`;
-  const cacheKey = generateCacheKey('fetchAnimeEmbeddedServers', animeId, provider);
+// Fetch Embedded Anime Episodes Servers
+export async function fetchAnimeEmbeddedEpisodes(episodeId: string) {
+  const url = `${BASE_URL}meta/anilist/servers/${episodeId}`;
+  console.log("Fetching servers from URL:", url); // Debugging log
+  const cacheKey = generateCacheKey('animeEmbeddedServers', episodeId);
 
   return fetchFromProxy(url, fetchAnimeEmbeddedEpisodesCache, cacheKey);
+
 }
 
 // Function to fetch anime streaming links

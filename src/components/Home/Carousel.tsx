@@ -43,15 +43,15 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   justify-content: flex-start;
   align-items: center;
   animation: ${keyframes`
-    0% {
-      opacity: 0.4;
-      transform: scale(0.965);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  `} 0.2s ease-in-out forwards;
+  //   0% {
+  //     opacity: 0.4;
+  //     transform: scale(1);
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     transform: scale(1);
+  //   }
+  // `} 0.2s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
