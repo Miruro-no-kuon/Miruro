@@ -19,14 +19,14 @@ interface ImageDisplayProps {
 }
 
 const popInAnimation = keyframes`
-  0% {
-    opacity: 0.4;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  // 0% {
+  //   opacity: 0.4;
+  //   transform: scale(1);
+  // }
+  // 100% {
+  //   opacity: 1;
+  //   transform: scale(1);
+  // }
 `;
 
 const AnimeImage = styled.div<{
@@ -45,7 +45,7 @@ const AnimeImage = styled.div<{
 
   &:hover {
     background: ${({ $ishovered, color }) =>
-      $ishovered ? color : "var(--global-card-bg)"};
+    $ishovered ? color : "var(--global-card-bg)"};
   }
 `;
 
@@ -127,7 +127,7 @@ const Button = styled.span<{ $ishovered?: boolean; color?: string }>`
 
   &:hover {
     color: ${({ $ishovered, color }) =>
-      $ishovered ? color : "var(--global-button-text)"};
+    $ishovered ? color : "var(--global-button-text)"};
   }
   @media (max-width: 1000px) {
     font-size: 0.6rem;

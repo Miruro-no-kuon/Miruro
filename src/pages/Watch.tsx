@@ -17,8 +17,8 @@ import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
 // Styled Components
 
 const WatchContainer = styled.div`
-  margin-left: 5rem;
-  margin-right: 5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   @media (max-width: 1000px) {
     margin-left: 0rem;
     margin-right: 0rem;

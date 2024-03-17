@@ -46,7 +46,7 @@ const SkeletonCard = styled.div<SkeletonProps>`
     !loading &&
     css`
       animation: ${css`
-        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+        // ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
       `};
     `}
 `;

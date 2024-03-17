@@ -33,7 +33,7 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 46rem;
+  max-height: 50rem;
   @media (max-width: 1900px) {
     max-height: 35rem;
   }

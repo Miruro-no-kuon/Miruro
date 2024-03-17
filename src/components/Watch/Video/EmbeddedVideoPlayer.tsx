@@ -12,7 +12,7 @@ const Container = styled.div`
   padding-bottom: 56.25%; /* 16:9 aspect ratio (height / width * 100) */
   position: relative;
   @media (max-width: 1000px) {
-    padding-bottom:18rem; /* Adjust aspect ratio for smaller screens */
+    padding-bottom:16rem; /* Adjust aspect ratio for smaller screens */
   }
 `;
 

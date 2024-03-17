@@ -144,7 +144,12 @@ const ShortcutsPopup = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const togglePopupWithShortcut = (e: any) => {
+    const togglePopupWithShortcut = (e) => {
+      // Check if the event's target is an input, textarea, or select element
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") {
+        return; // Do nothing if the event is from one of these elements
+      }
+
       if (e.shiftKey && e.key === "?") {
         e.preventDefault(); // Prevent the default action of the key press
         setShowPopup(!showPopup);
@@ -152,6 +157,7 @@ const ShortcutsPopup = () => {
         setShowPopup(false); // Close the popup when Escape key is pressed
       }
     };
+
 
     // Add the event listener
     window.addEventListener("keydown", togglePopupWithShortcut);

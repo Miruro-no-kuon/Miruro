@@ -47,13 +47,13 @@ interface CardItemContentProps {
 }
 
 const popInAnimation = keyframes`
-  0% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  // 0% {
+  //   opacity: 0.4;
+  // }
+  // 100% {
+  //   opacity: 1;
+  //   transform: scale(1);
+  // }
 `;
 
 const StyledCardWrapper = styled.div`

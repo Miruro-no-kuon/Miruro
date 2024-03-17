@@ -14,18 +14,18 @@ const pulseAnimation = keyframes`
 `;
 
 const popInAnimation = keyframes`
-  0%, 100%{
-    opacity: 0;
-    transform: scale(0.975);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  75% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
+  // 0%, 100%{
+  //   opacity: 0;
+  //   transform: scale(1);
+  // }
+  // 50% {
+  //   opacity: 1;
+  //   transform: scale(1);
+  // }
+  // 75% {
+  //   opacity: 0.5;
+  //   transform: scale(1);
+  // }
 `;
 
 interface SkeletonProps {
@@ -42,6 +42,7 @@ const SkeletonSlide = styled.div<SkeletonProps>`
 
   @media (max-width: 1000px) {
     height: 20rem;
+    margin-bottom: 0.5rem;
   }
   @media (max-width: 500px) {
     height: 18rem;
