@@ -101,8 +101,6 @@ bun install && cd server && bun install
 cp .env.example .env
 ```
 
-#### ⚠ Please remember to change the value of VITE_BACKEND_URL to a consumet deployment that is functional.⚠
-
 ### 3. Run on development &/or production (npm also works)
 
 #### Start development version
