@@ -462,7 +462,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
   // Function to generate a storage key that is shared between sub and dub
-  const generateStorageKey = (episodeId) => {
+  const generateStorageKey = (episodeId: any) => {
     // Remove '-dub' from the episodeId to unify the key for both versions
     return `savedTime-${episodeId.replace("-dub", "")}`;
   };
