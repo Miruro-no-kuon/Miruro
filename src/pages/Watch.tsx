@@ -117,8 +117,8 @@ interface CurrentEpisode {
 }
 
 // Main Component
-const getSourceTypeKey = (animeId) => `sourceType-${animeId}`;
-const getLanguageKey = (animeId) => `language-${animeId}`;
+const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
+const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
@@ -239,32 +239,38 @@ const Watch: React.FC = () => {
             id: ep.id,
             title: ep.title,
             image: ep.image,
-            number:
-              ep.number % 1 === 0
-                ? ep.number
-                : Math.floor(ep.number) +
-                "-" +
-                ep.number.toString().split(".")[1],
+            number: ep.number % 1 === 0
+              ? ep.number >= 0 ? ep.number : "Special" // Handles integer and episode 0
+              : `${Math.floor(ep.number)}-${ep.number.toString().split(".")[1]}`, // Handles fractional episodes
           }));
+
 
           setEpisodes(transformedEpisodes);
 
           // Navigate based on language change, URL parameters, or saved episode
           const navigateToEpisode = (() => {
+            if (episodeNumber !== undefined) {
+              const epNumber = parseInt(episodeNumber, 10); // Parse episodeNumber from URL
+
+              // Check if epNumber is 0 or a positive integer
+              if (!isNaN(epNumber) && epNumber >= 0) {
+                return transformedEpisodes.find(ep => ep.number === epNumber) || transformedEpisodes[0];
+              }
+            }
             if (languageChanged) {
               const currentEpisodeNumber =
                 parseInt(episodeNumber) || currentEpisode.number;
               // Try to find the current episode in the new language or default to the last available episode
               return (
                 transformedEpisodes.find(
-                  (ep) => ep.number === currentEpisodeNumber
+                  (ep: any) => ep.number === currentEpisodeNumber
                 ) || transformedEpisodes[transformedEpisodes.length - 1]
               );
             } else if (animeTitle && episodeNumber) {
               // Navigate based on URL parameters
               const episodeId = `${animeTitle}-episode-${episodeNumber}`;
               return (
-                transformedEpisodes.find((ep) => ep.id === episodeId) ||
+                transformedEpisodes.find((ep: any) => ep.id === episodeId) ||
                 navigate(`/watch/${animeId}`, { replace: true })
               );
             } else {
@@ -277,7 +283,7 @@ const Watch: React.FC = () => {
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                  (ep) => ep.number === savedEpisode.number
+                  (ep: any) => ep.number === savedEpisode.number
                 ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
@@ -397,7 +403,6 @@ const Watch: React.FC = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!event.shiftKey || !["N", "P"].includes(event.key.toUpperCase()))
         return;
-
       const now = Date.now();
       if (now - lastKeypressTime < 200) return; // Debounce check
 
@@ -427,7 +432,7 @@ const Watch: React.FC = () => {
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        "Miruro | " + (animeInfo.title.english || animeInfo.title.romaji || "");
+        "Miruro | " + (animeInfo.title.english || animeInfo.title.romaji || animeInfo.title.romaji || "");
     } else {
       document.title = "Miruro";
     }
