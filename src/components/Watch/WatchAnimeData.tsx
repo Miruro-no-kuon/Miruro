@@ -219,7 +219,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           <AnimeDataContainerTop>
             <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
             <AnimeDataText className="bio">
-            <p className="anime-title">{animeData.title.english ? animeData.title.english : animeData.title.romaji}</p>
+              <p className="anime-title">{animeData.title.english ? animeData.title.english : animeData.title.romaji}</p>
               <p>
                 <strong>Type:</strong> {animeData.type}
               </p>
@@ -248,14 +248,13 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <strong> Date aired:</strong>{" "}
                   {getDateString(animeData.startDate)}
                   {animeData.endDate
-                    ? ` to ${
-                        animeData.endDate.month && animeData.endDate.year
-                          ? getDateString(animeData.endDate)
-                          : "?"
-                      }`
+                    ? ` to ${animeData.endDate.month && animeData.endDate.year
+                      ? getDateString(animeData.endDate)
+                      : "?"
+                    }`
                     : animeData.status === "Ongoing"
-                    ? ""
-                    : " to ?"}
+                      ? ""
+                      : " to ?"}
                 </p>
               )}
               {animeData.studios && (
@@ -287,8 +286,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                     {isDescriptionExpanded
                       ? removeHTMLTags(animeData.description || "")
                       : `${removeHTMLTags(
-                          animeData.description || ""
-                        ).substring(0, 300)}...`}
+                        animeData.description || ""
+                      ).substring(0, 300)}...`}
                     <br />
                     <br />
                     <p style={{ textAlign: "center", fontWeight: "bold" }}>
@@ -337,7 +336,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
         ).length > 0 && (
           <>
             <AnimeDataText className="bio">
-              <p className="anime-title">Seasons/Related</p>
+              <p className="anime-title">Relations</p>
             </AnimeDataText>
             <Relations>
               <CardGrid
@@ -350,7 +349,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   .slice(0, 6)}
                 totalPages={0}
                 hasNextPage={false}
-                onLoadMore={() => {}}
+                onLoadMore={() => { }}
               />
             </Relations>
           </>
@@ -377,7 +376,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   .slice(0, 6)}
                 totalPages={0}
                 hasNextPage={false}
-                onLoadMore={() => {}}
+                onLoadMore={() => { }}
               />
             </Relations>
           </>

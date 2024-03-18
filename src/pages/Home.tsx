@@ -142,7 +142,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    document.title = `Miruro | Blazing Fast HD Anime Streaming`;
+    document.title = `Miruro | Fast HD Anime Streaming`;
   }, [activeTab]);
 
   useEffect(() => {

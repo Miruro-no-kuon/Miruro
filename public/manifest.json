@@ -92,17 +92,5 @@
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "./screenshot-1.jpg",
-      "sizes": "960x540",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "./screenshot-2.jpg",
-      "sizes": "960x540",
-      "type": "image/jpeg"
-    }
   ]
 }
