@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import ImageDisplay from "../components/Cards/ImageDisplay.tsx";
 
 interface Anime {
   id: string;
@@ -87,9 +86,6 @@ const AnimeTitle = styled.p`
   white-space: nowrap;
 `;
 
-const ImageDisplayWrapper = styled.div`
-  width: 5rem;
-`;
 
 interface DropDownSearchProps {
   searchResults: Anime[];
@@ -183,13 +179,6 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           <AnimeTitle>
             {result.title?.english || result.title?.romaji || "n/a"}
           </AnimeTitle>
-          {/* <ImageDisplayWrapper>
-            <ImageDisplay
-              type={result.type}
-              totalEpisodes={result.totalEpisodes}
-              rating={result.rating}
-            />
-          </ImageDisplayWrapper> */}
         </ResultItem>
       ))}
     </DropdownContainer>

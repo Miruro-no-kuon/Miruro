@@ -353,7 +353,7 @@ const Navbar = () => {
       // Optionally reset the flag here if you're using one
       // enterPressedRecently = false;
       // }
-    }, 300); // Debounce for 300ms
+    }, 100); // Debounce for 300ms
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -78,7 +78,7 @@ const Relations = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 20px;
-  padding: 0.6rem;
+  margin-top:2rem;
 `;
 
 const AnimeInfoImage = styled.img`
@@ -346,7 +346,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       relation.type
                     )
                   )
-                  .slice(0, 6)}
+                  .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => { }}
@@ -354,7 +354,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
             </Relations>
           </>
         )}
-
+      <br></br>
+      {/* Recommendations */}
       {animeData &&
         animeData.recommendations.filter((recommendation: any) =>
           ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
@@ -373,7 +374,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       recommendation.type
                     )
                   )
-                  .slice(0, 6)}
+                  .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => { }}

@@ -88,6 +88,7 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
+  const [itemsCount, setItemsCount] = useState(window.innerWidth > 500 ? 16 : 15);
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem("home tab");
     if (savedData) {
@@ -111,7 +112,19 @@ const Home = () => {
     popular: true,
     top: true,
   });
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsCount(window.innerWidth > 500 ? 16 : 15);
+    };
 
+    window.addEventListener('resize', handleResize);
+    // Set initial value
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -119,9 +132,9 @@ const Home = () => {
         setError(null);
 
         const [trending, popular, top] = await Promise.all([
-          fetchTrendingAnime(1, 16),
-          fetchPopularAnime(1, 16),
-          fetchTopAnime(1, 16),
+          fetchTrendingAnime(1, itemsCount), // Use itemsCount here
+          fetchPopularAnime(1, itemsCount), // And here
+          fetchTopAnime(1, itemsCount), // And here
         ]);
 
         setTrendingAnime(trending.results);
@@ -139,10 +152,10 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [itemsCount]);
 
   useEffect(() => {
-    document.title = `Miruro | Fast HD Anime Streaming`;
+    document.title = `Miruro | Blazing Fast HD Anime Streaming`;
   }, [activeTab]);
 
   useEffect(() => {

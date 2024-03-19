@@ -58,6 +58,9 @@ const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
   &:hover {
     transition: 0.1s ease;
   }
+  @media (max-width: 500px) {
+  font-size: .7rem;
+  }
 `;
 
 const TitleComponent: React.FC<TitleComponentProps> = ({

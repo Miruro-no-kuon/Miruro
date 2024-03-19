@@ -8,6 +8,12 @@ import CardSkeleton from "../components/Skeletons/CardSkeleton";
 
 const Container = styled.div`
   min-height: 85vh;
+  margin-left: 10rem;
+  margin-right: 10rem;
+  @media (max-width: 1500px) {
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
 `;
 
 const SearchTitle = styled.h2`
