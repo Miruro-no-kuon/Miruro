@@ -22,6 +22,7 @@ interface Props {
   episodes: Episode[];
   selectedEpisodeId: string;
   onEpisodeSelect: (id: string) => void;
+  maxListHeight: string;
 }
 
 // Styled components for the episode list
@@ -33,16 +34,7 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 50rem;
-  @media (max-width: 1900px) {
-    max-height: 35rem;
-  }
-  @media (max-width: 1400px) {
-    max-height: 24rem;
-  }
-  @media (max-width: 1000px) {
-    max-height: 18rem;
-  }
+  max-height: ${({ maxHeight }) => maxHeight};
 `;
 
 const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
@@ -189,6 +181,7 @@ const EpisodeList: React.FC<Props> = ({
   episodes,
   selectedEpisodeId,
   onEpisodeSelect,
+  maxListHeight,
 }) => {
   // State for interval, layout, user layout preference, search term, and watched episodes
   const episodeGridRef = useRef<HTMLDivElement>(null);
@@ -408,7 +401,7 @@ const EpisodeList: React.FC<Props> = ({
 
   // Render the EpisodeList component
   return (
-    <ListContainer>
+    <ListContainer maxHeight={maxListHeight}>
       <ControlsContainer>
         <SelectInterval
           onChange={handleIntervalChange}

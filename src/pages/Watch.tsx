@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
@@ -120,6 +120,9 @@ interface CurrentEpisode {
 const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
 const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
+  const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
+  const [maxEpisodeListHeight, setMaxEpisodeListHeight] = useState<string>('100%');
+
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
     animeTitle?: string;
@@ -534,6 +537,21 @@ const Watch: React.FC = () => {
     }
   }, [sourceType, currentEpisode.id]);
 
+  useEffect(() => {
+    const updateMaxHeight = () => {
+      if (videoPlayerContainerRef.current) {
+        const height = videoPlayerContainerRef.current.offsetHeight;
+        setMaxEpisodeListHeight(`${height}px`);
+      }
+    };
+
+    updateMaxHeight();
+    window.addEventListener('resize', updateMaxHeight);
+
+    return () => window.removeEventListener('resize', updateMaxHeight);
+  }, []);
+
+
   return (
     <WatchContainer>
       {showNoEpisodesMessage && (
@@ -546,7 +564,7 @@ const Watch: React.FC = () => {
         {/* Render WatchWrapper content conditionally based on showNoEpisodesMessage or other state */}
         {!showNoEpisodesMessage && (
           <>
-            <VideoPlayerContainer>
+            <VideoPlayerContainer ref={videoPlayerContainerRef}>
               {loading ? (
                 <VideoPlayerSkeleton />
               ) : sourceType === "default" ? (
@@ -560,7 +578,7 @@ const Watch: React.FC = () => {
                 <EmbeddedVideoPlayer src={embeddedVideoUrl} />
               )}
             </VideoPlayerContainer>
-            <EpisodeListContainer>
+            <EpisodeListContainer style={{ maxHeight: maxEpisodeListHeight }}>
               {loading ? (
                 <VideoPlayerSkeleton />
               ) : (
@@ -574,6 +592,7 @@ const Watch: React.FC = () => {
                       handleEpisodeSelect(episode);
                     }
                   }}
+                  maxListHeight={maxEpisodeListHeight}
                 />
               )}
             </EpisodeListContainer>
