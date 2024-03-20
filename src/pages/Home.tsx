@@ -44,6 +44,9 @@ const Tab = styled.button<TabProps>`
   position: relative;
   overflow: hidden;
   z-index: 1;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -51,6 +54,8 @@ const Tab = styled.button<TabProps>`
   }
   @media (max-width: 500px) {
     padding: .5rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
   }
 `;
 
