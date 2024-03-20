@@ -5,8 +5,8 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.COM</a> //
-    MIRURO<a href="https://www.miruro.tv">.TV</a>
+    <a href="https://www.miruro.com">miruro.com</a> //
+    <a href="https://www.miruro.tv">miruro.tv</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
   </p>
@@ -32,6 +32,7 @@
   - Mobile responsive
   - Fast page load
   - White/Dark theme
+  - Page to see your continue watching
 - Watch Page
   - Player
     - Autoplay next episode
@@ -39,7 +40,6 @@
     - Theater mode
 - Coming Soon
   - Profile page to see your watch list
-  - Profile page to see your continue watching
   - Comment section
 
 <div style="text-align: left;">
@@ -61,10 +61,6 @@
 </div>
 
 ## Installation 🛠️
-
-### Before starting installation ⚠️
-
-> Before we proceed with the installation, we strongly recommend using `bun` for a seamless and efficient setup.
 
 ### 1. Clone this repository using
 
@@ -93,6 +89,12 @@ bun -v
 
 ```bash
 bun install && cd server && bun install
+```
+
+#### or
+
+```bash
+bun iu
 ```
 
 ### Copy the `.env.example` contents to `.env` in the root folder

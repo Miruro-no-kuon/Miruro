@@ -76,6 +76,11 @@ const ImageDisplayWrapper = styled.div`
   &:hover {
     transform: translateY(-10px); /* Move card up by 10 pixels on hover */
   }
+  @media (max-width: 500px) {
+  &:hover {
+    transform: translateY(0px);
+  }
+  }
 `;
 
 const CardItemContent: React.FC<CardItemContentProps> = React.memo(

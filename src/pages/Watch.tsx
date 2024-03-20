@@ -144,7 +144,6 @@ const Watch: React.FC = () => {
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
-  const LANGUAGE_PREFERENCE_PREFIX = "language-preference-";
   const [sourceType, setSourceType] = useState(
     () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "default"
   );
@@ -480,10 +479,6 @@ const Watch: React.FC = () => {
       );
     }
   };
-  //Saving language preference to cache.
-  useEffect(() => {
-    localStorage.setItem(LANGUAGE_PREFERENCE_PREFIX + animeId, language);
-  }, [language, animeId]);
 
   // Assuming you need to determine which episode's URL to use
   const fetchEmbeddedUrl = async (episodeId: string) => {

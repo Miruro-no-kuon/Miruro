@@ -18,19 +18,16 @@ interface SlideData {
   description: string;
 }
 
-// Styled components for the Carousel
-
+// Check Carousel Skeleton to match height
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
   max-width: 100%;
   height: 24rem;
-  margin-bottom: 1rem;
   border-radius: var(--global-border-radius);
   cursor: grab;
-
-  @media (max-width: 1000px) {
+  
+  @media (max-width: 1000px) { 
     height: 20rem;
-    margin-bottom: 0.5rem;
   }
   @media (max-width: 500px) {
     height: 18rem;
@@ -214,7 +211,7 @@ const PaginationStyle = styled.div`
 `;
 
 // Adjust the Carousel component to use correctly typed props and state
-const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
+const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   const navigate = useNavigate();
 
   const handlePlayButtonClick = (id: string) => {
@@ -287,4 +284,4 @@ const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   );
 };
 
-export default Carousel;
+export default CarouselTrending;
