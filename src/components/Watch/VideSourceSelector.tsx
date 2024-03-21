@@ -49,16 +49,16 @@ const ButtonRow = styled.div`
 const Button = styled.button`
   padding: 0.5rem 1rem;
   border: none;
+  font-weight: bold;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   background-color: #505050;
   color: white;
   transition: background-color 0.3s ease;
-
-  &:hover {
+  &.active {
     background-color: var(--primary-accent);
   }
-  &.active {
+  &:hover {
     background-color: var(--primary-accent-bg);
   }
 `;
@@ -138,7 +138,11 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
           >
             Dub
           </Button>
-          <DownloadLink href={downloadLink} target="_blank" rel="noopener noreferrer">
+          <DownloadLink
+            href={downloadLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaDownload />
             Download
           </DownloadLink>

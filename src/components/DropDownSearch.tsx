@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTv,
+  faClosedCaptioning,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Anime {
   id: string;
@@ -10,6 +16,7 @@ interface Anime {
     romaji?: string;
     english?: string;
   };
+  releaseDate?: number;
   rating?: number;
   color?: string;
   format?: string;
@@ -22,7 +29,6 @@ interface Anime {
   popularity?: {
     anidb?: number;
   };
-  releaseDate?: string;
   year?: string;
 }
 
@@ -33,20 +39,15 @@ interface DropdownContainerProps {
 const DropdownContainer = styled.div<DropdownContainerProps>`
   display: ${(props) => (props.isVisible ? "block" : "none")};
   position: absolute;
-  top: 79.5%;
-  width: 40%;
+  top: 90%;
+  width: 32.5rem;
   margin-left: -0.85rem;
   overflow-y: auto;
   background-color: var(--global-input-div);
   border: 0.0625rem solid var(--global-input-border);
-  border-top: none;
-  border-radius: var(--global-border-radius);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  @media (max-width: 500px) {
-    /* margin-right: 45%; */
-    width: 55%;
-    top: 82%;
+  border-radius: 1rem;
+  @media (max-width: 1000px) {
+    max-width: 55%;
   }
   /* Hide scrollbar */
   scrollbar-width: none; /* Firefox */
@@ -70,7 +71,8 @@ const ResultItem = styled.div<{ isSelected: boolean }>`
 `;
 
 const AnimeImage = styled.img`
-  width: 3.5rem;
+  margin-left: 0.2rem;
+  width: 2.5rem;
   border-radius: var(--global-border-radius);
   height: auto;
   object-fit: cover;
@@ -81,11 +83,25 @@ const AnimeImage = styled.img`
 
 const AnimeTitle = styled.p`
   margin: 0.25rem;
+  text-align: left;
   overflow: hidden;
+  font-size: 0.9rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+  @media (max-width: 500px) {
+    font-size: 0.8rem;
+  }
 `;
 
+const AnimeDetails = styled.p`
+  font-size: 0.6rem;
+  margin: 0rem;
+  margin-top: 0.5rem;
+  display: flex;
+  p {
+    margin: 0rem;
+  }
+`;
 
 interface DropDownSearchProps {
   searchResults: Anime[];
@@ -177,8 +193,24 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
             alt={result.title?.english || result.title?.romaji || "n/a"}
           />
           <AnimeTitle>
-            {result.title?.english || result.title?.romaji || "n/a"}
+            <strong>
+              {result.title?.english || result.title?.romaji || "n/a"}
+            </strong>
+            <AnimeDetails>
+              <FontAwesomeIcon icon={faTv} />
+              <p>&nbsp;</p>
+              {result.type}
+              <p>&nbsp;</p>
+              <FontAwesomeIcon icon={faStar} />
+              <p>&nbsp;</p>
+              {result.rating / 10}
+              <p>&nbsp;</p>
+              <FontAwesomeIcon icon={faClosedCaptioning} />
+              <p>&nbsp;</p>
+              {result.totalEpisodes}
+            </AnimeDetails>
           </AnimeTitle>
+          <br></br>
         </ResultItem>
       ))}
     </DropdownContainer>

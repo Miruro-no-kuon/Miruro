@@ -8,8 +8,8 @@ import CardSkeleton from "../components/Skeletons/CardSkeleton";
 
 const Container = styled.div`
   min-height: 85vh;
-  margin-left: 10rem;
-  margin-right: 10rem;
+  // margin-left: 5rem;
+  // margin-right: 5rem;
   @media (max-width: 1500px) {
     margin-left: 0rem;
     margin-right: 0rem;

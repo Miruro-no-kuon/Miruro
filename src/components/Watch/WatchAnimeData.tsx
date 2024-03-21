@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CardGrid from "../Cards/CardGrid";
-
+import AniList_logo from "../../assets/AniList_logo.png";
+import MAL_logo from "../../assets/MyAnimeList_Logo.png";
 // Styled components
 const AnimeDataContainer = styled.div``;
 
@@ -13,6 +14,7 @@ const AnimeDataContainerTop = styled.div`
   flex-direction: row;
   align-items: flex-start;
   display: flex;
+  margin-bottom: -0.3rem;
 `;
 
 const AnimeDataContainerBottom = styled.div`
@@ -37,7 +39,7 @@ const AnimeDataText = styled.div`
 
 const Button = styled.button`
   padding: 0.5rem 0.6rem;
-  background-color: var(--primary-accent-bg);
+  background-color: var(--primary-accent);
   color: white;
   border: none;
   border-radius: var(--global-border-radius);
@@ -46,7 +48,7 @@ const Button = styled.button`
   outline: none;
 
   &:hover {
-    background-color: var(--primary-accent);
+    background-color: var(--primary-accent-bg);
   }
 
   @media (max-width: 1000px) {
@@ -78,16 +80,16 @@ const Relations = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 20px;
-  margin-top:2rem;
+  margin-top: 2rem;
 `;
 
 const AnimeInfoImage = styled.img`
   border-radius: var(--global-border-radius);
   max-height: 12rem;
   margin-right: 1rem;
-  @media (max-width: 1000px) {
-    max-height: 10rem;
-  }
+  // @media (max-width: 1000px) {
+  //   max-height: 10rem;
+  // }
 `;
 
 const AnimeCharacterContainer = styled.div`
@@ -219,47 +221,78 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           <AnimeDataContainerTop>
             <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
             <AnimeDataText className="bio">
-              <p className="anime-title">{animeData.title.english ? animeData.title.english : animeData.title.romaji}</p>
-              <p>
-                <strong>Type:</strong> {animeData.type}
-              </p>
-
-              <p>
-                <strong>Year:</strong>{" "}
-                {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
+              <p className="anime-title">
+                {animeData.title.english
+                  ? animeData.title.english
+                  : animeData.title.romaji}
               </p>
               <p>
-                <strong>Rating:</strong> {animeData.rating / 10}
+                Type: <strong>{animeData.type}</strong>
+              </p>
+              <p>
+                Year:{" "}
+                <strong>
+                  {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
+                </strong>{" "}
+              </p>
+              <p>
+                Rating: <strong>{animeData.rating / 10}</strong>
+              </p>
+              <p>
+                <a
+                  href={`https://anilist.co/anime/${animeData.id}`}
+                  target="_blank"
+                >
+                  <img
+                    src={AniList_logo}
+                    alt="AniList Logo"
+                    style={{ height: "30px", borderRadius: "50%" }}
+                  />
+                </a>{" "}
+                <a
+                  href={`https://myanimelist.net/anime/${animeData.malId}`}
+                  target="_blank"
+                >
+                  <img
+                    src={MAL_logo}
+                    alt="AniList Logo"
+                    style={{ height: "30px", borderRadius: "50%" }}
+                  />
+                </a>
               </p>
             </AnimeDataText>
           </AnimeDataContainerTop>
           <AnimeDataContainerBottom>
             <AnimeDataText>
               <p>
-                <strong>Status:</strong> {animeData.status}
+                Status: <strong>{animeData.status}</strong>
               </p>
               {animeData.genres.length > 0 && (
                 <p>
-                  <strong>Genres:</strong> {animeData.genres.join(", ")}
+                  Genres: <strong>{animeData.genres.join(", ")}</strong>
                 </p>
               )}
               {animeData.startDate && (
                 <p>
-                  <strong> Date aired:</strong>{" "}
-                  {getDateString(animeData.startDate)}
-                  {animeData.endDate
-                    ? ` to ${animeData.endDate.month && animeData.endDate.year
-                      ? getDateString(animeData.endDate)
-                      : "?"
-                    }`
-                    : animeData.status === "Ongoing"
+                  Date aired:
+                  <strong>
+                    {" "}
+                    {getDateString(animeData.startDate)}
+                    {animeData.endDate
+                      ? ` to ${
+                          animeData.endDate.month && animeData.endDate.year
+                            ? getDateString(animeData.endDate)
+                            : "?"
+                        }`
+                      : animeData.status === "Ongoing"
                       ? ""
                       : " to ?"}
+                  </strong>
                 </p>
               )}
               {animeData.studios && (
                 <p>
-                  <strong>Studios:</strong> {animeData.studios}
+                  Studios: <strong>{animeData.studios}</strong>
                 </p>
               )}
               {animeData.trailer && (
@@ -286,8 +319,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                     {isDescriptionExpanded
                       ? removeHTMLTags(animeData.description || "")
                       : `${removeHTMLTags(
-                        animeData.description || ""
-                      ).substring(0, 300)}...`}
+                          animeData.description || ""
+                        ).substring(0, 300)}...`}
                     <br />
                     <br />
                     <p style={{ textAlign: "center", fontWeight: "bold" }}>
@@ -349,7 +382,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
-                onLoadMore={() => { }}
+                onLoadMore={() => {}}
               />
             </Relations>
           </>
@@ -377,7 +410,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
-                onLoadMore={() => { }}
+                onLoadMore={() => {}}
               />
             </Relations>
           </>

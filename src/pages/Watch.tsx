@@ -16,14 +16,7 @@ import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
 
 // Styled Components
 
-const WatchContainer = styled.div`
-  margin-left: 1rem;
-  margin-right: 1rem;
-  @media (max-width: 1000px) {
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
-`;
+const WatchContainer = styled.div``;
 
 const WatchWrapper = styled.div`
   font-size: 0.9rem;
@@ -121,7 +114,8 @@ const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
 const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
-  const [maxEpisodeListHeight, setMaxEpisodeListHeight] = useState<string>('100%');
+  const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
+    useState<string>("100%");
 
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
@@ -241,11 +235,15 @@ const Watch: React.FC = () => {
             id: ep.id,
             title: ep.title,
             image: ep.image,
-            number: ep.number % 1 === 0
-              ? ep.number >= 0 ? ep.number : "Special" // Handles integer and episode 0
-              : `${Math.floor(ep.number)}-${ep.number.toString().split(".")[1]}`, // Handles fractional episodes
+            number:
+              ep.number % 1 === 0
+                ? ep.number >= 0
+                  ? ep.number
+                  : "Special" // Handles integer and episode 0
+                : `${Math.floor(ep.number)}-${
+                    ep.number.toString().split(".")[1]
+                  }`, // Handles fractional episodes
           }));
-
 
           setEpisodes(transformedEpisodes);
 
@@ -256,7 +254,10 @@ const Watch: React.FC = () => {
 
               // Check if epNumber is 0 or a positive integer
               if (!isNaN(epNumber) && epNumber >= 0) {
-                return transformedEpisodes.find(ep => ep.number === epNumber) || transformedEpisodes[0];
+                return (
+                  transformedEpisodes.find((ep) => ep.number === epNumber) ||
+                  transformedEpisodes[0]
+                );
               }
             }
             if (languageChanged) {
@@ -285,8 +286,8 @@ const Watch: React.FC = () => {
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                  (ep: any) => ep.number === savedEpisode.number
-                ) || transformedEpisodes[0]
+                    (ep: any) => ep.number === savedEpisode.number
+                  ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
           })();
@@ -434,7 +435,11 @@ const Watch: React.FC = () => {
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        "Miruro | " + (animeInfo.title.english || animeInfo.title.romaji || animeInfo.title.romaji || "");
+        "Miruro | " +
+        (animeInfo.title.english ||
+          animeInfo.title.romaji ||
+          animeInfo.title.romaji ||
+          "");
     } else {
       document.title = "Miruro";
     }
@@ -527,7 +532,6 @@ const Watch: React.FC = () => {
     }
   };
 
-
   // Call this function with the appropriate episode ID when an episode is selected
   useEffect(() => {
     if (sourceType === "vidstreaming" && currentEpisode.id) {
@@ -546,11 +550,10 @@ const Watch: React.FC = () => {
     };
 
     updateMaxHeight();
-    window.addEventListener('resize', updateMaxHeight);
+    window.addEventListener("resize", updateMaxHeight);
 
-    return () => window.removeEventListener('resize', updateMaxHeight);
+    return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
-
 
   return (
     <WatchContainer>

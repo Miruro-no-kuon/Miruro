@@ -28,14 +28,14 @@ const TabContainer = styled.div`
   gap: 1rem; /* Adds some space between your tabs if they wrap */
 `;
 
-
 // Correcting the type for the $isActive prop
 interface TabProps {
   $isActive: boolean;
 }
 const Tab = styled.button<TabProps>`
-  background: ${({ $isActive }) => ($isActive ? 'var(--primary-accent)' : 'transparent')};
-  padding: .8rem 1rem .8rem 1rem;
+  background: ${({ $isActive }) =>
+    $isActive ? "var(--primary-accent)" : "transparent"};
+  padding: 0.8rem 1rem 0.8rem 1rem;
   border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
@@ -44,8 +44,8 @@ const Tab = styled.button<TabProps>`
   position: relative;
   overflow: hidden;
   z-index: 1;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 
   transition: background-color 0.3s ease;
 
@@ -53,12 +53,11 @@ const Tab = styled.button<TabProps>`
     background: var(--primary-accent-bg);
   }
   @media (max-width: 500px) {
-    padding: .5rem;
+    padding: 0.5rem;
     margin-top: 0rem;
     margin-bottom: 0rem;
   }
 `;
-
 
 const Section = styled.section`
   padding: 0rem;
@@ -83,8 +82,7 @@ const ErrorMessage = styled.div`
 const EpisodeCard = styled.div`
   display: flex;
   flex-direction: column;
-  width: 250px; // Adjust based on your layout needs
-  margin: 1rem;
+  width: 235px; // Adjust based on your layout needs
   border-radius: var(--global-border-radius);
   overflow: hidden;
   transition: 0.2s ease-in-out;
@@ -127,35 +125,25 @@ const EpisodeCard = styled.div`
     }
   }
   &:hover {
-    transform: translateY(-10px); /* Move card up by 10 pixels on hover */
-  }
-  @media (max-width: 1000px) {
-    width: 200px;
-    margin: 0rem;
-    padding: 0.1rem;
-    margin-top: 1rem;
+    transform: translateY(-10px);
+    background: var(--primary-accent);
   }
   @media (max-width: 500px) {
-    width: 115px;
-    margin: 0rem;
-    padding: 0.1rem;
-    margin-top: 1rem;
-  }
-  &:hover {
-    background: var(--primary-accent); // Adjust based on your theme
-  }
-  @media (max-width: 500px) {
+    width: 175px; // Adjust based on your layout needs
     &:hover {
-      transform: translateY(0px); /* Move card up by 10 pixels on hover */
+      transform: translateY(0px);
+      background: var(--primary-accent); // Adjust based on your theme
     }
+  }
 `;
+
 const EpisodeCardGridContainer = styled.div`
-margin-top:-1rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* Center the cards horizontally */
+  gap: 2.75rem; /* Adjust gap between cards here */
   @media (max-width: 1000px) {
-    gap: .6rem;
+    gap: 0.9rem; /* You can adjust the gap for different screen sizes */
   }
 `;
 
@@ -174,7 +162,7 @@ const FooterLink = styled(Link)`
 const Home = () => {
   const [watchedEpisodes, setWatchedEpisodes] = useState([]);
   const [itemsCount, setItemsCount] = useState(
-    window.innerWidth > 500 ? 16 : 15
+    window.innerWidth > 500 ? 14 : 12
   );
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem("home tab");
@@ -201,7 +189,7 @@ const Home = () => {
   });
   useEffect(() => {
     const handleResize = () => {
-      setItemsCount(window.innerWidth > 500 ? 16 : 15);
+      setItemsCount(window.innerWidth > 500 ? 14 : 12);
     };
 
     window.addEventListener("resize", handleResize);
@@ -263,7 +251,7 @@ const Home = () => {
   }, [itemsCount]);
 
   useEffect(() => {
-    document.title = `Miruro | Fast Anime Streaming HD`;
+    document.title = `Miruro | Watch Anime for free in HD`;
   }, [activeTab]);
 
   useEffect(() => {
@@ -280,7 +268,7 @@ const Home = () => {
     <Section>
       {isLoading || hasError ? (
         <StyledCardGrid>
-          {Array.from({ length: 16 }, (_, index) => (
+          {Array.from({ length: 14 }, (_, index) => (
             <CardSkeleton key={index} />
           ))}
         </StyledCardGrid>
@@ -289,7 +277,7 @@ const Home = () => {
           animeData={animeData}
           totalPages={1} // Adjust as necessary
           hasNextPage={false} // Adjust as necessary
-          onLoadMore={() => { }} // Placeholder for actual logic
+          onLoadMore={() => {}} // Placeholder for actual logic
         />
       )}
     </Section>
@@ -306,8 +294,9 @@ const Home = () => {
 
     const episodeNumberText =
       window.innerWidth > 500
-        ? `Episode ${episode.number}${truncatedEpisodeTitle ? `: ${truncatedEpisodeTitle}` : ""
-        }`
+        ? `Episode ${episode.number}${
+            truncatedEpisodeTitle ? `: ${truncatedEpisodeTitle}` : ""
+          }`
         : `Episode ${episode.number}`;
 
     return (

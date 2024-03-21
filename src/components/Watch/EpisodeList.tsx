@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -47,12 +53,13 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   flex-grow: 1;
 `;
 const EpisodeImage = styled.img`
-  max-width: 100%;
+  max-width: 250px;
   height: auto;
   margin-top: 0.5rem;
-@media (max-width: 1000px) {
-  max-height: 75px; /* Adjust this value to control the image size */
-}
+  border-radius: var(--global-border-radius);
+  @media (max-width: 500px) {
+    max-width: 125px;
+  }
 `;
 
 const ListItem = styled.button<{
@@ -63,11 +70,11 @@ const ListItem = styled.button<{
   background-color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched
-        ? "var(--primary-accent-bg)" // Selected and watched
+        ? "var(--primary-accent)" // Selected and watched
         : "var(--primary-accent-bg)" // Selected but not watched
       : $isWatched
-        ? "var(--primary-accent-bg); filter: brightness(0.8);" // Not selected but watched
-        : "var(--global-tertiary-bg)"};
+      ? "var(--primary-accent-bg); filter: brightness(0.8);" // Not selected but watched
+      : "var(--global-tertiary-bg)"};
 
   border: none;
   border-radius: var(--global-border-radius);
@@ -77,8 +84,8 @@ const ListItem = styled.button<{
         ? "var(--global-text)" // Selected and watched
         : "var(--global-text)" // Selected but not watched
       : $isWatched
-        ? "var(--primary-accent); filter: brightness(0.8);" // Not selected but watched
-        : "grey"}; // Not selected and not watched
+      ? "var(--primary-accent); filter: brightness(0.8);" // Not selected but watched
+      : "grey"}; // Not selected and not watched
 
   padding: ${({ $isRowLayout }) =>
     $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
@@ -90,11 +97,11 @@ const ListItem = styled.button<{
 
   &:hover {
     ${({ $isSelected, $isWatched }) =>
-    $isSelected
-      ? $isWatched
-        ? "filter: brightness(1.1)" // Selected and watched
-        : "filter: brightness(1.1)" // Selected but not watched
-      : $isWatched
+      $isSelected
+        ? $isWatched
+          ? "filter: brightness(1.1)" // Selected and watched
+          : "filter: brightness(1.1)" // Selected but not watched
+        : $isWatched
         ? "filter: brightness(1.1)" // Not selected but watched
         : "background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff"};
   }
@@ -193,11 +200,17 @@ const EpisodeList: React.FC<Props> = ({
   >(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [watchedEpisodes, setWatchedEpisodes] = useState<Episode[]>([]);
-  const defaultLayoutMode = episodes.every(episode => episode.title) ? 'list' : 'grid';
-  const [displayMode, setDisplayMode] = useState<'list' | 'grid' | 'imageList'>(() => {
-    const savedMode = animeId ? localStorage.getItem(`layout-preference-${animeId}`) : null;
-    return savedMode as 'list' | 'grid' | 'imageList' || defaultLayoutMode;
-  });
+  const defaultLayoutMode = episodes.every((episode) => episode.title)
+    ? "list"
+    : "grid";
+  const [displayMode, setDisplayMode] = useState<"list" | "grid" | "imageList">(
+    () => {
+      const savedMode = animeId
+        ? localStorage.getItem(`layout-preference-${animeId}`)
+        : null;
+      return (savedMode as "list" | "grid" | "imageList") || defaultLayoutMode;
+    }
+  );
 
   const [selectionInitiatedByUser, setSelectionInitiatedByUser] =
     useState(false);
@@ -302,8 +315,13 @@ const EpisodeList: React.FC<Props> = ({
 
   // Toggle layout preference
   const toggleLayoutPreference = useCallback(() => {
-    setDisplayMode(prevMode => {
-      const nextMode = prevMode === 'list' ? 'grid' : prevMode === 'grid' ? 'imageList' : 'list';
+    setDisplayMode((prevMode) => {
+      const nextMode =
+        prevMode === "list"
+          ? "grid"
+          : prevMode === "grid"
+          ? "imageList"
+          : "list";
       if (animeId) {
         localStorage.setItem(`layout-preference-${animeId}`, nextMode);
       }
@@ -375,20 +393,22 @@ const EpisodeList: React.FC<Props> = ({
       }
     };
 
-    const savedScrollPosition = animeId ? localStorage.getItem(`scroll-position-${animeId}`) : null;
+    const savedScrollPosition = animeId
+      ? localStorage.getItem(`scroll-position-${animeId}`)
+      : null;
     if (savedScrollPosition) {
       setScrollPosition(parseInt(savedScrollPosition, 10));
     }
 
     const grid = episodeGridRef.current;
     if (grid) {
-      grid.addEventListener('scroll', handleScroll);
+      grid.addEventListener("scroll", handleScroll);
       grid.scrollTo(0, scrollPosition);
     }
 
     return () => {
       if (grid) {
-        grid.removeEventListener('scroll', handleScroll);
+        grid.removeEventListener("scroll", handleScroll);
       }
     };
   }, [animeId, scrollPosition]);
@@ -397,7 +417,6 @@ const EpisodeList: React.FC<Props> = ({
       episodeGridRef.current.scrollTo(0, scrollPosition);
     }
   }, [scrollPosition]);
-
 
   // Render the EpisodeList component
   return (
@@ -426,13 +445,16 @@ const EpisodeList: React.FC<Props> = ({
           />
         </SearchContainer>
         <LayoutToggle onClick={toggleLayoutPreference}>
-          {displayMode === 'list' && <FontAwesomeIcon icon={faThList} />}
-          {displayMode === 'grid' && <FontAwesomeIcon icon={faTh} />}
-          {displayMode === 'imageList' && <FontAwesomeIcon icon={faImage} />}
+          {displayMode === "list" && <FontAwesomeIcon icon={faThList} />}
+          {displayMode === "grid" && <FontAwesomeIcon icon={faTh} />}
+          {displayMode === "imageList" && <FontAwesomeIcon icon={faImage} />}
         </LayoutToggle>
-
       </ControlsContainer>
-      <EpisodeGrid key={`episode-grid-${displayMode}`} $isRowLayout={displayMode === 'list' || displayMode === 'imageList'} ref={episodeGridRef}>
+      <EpisodeGrid
+        key={`episode-grid-${displayMode}`}
+        $isRowLayout={displayMode === "list" || displayMode === "imageList"}
+        ref={episodeGridRef}
+      >
         {displayedEpisodes.map((episode) => {
           const $isSelected = episode.id === selectedEpisodeId;
           const $isWatched = watchedEpisodes.some((e) => e.id === episode.id);
@@ -441,22 +463,35 @@ const EpisodeList: React.FC<Props> = ({
             <ListItem
               key={episode.id}
               $isSelected={$isSelected}
-              $isRowLayout={displayMode === 'list' || displayMode === 'imageList'}
+              $isRowLayout={
+                displayMode === "list" || displayMode === "imageList"
+              }
               $isWatched={$isWatched}
               onClick={() => handleEpisodeSelect(episode.id)}
               aria-selected={$isSelected}
             >
-              {displayMode === 'imageList' ? (
+              {displayMode === "imageList" ? (
                 <>
                   <div>
                     <EpisodeNumber>{episode.number}. </EpisodeNumber>
                     <EpisodeTitle>{episode.title}</EpisodeTitle>
                   </div>
-                  <EpisodeImage src={episode.image} alt={`Episode ${episode.number} - ${episode.title}`} />
+                  <EpisodeImage
+                    src={episode.image}
+                    alt={`Episode ${episode.number} - ${episode.title}`}
+                  />
                 </>
-              ) : displayMode === 'grid' ? (
+              ) : displayMode === "grid" ? (
                 <>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
                     {$isSelected ? (
                       <FontAwesomeIcon icon={faPlay} />
                     ) : (

@@ -18,26 +18,24 @@ const fadeInAnimation = (color: string) => keyframes`
   to { background-color: ${color}; }
 `;
 
-// Styled components
 const StyledNavbar = styled.div`
-  position: sticky;
+  position: fixed; /* or 'absolute', depending on layout needs */
   top: 0;
-  height: 3.5rem;
+  left: 0;
+  right: 0;
+  height: 2.5rem;
   text-align: center;
-  margin: 0 -2rem;
-  padding: 0.5rem 2rem 0 2rem;
-  background-color: var(--global-primary-bg-tr);
+  margin: 0; /* Remove any margin */
+  padding: 0.5rem 2rem;
+  background-color: var(--global-primary-bg);
   backdrop-filter: blur(10px);
-  transform: translateY(0);
   z-index: 4;
-  width: calc(100%);
+  /* Removed width and transform properties */
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 500px) {
-    margin: 0 -0.5rem;
-    padding: 0.5rem 0.5rem 0 0.5rem;
-    height: 3rem;
+    padding: 0.5rem 0.5rem; /* Adjusted for smaller screens */
   }
 `;
 
@@ -45,7 +43,6 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: 0.2s ease;
 `;
 
 const LogoImg = styled(Link)`
@@ -72,16 +69,16 @@ const LogoImg = styled(Link)`
 const InputContainer = styled.div`
   display: flex;
   flex: 1;
-  max-width: 40%;
-  height: 1rem;
+  max-width: 35rem;
+  height: 1.2rem;
   border: 1px solid var(--global-input-border);
   align-items: center;
-  padding: 0.8rem;
-  border-radius: var(--global-border-radius);
+  padding: 0.6rem;
+  border-radius: 1.5rem;
   background-color: var(--global-input-div);
   animation: ${fadeInAnimation("var(--global-input-div)")} 0.5s ease-out;
   @media (max-width: 500px) {
-    height: 0.6rem;
+    height: 1rem;
     max-width: 100%;
   }
 `;
@@ -92,11 +89,14 @@ interface IconProps {
 }
 
 const Icon = styled.div<IconProps>`
-  margin-right: 0.7rem;
+  margin-left: 0.2rem;
+  margin-right: 0.5rem;
   color: var(--global-text);
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
   font-size: ${({ $fontSize }) => $fontSize || "0.8rem"};
   transition: opacity 0.2s;
+  @media (max-width: 500px) {
+  }
 `;
 
 const SearchInput = styled.input`
@@ -156,6 +156,7 @@ interface SlashToggleBtnProps {
 }
 
 const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
+  margin-right: 0.3rem;
   background: transparent;
   border: 2px solid var(--global-text);
   border-radius: var(--global-border-radius);
@@ -405,7 +406,9 @@ const Navbar = () => {
   return (
     <StyledNavbar ref={navbarRef}>
       <TopContainer>
-        <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>見るろ の 久遠</LogoImg>
+        <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>
+          見るろ の 久遠
+        </LogoImg>
         <InputContainer>
           <Icon $isFocused={search.isSearchFocused}>
             <FontAwesomeIcon icon={faSearch} />
@@ -425,7 +428,6 @@ const Navbar = () => {
             }}
             ref={inputRef}
           />
-
           <DropDownSearch
             searchResults={searchResults}
             onClose={handleCloseDropdown}
