@@ -93,7 +93,7 @@ body {
 /* Responsive styles */
 @media (max-width: 1000px) {
   body {
-    padding: 3.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 3rem 0.5rem 0.5rem 0.5rem;
   }
 }
 /* Selection styles */

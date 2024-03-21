@@ -40,14 +40,18 @@ const DropdownContainer = styled.div<DropdownContainerProps>`
   display: ${(props) => (props.isVisible ? "block" : "none")};
   position: absolute;
   top: 90%;
-  width: 32.5rem;
-  margin-left: -0.85rem;
+  width: 33.5rem;
+  margin-left: -0.6rem;
   overflow-y: auto;
   background-color: var(--global-input-div);
   border: 0.0625rem solid var(--global-input-border);
   border-radius: 1rem;
   @media (max-width: 1000px) {
-    max-width: 55%;
+    max-width: 60%;
+  }
+  @media (max-width: 500px) {
+    max-width: 95%;
+    top: 168%;
   }
   /* Hide scrollbar */
   scrollbar-width: none; /* Firefox */
@@ -72,12 +76,12 @@ const ResultItem = styled.div<{ isSelected: boolean }>`
 
 const AnimeImage = styled.img`
   margin-left: 0.2rem;
-  width: 2.5rem;
+  width: 3rem;
   border-radius: var(--global-border-radius);
   height: auto;
   object-fit: cover;
-  @media (max-width: 1000px) {
-    width: 2.125rem;
+  @media (max-width: 500px) {
+    width: 2.5rem;
   }
 `;
 
@@ -181,7 +185,10 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
   }, [isVisible, searchResults, selectedIndex, onClose, navigate]);
 
   return (
-    <DropdownContainer isVisible={isVisible} ref={dropdownRef}>
+    <DropdownContainer
+      isVisible={isVisible && searchResults.length > 0}
+      ref={dropdownRef}
+    >
       {searchResults.map((result, index) => (
         <ResultItem
           key={index}

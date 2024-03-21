@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -24,11 +29,12 @@ function ScrollToTop() {
     };
 
     // Save the scroll position for the current path before navigating away
-    const saveScrollPosition = () => sessionStorage.setItem(location.pathname, window.scrollY.toString());
+    const saveScrollPosition = () =>
+      sessionStorage.setItem(location.pathname, window.scrollY.toString());
 
     // Add event listeners
-    window.addEventListener('beforeunload', saveScrollPosition);
-    window.addEventListener('popstate', restoreScrollPosition);
+    window.addEventListener("beforeunload", saveScrollPosition);
+    window.addEventListener("popstate", restoreScrollPosition);
 
     // Initial scroll restoration or scroll to top
     const ignoreRoutePattern = /^\/watch\/[^/]+\/[^/]+\/[^/]+$/;
@@ -49,8 +55,8 @@ function ScrollToTop() {
 
     // Cleanup event listeners
     return () => {
-      window.removeEventListener('beforeunload', saveScrollPosition);
-      window.removeEventListener('popstate', restoreScrollPosition);
+      window.removeEventListener("beforeunload", saveScrollPosition);
+      window.removeEventListener("popstate", restoreScrollPosition);
     };
   }, [location]);
 
@@ -60,20 +66,20 @@ function ScrollToTop() {
 const usePreserveScrollOnReload = () => {
   useEffect(() => {
     // Restore scroll position
-    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    const savedScrollPosition = sessionStorage.getItem("scrollPosition");
     if (savedScrollPosition) {
       window.scrollTo(0, parseInt(savedScrollPosition, 10));
     }
 
     // Save scroll position before reload
     const handleBeforeUnload = () => {
-      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+      sessionStorage.setItem("scrollPosition", window.scrollY.toString());
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 };
