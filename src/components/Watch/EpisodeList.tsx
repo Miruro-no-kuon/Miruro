@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
@@ -31,6 +31,18 @@ interface Props {
   maxListHeight: string;
 }
 
+const popInAnimation = keyframes`
+  0% {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+
 // Styled components for the episode list
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
@@ -52,6 +64,7 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   overflow-y: auto;
   flex-grow: 1;
 `;
+
 const EpisodeImage = styled.img`
   max-width: 250px;
   height: auto;
@@ -67,6 +80,8 @@ const ListItem = styled.button<{
   $isRowLayout: boolean;
   $isWatched: boolean;
 }>`
+  transition: padding 0.3s ease-in-out, transform 0.3s ease-in-out;
+  animation: ${popInAnimation} 0.3s ease forwards;
   background-color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched
@@ -104,6 +119,7 @@ const ListItem = styled.button<{
         : $isWatched
         ? "filter: brightness(1.1)" // Not selected but watched
         : "background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff"};
+    padding-left: ${({ $isRowLayout }) => ($isRowLayout ? "1rem" : "")};
   }
 `;
 

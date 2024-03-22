@@ -19,14 +19,14 @@ interface ImageDisplayProps {
 }
 
 const popInAnimation = keyframes`
-  // 0% {
-  //   opacity: 0.4;
-  //   transform: scale(1);
-  // }
-  // 100% {
-  //   opacity: 1;
-  //   transform: scale(1);
-  // }
+  0% {
+    opacity: 0.4;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
 `;
 
 const AnimeImage = styled.div<{
@@ -41,7 +41,7 @@ const AnimeImage = styled.div<{
   background: var(--global-card-bg);
   box-shadow: 2px 2px 10px var(--global-card-shadow);
   transition: background-color 0.2s ease-in-out;
-  animation: ${popInAnimation} 0.2s ease forwards;
+  animation: ${popInAnimation} 0.5s ease forwards;
 
   &:hover {
     background: ${({ $ishovered, color }) =>

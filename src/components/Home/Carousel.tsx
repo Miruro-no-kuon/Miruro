@@ -25,8 +25,8 @@ const StyledSwiperContainer = styled(Swiper)`
   height: 24rem;
   border-radius: var(--global-border-radius);
   cursor: grab;
-  
-  @media (max-width: 1000px) { 
+
+  @media (max-width: 1000px) {
     height: 20rem;
   }
   @media (max-width: 500px) {
@@ -40,15 +40,13 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   justify-content: flex-start;
   align-items: center;
   animation: ${keyframes`
-  //   0% {
-  //     opacity: 0.4;
-  //     transform: scale(1);
-  //   }
-  //   100% {
-  //     opacity: 1;
-  //     transform: scale(1);
-  //   }
-  // `} 0.2s ease-in-out forwards;
+    0% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 1;
+    }
+  `} 0.3s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
@@ -93,6 +91,17 @@ const SlideContent = styled.div`
   bottom: 1.5rem;
   z-index: 5;
   max-width: 60%;
+
+  animation: ${keyframes`
+  0% {
+    opacity: 0.4;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+`} 0.3s ease-in-out forwards;
 
   @media (max-width: 1000px) {
     left: 1rem;

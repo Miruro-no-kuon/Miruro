@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Carousel from "../components/Home/Carousel";
 import CardGrid, { StyledCardGrid } from "../components/Cards/CardGrid";
 import CarouselSkeleton from "../components/Skeletons/CarouselSkeleton";
@@ -17,6 +17,17 @@ const SimpleLayout = styled.div`
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
+`;
+
+const popInAnimation = keyframes`
+  0% {
+    opacity: 0.4;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
 `;
 
 const TabContainer = styled.div`
@@ -86,7 +97,9 @@ const EpisodeCard = styled.div`
   border-radius: var(--global-border-radius);
   overflow: hidden;
   transition: 0.2s ease-in-out;
+  
   img {
+    animation: ${popInAnimation} 0.3s ease forwards;
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 9; // Ensure the image maintains a 16:9 aspect ratio
@@ -140,10 +153,23 @@ const EpisodeCard = styled.div`
 const EpisodeCardGridContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center the cards horizontally */
-  gap: 2.75rem; /* Adjust gap between cards here */
+  justify-content: center;
+  gap: 2.5rem;
+  
+  @media (max-width: 1200px) {
+    gap: 2rem;
+  }
+
   @media (max-width: 1000px) {
-    gap: 0.9rem; /* You can adjust the gap for different screen sizes */
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 800px) {
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 450px) {
+    gap: 0.9rem;
   }
 `;
 

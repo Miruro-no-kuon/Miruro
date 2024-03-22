@@ -14,18 +14,18 @@ const pulseAnimation = keyframes`
 `;
 
 const popInAnimation = keyframes`
-  // 0%, 100%{
-  //   opacity: 0;
-  //   transform: scale(1);
-  // }
-  // 50% {
-  //   opacity: 1;
-  //   transform: scale(1);
-  // }
-  // 75% {
-  //   opacity: 0.5;
-  //   transform: scale(1);
-  // }
+  0%, 100%{
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
 `;
 
 interface SkeletonProps {
