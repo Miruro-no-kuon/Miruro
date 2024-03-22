@@ -119,7 +119,7 @@ function Footer() {
       </Container>
       <Container>
         <Text>
-          &copy; {new Date().getFullYear()} miruro.tv | Website Made by{" "}
+          &copy; {new Date().getFullYear()} | Website Made by{" "}
           <HighLight>Miruro no Kuon</HighLight>{" "}
         </Text>
 

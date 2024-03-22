@@ -248,20 +248,35 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    const desiredItemCount = itemsCount;
+    // Increase initial fetch count by 20% to account for filtering
+    const fetchCount = Math.ceil(itemsCount * 1.2);
+
     const fetchData = async () => {
       try {
         // Reset error state on new fetch attempt
         setError(null);
 
         const [trending, popular, top] = await Promise.all([
-          fetchTrendingAnime(1, itemsCount), // Use itemsCount here
-          fetchPopularAnime(1, itemsCount), // And here
-          fetchTopAnime(1, itemsCount), // And here
+          fetchTrendingAnime(1, fetchCount),
+          fetchPopularAnime(1, fetchCount),
+          fetchTopAnime(1, fetchCount),
         ]);
 
-        setTrendingAnime(trending.results);
-        setPopularAnime(popular.results);
-        setTopAnime(top.results);
+        // Filter out anime without totalEpisodes, duration, or releaseDate
+        const filterAndTrimAnime = (animeList: any) =>
+          animeList.results
+            .filter(
+              (anime: any) =>
+                anime.totalEpisodes !== null &&
+                anime.duration !== null &&
+                anime.releaseDate !== null
+            )
+            .slice(0, desiredItemCount); // Trim the list to the desired item count
+
+        setTrendingAnime(filterAndTrimAnime(trending));
+        setPopularAnime(filterAndTrimAnime(popular));
+        setTopAnime(filterAndTrimAnime(top));
       } catch (fetchError) {
         if (fetchError instanceof Error) {
           setError(fetchError.message);
