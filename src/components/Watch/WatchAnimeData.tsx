@@ -9,6 +9,7 @@ const AnimeDataContainer = styled.div``;
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
   padding: 0.6rem;
+  padding-top: 0.8rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -91,7 +92,6 @@ const AnimeCharacterContainer = styled.div`
   justify-content: space-evenly;
   gap: 20px;
   padding: 0.6rem;
-
 `;
 
 const CharacterCard = styled.div`
@@ -235,9 +235,10 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <img
                     src={AniList_logo}
                     alt="AniList Logo"
-                    style={{ height: "30px", borderRadius: "50%" }}
+                    style={{ height: "35px", borderRadius: "30%" }}
                   />
-                </a>{" "}
+                </a>
+                &nbsp; &nbsp;
                 <a
                   href={`https://myanimelist.net/anime/${animeData.malId}`}
                   target="_blank"
@@ -245,7 +246,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <img
                     src={MAL_logo}
                     alt="AniList Logo"
-                    style={{ height: "30px", borderRadius: "50%" }}
+                    style={{ height: "35px", borderRadius: "30%" }}
                   />
                 </a>
               </p>
@@ -368,7 +369,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       relation.type
                     )
                   )
-                  .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
+                  .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => {}}
@@ -396,7 +397,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       recommendation.type
                     )
                   )
-                  .slice(0, window.innerWidth > 500 ? 7 : 6)} // Adjust slice based on screen width
+                  .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => {}}

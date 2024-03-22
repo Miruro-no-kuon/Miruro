@@ -44,14 +44,14 @@ const DropdownContainer = styled.div<DropdownContainerProps>`
   margin-left: -0.6rem;
   overflow-y: auto;
   background-color: var(--global-input-div);
-  border: 0.0625rem solid var(--global-input-border);
+  border: 1px solid var(--global-input-border);
   border-radius: 1rem;
   @media (max-width: 1000px) {
     max-width: 60%;
   }
   @media (max-width: 500px) {
     max-width: 95%;
-    top: 168%;
+    top: 179%;
   }
   /* Hide scrollbar */
   scrollbar-width: none; /* Firefox */

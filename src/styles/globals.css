@@ -83,7 +83,7 @@ body {
   font-feature-settings: normal;
   font-variation-settings: normal;
   margin: 0;
-  padding: 3.5rem 0.5rem 0.5rem 0.5rem;
+  padding: 3.5rem 1rem 1.5rem 1rem;
   max-width: 105rem;
   margin: auto;
   background-color: var(--global-primary-bg);

@@ -14,29 +14,28 @@ interface VideoSourceSelectorProps {
 const SelectorContainer = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 0.9rem;
   align-items: center;
-  gap: 2rem;
-  margin: 1rem;
+  margin-top: 0.8rem;
+  border-radius: var(--global-border-radius);
+  background-color: var(--global-secondary-bg);
 
-  @media (min-width: 1000px) {
+  @media (min-width: 1200px) {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    gap: 1rem;
+  }
+  @media (min-width: 1000px) {
+    background-color: transparent;
+    flex-direction: row;
   }
 `;
 
 const Group = styled.div`
+  padding: 0.6rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-
-  @media (min-width: 1000px) {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-  }
 `;
 
 const ButtonRow = styled.div`
@@ -84,10 +83,10 @@ const DownloadLink = styled.a`
 `;
 
 const Label = styled.p`
-  margin: 0;
+  margin: 0rem;
   font-weight: bold;
   @media (min-width: 1000px) {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
   }
 `;
 

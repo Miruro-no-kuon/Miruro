@@ -93,7 +93,7 @@ const InputContainer = styled.div`
   border: 1px solid var(--global-input-border);
   align-items: center;
   padding: 0.6rem;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   background-color: var(--global-input-div);
   animation: ${fadeInAnimation("var(--global-input-div)")} 0.1s ease-out;
   @media (max-width: 1000px) {
@@ -102,7 +102,7 @@ const InputContainer = styled.div`
   @media (max-width: 500px) {
     height: 1rem;
     max-width: 100%;
-    margin-top: 0.2rem;
+    margin-top: 0.5rem;
     display: ${({ isVisible }) => (isVisible ? "flex" : "none")};
   }
 `;

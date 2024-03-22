@@ -42,7 +42,6 @@ const popInAnimation = keyframes`
   }
 `;
 
-
 // Styled components for the episode list
 const ListContainer = styled.div`
   background-color: var(--global-secondary-bg);
@@ -67,11 +66,13 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
 
 const EpisodeImage = styled.img`
   max-width: 250px;
+  max-height: 150px;
   height: auto;
   margin-top: 0.5rem;
   border-radius: var(--global-border-radius);
   @media (max-width: 500px) {
     max-width: 125px;
+    max-height: 80px;
   }
 `;
 
