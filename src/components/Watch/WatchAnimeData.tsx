@@ -68,11 +68,6 @@ const ShowMoreButton = styled.p`
   padding-top: 0.5rem;
   display: block;
   text-align: left;
-  margin-right: 10rem;
-  @media (max-width: 1000px) {
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
 `;
 
 const Relations = styled.div`
@@ -87,9 +82,6 @@ const AnimeInfoImage = styled.img`
   border-radius: var(--global-border-radius);
   max-height: 12rem;
   margin-right: 1rem;
-  // @media (max-width: 1000px) {
-  //   max-height: 10rem;
-  // }
 `;
 
 const AnimeCharacterContainer = styled.div`
@@ -99,10 +91,7 @@ const AnimeCharacterContainer = styled.div`
   justify-content: space-evenly;
   gap: 20px;
   padding: 0.6rem;
-  margin-right: 10rem;
-  @media (max-width: 1000px) {
-    margin-right: 0rem;
-  }
+
 `;
 
 const CharacterCard = styled.div`

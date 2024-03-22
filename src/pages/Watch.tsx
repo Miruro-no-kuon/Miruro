@@ -32,6 +32,16 @@ const WatchWrapper = styled.div`
   }
 `;
 
+const DataWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr; // Aim for a 3:1 ratio
+  width: 100%; // Make sure this container can expand enough
+`;
+
+const SourceAndData = styled.div``;
+
+const RalationsTable = styled.div``;
+
 const VideoPlayerContainer = styled.div`
   position: relative;
   width: 100%;
@@ -114,6 +124,22 @@ const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
 const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
+  const [videoPlayerWidth, setVideoPlayerWidth] = useState("100%"); // Default to 100%
+
+  const updateVideoPlayerWidth = useCallback(() => {
+    if (videoPlayerContainerRef.current) {
+      const width = `${videoPlayerContainerRef.current.offsetWidth}px`;
+      setVideoPlayerWidth(width);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateVideoPlayerWidth(); // Update on mount
+    window.addEventListener("resize", updateVideoPlayerWidth); // Update on resize
+
+    return () => window.removeEventListener("resize", updateVideoPlayerWidth); // Cleanup
+  }, [updateVideoPlayerWidth]);
+
   const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
     useState<string>("100%");
 
@@ -602,14 +628,23 @@ const Watch: React.FC = () => {
           </>
         )}
       </WatchWrapper>
-      <VideoSourceSelector
-        sourceType={sourceType}
-        setSourceType={setSourceType}
-        language={language}
-        setLanguage={setLanguage}
-        downloadLink={downloadLink}
-      />
-      {animeInfo && <AnimeData animeData={animeInfo} />}
+      <DataWrapper>
+        <SourceAndData style={{ width: videoPlayerWidth }}>
+          {/* First row content (3 parts) */}
+          <VideoSourceSelector
+            sourceType={sourceType}
+            setSourceType={setSourceType}
+            language={language}
+            setLanguage={setLanguage}
+            downloadLink={downloadLink}
+          />
+          {animeInfo && <AnimeData animeData={animeInfo} />}
+        </SourceAndData>{" "}
+        <RalationsTable>
+          {/* Second row content (1 part) */}
+          {/* Your content for the second part */}
+        </RalationsTable>
+      </DataWrapper>
     </WatchContainer>
   );
 };
