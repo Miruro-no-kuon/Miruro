@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CardGrid from "../Cards/CardGrid";
 import AniList_logo from "../../assets/AniList_logo.png";
@@ -167,6 +167,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
   const [showCharacters, setShowCharacters] = useState(false);
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [countdown, setCountdown] = useState("");
 
   // Toggle description expansion
   const toggleDescription = () => {
@@ -203,6 +204,27 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
     return `${monthNames[date.month - 1]} ${date.day}, ${date.year}`;
   }
 
+  useEffect(() => {
+    const updateCountdown = () => {
+      if (animeData.nextAiringEpisode) {
+        const secondsUntilAiring =
+          animeData.nextAiringEpisode.airingTime -
+          Math.floor(Date.now() / 1000);
+        const days = Math.floor(secondsUntilAiring / (3600 * 24));
+        const hours = Math.floor((secondsUntilAiring % (3600 * 24)) / 3600);
+        const minutes = Math.floor((secondsUntilAiring % 3600) / 60);
+        const seconds = Math.floor(secondsUntilAiring % 60);
+        setCountdown(
+          `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`
+        );
+      }
+    };
+
+    updateCountdown(); // Initial update on component mount
+    const timer = setInterval(updateCountdown, 1000); // Update every second
+
+    return () => clearInterval(timer); // Cleanup on component unmount
+  }, [animeData.nextAiringEpisode]);
   return (
     <>
       {animeData && (
@@ -254,6 +276,41 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           </AnimeDataContainerTop>
           <AnimeDataContainerBottom>
             <AnimeDataText>
+              {/* Existing Status, Type, Year, Rating Display */}
+              {animeData.nextAiringEpisode && (
+                <p>
+                  Time until next episode:{" "}
+                  <strong>
+                    {/* {new Date(
+                      animeData.nextAiringEpisode.airingTime * 1000
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZoneName: "short",
+                    })}{" "} */}
+                    (
+                    {(() => {
+                      const secondsUntilAiring =
+                        animeData.nextAiringEpisode.airingTime -
+                        Math.floor(Date.now() / 1000);
+                      const days = Math.floor(secondsUntilAiring / (3600 * 24));
+                      const hours = Math.floor(
+                        (secondsUntilAiring % (3600 * 24)) / 3600
+                      );
+                      const minutes = Math.floor(
+                        (secondsUntilAiring % 3600) / 60
+                      );
+                      const seconds = Math.floor(secondsUntilAiring % 60);
+
+                      return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                    })()}
+                    )
+                  </strong>
+                </p>
+              )}
               <p>
                 Status: <strong>{animeData.status}</strong>
               </p>

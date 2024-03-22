@@ -97,7 +97,7 @@ const EpisodeCard = styled.div`
   border-radius: var(--global-border-radius);
   overflow: hidden;
   transition: 0.2s ease-in-out;
-  
+
   img {
     animation: ${popInAnimation} 0.3s ease forwards;
     width: 100%;
@@ -155,7 +155,7 @@ const EpisodeCardGridContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 2.5rem;
-  
+
   @media (max-width: 1200px) {
     gap: 2rem;
   }
@@ -277,7 +277,7 @@ const Home = () => {
   }, [itemsCount]);
 
   useEffect(() => {
-    document.title = `Miruro | Watch Anime for free in HD`;
+    document.title = `Miruro | Watch Anime for Free in HD`;
   }, [activeTab]);
 
   useEffect(() => {

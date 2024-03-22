@@ -6,6 +6,7 @@ import {
   faTv,
   faClosedCaptioning,
   faStar,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface Anime {
@@ -77,11 +78,12 @@ const ResultItem = styled.div<{ isSelected: boolean }>`
 const AnimeImage = styled.img`
   margin-left: 0.2rem;
   width: 3rem;
+  height: 4rem;
   border-radius: var(--global-border-radius);
-  height: auto;
   object-fit: cover;
   @media (max-width: 500px) {
-    width: 2.5rem;
+    width: 2rem;
+    height: 3rem;
   }
 `;
 
@@ -117,6 +119,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
   searchResults = [],
   onClose,
   isVisible,
+  searchQuery,
 }) => {
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -134,6 +137,13 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
     ) {
       onClose();
     }
+  };
+
+  //View all button
+  const handleViewAllClick = () => {
+    // Directly navigate to the desired page with search query
+    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    onClose();
   };
 
   useEffect(() => {
@@ -158,31 +168,33 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isVisible) return;
 
+      const totalOptions = searchResults.length; // Not including "View All"
+      let newSelectedIndex = selectedIndex !== null ? selectedIndex : -1;
+
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((prevIndex) =>
-          prevIndex === null || prevIndex === searchResults.length - 1
-            ? 0
-            : prevIndex + 1
-        );
+        newSelectedIndex = (newSelectedIndex + 1) % (totalOptions + 1); // +1 for "View All"
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex((prevIndex) =>
-          prevIndex === null || prevIndex === 0
-            ? searchResults.length - 1
-            : prevIndex - 1
-        );
+        newSelectedIndex =
+          (newSelectedIndex - 1 + totalOptions + 1) % (totalOptions + 1); // +1 for "View All"
       } else if (e.key === "Enter" && selectedIndex !== null) {
-        handleResultClick(searchResults[selectedIndex].id);
-        e.preventDefault(); // To prevent the form from submitting if wrapped in a form
+        e.preventDefault(); // Prevent form submission
+        if (selectedIndex < totalOptions) {
+          // Navigate to the selected anime's detail page
+          handleResultClick(searchResults[selectedIndex].id);
+        } else {
+          // "View All" selected
+          handleViewAllClick();
+        }
       }
+
+      setSelectedIndex(newSelectedIndex);
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isVisible, searchResults, selectedIndex, onClose, navigate]);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isVisible, searchResults, selectedIndex]);
 
   return (
     <DropdownContainer
@@ -220,6 +232,16 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           <br></br>
         </ResultItem>
       ))}
+      <ResultItem
+        isSelected={selectedIndex === searchResults.length} // "View All" is selected
+        onClick={handleViewAllClick}
+        style={{ justifyContent: "center" }}
+      >
+        <AnimeTitle>
+          <strong>View All </strong>
+          <FontAwesomeIcon icon={faArrowRight} />
+        </AnimeTitle>
+      </ResultItem>
     </DropdownContainer>
   );
 };

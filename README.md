@@ -121,6 +121,12 @@ bun start
 
 Please be aware that self-hosting this application is strictly limited to personal use only. Commercial utilization is prohibited, and the inclusion of advertisements on your self-hosted website may lead to consequences, including potential site takedown measures.
 
+## For Deployments
+
+#### Deploy your Miruro instance on Vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_PROXY_URL,VITE_IS_LOCAL,PORT&project-name=miruro&repository-name=miruro)
+
 ## License 📝
 
 This project is licensed under the Custom BY-NC [License](LICENSE). You are free to use, share, and modify the code for non-commercial purposes with proper attribution to our platform miruro.com. Commercial use is not allowed. For details, see the [LICENSE](LICENSE) file. Feel free to contact the author(s) for questions or additional permissions.

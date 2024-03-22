@@ -484,6 +484,7 @@ const Navbar = () => {
                 isVisible={search.isDropdownOpen}
                 selectedIndex={selectedIndex}
                 setSelectedIndex={setSelectedIndex}
+                searchQuery={search.searchQuery}
               />
               <ClearButton
                 $query={search.searchQuery}
@@ -536,6 +537,7 @@ const Navbar = () => {
               isVisible={search.isDropdownOpen}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
+              searchQuery={search.searchQuery}
             />
             <ClearButton
               $query={search.searchQuery}
