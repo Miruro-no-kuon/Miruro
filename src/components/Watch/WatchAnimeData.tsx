@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CardGrid from "../Cards/CardGrid";
-
+import AniList_logo from "../../assets/AniList_logo.png";
+import MAL_logo from "../../assets/MyAnimeList_Logo.png";
 // Styled components
 const AnimeDataContainer = styled.div``;
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
   padding: 0.6rem;
+  padding-top: 0.8rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
   align-items: flex-start;
   display: flex;
+  margin-bottom: -0.3rem;
 `;
 
 const AnimeDataContainerBottom = styled.div`
@@ -37,7 +40,7 @@ const AnimeDataText = styled.div`
 
 const Button = styled.button`
   padding: 0.5rem 0.6rem;
-  background-color: var(--primary-accent-bg);
+  background-color: var(--primary-accent);
   color: white;
   border: none;
   border-radius: var(--global-border-radius);
@@ -46,7 +49,7 @@ const Button = styled.button`
   outline: none;
 
   &:hover {
-    background-color: var(--primary-accent);
+    background-color: var(--primary-accent-bg);
   }
 
   @media (max-width: 1000px) {
@@ -66,11 +69,6 @@ const ShowMoreButton = styled.p`
   padding-top: 0.5rem;
   display: block;
   text-align: left;
-  margin-right: 10rem;
-  @media (max-width: 1000px) {
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
 `;
 
 const Relations = styled.div`
@@ -78,16 +76,13 @@ const Relations = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 20px;
-  padding: 0.6rem;
+  margin-top: 2rem;
 `;
 
 const AnimeInfoImage = styled.img`
   border-radius: var(--global-border-radius);
   max-height: 12rem;
   margin-right: 1rem;
-  @media (max-width: 1000px) {
-    max-height: 10rem;
-  }
 `;
 
 const AnimeCharacterContainer = styled.div`
@@ -97,10 +92,6 @@ const AnimeCharacterContainer = styled.div`
   justify-content: space-evenly;
   gap: 20px;
   padding: 0.6rem;
-  margin-right: 10rem;
-  @media (max-width: 1000px) {
-    margin-right: 0rem;
-  }
 `;
 
 const CharacterCard = styled.div`
@@ -176,6 +167,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
   const [showCharacters, setShowCharacters] = useState(false);
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [countdown, setCountdown] = useState("");
 
   // Toggle description expansion
   const toggleDescription = () => {
@@ -212,6 +204,27 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
     return `${monthNames[date.month - 1]} ${date.day}, ${date.year}`;
   }
 
+  useEffect(() => {
+    const updateCountdown = () => {
+      if (animeData.nextAiringEpisode) {
+        const secondsUntilAiring =
+          animeData.nextAiringEpisode.airingTime -
+          Math.floor(Date.now() / 1000);
+        const days = Math.floor(secondsUntilAiring / (3600 * 24));
+        const hours = Math.floor((secondsUntilAiring % (3600 * 24)) / 3600);
+        const minutes = Math.floor((secondsUntilAiring % 3600) / 60);
+        const seconds = Math.floor(secondsUntilAiring % 60);
+        setCountdown(
+          `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`
+        );
+      }
+    };
+
+    updateCountdown(); // Initial update on component mount
+    const timer = setInterval(updateCountdown, 1000); // Update every second
+
+    return () => clearInterval(timer); // Cleanup on component unmount
+  }, [animeData.nextAiringEpisode]);
   return (
     <>
       {animeData && (
@@ -219,48 +232,114 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           <AnimeDataContainerTop>
             <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
             <AnimeDataText className="bio">
-            <p className="anime-title">{animeData.title.english ? animeData.title.english : animeData.title.romaji}</p>
-              <p>
-                <strong>Type:</strong> {animeData.type}
-              </p>
-
-              <p>
-                <strong>Year:</strong>{" "}
-                {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
+              <p className="anime-title">
+                {animeData.title.english
+                  ? animeData.title.english
+                  : animeData.title.romaji}
               </p>
               <p>
-                <strong>Rating:</strong> {animeData.rating / 10}
+                Type: <strong>{animeData.type}</strong>
+              </p>
+              <p>
+                Year:{" "}
+                <strong>
+                  {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
+                </strong>{" "}
+              </p>
+              <p>
+                Rating: <strong>{animeData.rating / 10}</strong>
+              </p>
+              <p>
+                <a
+                  href={`https://anilist.co/anime/${animeData.id}`}
+                  target="_blank"
+                >
+                  <img
+                    src={AniList_logo}
+                    alt="AniList Logo"
+                    style={{ height: "35px", borderRadius: "30%" }}
+                  />
+                </a>
+                &nbsp; &nbsp;
+                <a
+                  href={`https://myanimelist.net/anime/${animeData.malId}`}
+                  target="_blank"
+                >
+                  <img
+                    src={MAL_logo}
+                    alt="AniList Logo"
+                    style={{ height: "35px", borderRadius: "30%" }}
+                  />
+                </a>
               </p>
             </AnimeDataText>
           </AnimeDataContainerTop>
           <AnimeDataContainerBottom>
             <AnimeDataText>
+              {/* Existing Status, Type, Year, Rating Display */}
+              {animeData.nextAiringEpisode && (
+                <p>
+                  Time until next episode:{" "}
+                  <strong>
+                    {/* {new Date(
+                      animeData.nextAiringEpisode.airingTime * 1000
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZoneName: "short",
+                    })}{" "} */}
+                    (
+                    {(() => {
+                      const secondsUntilAiring =
+                        animeData.nextAiringEpisode.airingTime -
+                        Math.floor(Date.now() / 1000);
+                      const days = Math.floor(secondsUntilAiring / (3600 * 24));
+                      const hours = Math.floor(
+                        (secondsUntilAiring % (3600 * 24)) / 3600
+                      );
+                      const minutes = Math.floor(
+                        (secondsUntilAiring % 3600) / 60
+                      );
+                      const seconds = Math.floor(secondsUntilAiring % 60);
+
+                      return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                    })()}
+                    )
+                  </strong>
+                </p>
+              )}
               <p>
-                <strong>Status:</strong> {animeData.status}
+                Status: <strong>{animeData.status}</strong>
               </p>
               {animeData.genres.length > 0 && (
                 <p>
-                  <strong>Genres:</strong> {animeData.genres.join(", ")}
+                  Genres: <strong>{animeData.genres.join(", ")}</strong>
                 </p>
               )}
               {animeData.startDate && (
                 <p>
-                  <strong> Date aired:</strong>{" "}
-                  {getDateString(animeData.startDate)}
-                  {animeData.endDate
-                    ? ` to ${
-                        animeData.endDate.month && animeData.endDate.year
-                          ? getDateString(animeData.endDate)
-                          : "?"
-                      }`
-                    : animeData.status === "Ongoing"
-                    ? ""
-                    : " to ?"}
+                  Date aired:
+                  <strong>
+                    {" "}
+                    {getDateString(animeData.startDate)}
+                    {animeData.endDate
+                      ? ` to ${
+                          animeData.endDate.month && animeData.endDate.year
+                            ? getDateString(animeData.endDate)
+                            : "?"
+                        }`
+                      : animeData.status === "Ongoing"
+                      ? ""
+                      : " to ?"}
+                  </strong>
                 </p>
               )}
               {animeData.studios && (
                 <p>
-                  <strong>Studios:</strong> {animeData.studios}
+                  Studios: <strong>{animeData.studios}</strong>
                 </p>
               )}
               {animeData.trailer && (
@@ -337,7 +416,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
         ).length > 0 && (
           <>
             <AnimeDataText className="bio">
-              <p className="anime-title">Seasons/Related</p>
+              <p className="anime-title">Relations</p>
             </AnimeDataText>
             <Relations>
               <CardGrid
@@ -347,7 +426,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       relation.type
                     )
                   )
-                  .slice(0, 6)}
+                  .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => {}}
@@ -355,7 +434,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
             </Relations>
           </>
         )}
-
+      <br></br>
+      {/* Recommendations */}
       {animeData &&
         animeData.recommendations.filter((recommendation: any) =>
           ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
@@ -374,7 +454,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       recommendation.type
                     )
                   )
-                  .slice(0, 6)}
+                  .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
                 hasNextPage={false}
                 onLoadMore={() => {}}

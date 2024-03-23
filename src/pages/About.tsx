@@ -8,7 +8,7 @@ const colors = {
   buttonHoverBackground: "var(--global-button-hover-bg)",
   adBackground: "var(--global-ad-bg)",
   customColor: "var(--your-custom-color)",
-  paddingSize: "1.5rem",
+  paddingSize: "1rem",
 };
 
 const SplashContainer = styled.div`

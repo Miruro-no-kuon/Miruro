@@ -47,13 +47,13 @@ interface CardItemContentProps {
 }
 
 const popInAnimation = keyframes`
-  // 0% {
-  //   opacity: 0.4;
-  // }
-  // 100% {
-  //   opacity: 1;
-  //   transform: scale(1);
-  // }
+  0% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 `;
 
 const StyledCardWrapper = styled.div`
@@ -75,6 +75,11 @@ const ImageDisplayWrapper = styled.div`
   transition: 0.2s ease-in-out;
   &:hover {
     transform: translateY(-10px); /* Move card up by 10 pixels on hover */
+  }
+  @media (max-width: 500px) {
+  &:hover {
+    transform: translateY(0px);
+  }
   }
 `;
 
@@ -102,7 +107,7 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
       // In a real application, this might be replaced with an API call
       const timer = setTimeout(() => {
         setLoading(false); // Set loading to false after data is "loaded"
-      }, 50); // Simulate a loading time
+      }, 100); // Simulate a loading time
 
       return () => clearTimeout(timer);
     }, [anime.id]); // Dependency array includes anime.id to re-run effect if it changes
@@ -121,11 +126,6 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
 
     const imageSrc = anime.coverImage || anime.image || "";
     const animeColor = anime.color || "#999999";
-
-    const popularityValue =
-      typeof anime.popularity === "number"
-        ? anime.popularity
-        : anime.popularity?.anidb;
 
     return (
       <>
@@ -160,28 +160,6 @@ const CardItemContent: React.FC<CardItemContentProps> = React.memo(
               </ImageDisplayWrapper>
               <TitleComponent isHovered={isHoveredInstant} anime={anime} />
             </StyledCardItem>
-            {/* {!isMobile && isHoveredDelayed && (
-              <InfoPopupContent
-                title={anime.title?.english || anime.title?.romaji || ""}
-                description={anime.description || ""}
-                genres={anime.genres || []}
-                $isPositionedLeft={
-                  cardRef.current &&
-                  getElementPosition(cardRef.current).left < width / 2
-                    ? true
-                    : false
-                }
-                color={animeColor}
-                type={anime.format || anime.type || ""}
-                status={anime.status || ""}
-                popularity={popularityValue || 0}
-                totalEpisodes={anime.totalEpisodes}
-                currentEpisode={anime.currentEpisode}
-                releaseDate={anime.releaseDate || anime.year || ""}
-                cover={anime.image || anime.coverImage || ""}
-                maxDescriptionLength={100}
-              />
-            )} */}
           </StyledCardWrapper>
         )}
       </>

@@ -1,6 +1,11 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DropDownSearch from "./DropDownSearch";
 import { fetchAdvancedSearch } from "../hooks/useApi"; // Adjust the path as necessary
@@ -18,26 +23,25 @@ const fadeInAnimation = (color: string) => keyframes`
   to { background-color: ${color}; }
 `;
 
-// Styled components
 const StyledNavbar = styled.div`
-  position: sticky;
+  position: fixed; /* or 'absolute', depending on layout needs */
   top: 0;
-  height: 3.5rem;
+  left: 0;
+  right: 0;
+  height: 2.5rem;
   text-align: center;
-  margin: 0 -2rem;
-  padding: 0.5rem 2rem 0 2rem;
-  background-color: var(--global-primary-bg-tr);
+  margin: 0; /* Remove any margin */
+  padding: 0.5rem 2rem;
+  background-color: var(--global-primary-bg);
   backdrop-filter: blur(10px);
-  transform: translateY(0);
   z-index: 4;
-  width: calc(100%);
+  /* Removed width and transform properties */
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 500px) {
-    margin: 0 -0.5rem;
-    padding: 0.5rem 0.5rem 0 0.5rem;
-    height: 3rem;
+    padding: 0.5rem 0.5rem; /* Adjusted for smaller screens */
+    height: 2rem;
   }
 `;
 
@@ -45,7 +49,6 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: 0.2s ease;
 `;
 
 const LogoImg = styled(Link)`
@@ -69,21 +72,44 @@ const LogoImg = styled(Link)`
   }
 `;
 
+const InputToggleBtn = styled.button`
+  background: transparent;
+  border: none;
+  color: var(--global-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none; // Default to not displayed
+  align-items: right;
+  @media (max-width: 500px) {
+    display: block; // Only show on small screens
+  }
+`;
+
 const InputContainer = styled.div`
   display: flex;
   flex: 1;
-  max-width: 40%;
-  height: 1rem;
+  max-width: 35rem;
+  height: 1.2rem;
   border: 1px solid var(--global-input-border);
   align-items: center;
-  padding: 0.8rem;
-  border-radius: var(--global-border-radius);
+  padding: 0.6rem;
+  border-radius: 1rem;
   background-color: var(--global-input-div);
-  animation: ${fadeInAnimation("var(--global-input-div)")} 0.5s ease-out;
-  @media (max-width: 500px) {
-    height: 0.6rem;
-    max-width: 100%;
+  animation: ${fadeInAnimation("var(--global-input-div)")} 0.1s ease-out;
+  @media (max-width: 1000px) {
+    max-width: 20rem;
   }
+  @media (max-width: 500px) {
+    height: 1rem;
+    max-width: 100%;
+    margin-top: 0.5rem;
+    display: ${({ isVisible }) => (isVisible ? "flex" : "none")};
+  }
+`;
+const RightContent = styled.div`
+  display: flex;
+  align-items: center;
+  height: 2rem;
 `;
 
 interface IconProps {
@@ -92,11 +118,14 @@ interface IconProps {
 }
 
 const Icon = styled.div<IconProps>`
-  margin-right: 0.7rem;
+  margin-left: 0.2rem;
+  margin-right: 0.5rem;
   color: var(--global-text);
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
   font-size: ${({ $fontSize }) => $fontSize || "0.8rem"};
   transition: opacity 0.2s;
+  @media (max-width: 500px) {
+  }
 `;
 
 const SearchInput = styled.input`
@@ -156,6 +185,7 @@ interface SlashToggleBtnProps {
 }
 
 const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
+  margin-right: 0.3rem;
   background: transparent;
   border: 2px solid var(--global-text);
   border-radius: var(--global-border-radius);
@@ -227,6 +257,7 @@ interface Anime {
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
@@ -239,7 +270,8 @@ const Navbar = () => {
     searchQuery: searchParams.get("query") || "",
     isDropdownOpen: false,
   });
-
+  const [isInputVisible, setIsInputVisible] = useState(false); // Default to false
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 500);
   const fetchSearchResults = async (query: string) => {
     if (!query.trim()) return;
 
@@ -353,7 +385,7 @@ const Navbar = () => {
       // Optionally reset the flag here if you're using one
       // enterPressedRecently = false;
       // }
-    }, 300); // Debounce for 300ms
+    }, 100); // Debounce for 300ms
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -381,6 +413,13 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    // This effect runs when the location.pathname changes or enter is pressed (Hide the InputContainer)
+    if (isMobileView) {
+      setIsInputVisible(false);
+    }
+  }, [location.pathname, isMobileView]);
+
   const handleClearSearch = () => {
     setSearch((prevState) => ({
       ...prevState,
@@ -401,50 +440,119 @@ const Navbar = () => {
     setIsDarkMode(newIsDarkMode);
     saveThemePreference(newIsDarkMode);
   };
+  useEffect(() => {
+    function handleResize() {
+      setIsMobileView(window.innerWidth < 500);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <StyledNavbar ref={navbarRef}>
-      <TopContainer>
-        <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>見るろ の 久遠</LogoImg>
-        <InputContainer>
-          <Icon $isFocused={search.isSearchFocused}>
-            <FontAwesomeIcon icon={faSearch} />
-          </Icon>
-          <SearchInput
-            type="text"
-            placeholder="Search Anime"
-            value={search.searchQuery}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDownOnInput}
-            onFocus={() => {
-              setSearch((prevState) => ({
-                ...prevState,
-                isDropdownOpen: true,
-                isSearchFocused: true,
-              }));
-            }}
-            ref={inputRef}
-          />
+    <>
+      <StyledNavbar ref={navbarRef}>
+        <TopContainer>
+          <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>
+            見るろ の 久遠
+          </LogoImg>
 
-          <DropDownSearch
-            searchResults={searchResults}
-            onClose={handleCloseDropdown}
-            isVisible={search.isDropdownOpen}
-            selectedIndex={selectedIndex}
-            setSelectedIndex={setSelectedIndex}
-          />
-          <ClearButton $query={search.searchQuery} onClick={handleClearSearch}>
-            <FontAwesomeIcon icon={faTimes} />
-          </ClearButton>
-          <SlashToggleBtn $isFocused={search.isSearchFocused}>
-            <FontAwesomeIcon icon={faSlash} rotation={90} />
-          </SlashToggleBtn>
-        </InputContainer>
-        <ThemeToggleBtn onClick={toggleTheme}>
-          <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
-        </ThemeToggleBtn>
-      </TopContainer>
-    </StyledNavbar>
+          {/* Render InputContainer within the navbar for screens larger than 500px */}
+          {!isMobileView && (
+            <InputContainer isVisible={true}>
+              <Icon $isFocused={search.isSearchFocused}>
+                <FontAwesomeIcon icon={faSearch} />
+              </Icon>
+              <SearchInput
+                type="text"
+                placeholder="Search Anime"
+                value={search.searchQuery}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDownOnInput}
+                onFocus={() => {
+                  setSearch((prevState) => ({
+                    ...prevState,
+                    isDropdownOpen: true,
+                    isSearchFocused: true,
+                  }));
+                }}
+                ref={inputRef}
+              />
+              <DropDownSearch
+                searchResults={searchResults}
+                onClose={handleCloseDropdown}
+                isVisible={search.isDropdownOpen}
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
+                searchQuery={search.searchQuery}
+              />
+              <ClearButton
+                $query={search.searchQuery}
+                onClick={handleClearSearch}
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </ClearButton>
+              <SlashToggleBtn $isFocused={search.isSearchFocused}>
+                <FontAwesomeIcon icon={faSlash} rotation={90} />
+              </SlashToggleBtn>
+            </InputContainer>
+          )}
+          <RightContent>
+            {/* Toggle Button should only be visible in mobile view */}
+            {isMobileView && (
+              <InputToggleBtn
+                onClick={() => setIsInputVisible((prev) => !prev)}
+              >
+                <FontAwesomeIcon icon={faSearch} />
+              </InputToggleBtn>
+            )}
+            <ThemeToggleBtn onClick={toggleTheme}>
+              <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+            </ThemeToggleBtn>
+          </RightContent>
+        </TopContainer>
+        {isMobileView && isInputVisible && (
+          <InputContainer isVisible={isInputVisible}>
+            <Icon $isFocused={search.isSearchFocused}>
+              <FontAwesomeIcon icon={faSearch} />
+            </Icon>
+            <SearchInput
+              type="text"
+              placeholder="Search Anime"
+              value={search.searchQuery}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDownOnInput}
+              onFocus={() => {
+                setSearch((prevState) => ({
+                  ...prevState,
+                  isDropdownOpen: true,
+                  isSearchFocused: true,
+                }));
+              }}
+              ref={inputRef}
+            />
+            <DropDownSearch
+              searchResults={searchResults}
+              onClose={handleCloseDropdown}
+              isVisible={search.isDropdownOpen}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+              searchQuery={search.searchQuery}
+            />
+            <ClearButton
+              $query={search.searchQuery}
+              onClick={handleClearSearch}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </ClearButton>
+            <SlashToggleBtn $isFocused={search.isSearchFocused}>
+              <FontAwesomeIcon icon={faSlash} rotation={90} />
+            </SlashToggleBtn>
+          </InputContainer>
+        )}
+      </StyledNavbar>
+      {/* Conditionally render InputContainer below the navbar for mobile view when visibility is toggled */}
+    </>
   );
 };
 

@@ -14,29 +14,28 @@ interface VideoSourceSelectorProps {
 const SelectorContainer = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 0.9rem;
   align-items: center;
-  gap: 2rem;
-  margin: 1rem;
+  margin-top: 0.8rem;
+  border-radius: var(--global-border-radius);
+  background-color: var(--global-secondary-bg);
 
-  @media (min-width: 1000px) {
+  @media (min-width: 1200px) {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    gap: 1rem;
+  }
+  @media (min-width: 1000px) {
+    background-color: transparent;
+    flex-direction: row;
   }
 `;
 
 const Group = styled.div`
+  padding: 0.6rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-
-  @media (min-width: 1000px) {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-  }
 `;
 
 const ButtonRow = styled.div`
@@ -49,16 +48,16 @@ const ButtonRow = styled.div`
 const Button = styled.button`
   padding: 0.5rem 1rem;
   border: none;
+  font-weight: bold;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   background-color: #505050;
   color: white;
   transition: background-color 0.3s ease;
-
-  &:hover {
+  &.active {
     background-color: var(--primary-accent);
   }
-  &.active {
+  &:hover {
     background-color: var(--primary-accent-bg);
   }
 `;
@@ -84,10 +83,10 @@ const DownloadLink = styled.a`
 `;
 
 const Label = styled.p`
-  margin: 0;
+  margin: 0rem;
   font-weight: bold;
   @media (min-width: 1000px) {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
   }
 `;
 
@@ -138,7 +137,11 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
           >
             Dub
           </Button>
-          <DownloadLink href={downloadLink} target="_blank" rel="noopener noreferrer">
+          <DownloadLink
+            href={downloadLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaDownload />
             Download
           </DownloadLink>

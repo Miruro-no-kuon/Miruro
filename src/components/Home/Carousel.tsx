@@ -18,19 +18,16 @@ interface SlideData {
   description: string;
 }
 
-// Styled components for the Carousel
-
+// Check Carousel Skeleton to match height
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
   max-width: 100%;
   height: 24rem;
-  margin-bottom: 1rem;
   border-radius: var(--global-border-radius);
   cursor: grab;
 
   @media (max-width: 1000px) {
     height: 20rem;
-    margin-bottom: 0.5rem;
   }
   @media (max-width: 500px) {
     height: 18rem;
@@ -43,15 +40,13 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   justify-content: flex-start;
   align-items: center;
   animation: ${keyframes`
-  //   0% {
-  //     opacity: 0.4;
-  //     transform: scale(1);
-  //   }
-  //   100% {
-  //     opacity: 1;
-  //     transform: scale(1);
-  //   }
-  // `} 0.2s ease-in-out forwards;
+    0% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 1;
+    }
+  `} 0.3s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
@@ -96,6 +91,17 @@ const SlideContent = styled.div`
   bottom: 1.5rem;
   z-index: 5;
   max-width: 60%;
+
+  animation: ${keyframes`
+  0% {
+    opacity: 0.4;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+`} 0.3s ease-in-out forwards;
 
   @media (max-width: 1000px) {
     left: 1rem;
@@ -214,7 +220,7 @@ const PaginationStyle = styled.div`
 `;
 
 // Adjust the Carousel component to use correctly typed props and state
-const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
+const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   const navigate = useNavigate();
 
   const handlePlayButtonClick = (id: string) => {
@@ -287,4 +293,4 @@ const Carousel: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   );
 };
 
-export default Carousel;
+export default CarouselTrending;

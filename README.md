@@ -5,8 +5,8 @@
 </p>
 
 <h1 align="center">
-    MIRURO<a href="https://www.miruro.com">.COM</a> //
-    MIRURO<a href="https://www.miruro.tv">.TV</a>
+    <a href="https://www.miruro.com">miruro.com</a> //
+    <a href="https://www.miruro.tv">miruro.tv</a>
   <p align="center">
     <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
   </p>
@@ -32,6 +32,7 @@
   - Mobile responsive
   - Fast page load
   - White/Dark theme
+  - Page to see your continue watching
 - Watch Page
   - Player
     - Autoplay next episode
@@ -39,7 +40,6 @@
     - Theater mode
 - Coming Soon
   - Profile page to see your watch list
-  - Profile page to see your continue watching
   - Comment section
 
 <div style="text-align: left;">
@@ -61,10 +61,6 @@
 </div>
 
 ## Installation 🛠️
-
-### Before starting installation ⚠️
-
-> Before we proceed with the installation, we strongly recommend using `bun` for a seamless and efficient setup.
 
 ### 1. Clone this repository using
 
@@ -95,6 +91,12 @@ bun -v
 bun install && cd server && bun install
 ```
 
+#### or
+
+```bash
+bun iu
+```
+
 ### Copy the `.env.example` contents to `.env` in the root folder
 
 ```bash
@@ -118,6 +120,12 @@ bun start
 ## For Local Development 💻
 
 Please be aware that self-hosting this application is strictly limited to personal use only. Commercial utilization is prohibited, and the inclusion of advertisements on your self-hosted website may lead to consequences, including potential site takedown measures.
+
+## For Deployments
+
+#### Deploy your Miruro instance on Vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_PROXY_URL,VITE_IS_LOCAL,PORT&project-name=miruro&repository-name=miruro)
 
 ## License 📝
 

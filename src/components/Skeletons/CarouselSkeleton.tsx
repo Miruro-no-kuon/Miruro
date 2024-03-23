@@ -14,18 +14,18 @@ const pulseAnimation = keyframes`
 `;
 
 const popInAnimation = keyframes`
-  // 0%, 100%{
-  //   opacity: 0;
-  //   transform: scale(1);
-  // }
-  // 50% {
-  //   opacity: 1;
-  //   transform: scale(1);
-  // }
-  // 75% {
-  //   opacity: 0.5;
-  //   transform: scale(1);
-  // }
+  0%, 100%{
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
 `;
 
 interface SkeletonProps {
@@ -38,11 +38,9 @@ const SkeletonSlide = styled.div<SkeletonProps>`
   height: 24rem;
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
-  margin-bottom: 1rem;
 
   @media (max-width: 1000px) {
     height: 20rem;
-    margin-bottom: 0.5rem;
   }
   @media (max-width: 500px) {
     height: 18rem;

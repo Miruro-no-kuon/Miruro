@@ -147,26 +147,27 @@ export const StyledCardGrid = styled.div`
   position: relative;
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
   grid-template-rows: auto;
-  gap: 1.75rem;
+  gap: 2.75rem;
   transition: grid-template-columns 0.2s ease-in-out;
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   @media (max-width: 1000px) {
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
   @media (max-width: 800px) {
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   @media (max-width: 450px) {
     grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-    gap: 0.5rem;
+    gap: .9rem;
+
   }
 `;
 

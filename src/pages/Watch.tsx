@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EpisodeList from "../components/Watch/EpisodeList";
@@ -16,14 +16,7 @@ import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
 
 // Styled Components
 
-const WatchContainer = styled.div`
-  margin-left: 1rem;
-  margin-right: 1rem;
-  @media (max-width: 1000px) {
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
-`;
+const WatchContainer = styled.div``;
 
 const WatchWrapper = styled.div`
   font-size: 0.9rem;
@@ -38,6 +31,16 @@ const WatchWrapper = styled.div`
     align-items: flex-start;
   }
 `;
+
+const DataWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr; // Aim for a 3:1 ratio
+  width: 100%; // Make sure this container can expand enough
+`;
+
+const SourceAndData = styled.div``;
+
+const RalationsTable = styled.div``;
 
 const VideoPlayerContainer = styled.div`
   position: relative;
@@ -117,9 +120,29 @@ interface CurrentEpisode {
 }
 
 // Main Component
-const getSourceTypeKey = (animeId) => `sourceType-${animeId}`;
-const getLanguageKey = (animeId) => `language-${animeId}`;
+const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
+const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
+  const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
+  const [videoPlayerWidth, setVideoPlayerWidth] = useState("100%"); // Default to 100%
+
+  const updateVideoPlayerWidth = useCallback(() => {
+    if (videoPlayerContainerRef.current) {
+      const width = `${videoPlayerContainerRef.current.offsetWidth}px`;
+      setVideoPlayerWidth(width);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateVideoPlayerWidth(); // Update on mount
+    window.addEventListener("resize", updateVideoPlayerWidth); // Update on resize
+
+    return () => window.removeEventListener("resize", updateVideoPlayerWidth); // Cleanup
+  }, [updateVideoPlayerWidth]);
+
+  const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
+    useState<string>("100%");
+
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
     animeTitle?: string;
@@ -144,7 +167,6 @@ const Watch: React.FC = () => {
   const [isEpisodeChanging, setIsEpisodeChanging] = useState(false);
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
-  const LANGUAGE_PREFERENCE_PREFIX = "language-preference-";
   const [sourceType, setSourceType] = useState(
     () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "default"
   );
@@ -241,30 +263,43 @@ const Watch: React.FC = () => {
             image: ep.image,
             number:
               ep.number % 1 === 0
-                ? ep.number
-                : Math.floor(ep.number) +
-                "-" +
-                ep.number.toString().split(".")[1],
+                ? ep.number >= 0
+                  ? ep.number
+                  : "Special" // Handles integer and episode 0
+                : `${Math.floor(ep.number)}-${
+                    ep.number.toString().split(".")[1]
+                  }`, // Handles fractional episodes
           }));
 
           setEpisodes(transformedEpisodes);
 
           // Navigate based on language change, URL parameters, or saved episode
           const navigateToEpisode = (() => {
+            if (episodeNumber !== undefined) {
+              const epNumber = parseInt(episodeNumber, 10); // Parse episodeNumber from URL
+
+              // Check if epNumber is 0 or a positive integer
+              if (!isNaN(epNumber) && epNumber >= 0) {
+                return (
+                  transformedEpisodes.find((ep) => ep.number === epNumber) ||
+                  transformedEpisodes[0]
+                );
+              }
+            }
             if (languageChanged) {
               const currentEpisodeNumber =
                 parseInt(episodeNumber) || currentEpisode.number;
               // Try to find the current episode in the new language or default to the last available episode
               return (
                 transformedEpisodes.find(
-                  (ep) => ep.number === currentEpisodeNumber
+                  (ep: any) => ep.number === currentEpisodeNumber
                 ) || transformedEpisodes[transformedEpisodes.length - 1]
               );
             } else if (animeTitle && episodeNumber) {
               // Navigate based on URL parameters
               const episodeId = `${animeTitle}-episode-${episodeNumber}`;
               return (
-                transformedEpisodes.find((ep) => ep.id === episodeId) ||
+                transformedEpisodes.find((ep: any) => ep.id === episodeId) ||
                 navigate(`/watch/${animeId}`, { replace: true })
               );
             } else {
@@ -277,8 +312,8 @@ const Watch: React.FC = () => {
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                  (ep) => ep.number === savedEpisode.number
-                ) || transformedEpisodes[0]
+                    (ep: any) => ep.number === savedEpisode.number
+                  ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
           })();
@@ -397,7 +432,6 @@ const Watch: React.FC = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!event.shiftKey || !["N", "P"].includes(event.key.toUpperCase()))
         return;
-
       const now = Date.now();
       if (now - lastKeypressTime < 200) return; // Debounce check
 
@@ -427,7 +461,11 @@ const Watch: React.FC = () => {
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        "Miruro | " + (animeInfo.title.english || animeInfo.title.romaji || "");
+        "Miruro | " +
+        (animeInfo.title.english ||
+          animeInfo.title.romaji ||
+          animeInfo.title.romaji ||
+          "");
     } else {
       document.title = "Miruro";
     }
@@ -475,10 +513,6 @@ const Watch: React.FC = () => {
       );
     }
   };
-  //Saving language preference to cache.
-  useEffect(() => {
-    localStorage.setItem(LANGUAGE_PREFERENCE_PREFIX + animeId, language);
-  }, [language, animeId]);
 
   // Assuming you need to determine which episode's URL to use
   const fetchEmbeddedUrl = async (episodeId: string) => {
@@ -524,7 +558,6 @@ const Watch: React.FC = () => {
     }
   };
 
-
   // Call this function with the appropriate episode ID when an episode is selected
   useEffect(() => {
     if (sourceType === "vidstreaming" && currentEpisode.id) {
@@ -533,6 +566,20 @@ const Watch: React.FC = () => {
       fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
     }
   }, [sourceType, currentEpisode.id]);
+
+  useEffect(() => {
+    const updateMaxHeight = () => {
+      if (videoPlayerContainerRef.current) {
+        const height = videoPlayerContainerRef.current.offsetHeight;
+        setMaxEpisodeListHeight(`${height}px`);
+      }
+    };
+
+    updateMaxHeight();
+    window.addEventListener("resize", updateMaxHeight);
+
+    return () => window.removeEventListener("resize", updateMaxHeight);
+  }, []);
 
   return (
     <WatchContainer>
@@ -546,7 +593,7 @@ const Watch: React.FC = () => {
         {/* Render WatchWrapper content conditionally based on showNoEpisodesMessage or other state */}
         {!showNoEpisodesMessage && (
           <>
-            <VideoPlayerContainer>
+            <VideoPlayerContainer ref={videoPlayerContainerRef}>
               {loading ? (
                 <VideoPlayerSkeleton />
               ) : sourceType === "default" ? (
@@ -560,7 +607,7 @@ const Watch: React.FC = () => {
                 <EmbeddedVideoPlayer src={embeddedVideoUrl} />
               )}
             </VideoPlayerContainer>
-            <EpisodeListContainer>
+            <EpisodeListContainer style={{ maxHeight: maxEpisodeListHeight }}>
               {loading ? (
                 <VideoPlayerSkeleton />
               ) : (
@@ -574,20 +621,30 @@ const Watch: React.FC = () => {
                       handleEpisodeSelect(episode);
                     }
                   }}
+                  maxListHeight={maxEpisodeListHeight}
                 />
               )}
             </EpisodeListContainer>
           </>
         )}
       </WatchWrapper>
-      <VideoSourceSelector
-        sourceType={sourceType}
-        setSourceType={setSourceType}
-        language={language}
-        setLanguage={setLanguage}
-        downloadLink={downloadLink}
-      />
-      {animeInfo && <AnimeData animeData={animeInfo} />}
+      <DataWrapper>
+        <SourceAndData style={{ width: videoPlayerWidth }}>
+          {/* First row content (3 parts) */}
+          <VideoSourceSelector
+            sourceType={sourceType}
+            setSourceType={setSourceType}
+            language={language}
+            setLanguage={setLanguage}
+            downloadLink={downloadLink}
+          />
+          {animeInfo && <AnimeData animeData={animeInfo} />}
+        </SourceAndData>{" "}
+        <RalationsTable>
+          {/* Second row content (1 part) */}
+          {/* Your content for the second part */}
+        </RalationsTable>
+      </DataWrapper>
     </WatchContainer>
   );
 };

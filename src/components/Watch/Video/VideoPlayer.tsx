@@ -462,7 +462,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
   // Function to generate a storage key that is shared between sub and dub
-  const generateStorageKey = (episodeId) => {
+  const generateStorageKey = (episodeId: any) => {
     // Remove '-dub' from the episodeId to unify the key for both versions
     return `savedTime-${episodeId.replace("-dub", "")}`;
   };
@@ -513,7 +513,41 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     };
   }, [episodeId]); // Make sure to include other dependencies as necessary
 
-  // Dependency array includes isPlaying to react to play/pause changes
+  // When saving the volume to cache
+  useEffect(() => {
+    const updateVolume = () => {
+      if (videoRef.current) {
+        const volume = videoRef.current.volume;
+        localStorage.setItem('videoVolume', volume.toString());
+      }
+    };
+
+    // Save volume whenever it changes
+    const volumeChangeHandler = () => {
+      updateVolume();
+    };
+
+    // Listen to volume change events on the video element
+    if (videoRef.current) {
+      videoRef.current.addEventListener('volumechange', volumeChangeHandler);
+    }
+
+    // Load the volume from cache when component mounts
+    const savedVolume = localStorage.getItem('videoVolume');
+    if (savedVolume) {
+      setVolume(parseFloat(savedVolume));
+      if (videoRef.current) {
+        videoRef.current.volume = parseFloat(savedVolume);
+      }
+    }
+
+    return () => {
+      // Clean up event listener
+      if (videoRef.current) {
+        videoRef.current.removeEventListener('volumechange', volumeChangeHandler);
+      }
+    };
+  }, []); // Empty dependency array to run only once on component mount
 
   return (
     <VideoPlayerContainer id="video-player-wrapper" ref={playerWrapperRef}>
