@@ -26,40 +26,46 @@ MIRURO
 
 ## What is Miruro?
 
-<p><a href="https://www.miruro.com">Miruro</a> is a anime streaming platform powered by the <a href="https://github.com/consumet">Consumet API</a>. Crafted using <a href="https://react.dev/">React</a> and <a href="https://vitejs.dev/">Vite</a>, it boasts a stylish and contemporary interface. Miruro.com offers an immersive anime streaming experience where you can enjoy a vast library of anime titles in HD. Watch your favorite shows with English subtitles or dubbing, and conveniently download any anime without the need for registration.</p>
+Welcome to **Miruro** - your ultimate anime destination! 😎 Explore **[miruro.com](https://www.miruro.com)** and dive into the world of anime, powered by the incredible **[Consumet API](https://github.com/consumet)**.
+
+Crafted with ❤️ using **React** and **Vite**, our site rocks a slick and modern interface. Experience lightning-fast performance and smooth navigation as you explore a vast collection of HD anime titles.
+
+Enjoy your favorite shows with English subs or dubs, and here's the kicker - you can download individual episodes hassle-free, no sign-up required!
+
 
 ## Features 🪴
 
-- General
-  - Dub Anime support
-  - User-friendly interface
-  - Mobile responsive
-  - Fast page load
-  - White/Dark theme
-  - Page to see your continue watching
-- Watch Page
-  - Player
-    - Autoplay next episode
-    - Skip op/ed button
-    - Theater mode
-- Coming Soon
-  - Profile page to see your watch list
-  - Comment section
+<details>
+<summary>View More</summary>
 
+### General
+- Dub Anime support
+- User-friendly interface
+- Mobile responsive
+- Fast page load
+- White/Dark theme
+- Page to see your continue watching
+
+### Watch Page
+- **Player**
+  - Autoplay next episode
+  - Skip op/ed button
+  - Theater mode
+
+### Coming Soon
+- Profile page to see your watch list
+- Comment section
+
+</details>
+
+## Images
 <div style="text-align: left;">
-  <h3>Home Page</h3>
-
   <img src="https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/home-page.webp" alt="Home Page" style="max-width: 70%;" >
   <details>
   <summary>View More</summary>
-  <h3>Splash Page</h3>
   <br>
   <img src="https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/splash-page.webp" alt="Splash Page" style="max-width: 70%;">
-
-  <h3>Watch Page</h3>
   <img src="https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/watch-page.webp" alt="Watch Page" style="max-width: 70%;">
-
-  <h3>Footer</h3>
   <img src="https://raw.githubusercontent.com/Miruro-no-kuon/.github/main/profile/footer.webp" alt="Footer" style="max-width: 70%;">
   </details>
 </div>
