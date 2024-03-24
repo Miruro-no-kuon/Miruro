@@ -247,7 +247,21 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 </strong>{" "}
               </p>
               <p>
-                Rating: <strong>{animeData.rating / 10}</strong>
+                Rating:{" "}
+                <strong
+                  style={{
+                    color:
+                      animeData.rating >= 85
+                        ? "green"
+                        : animeData.rating >= 70
+                        ? "lightgreen"
+                        : animeData.rating >= 55
+                        ? "orange"
+                        : "red",
+                  }}
+                >
+                  {animeData.rating}
+                </strong>
               </p>
               <p>
                 <a

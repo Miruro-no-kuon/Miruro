@@ -52,6 +52,12 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-height: ${({ maxHeight }) => maxHeight};
+  @media (max-width: 1000px) {
+    max-height: 18rem;
+  }
+  @media (max-width: 500px) {
+    max-height: ${({ maxHeight }) => maxHeight};
+  }
 `;
 
 const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
@@ -209,7 +215,7 @@ const EpisodeList: React.FC<Props> = ({
 }) => {
   // State for interval, layout, user layout preference, search term, and watched episodes
   const episodeGridRef = useRef<HTMLDivElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const episodeRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [interval, setInterval] = useState<[number, number]>([0, 99]);
   const [isRowLayout, setIsRowLayout] = useState(true);
   const [userLayoutPreference, setUserLayoutPreference] = useState<
@@ -401,39 +407,30 @@ const EpisodeList: React.FC<Props> = ({
     intervalOptions,
     selectionInitiatedByUser,
   ]);
-
   useEffect(() => {
-    const handleScroll = () => {
-      if (animeId && episodeGridRef.current) {
-        const scroll = episodeGridRef.current.scrollTop;
-        localStorage.setItem(`scroll-position-${animeId}`, scroll.toString());
-      }
-    };
+    if (
+      selectedEpisodeId &&
+      episodeRefs.current[selectedEpisodeId] &&
+      episodeGridRef.current &&
+      !selectionInitiatedByUser
+    ) {
+      const episodeElement = episodeRefs.current[selectedEpisodeId];
+      const container = episodeGridRef.current;
 
-    const savedScrollPosition = animeId
-      ? localStorage.getItem(`scroll-position-${animeId}`)
-      : null;
-    if (savedScrollPosition) {
-      setScrollPosition(parseInt(savedScrollPosition, 10));
-    }
+      const episodeTop = episodeElement.offsetTop;
+      const episodeHeight = episodeElement.offsetHeight;
+      const containerHeight = container.offsetHeight;
 
-    const grid = episodeGridRef.current;
-    if (grid) {
-      grid.addEventListener("scroll", handleScroll);
-      grid.scrollTo(0, scrollPosition);
-    }
+      const desiredScrollPosition =
+        episodeTop + episodeHeight / 2 - containerHeight / 2;
 
-    return () => {
-      if (grid) {
-        grid.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [animeId, scrollPosition]);
-  useEffect(() => {
-    if (episodeGridRef.current) {
-      episodeGridRef.current.scrollTo(0, scrollPosition);
+      container.scrollTo({ top: desiredScrollPosition, behavior: "smooth" });
+
+      // Optionally, reset selectionInitiatedByUser after performing any necessary actions
+      // to ensure it's ready for the next selection event
+      setSelectionInitiatedByUser(false); // Reset it here if needed
     }
-  }, [scrollPosition]);
+  }, [selectedEpisodeId, episodes, displayMode, selectionInitiatedByUser]);
 
   // Render the EpisodeList component
   return (
@@ -486,6 +483,7 @@ const EpisodeList: React.FC<Props> = ({
               $isWatched={$isWatched}
               onClick={() => handleEpisodeSelect(episode.id)}
               aria-selected={$isSelected}
+              ref={(el) => (episodeRefs.current[episode.id] = el)} // Reference to each episode's button
             >
               {displayMode === "imageList" ? (
                 <>

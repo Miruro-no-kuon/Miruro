@@ -83,9 +83,9 @@ const NoEpsFoundDiv = styled.div`
 
 const GoToHomePageButton = styled.a`
   position: absolute;
-  color: black;
+  color: white;
   border-radius: var(--global-border-radius);
-  background-color: var(--primary-accent-bg);
+  background-color: var(--primary-accent);
   margin-top: 1rem;
   padding: 0.7rem 0.8rem;
   transform: translate(-50%, -50%) scaleX(1.1);
@@ -263,29 +263,16 @@ const Watch: React.FC = () => {
             image: ep.image,
             number:
               ep.number % 1 === 0
-                ? ep.number >= 0
-                  ? ep.number
-                  : "Special" // Handles integer and episode 0
-                : `${Math.floor(ep.number)}-${
-                    ep.number.toString().split(".")[1]
-                  }`, // Handles fractional episodes
+                ? ep.number
+                : Math.floor(ep.number) +
+                  "-" +
+                  ep.number.toString().split(".")[1],
           }));
 
           setEpisodes(transformedEpisodes);
 
           // Navigate based on language change, URL parameters, or saved episode
           const navigateToEpisode = (() => {
-            if (episodeNumber !== undefined) {
-              const epNumber = parseInt(episodeNumber, 10); // Parse episodeNumber from URL
-
-              // Check if epNumber is 0 or a positive integer
-              if (!isNaN(epNumber) && epNumber >= 0) {
-                return (
-                  transformedEpisodes.find((ep) => ep.number === epNumber) ||
-                  transformedEpisodes[0]
-                );
-              }
-            }
             if (languageChanged) {
               const currentEpisodeNumber =
                 parseInt(episodeNumber) || currentEpisode.number;
