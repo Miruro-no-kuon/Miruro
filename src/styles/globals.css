@@ -21,9 +21,10 @@
 /* Base and Light Mode Specific Colors */
 :root {
   --global-primary-bg: #f5f5f5;
-  --global-primary-bg-tr: rgba(245, 245, 245, 0.97);
+  --global-primary-bg-tr: rgba(245, 245, 245, 0.8);
   --global-ad-bg: #e0e0e0;
   --global-input-div: #e0e0e0;
+  --global-input-div-tr: rgba(224, 224, 224, 0.5);
   --global-input-border: rgba(8, 8, 8, 0.1);
   --global-text: #333333;
   --global-card-bg: #ffffff;
@@ -83,17 +84,22 @@ body {
   font-feature-settings: normal;
   font-variation-settings: normal;
   margin: 0;
-  padding: 3.5rem 1rem 1.5rem 1rem;
+  padding: 4.5rem 1rem 1.5rem 1rem;
   max-width: 105rem;
   margin: auto;
   background-color: var(--global-primary-bg);
   color: var(--global-text);
-  transition: 0.1s ease;
+  transition: 0.2s ease;
 }
 /* Responsive styles */
 @media (max-width: 1000px) {
   body {
-    padding: 3rem 0.5rem 0.5rem 0.5rem;
+    padding: 4.5rem 0.5rem 0.5rem 0.5rem;
+  }
+}
+@media (max-width: 500px) {
+  body {
+    padding: 4rem 0.5rem 0.5rem 0.5rem;
   }
 }
 /* Selection styles */

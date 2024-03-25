@@ -6,47 +6,44 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DropDownSearch from "./DropDownSearch";
-import { fetchAdvancedSearch } from "../hooks/useApi"; // Adjust the path as necessary
-import {
-  faSun,
-  faMoon,
-  faSearch,
-  faTimes,
-  faSlash,
-} from "@fortawesome/free-solid-svg-icons";
+import { fetchAdvancedSearch } from "../hooks/useApi";
+import { FiSun, FiMoon, FiX } from "react-icons/fi";
+import { GoCommandPalette } from "react-icons/go";
+import { IoIosSearch } from "react-icons/io";
 
-// Define keyframe animation
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
   to { background-color: ${color}; }
 `;
 
-const StyledNavbar = styled.div`
-  position: fixed; /* or 'absolute', depending on layout needs */
+const slideDownAnimation2 = keyframes`
+  0% { opacity: 0; transform: translateY(-20px); max-height: 0; }
+  100% { opacity: 1; transform: translateY(0); max-height: 500px; } /* Example max-height */
+`;
+
+const StyledNavbar = styled.div<{ isExtended?: boolean }>`
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 2.5rem;
   text-align: center;
-  margin: 0; /* Remove any margin */
-  padding: 0.5rem 2rem;
-  background-color: var(--global-primary-bg);
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--global-primary-bg-tr);
   backdrop-filter: blur(10px);
   z-index: 4;
-  /* Removed width and transform properties */
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 500px) {
-    padding: 0.5rem 0.5rem; /* Adjusted for smaller screens */
-    height: 2rem;
+    padding-bottom: ${({ isExtended }) => (isExtended ? "1rem" : "1rem")};
   }
 `;
 
 const TopContainer = styled.div`
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   justify-content: space-between;
 `;
@@ -62,30 +59,17 @@ const LogoImg = styled(Link)`
   transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 
   &:hover {
-    color: black; // Replace with your hover color
+    color: black;
     transform: scale(1.05);
   }
+
   @media (max-width: 500px) {
     max-width: 6rem;
     margin-right: 1rem;
-    /* padding: 0rem; */
   }
 `;
 
-const InputToggleBtn = styled.button`
-  background: transparent;
-  border: none;
-  color: var(--global-text);
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: none; // Default to not displayed
-  align-items: right;
-  @media (max-width: 500px) {
-    display: block; // Only show on small screens
-  }
-`;
-
-const InputContainer = styled.div`
+const InputContainer = styled.div<{ isVisible: boolean }>`
   display: flex;
   flex: 1;
   max-width: 35rem;
@@ -96,35 +80,34 @@ const InputContainer = styled.div`
   border-radius: 1.5rem;
   background-color: var(--global-input-div);
   animation: ${fadeInAnimation("var(--global-input-div)")} 0.1s ease-out;
+  animation: ${slideDownAnimation2} 0.5s ease;
+
   @media (max-width: 1000px) {
     max-width: 20rem;
   }
+
   @media (max-width: 500px) {
     max-width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     display: ${({ isVisible }) => (isVisible ? "flex" : "none")};
   }
 `;
+
 const RightContent = styled.div`
   display: flex;
   align-items: center;
   height: 2rem;
 `;
 
-interface IconProps {
-  $isFocused: boolean;
-  $fontSize?: string;
-}
-
-const Icon = styled.div<IconProps>`
-  margin-left: 0.2rem;
-  margin-right: 0.5rem;
+const Icon = styled.div<{ $isFocused: boolean }>`
+  margin: 0 0.5rem;
   color: var(--global-text);
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
-  font-size: ${({ $fontSize }) => $fontSize || "0.8rem"};
+  font-size: 1.2rem;
   transition: opacity 0.2s;
-  @media (max-width: 500px) {
-  }
+  max-height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const SearchInput = styled.input`
@@ -135,16 +118,15 @@ const SearchInput = styled.input`
   font-size: 0.9rem;
   outline: 0;
   padding: 0;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
   padding-top: 0;
   width: 100%;
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 `;
 
-interface ClearButtonProps {
-  $query: string;
-}
-
-const ClearButton = styled.button<ClearButtonProps>`
+const ClearButton = styled.button<{ $query: string }>`
   background: transparent;
   border: none;
   color: var(--global-text);
@@ -153,6 +135,9 @@ const ClearButton = styled.button<ClearButtonProps>`
   opacity: ${({ $query }) => ($query ? 0.5 : 0)};
   visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
   transition: color 0.2s, opacity 0.2s;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: var(--global-text);
@@ -160,45 +145,37 @@ const ClearButton = styled.button<ClearButtonProps>`
   }
 `;
 
-const ThemeToggleBtn = styled.button`
+const StyledButton = styled.button<{ isInputToggle?: boolean }>`
   background: transparent;
-  border: none;
-  border-radius: var(--global-border-radius);
+  background-color: var(--global-input-div);
   color: var(--global-text);
-  padding: 0.5rem;
   font-size: 1.2rem;
   cursor: pointer;
+  padding: 1rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--global-border-radius);
+  width: 100%;
+  height: 100%;
   transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  border: 1px solid var(--global-input-border);
 
-  &:hover {
-    transform: rotate(-45deg);
-  }
   @media (max-width: 500px) {
-    margin-left: 0.7rem;
-    padding-right: 0.7rem;
+    display: flex;
+    margin: ${({ isInputToggle }) => (isInputToggle ? "0" : "0 0.5rem")};
   }
 `;
 
-interface SlashToggleBtnProps {
-  $isFocused: boolean;
-}
-
-const SlashToggleBtn = styled.button<SlashToggleBtnProps>`
-  margin-right: 0.3rem;
-  background: transparent;
-  border: 2px solid var(--global-text);
-  border-radius: var(--global-border-radius);
-  padding: 0.3rem;
-  color: var(--global-text);
-  font-size: 0.5rem;
+const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
+  font-size: 1rem;
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
-  margin-left: 0.5rem;
-  transition: opacity 0.2s;
 
   &:hover {
     opacity: 1;
   }
+
   @media (max-width: 1000px) {
     display: none;
   }
@@ -236,9 +213,8 @@ interface Anime {
     romaji?: string;
     english?: string;
   };
-  rating?: {
-    anilist?: number;
-  };
+  releaseDate?: number;
+  rating?: number;
   color?: string;
   format?: string;
   type?: string;
@@ -250,18 +226,20 @@ interface Anime {
   popularity?: {
     anidb?: number;
   };
-  releaseDate?: string;
   year?: string;
 }
 
 const Navbar = () => {
+  const [isPaddingExtended, setIsPaddingExtended] = useState(false);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [inputContainerWidth, setInputContainerWidth] = useState(0);
   const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown container
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Anime[]>([]);
   const debounceTimeout = useRef<Timer | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [search, setSearch] = useState({
@@ -371,20 +349,12 @@ const Navbar = () => {
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
     debounceTimeout.current = setTimeout(() => {
-      // Before executing the delayed search, check if the enter key was recently pressed
-      // You might set a flag when the enter key is pressed and check it here
-      // For example, using a state or ref like `enterPressedRecently`
-      // if (!enterPressedRecently) {
       fetchSearchResults(newValue);
       setSearch((prevState) => ({
         ...prevState,
         isDropdownOpen: true,
       }));
-      // } else {
-      // Optionally reset the flag here if you're using one
-      // enterPressedRecently = false;
-      // }
-    }, 100); // Debounce for 300ms
+    }, 100);
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -411,6 +381,24 @@ const Navbar = () => {
       }
     }
   };
+
+  useEffect(() => {
+    // Function to update the width
+    const updateWidth = () => {
+      if (inputContainerRef.current) {
+        setInputContainerWidth(inputContainerRef.current.offsetWidth);
+      }
+    };
+
+    // Update width on mount
+    updateWidth();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", updateWidth);
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   useEffect(() => {
     // This effect runs when the location.pathname changes or enter is pressed (Hide the InputContainer)
@@ -450,17 +438,21 @@ const Navbar = () => {
 
   return (
     <>
-      <StyledNavbar ref={navbarRef}>
+      <StyledNavbar isExtended={isPaddingExtended} ref={navbarRef}>
         <TopContainer>
-          <LogoImg to="/home" onClick={() => window.scrollTo(0, 0)}>
+          <LogoImg
+            title="MIRURO.tv"
+            to="/home"
+            onClick={() => window.scrollTo(0, 0)}
+          >
             見るろ の 久遠
           </LogoImg>
 
           {/* Render InputContainer within the navbar for screens larger than 500px */}
           {!isMobileView && (
-            <InputContainer isVisible={true}>
+            <InputContainer ref={inputContainerRef} isVisible={isInputVisible}>
               <Icon $isFocused={search.isSearchFocused}>
-                <FontAwesomeIcon icon={faSearch} />
+                <IoIosSearch />
               </Icon>
               <SearchInput
                 type="text"
@@ -484,36 +476,40 @@ const Navbar = () => {
                 selectedIndex={selectedIndex}
                 setSelectedIndex={setSelectedIndex}
                 searchQuery={search.searchQuery}
+                containerWidth={inputContainerWidth}
               />
+
               <ClearButton
                 $query={search.searchQuery}
                 onClick={handleClearSearch}
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <FiX />
               </ClearButton>
-              <SlashToggleBtn $isFocused={search.isSearchFocused}>
-                <FontAwesomeIcon icon={faSlash} rotation={90} />
-              </SlashToggleBtn>
+              <Icon $isFocused={search.isSearchFocused}>
+                <GoCommandPalette />
+              </Icon>
             </InputContainer>
           )}
           <RightContent>
-            {/* Toggle Button should only be visible in mobile view */}
             {isMobileView && (
-              <InputToggleBtn
-                onClick={() => setIsInputVisible((prev) => !prev)}
+              <StyledButton
+                onClick={() => {
+                  setIsInputVisible((prev) => !prev);
+                  setIsPaddingExtended((prev) => !prev); // Toggle padding extension when toggling input visibility
+                }}
               >
-                <FontAwesomeIcon icon={faSearch} />
-              </InputToggleBtn>
+                <IoIosSearch />
+              </StyledButton>
             )}
-            <ThemeToggleBtn onClick={toggleTheme}>
-              <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
-            </ThemeToggleBtn>
+            <StyledButton onClick={toggleTheme}>
+              {isDarkMode ? <FiSun /> : <FiMoon />}
+            </StyledButton>
           </RightContent>
         </TopContainer>
         {isMobileView && isInputVisible && (
           <InputContainer isVisible={isInputVisible}>
             <Icon $isFocused={search.isSearchFocused}>
-              <FontAwesomeIcon icon={faSearch} />
+              <IoIosSearch />
             </Icon>
             <SearchInput
               type="text"
@@ -537,15 +533,17 @@ const Navbar = () => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               searchQuery={search.searchQuery}
+              containerWidth={inputContainerWidth} // Ensure this prop is passed, as specified by the updated interface
             />
+
             <ClearButton
               $query={search.searchQuery}
               onClick={handleClearSearch}
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <FiX />
             </ClearButton>
             <SlashToggleBtn $isFocused={search.isSearchFocused}>
-              <FontAwesomeIcon icon={faSlash} rotation={90} />
+              <GoCommandPalette />
             </SlashToggleBtn>
           </InputContainer>
         )}

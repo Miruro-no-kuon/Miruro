@@ -242,9 +242,9 @@ const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
       <StyledSwiperContainer
         spaceBetween={30}
         slidesPerView={1}
-        loop={true}
+        loop={false}
         autoplay={{
-          delay: 4000,
+          delay: 3000,
           disableOnInteraction: false,
         }}
         navigation={{
@@ -259,7 +259,7 @@ const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
         }}
       >
         {validData.map(({ id, image, cover, title, description }) => (
-          <StyledSwiperSlide key={id}>
+          <StyledSwiperSlide key={id} title={title.english || title.romaji}>
             <SlideImageWrapper>
               <SlideImage
                 src={cover === image ? BannerNotFound : cover}

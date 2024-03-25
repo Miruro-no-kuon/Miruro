@@ -125,9 +125,12 @@ const SearchResults = () => {
 
   return (
     <Container>
-      <SearchTitle>
-        {animeData.length} Search Results: <strong>{query}</strong>
-      </SearchTitle>
+      <>
+        <h1>{animeData.length} Search Results:</h1>
+        <h1>
+          <strong>{query}</strong>
+        </h1>
+      </>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 20 }).map((_, index) => (
@@ -137,7 +140,6 @@ const SearchResults = () => {
       ) : (
         <CardGrid
           animeData={animeData}
-          totalPages={totalPages}
           hasNextPage={hasNextPage}
           onLoadMore={handleLoadMore}
         />
