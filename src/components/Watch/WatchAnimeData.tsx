@@ -8,18 +8,16 @@ const AnimeDataContainer = styled.div``;
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  padding: 0.6rem;
   padding-top: 0.8rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
   align-items: flex-start;
   display: flex;
-  margin-bottom: -0.3rem;
 `;
 
 const AnimeDataContainerBottom = styled.div`
-  padding: 0.6rem;
+  margin-top: 1rem;
 `;
 
 const AnimeDataText = styled.div`
@@ -356,7 +354,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   Studios: <strong>{animeData.studios}</strong>
                 </p>
               )}
-              {animeData.trailer && (
+              {animeData.trailer && animeData.status !== "Not yet aired" && (
                 <>
                   <ShowTrailerButton onClick={toggleTrailer}>
                     {showTrailer ? "Hide Trailer" : "Show Trailer"}
@@ -423,22 +421,22 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
         </AnimeDataContainer>
       )}
       {animeData &&
-        animeData.relations.filter((relation: any) =>
-          ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
-            relation.type
-          )
+        animeData.relations.filter(
+          (relation: any) =>
+            relation.relationType.toUpperCase() === "PREQUEL" ||
+            relation.relationType.toUpperCase() === "SEQUEL"
         ).length > 0 && (
           <>
             <AnimeDataText className="bio">
-              <p className="anime-title">Relations</p>
+              <p className="anime-title">Seasons</p>
             </AnimeDataText>
             <Relations>
               <CardGrid
                 animeData={animeData.relations
-                  .filter((relation: any) =>
-                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
-                      relation.type
-                    )
+                  .filter(
+                    (relation: any) =>
+                      relation.relationType.toUpperCase() === "PREQUEL" ||
+                      relation.relationType.toUpperCase() === "SEQUEL"
                   )
                   .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
@@ -446,9 +444,47 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 onLoadMore={() => {}}
               />
             </Relations>
+            <br></br>
           </>
         )}
-      <br></br>
+      {animeData &&
+        animeData.relations.filter(
+          (relation: any) =>
+            ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+              relation.type
+            ) &&
+            relation.relationType.toUpperCase() !== "PREQUEL" &&
+            relation.relationType.toUpperCase() !== "SEQUEL"
+        ).length > 0 && (
+          <>
+            <AnimeDataText className="bio">
+              <p className="anime-title">Related</p>
+            </AnimeDataText>
+            <Relations>
+              <CardGrid
+                animeData={animeData.relations
+                  .filter(
+                    (relation: any) =>
+                      [
+                        "OVA",
+                        "SPECIAL",
+                        "TV",
+                        "MOVIE",
+                        "ONA",
+                        "NOVEL",
+                      ].includes(relation.type) &&
+                      relation.relationType.toUpperCase() !== "PREQUEL" &&
+                      relation.relationType.toUpperCase() !== "SEQUEL"
+                  )
+                  .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
+                totalPages={0}
+                hasNextPage={false}
+                onLoadMore={() => {}}
+              />
+            </Relations>
+            <br></br>
+          </>
+        )}
       {/* Recommendations */}
       {animeData &&
         animeData.recommendations.filter((recommendation: any) =>

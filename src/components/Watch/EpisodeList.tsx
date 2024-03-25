@@ -408,28 +408,34 @@ const EpisodeList: React.FC<Props> = ({
     selectionInitiatedByUser,
   ]);
   useEffect(() => {
-    if (
-      selectedEpisodeId &&
-      episodeRefs.current[selectedEpisodeId] &&
-      episodeGridRef.current &&
-      !selectionInitiatedByUser
-    ) {
-      const episodeElement = episodeRefs.current[selectedEpisodeId];
-      const container = episodeGridRef.current;
+    const timer = setTimeout(() => {
+      if (
+        selectedEpisodeId &&
+        episodeRefs.current[selectedEpisodeId] &&
+        episodeGridRef.current &&
+        !selectionInitiatedByUser
+      ) {
+        const episodeElement = episodeRefs.current[selectedEpisodeId];
+        const container = episodeGridRef.current;
 
-      const episodeTop = episodeElement.offsetTop;
-      const episodeHeight = episodeElement.offsetHeight;
-      const containerHeight = container.offsetHeight;
+        // Calculate episode's top position relative to the container
+        const episodeTop =
+          episodeElement.getBoundingClientRect().top -
+          container.getBoundingClientRect().top;
 
-      const desiredScrollPosition =
-        episodeTop + episodeHeight / 2 - containerHeight / 2;
+        // Calculate the desired scroll position to center the episode in the container
+        const episodeHeight = episodeElement.offsetHeight;
+        const containerHeight = container.offsetHeight;
+        const desiredScrollPosition =
+          episodeTop + episodeHeight / 2 - containerHeight / 2;
 
-      container.scrollTo({ top: desiredScrollPosition, behavior: "smooth" });
+        container.scrollTo({ top: desiredScrollPosition, behavior: "smooth" });
 
-      // Optionally, reset selectionInitiatedByUser after performing any necessary actions
-      // to ensure it's ready for the next selection event
-      setSelectionInitiatedByUser(false); // Reset it here if needed
-    }
+        setSelectionInitiatedByUser(false);
+      }
+    }, 100); // A delay ensures the layout has stabilized, especially after dynamic content loading.
+
+    return () => clearTimeout(timer);
   }, [selectedEpisodeId, episodes, displayMode, selectionInitiatedByUser]);
 
   // Render the EpisodeList component
