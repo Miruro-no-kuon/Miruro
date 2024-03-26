@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Carousel from "../components/Home/Carousel";
+import Carousel from "../components/Home/HomeCarousel";
 import CardGrid, { StyledCardGrid } from "../components/Cards/CardGrid";
 import CarouselSkeleton from "../components/Skeletons/CarouselSkeleton";
 import CardSkeleton from "../components/Skeletons/CardSkeleton";
@@ -9,7 +9,7 @@ import {
   fetchPopularAnime,
   fetchTopAnime,
 } from "../hooks/useApi";
-import renderWatchedEpisodes from "../components/Home/EpisodeCardComponent";
+import renderWatchedEpisodes from "../components/Home/EpisodeCard";
 
 const SimpleLayout = styled.div`
   display: flex;
@@ -47,7 +47,6 @@ const Tab = styled.button<{ $isActive: boolean }>`
   color: var(--global-text);
   position: relative;
   overflow: hidden;
-  z-index: 1;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 
@@ -238,7 +237,6 @@ const Home = () => {
       ) : (
         <Carousel data={trendingAnime} />
       )}
-      <h2 style={{ textAlign: "center" }}>Continue Watching</h2>
       {renderWatchedEpisodes()}
       <TabContainer>
         <Tab

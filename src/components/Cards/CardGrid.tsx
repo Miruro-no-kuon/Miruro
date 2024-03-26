@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CardItem from "./CardItem";
+import { Anime } from "../../hooks/interface";
 
 interface CardGridProps {
   animeData: Anime[];
@@ -8,48 +9,13 @@ interface CardGridProps {
   onLoadMore: () => void;
 }
 
-interface Anime {
-  id: string;
-  coverImage?: string;
-  image?: string;
-  title: {
-    romaji?: string;
-    english?: string;
-  };
-  rating: number;
-  color?: string;
-  episodes?: number;
-  format?: string;
-  type?: string;
-  totalEpisodes?: number;
-  currentEpisode?: number;
-  description?: string;
-  genres?: string[];
-  status?: string;
-  popularity?: {
-    anidb?: number;
-  };
-  releaseDate?: string;
-  year?: string;
-}
-
 const CardGrid: React.FC<CardGridProps> = ({
   animeData,
   hasNextPage,
   onLoadMore,
 }) => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setLoading(false);
-    }, 0);
-    return () => clearTimeout(loadingTimeout);
-  }, [animeData]);
-
   const handleLoadMore = () => {
-    if (!loading && hasNextPage) {
-      setLoading(true);
+    if (hasNextPage) {
       onLoadMore();
     }
   };
@@ -72,7 +38,7 @@ const CardGrid: React.FC<CardGridProps> = ({
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [loading, hasNextPage]);
+  }, [hasNextPage]);
 
   return (
     <StyledCardGrid>

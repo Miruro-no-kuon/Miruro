@@ -7,19 +7,11 @@ import { fetchAdvancedSearch } from "../hooks/useApi";
 import CardSkeleton from "../components/Skeletons/CardSkeleton";
 
 const Container = styled.div`
-  min-height: 85vh;
-  // margin-left: 5rem;
-  // margin-right: 5rem;
+  min-height: 65vh;
   @media (max-width: 1500px) {
     margin-left: 0rem;
     margin-right: 0rem;
   }
-`;
-
-const SearchTitle = styled.h2`
-  text-align: left;
-  margin-bottom: 2rem;
-  font-weight: 400;
 `;
 
 const SearchResults = () => {
@@ -27,18 +19,14 @@ const SearchResults = () => {
   const query = searchParams.get("query") || "";
   const [animeData, setAnimeData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(1);
-  const delayTimeout = useRef<NodeJS.Timeout | null>(null);
-  const lastCachedPage = useRef(0);
-  const [, /* loadingStates */ setLoadingStates] = useState<boolean[]>([]);
+  const delayTimeout = useRef<number | null>(null);
 
   useEffect(() => {
     const previousTitle = document.title;
     document.title = query ? `${query} - Miruro` : "Miruro";
     return () => {
-      // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;
     };
   }, [animeData.length, query]);
@@ -46,45 +34,20 @@ const SearchResults = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setPage(1);
-    lastCachedPage.current = 0;
   }, [query]);
 
   const initiatefetchAdvancedSearch = async () => {
     setIsLoading(true);
 
-    if (page > 1) {
-      setLoadingStates((prev) => [
-        ...prev,
-        ...Array.from({ length: 20 }, () => true),
-      ]);
-    }
-
     try {
-      const fetchedData = await fetchAdvancedSearch(
-        query,
-        page,
-        20,
-        (isCached: boolean) => {
-          if (!isCached) {
-            preloadNextPage(page + 1);
-          }
-        }
-      );
+      const fetchedData = await fetchAdvancedSearch(query, page, 20);
 
       if (page === 1) {
         setAnimeData(fetchedData.results);
-        setLoadingStates(
-          Array.from({ length: fetchedData.results.length }, () => false)
-        );
-        preloadNextPage(page + 1);
       } else {
         setAnimeData((prevData) => [...prevData, ...fetchedData.results]);
-        setLoadingStates((prev) =>
-          prev.map((state, index) => (index >= (page - 1) * 20 ? false : state))
-        );
       }
 
-      setTotalPages(fetchedData.totalPages);
       setHasNextPage(fetchedData.hasNextPage);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -94,43 +57,26 @@ const SearchResults = () => {
   };
 
   const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-
-  const preloadNextPage = (nextPage: number) => {
-    if (
-      nextPage <= totalPages &&
-      nextPage > lastCachedPage.current &&
-      hasNextPage
-    ) {
-      fetchAdvancedSearch(query, nextPage, 25, (isCached: boolean) => {
-        if (!isCached) {
-          lastCachedPage.current = nextPage;
-          preloadNextPage(nextPage + 1);
-        }
-      });
-    }
+    setPage((prevPage) => {
+      return prevPage < 10 ? prevPage + 1 : prevPage;
+    });
   };
 
   useEffect(() => {
-    if (delayTimeout.current) clearTimeout(delayTimeout.current);
-    delayTimeout.current = setTimeout(() => {
+    if (delayTimeout.current !== null)
+      clearTimeout(delayTimeout.current as any);
+    delayTimeout.current = window.setTimeout(() => {
       initiatefetchAdvancedSearch();
-    }, 0);
+    }, 0) as any;
 
     return () => {
-      if (delayTimeout.current) clearTimeout(delayTimeout.current);
+      if (delayTimeout.current !== null)
+        clearTimeout(delayTimeout.current as any);
     };
   }, [query, page]);
 
   return (
     <Container>
-      <>
-        <h1>{animeData.length} Search Results:</h1>
-        <h1>
-          <strong>{query}</strong>
-        </h1>
-      </>
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 20 }).map((_, index) => (
@@ -140,7 +86,7 @@ const SearchResults = () => {
       ) : (
         <CardGrid
           animeData={animeData}
-          hasNextPage={hasNextPage}
+          hasNextPage={hasNextPage && page < 10}
           onLoadMore={handleLoadMore}
         />
       )}

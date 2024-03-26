@@ -1,96 +1,83 @@
 {
-  "background_color": "#080808",
+  "name": "Miruro",
+  "short_name": "miruro",
+  "description": "Blazing Fast HD Anime Streaming",
+  "lang": "en",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
-  "name": "Miruro",
-  "short_name": "Miruro",
-  "description": "🍜 Miruro is an Anime Streaming Site with minimal UI. Made with ⚡ Vite & 🍞 Bun!",
-  "lang": "en",
-  "categories": [
-    "Action",
-    "Adventure",
-    "Comedy",
-    "Drama",
-    "Fantasy",
-    "Horror",
-    "Mystery",
-    "Romance",
-    "Sci-Fi",
-    "Slice of Life",
-    "Supernatural",
-    "Thriller",
-    "Psychological",
-    "Magic",
-    "Mecha",
-    "Music",
-    "Sports",
-    "Historical",
-    "School",
-    "Shounen",
-    "Shoujo",
-    "Seinen",
-    "Josei",
-    "Martial Arts",
-    "Space",
-    "Super Power",
-    "Game",
-    "Military",
-    "Police",
-    "Vampire",
-    "Demons",
-    "Samurai",
-    "Cyberpunk",
-    "Post-Apocalyptic",
-    "Parody",
-    "Ecchi",
-    "Harem",
-    "Reverse Harem",
-    "Isekai",
-    "Time Travel",
-    "Virtual Reality",
-    "Gore",
-    "Psychological",
-    "Thriller",
-    "Supernatural"
+  "screenshots": [
+    {
+      "src": "/preview.jpg",
+      "sizes": "960x540",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Wonder Widgets"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Icon Widget"
+    }
   ],
   "icons": [
     {
-      "src": "./favicon-miruro.webp",
-      "sizes": "148x148",
-      "type": "image/webp"
-    },
-    {
-      "src": "./android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    },
-    {
-      "src": "./favicon-16x16.png",
+      "src": "/favicon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "./favicon-32x32.png",
+      "src": "/favicon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "./favicon.ico",
+      "src": "/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

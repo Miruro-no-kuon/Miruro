@@ -1,8 +1,13 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Image404URL from "/src/assets/404-Page-not-found.gif";
 
-// Styled component to center content
+const FadeIn = keyframes`
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+`;
+
+// Styled component for Centered Content
 const CenteredContent = styled.div`
   display: flex;
   padding-top: 5rem;
@@ -13,23 +18,35 @@ const CenteredContent = styled.div`
   margin-top: 2rem;
   text-align: center;
   font-size: large;
-  & img {
-    border-radius: var(--global-border-radius);
-    max-width: 100%; /* Ensures the image doesn't exceed its container */
+
+  h2 {
+    font-weight: 300; /* Thin font */
+    font-size: 1.5rem; /* Adjust font size */
+    margin-bottom: 1rem; /* Add margin */
   }
+
   h3 {
-    font-size: 1.5rem; /* Set initial font size */
-    max-width: 100%; /* Ensures the image doesn't exceed its container */
+    font-weight: 300; /* Thin font */
+    font-size: 1.2rem; /* Adjust font size */
+    margin-top: 1rem; /* Add margin */
   }
+
+  img {
+    max-width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow */
+    border-radius: var(--global-border-radius);
+    animation: ${FadeIn} 0.5s ease; /* Apply fade-in animation */
+  }
+
   @media (max-width: 550px) {
-    flex-direction: column;
-    text-align: center;
-    & img {
-      max-width: 80%; /* Adjust the value as needed */
+    img {
+      max-width: 80%;
     }
-    h4 {
-      font-size: 1rem; /* Decrease font size for smaller screens */
-      max-width: 80%; /* Adjust the value as needed */
+
+    h2,
+    h3 {
+      font-size: 1rem;
+      max-width: 80%;
     }
   }
 `;
@@ -37,18 +54,16 @@ const CenteredContent = styled.div`
 const NotFound: React.FC = () => {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "404 Not Found"; // Set the title when the component mounts
+    document.title = "404 | Page Not Found";
     return () => {
-      // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;
     };
   }, []);
 
   return (
     <CenteredContent>
-      <img src={Image404URL} alt="Image404URL" />
-      <br></br>
-      <h4>The page you're looking for doesn't seem to exist.</h4>
+      <h2>404 | Page Not Found</h2>
+      <img src={Image404URL} alt="404 Error" />
     </CenteredContent>
   );
 };

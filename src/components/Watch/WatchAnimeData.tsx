@@ -61,7 +61,7 @@ const ShowTrailerButton = styled(Button)`
   margin-bottom: 0.5rem;
 `;
 
-const ShowMoreButton = styled.p`
+const ShowMoreButton = styled.span`
   border-radius: var(--global-border-radius);
   transition: background-color 0.3s ease;
   padding-top: 0.5rem;
@@ -242,7 +242,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 Year:{" "}
                 <strong>
                   {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
-                </strong>{" "}
+                </strong>
               </p>
               <p>
                 Rating:{" "}
@@ -382,10 +382,9 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                         ).substring(0, 300)}...`}
                     <br />
                     <br />
-                    <p style={{ textAlign: "center", fontWeight: "bold" }}>
-                      {" "}
-                      {isDescriptionExpanded ? "Show Less" : "Show More"}
-                    </p>
+                    <span
+                      style={{ textAlign: "center", fontWeight: "bold" }}
+                    ></span>
                   </ShowMoreButton>
                 </DescriptionText>
               )}

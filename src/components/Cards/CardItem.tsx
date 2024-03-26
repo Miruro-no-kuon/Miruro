@@ -5,35 +5,7 @@ import CardSkeleton from "../Skeletons/CardSkeleton";
 import { MdLayers } from "react-icons/md"; // For the stacked/layered icon
 import { FaPlay } from "react-icons/fa"; // For the heart icon
 import { BiSolidLike } from "react-icons/bi";
-
-interface Anime {
-  id: string;
-  coverImage?: string;
-  image?: string;
-  title: {
-    romaji?: string;
-    english?: string;
-  };
-  rating: number;
-  color?: string;
-  episodes?: number;
-  format?: string;
-  type?: string;
-  totalEpisodes?: number;
-  currentEpisode?: number;
-  description?: string;
-  genres?: string[];
-  status?: string;
-  popularity?: {
-    anidb?: number;
-  };
-  releaseDate?: string;
-  year?: string;
-}
-
-interface CardItemContentProps {
-  anime: Anime;
-}
+import { Anime } from "../../hooks/interface";
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -195,7 +167,7 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   transition: 0.2s ease-in-out;
 `);
 
-const CardDetails = styled.p`
+const CardDetails = styled.div`
   animation: ${slideRightAnimation} 0.4s ease forwards;
   width: 100%;
   font-family: Arial;
@@ -215,7 +187,7 @@ const CardDetails = styled.p`
   text-overflow: ellipsis; // Adds an ellipsis to indicate that text has been cut off
 `;
 
-const CardItemContent: React.FC<CardItemContentProps> = ({ anime }) => {
+const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -297,7 +269,9 @@ const CardItemContent: React.FC<CardItemContentProps> = ({ anime }) => {
                 <ImageWrapper>
                   <img
                     src={imageSrc}
-                    onLoad={handleImageLoad} // Add onLoad event handler
+                    onLoad={handleImageLoad}
+                    loading="eager"
+                    alt={anime.title.english || anime.title.romaji}
                   />
                   <PlayIcon />
                 </ImageWrapper>
@@ -318,12 +292,12 @@ const CardItemContent: React.FC<CardItemContentProps> = ({ anime }) => {
               <CardDetails>
                 <div>{anime.releaseDate}</div>
                 <div>
-                  {anime.totalEpisodes}
                   <MdLayers />
+                  {anime.totalEpisodes || anime.episodes}
                 </div>
                 <div>
-                  {anime.rating / 10}
                   <BiSolidLike />
+                  {anime.rating / 10}
                 </div>
               </CardDetails>
             </div>

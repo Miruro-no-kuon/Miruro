@@ -170,8 +170,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     ) {
       const errorMessage = response.data.message || "Unknown server error";
       throw new Error(
-        `Server error: ${
-          response.data.statusCode || response.status
+        `Server error: ${response.data.statusCode || response.status
         } ${errorMessage}`
       );
     }
@@ -208,8 +207,8 @@ export async function fetchAdvancedSearch(
     ...(options.sort && { sort: JSON.stringify(options.sort) }),
     ...(options.genres &&
       options.genres.length > 0 && {
-        genres: options.genres.filter((g: string) => g).join(","),
-      }),
+      genres: options.genres.filter((g: string) => g).join(","),
+    }),
   });
 
   const url = `${BASE_URL}meta/anilist/advanced-search?${queryParams.toString()}`;
@@ -315,7 +314,6 @@ export async function fetchAnimeEpisodes(
 // Fetch Embedded Anime Episodes Servers
 export async function fetchAnimeEmbeddedEpisodes(episodeId: string) {
   const url = `${BASE_URL}meta/anilist/servers/${episodeId}`;
-  console.log("Fetching servers from URL:", url); // Debugging log
   const cacheKey = generateCacheKey("animeEmbeddedServers", episodeId);
 
   return fetchFromProxy(url, fetchAnimeEmbeddedEpisodesCache, cacheKey);

@@ -181,6 +181,8 @@ export const renderWatchedEpisodes = () => {
 
   return (
     <Section>
+      <h2 style={{ textAlign: "center" }}>Continue Watching</h2>
+
       <EpisodeCardGridContainer>{episodesToRender}</EpisodeCardGridContainer>
     </Section>
   );

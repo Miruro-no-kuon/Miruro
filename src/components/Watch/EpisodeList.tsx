@@ -43,7 +43,7 @@ const popInAnimation = keyframes`
 `;
 
 // Styled components for the episode list
-const ListContainer = styled.div`
+const ListContainer = styled.div<{ $maxHeight: string }>`
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   border-radius: var(--global-border-radius);
@@ -51,12 +51,12 @@ const ListContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: ${({ maxHeight }) => maxHeight};
+  max-height: ${({ $maxHeight }) => $maxHeight};
   @media (max-width: 1000px) {
     max-height: 18rem;
   }
   @media (max-width: 500px) {
-    max-height: ${({ maxHeight }) => maxHeight};
+    max-height: ${({ $maxHeight }) => $maxHeight};
   }
 `;
 
@@ -407,6 +407,7 @@ const EpisodeList: React.FC<Props> = ({
     intervalOptions,
     selectionInitiatedByUser,
   ]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (
@@ -418,20 +419,26 @@ const EpisodeList: React.FC<Props> = ({
         const episodeElement = episodeRefs.current[selectedEpisodeId];
         const container = episodeGridRef.current;
 
-        // Calculate episode's top position relative to the container
-        const episodeTop =
-          episodeElement.getBoundingClientRect().top -
-          container.getBoundingClientRect().top;
+        // Ensure episodeElement is not null before proceeding
+        if (episodeElement && container) {
+          // Calculate episode's top position relative to the container
+          const episodeTop =
+            episodeElement.getBoundingClientRect().top -
+            container.getBoundingClientRect().top;
 
-        // Calculate the desired scroll position to center the episode in the container
-        const episodeHeight = episodeElement.offsetHeight;
-        const containerHeight = container.offsetHeight;
-        const desiredScrollPosition =
-          episodeTop + episodeHeight / 2 - containerHeight / 2;
+          // Calculate the desired scroll position to center the episode in the container
+          const episodeHeight = episodeElement.offsetHeight;
+          const containerHeight = container.offsetHeight;
+          const desiredScrollPosition =
+            episodeTop + episodeHeight / 2 - containerHeight / 2;
 
-        container.scrollTo({ top: desiredScrollPosition, behavior: "smooth" });
+          container.scrollTo({
+            top: desiredScrollPosition,
+            behavior: "smooth",
+          });
 
-        setSelectionInitiatedByUser(false);
+          setSelectionInitiatedByUser(false);
+        }
       }
     }, 100); // A delay ensures the layout has stabilized, especially after dynamic content loading.
 
@@ -440,7 +447,7 @@ const EpisodeList: React.FC<Props> = ({
 
   // Render the EpisodeList component
   return (
-    <ListContainer maxHeight={maxListHeight}>
+    <ListContainer $maxHeight={maxListHeight}>
       <ControlsContainer>
         <SelectInterval
           onChange={handleIntervalChange}

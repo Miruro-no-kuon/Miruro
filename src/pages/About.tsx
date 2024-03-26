@@ -6,7 +6,7 @@ const colors = {
   buttonBackground: "var(--global-button-bg)",
   buttonText: "var(--global-button-text)",
   buttonHoverBackground: "var(--global-button-hover-bg)",
-  adBackground: "var(--global-ad-bg)",
+  adBackground: "var(--global-div)",
   customColor: "var(--your-custom-color)",
   paddingSize: "1rem",
 };
@@ -140,13 +140,13 @@ function About() {
       <MainContent>
         <br />
         {sections.map((section, index) => (
-          <div key={index}>
+          <span key={index}>
             {section.title && <h1 className="title-style">{section.title}</h1>}
             {section.title2 && (
               <h3 className="title-style">{section.title2}</h3>
             )}
             {section.content}
-          </div>
+          </span>
         ))}
       </MainContent>
     </SplashContainer>

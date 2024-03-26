@@ -266,7 +266,7 @@ const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
                 alt={title.english}
                 $cover={cover} // Managed outside, but kept for styled component
                 $image={image} // Managed outside, but kept for styled component
-                loading="lazy"
+                loading="eager"
               />
               <ContentWrapper>
                 <SlideContent>

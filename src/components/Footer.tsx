@@ -2,51 +2,57 @@ import styled from "styled-components";
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const theme = {
-  primaryBackgroundColor: "var(--global-secondary-bg)",
-  textColor: "var(--global-text)",
-  buttonTextColor: "var(--global-button-text)",
-  footerLogo: "var(--logo-transparent)",
-};
+const currentYear = new Date().getFullYear();
 
 const PageWrapper = styled.div`
-  padding: 1rem;
-  margin-top: 1.5rem;
+  padding: 0 1rem;
+  margin-top: 2rem;
 `;
 
-const FooterContainer = styled.footer`
-  color: ${theme.textColor};
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-top: 0.125rem solid ${theme.primaryBackgroundColor};
+const FooterBaseContainer = styled.footer<{ $isSub: boolean }>`
+  color: var(--global-text);
+  padding: ${({ $isSub }) => ($isSub ? "0" : "0.5rem 0")};
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  border-top: ${({ $isSub }) => ($isSub ? "0.125rem solid" : "none")}
+    var(--global-secondary-bg);
+  flex-direction: column;
+
+  @media (max-width: 1000px) {
+    padding: ${({ $isSub }) => ($isSub ? "0 0 1rem 0" : "0.5rem 0")};
+  }
+
+  @media (min-width: 601px) {
+    flex-direction: row;
+  }
 
   @media (max-width: 600px) {
-    flex-direction: column;
-    text-align: center;
+    padding: ${({ $isSub }) => ($isSub ? "0" : "0.5rem 0")};
   }
 `;
 
 const StyledLinkList = styled.div`
   display: flex;
-  gap: 1rem;
-  margin: auto; /* Center the content horizontally */
-  @media (max-width: 600px) {
-    margin-bottom: 0.8rem;
-  }
+  flex-direction: column;
+  margin: 0.5rem 0;
+  margin-top: auto;
 `;
 
 const FooterLink = styled(Link)`
-  padding-top: 1rem;
+  padding: 0.5rem 0;
   color: grey;
+  font-size: 0.9rem;
   text-decoration: none;
   transition: color 0.1s ease-in-out;
+  bottom: 0;
+  align-self: auto;
+
+  @media (min-width: 601px) {
+    align-self: end;
+  }
 
   &:hover {
-    color: ${theme.buttonTextColor};
+    color: var(--global-button-text);
   }
 `;
 
@@ -54,102 +60,88 @@ const SocialIconsWrapper = styled.div`
   padding-top: 1rem;
   display: flex;
   gap: 1rem;
-  @media (max-width: 600px) {
-    margin-bottom: 0.8rem;
-  }
 `;
 
-const FooterLogoImage = styled.img`
-  max-width: 3rem;
-  content: ${theme.footerLogo};
+const FooterLogoImage = styled.img.attrs({
+  alt: "Footer Logo",
+})`
+  content: var(--logo-transparent);
+  max-width: 4rem;
   height: auto;
 `;
 
-const CopyrightText = styled.p`
-  text-align: center;
+const Text = styled.div<{ $isSub: boolean }>`
   color: grey;
-  font-size: 0.8rem;
-  margin: 0;
-  @media (max-width: 600px) {
-    margin-bottom: 0.8rem;
-  }
-`;
+  font-size: ${({ $isSub }) => ($isSub ? "0.75rem" : "0.65rem")};
+  margin: ${({ $isSub }) => ($isSub ? "1rem 0 0 0" : "1rem 0")};
+  max-width: 25rem;
 
-const DisclaimerText = styled.p`
-  padding-top: 1rem;
-  text-align: center;
-  color: grey;
-  font-size: 0.8rem;
-  margin: 0;
+  strong {
+    color: var(--global-text);
+  }
 `;
 
 const ShareButton = styled.a`
   display: inline-block;
   color: grey;
-  text-decoration: none;
   transition: 0.2s ease-in-out;
 
   svg {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   &:hover {
     transform: scale(1.15);
-    color: ${theme.buttonTextColor};
+    color: var(--global-button-text);
     text-decoration: underline;
   }
-`;
 
-const currentYear = new Date().getFullYear();
+  @media (max-width: 600px) {
+    margin-bottom: 1rem;
+  }
+`;
 
 function Footer() {
   return (
     <PageWrapper>
-      <FooterContainer>
-        <CopyrightText>
-          <FooterLogoImage src={theme.footerLogo} alt="Footer Logo" />
-          <br></br>
-          &copy; {currentYear} Miruro no Kuon.
-        </CopyrightText>
+      <FooterBaseContainer $isSub={false}>
+        <Text $isSub={false}>
+          <FooterLogoImage /> <br />
+          This site does not store any files on our server, we only link to the
+          media which is hosted on 3rd party services.
+        </Text>
         <StyledLinkList>
-          <FooterLink to="About">About</FooterLink>
-          <FooterLink to="pptos">Policy</FooterLink>
-          <FooterLink to="pptos">Terms</FooterLink>
+          <FooterLink to="/about">About</FooterLink>
+          <FooterLink to="/pptos">Privacy & ToS</FooterLink>
+          <FooterLink to="/pptos">🤍 Donate</FooterLink>
         </StyledLinkList>
+      </FooterBaseContainer>
+      <FooterBaseContainer $isSub={true}>
+        <Text $isSub={true}>
+          &copy; {currentYear} miruro.tv | Website Made by{" "}
+          <strong>Miruro no Kuon</strong>
+        </Text>
         <SocialIconsWrapper>
-          <ShareButton
-            href="https://twitter.com/miruro_official"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaTwitter />
-          </ShareButton>
-          <ShareButton
-            href="https://discord.gg/4kfypZ96K4"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaDiscord />
-          </ShareButton>
-          <ShareButton
-            href="https://github.com/Miruro-no-kuon/Miruro"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaGithub />
-          </ShareButton>
-          <ShareButton
-            href="https://www.reddit.com/r/miruro"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaReddit />
-          </ShareButton>
+          {[
+            { href: "https://twitter.com/miruro_official", Icon: FaTwitter },
+            { href: "https://discord.gg/4kfypZ96K4", Icon: FaDiscord },
+            {
+              href: "https://github.com/Miruro-no-kuon/Miruro",
+              Icon: FaGithub,
+            },
+            { href: "https://www.reddit.com/r/miruro", Icon: FaReddit },
+          ].map(({ href, Icon }) => (
+            <ShareButton
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon />
+            </ShareButton>
+          ))}
         </SocialIconsWrapper>
-      </FooterContainer>
-      <DisclaimerText>
-        This site does not store any files on its server.
-      </DisclaimerText>
+      </FooterBaseContainer>
     </PageWrapper>
   );
 }

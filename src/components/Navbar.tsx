@@ -11,6 +11,7 @@ import { fetchAdvancedSearch } from "../hooks/useApi";
 import { FiSun, FiMoon, FiX } from "react-icons/fi";
 import { GoCommandPalette } from "react-icons/go";
 import { IoIosSearch } from "react-icons/io";
+import { Anime } from "../hooks/interface";
 
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
@@ -22,7 +23,7 @@ const slideDownAnimation2 = keyframes`
   100% { opacity: 1; transform: translateY(0); max-height: 500px; } /* Example max-height */
 `;
 
-const StyledNavbar = styled.div<{ isExtended?: boolean }>`
+const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -32,12 +33,13 @@ const StyledNavbar = styled.div<{ isExtended?: boolean }>`
   padding: 1rem;
   background-color: var(--global-primary-bg-tr);
   backdrop-filter: blur(10px);
-  z-index: 4;
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
-  @media (max-width: 500px) {
-    padding-bottom: ${({ isExtended }) => (isExtended ? "1rem" : "1rem")};
+  @media (max-width: 1000px) {
+    padding: 1rem 0.5rem;
   }
 `;
 
@@ -50,7 +52,7 @@ const TopContainer = styled.div`
 
 const LogoImg = styled(Link)`
   width: 7rem;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: bold;
   text-decoration: none;
   color: var(--global-text);
@@ -63,44 +65,48 @@ const LogoImg = styled(Link)`
     transform: scale(1.05);
   }
 
+  &:active {
+    transform: scale(0.95);
+  }
+
   @media (max-width: 500px) {
     max-width: 6rem;
-    margin-right: 1rem;
   }
 `;
 
-const InputContainer = styled.div<{ isVisible: boolean }>`
+const InputContainer = styled.div<{ $isVisible: boolean }>`
   display: flex;
   flex: 1;
   max-width: 35rem;
   height: 1.2rem;
-  border: 1px solid var(--global-input-border);
   align-items: center;
   padding: 0.6rem;
-  border-radius: 1.5rem;
-  background-color: var(--global-input-div);
-  animation: ${fadeInAnimation("var(--global-input-div)")} 0.1s ease-out;
+  border-radius: var(--global-border-radius);
+  background-color: var(--global-div);
+  animation: ${fadeInAnimation("var(--global-div)")} 0.1s ease-out;
   animation: ${slideDownAnimation2} 0.5s ease;
 
   @media (max-width: 1000px) {
-    max-width: 20rem;
+    max-width: 30rem;
   }
 
   @media (max-width: 500px) {
     max-width: 100%;
     margin-top: 1rem;
-    display: ${({ isVisible }) => (isVisible ? "flex" : "none")};
+    display: ${({ $isVisible }) => ($isVisible ? "flex" : "none")};
   }
 `;
 
 const RightContent = styled.div`
+  gap: 0.5rem;
   display: flex;
   align-items: center;
   height: 2rem;
 `;
 
 const Icon = styled.div<{ $isFocused: boolean }>`
-  margin: 0 0.5rem;
+  margin: 0;
+  padding: 0 0.25rem;
   color: var(--global-text);
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
   font-size: 1.2rem;
@@ -115,7 +121,7 @@ const SearchInput = styled.input`
   border: none;
   color: var(--global-text);
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   outline: 0;
   padding: 0;
   max-height: 100%;
@@ -130,7 +136,7 @@ const ClearButton = styled.button<{ $query: string }>`
   background: transparent;
   border: none;
   color: var(--global-text);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   opacity: ${({ $query }) => ($query ? 0.5 : 0)};
   visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
@@ -147,28 +153,32 @@ const ClearButton = styled.button<{ $query: string }>`
 
 const StyledButton = styled.button<{ isInputToggle?: boolean }>`
   background: transparent;
-  background-color: var(--global-input-div);
+  background-color: var(--global-div);
   color: var(--global-text);
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 1rem 0.5rem;
+  padding: 1.2rem 0.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--global-border-radius);
+  border-radius: 0.3rem;
   width: 100%;
   height: 100%;
   transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
-  border: 1px solid var(--global-input-border);
+  border: none;
+
+  &:active {
+    transform: scale(0.9);
+  }
 
   @media (max-width: 500px) {
     display: flex;
-    margin: ${({ isInputToggle }) => (isInputToggle ? "0" : "0 0.5rem")};
+    margin: ${({ isInputToggle }) => (isInputToggle ? "0" : "0")};
   }
 `;
 
 const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
 
@@ -204,30 +214,6 @@ const getInitialThemePreference = () => {
 
   return detectUserTheme();
 };
-
-interface Anime {
-  id: string;
-  coverImage?: string;
-  image?: string;
-  title: {
-    romaji?: string;
-    english?: string;
-  };
-  releaseDate?: number;
-  rating?: number;
-  color?: string;
-  format?: string;
-  type?: string;
-  totalEpisodes?: number;
-  currentEpisode?: number;
-  description?: string;
-  genres?: string[];
-  status?: string;
-  popularity?: {
-    anidb?: number;
-  };
-  year?: string;
-}
 
 const Navbar = () => {
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
@@ -342,6 +328,7 @@ const Navbar = () => {
     },
     [navigate]
   );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearch({ ...search, searchQuery: newValue });
@@ -360,13 +347,13 @@ const Navbar = () => {
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent default form submission behavior
-      if (selectedIndex !== null && searchResults.length > 0) {
-        // Navigate to the selected search result
+      if (selectedIndex !== null && searchResults[selectedIndex]) {
+        // Navigate to the selected search result if it exists
         const animeId = searchResults[selectedIndex].id;
         navigate(`/watch/${animeId}`);
         handleCloseDropdown();
       } else {
-        // Existing logic for handling enter without a selection
+        // Fallback to navigating with the search query if the selected index is not in searchResults
         navigateWithQuery(search.searchQuery);
       }
       if (debounceTimeout.current) {
@@ -438,7 +425,7 @@ const Navbar = () => {
 
   return (
     <>
-      <StyledNavbar isExtended={isPaddingExtended} ref={navbarRef}>
+      <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
         <TopContainer>
           <LogoImg
             title="MIRURO.tv"
@@ -450,7 +437,7 @@ const Navbar = () => {
 
           {/* Render InputContainer within the navbar for screens larger than 500px */}
           {!isMobileView && (
-            <InputContainer ref={inputContainerRef} isVisible={isInputVisible}>
+            <InputContainer ref={inputContainerRef} $isVisible={isInputVisible}>
               <Icon $isFocused={search.isSearchFocused}>
                 <IoIosSearch />
               </Icon>
@@ -507,7 +494,7 @@ const Navbar = () => {
           </RightContent>
         </TopContainer>
         {isMobileView && isInputVisible && (
-          <InputContainer isVisible={isInputVisible}>
+          <InputContainer $isVisible={isInputVisible}>
             <Icon $isFocused={search.isSearchFocused}>
               <IoIosSearch />
             </Icon>
@@ -533,7 +520,7 @@ const Navbar = () => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               searchQuery={search.searchQuery}
-              containerWidth={inputContainerWidth} // Ensure this prop is passed, as specified by the updated interface
+              containerWidth={inputContainerWidth}
             />
 
             <ClearButton

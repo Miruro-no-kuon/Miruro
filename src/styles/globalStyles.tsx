@@ -10,9 +10,8 @@ const GlobalStyless = createGlobalStyle`
   :root.dark-mode {
     --global-primary-bg: #080808;
     --global-primary-bg-tr: rgba(8, 8, 8, 0.9);
-    --global-ad-bg: #141414;
-    --global-input-div: #141414;
-    --global-input-border: rgba(245, 245, 245, 0.1);
+    --global-div: #141414;
+    --global-border: rgba(245, 245, 245, 0.1);
     --global-text: #e8e8e8;
     --global-card-bg: #181818;
     --global-card-shadow: rgba(0, 0, 0, 0.6);
@@ -42,9 +41,8 @@ const GlobalStyless = createGlobalStyle`
   :root {
     --global-primary-bg: #f5f5f5;
     --global-primary-bg-tr: rgba(245, 245, 245, 0.97);
-    --global-ad-bg: #e0e0e0;
-    --global-input-div: #e0e0e0;
-    --global-input-border: rgba(8, 8, 8, 0.1);
+    --global-div: #e0e0e0;
+    --global-border: rgba(8, 8, 8, 0.1);
     --global-text: #333333;
     --global-card-bg: #ffffff;
     --global-card-title-bg: #e8e8e8;
