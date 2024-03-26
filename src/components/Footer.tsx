@@ -113,7 +113,7 @@ function Footer() {
         <StyledLinkList>
           <FooterLink to="/about">About</FooterLink>
           <FooterLink to="/pptos">Privacy & ToS</FooterLink>
-          <FooterLink to="/pptos">🤍 Donate</FooterLink>
+          <FooterLink to="/donate">🤍 Donate</FooterLink>
         </StyledLinkList>
       </FooterBaseContainer>
       <FooterBaseContainer $isSub={true}>

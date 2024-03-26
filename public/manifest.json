@@ -9,9 +9,9 @@
   "start_url": "/",
   "screenshots": [
     {
-      "src": "/preview.jpg",
+      "src": "/preview.png",
       "sizes": "960x540",
-      "type": "image/jpeg",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Wonder Widgets"
     },
