@@ -34,7 +34,7 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   background-color: var(--global-primary-bg-tr);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  z-index: 100;
+  z-index: 8;
   animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 

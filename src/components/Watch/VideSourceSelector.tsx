@@ -18,7 +18,6 @@ const SelectorContainer = styled.div`
   align-items: center;
   margin-top: 0.8rem;
   border-radius: var(--global-border-radius);
-  background-color: var(--global-secondary-bg);
 
   @media (min-width: 1200px) {
     flex-direction: row;
@@ -51,14 +50,15 @@ const Button = styled.button`
   font-weight: bold;
   border-radius: var(--global-border-radius);
   cursor: pointer;
-  background-color: #505050;
-  color: white;
-  transition: background-color 0.3s ease;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
   &.active {
     background-color: var(--primary-accent);
   }
   &:hover {
-    background-color: var(--primary-accent-bg);
+    transform: scale(1.05);
+    background-color: var(--primary-accent);
   }
 `;
 
@@ -68,17 +68,17 @@ const DownloadLink = styled.a`
   padding: 0.5rem 1rem;
   border-radius: var(--global-border-radius);
   cursor: pointer;
-  background-color: #505050;
-  color: white;
+  background-color: var(--global-div);
+  color: var(--global-text);
   text-decoration: none;
-  transition: background-color 0.3s ease;
-
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
   svg {
     margin-right: 0.5rem;
   }
 
   &:hover {
     background-color: var(--primary-accent);
+    transform: scale(1.05);
   }
 `;
 
@@ -143,7 +143,7 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
             rel="noopener noreferrer"
           >
             <FaDownload />
-            Download
+            <strong>Download</strong>
           </DownloadLink>
         </ButtonRow>
       </Group>

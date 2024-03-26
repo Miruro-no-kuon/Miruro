@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import CardGrid from "../Cards/CardGrid";
 import AniList_logo from "../../assets/AniList_logo.png";
 import MAL_logo from "../../assets/MyAnimeList_Logo.png";
@@ -58,7 +58,20 @@ const Button = styled.button`
 `;
 
 const ShowTrailerButton = styled(Button)`
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 1rem;
+  padding-top: 0.8rem;
+  width: 8.5rem; //same as anime picture width.
+  padding-bottom: 0.8rem;
+  background-color: var(--global-div);
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+  color: var(--global-text);
+  font-size: 0.9rem;
+  &:hover {
+    background-color: var(--primary-accent);
+    transform: scale(1.05);
+    z-index: 2;
+  }
 `;
 
 const ShowMoreButton = styled.span`
@@ -122,23 +135,6 @@ const DescriptionText = styled.p`
   text-overflow: ellipsis;
 `;
 
-const VideoTrailer = styled.div`
-  margin-top: 0.5rem;
-  margin-bottom: -1.5rem;
-  overflow: hidden;
-  position: relative;
-  width: 50%;
-  height: auto;
-  border: none;
-
-  @media (max-width: 1000px) {
-    aspect-ratio: 16/9;
-    width: 100%;
-    height: 100%;
-    margin-bottom: 0.5rem;
-  }
-`;
-
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9;
   margin-bottom: 2rem;
@@ -152,6 +148,47 @@ const IframeTrailer = styled.iframe`
   @media (max-width: 1000px) {
     width: 100%;
     height: 100%;
+  }
+`;
+
+const slideUpAnimation = keyframes`
+  0% { opacity: 0.4; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+`;
+
+const fadeInAnimation = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const TrailerOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: ${fadeInAnimation} 0.3s ease forwards;
+  animation: ${slideUpAnimation} 0.3s ease forwards;
+  aspect-ratio: 16 / 9; // Maintain a 16:9 aspect ratio
+`;
+
+const TrailerOverlayContent = styled.div`
+  width: 60%; // Adjusted width for better visibility
+  aspect-ratio: 16 / 9; // Maintain a 16:9 aspect ratio
+  background: white;
+  border-radius: var(--global-border-radius);
+  overflow: hidden;
+  z-index: 11;
+  background-color: var(--global-div);
+  @media (max-width: 500px) {
+    width: 95%;
   }
 `;
 
@@ -228,7 +265,30 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       {animeData && (
         <AnimeDataContainer>
           <AnimeDataContainerTop>
-            <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <AnimeInfoImage src={animeData.image} alt="Anime Title Image" />
+              {animeData.trailer && animeData.status !== "Not yet aired" && (
+                <ShowTrailerButton onClick={toggleTrailer}>
+                  <strong>Show Trailer</strong>
+                </ShowTrailerButton>
+              )}
+              {showTrailer && (
+                <TrailerOverlay onClick={toggleTrailer}>
+                  <TrailerOverlayContent onClick={(e) => e.stopPropagation()}>
+                    <IframeTrailer
+                      src={`https://www.youtube.com/embed/${animeData.trailer.id}`}
+                      allowFullScreen
+                    />
+                  </TrailerOverlayContent>
+                </TrailerOverlay>
+              )}
+            </div>
             <AnimeDataText className="bio">
               <p className="anime-title">
                 {animeData.title.english
@@ -353,23 +413,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 <p>
                   Studios: <strong>{animeData.studios}</strong>
                 </p>
-              )}
-              {animeData.trailer && animeData.status !== "Not yet aired" && (
-                <>
-                  <ShowTrailerButton onClick={toggleTrailer}>
-                    {showTrailer ? "Hide Trailer" : "Show Trailer"}
-                  </ShowTrailerButton>
-                  {showTrailer && (
-                    <VideoTrailer>
-                      <IframeTrailer
-                        src={`https://www.youtube.com/embed/${animeData.trailer.id}`}
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </VideoTrailer>
-                  )}
-                </>
               )}
               {animeData.description && (
                 <DescriptionText>

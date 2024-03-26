@@ -53,7 +53,7 @@ const Tab = styled.button<{ $isActive: boolean }>`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background: var(--primary-accent-bg);
+    background: var(--primary-accent);
   }
   @media (max-width: 500px) {
     padding: 0.5rem;

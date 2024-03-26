@@ -610,38 +610,30 @@ const Watch: React.FC = () => {
       animeInfo.trailer ? (
         // Display the trailer if the anime has not yet aired and has a trailer
         <div style={{ textAlign: "center" }}>
-          {animeInfo.nextAiringEpisode && (
-            <p>
-              <h2>Time until next episode:</h2>
-              <h4>
-                {/* {new Date(
-                      animeData.nextAiringEpisode.airingTime * 1000
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZoneName: "short",
-                    })}{" "} */}
-                (
-                {(() => {
-                  const secondsUntilAiring =
-                    animeInfo.nextAiringEpisode.airingTime -
-                    Math.floor(Date.now() / 1000);
-                  const days = Math.floor(secondsUntilAiring / (3600 * 24));
-                  const hours = Math.floor(
-                    (secondsUntilAiring % (3600 * 24)) / 3600
-                  );
-                  const minutes = Math.floor((secondsUntilAiring % 3600) / 60);
-                  const seconds = Math.floor(secondsUntilAiring % 60);
+          <strong>
+            <h2>Time until next episode:</h2>
+          </strong>
+          <p>
+            <h4>
+              {animeInfo.nextAiringEpisode
+                ? (() => {
+                    const secondsUntilAiring =
+                      animeInfo.nextAiringEpisode.airingTime -
+                      Math.floor(Date.now() / 1000);
+                    const days = Math.floor(secondsUntilAiring / (3600 * 24));
+                    const hours = Math.floor(
+                      (secondsUntilAiring % (3600 * 24)) / 3600
+                    );
+                    const minutes = Math.floor(
+                      (secondsUntilAiring % 3600) / 60
+                    );
+                    const seconds = Math.floor(secondsUntilAiring % 60);
 
-                  return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-                })()}
-                )
-              </h4>
-            </p>
-          )}
+                    return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                  })()
+                : "Unknown"}
+            </h4>
+          </p>
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
