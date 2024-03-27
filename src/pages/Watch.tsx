@@ -100,6 +100,7 @@ const GoToHomePageButton = styled.a`
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9;
   position: relative;
+  border-radius: var(--global-border-radius);
   border: none;
   top: 0;
   left: 0;

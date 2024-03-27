@@ -31,6 +31,9 @@ const AnimeDataContainerMiddle = styled.div`
   flex-direction: row;
   align-items: flex-start;
   display: flex;
+  @media (max-width: 500px) {
+    padding-top: 0.4rem;
+  }
 `;
 
 const AnimeDataContainerBottom = styled.div`
