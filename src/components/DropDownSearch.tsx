@@ -231,7 +231,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
       width={containerWidth}
       $isVisible={isVisible && searchResults.length > 0}
       ref={dropdownRef}
-      role="list" // Enhanced semantic meaning for accessibility
+      role='list' // Enhanced semantic meaning for accessibility
     >
       {searchResults.map((result, index) => (
         <ResultItem
@@ -239,7 +239,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           title={result.title.english || result.title.romaji}
           $isSelected={index === selectedIndex}
           onClick={() => handleResultClick(result.id)}
-          role="listitem" // Enhanced semantic meaning for accessibility
+          role='listitem' // Enhanced semantic meaning for accessibility
         >
           <AnimeImage
             src={result.image || result.coverImage || ''} // Fallback for missing images
@@ -252,11 +252,11 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
             <AnimeDetails $isSelected={index === selectedIndex}>
               <span>&nbsp;{result.type}</span>
               <span>&nbsp;&nbsp;</span>
-              <BiSolidLike color="#" />
+              <BiSolidLike color='#' />
               <span>&nbsp;</span>
               <span>{result.rating ? result.rating / 10 : 'N/A'}&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
-              <MdLayers color="#" />
+              <MdLayers color='#' />
               <span>&nbsp;</span>
               <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
             </AnimeDetails>
@@ -267,7 +267,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
         $isSelected={selectedIndex === searchResults.length} // "View All" is selected
         onClick={handleViewAllClick}
         style={{ justifyContent: 'center' }}
-        role="listitem"
+        role='listitem'
         tabIndex={0} // Add tabIndex to make it focusable
       >
         <>view all</> &nbsp;

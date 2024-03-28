@@ -4,7 +4,7 @@ const useSubtitleLogic = (
   videoRef,
   subtitleTracks,
   subtitlesEnabled,
-  setSubtitlesEnabled
+  setSubtitlesEnabled,
 ) => {
   useEffect(() => {
     let isMounted = true;
@@ -19,7 +19,7 @@ const useSubtitleLogic = (
     const addDefaultSubtitleTrack = () => {
       if (videoRef.current && subtitleTracks.length > 0) {
         const defaultLanguageTrack = subtitleTracks.find(
-          (track) => track.label === 'English'
+          (track) => track.label === 'English',
         );
 
         if (defaultLanguageTrack) {

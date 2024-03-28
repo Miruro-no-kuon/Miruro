@@ -2,7 +2,7 @@ import { useEffect, RefObject } from 'react';
 
 const useLocalStorage = (
   videoRef: RefObject<HTMLVideoElement>,
-  episodeId: string
+  episodeId: string,
 ) => {
   useEffect(() => {
     const handlePause = () => {
@@ -25,7 +25,7 @@ const useLocalStorage = (
           const currentTime = videoRef.current.currentTime;
           localStorage.setItem(
             `savedTime-${episodeId}`,
-            currentTime.toString()
+            currentTime.toString(),
           );
         }
       }

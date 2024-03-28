@@ -85,7 +85,7 @@ const ErrorMessage = styled.div`
 const Home = () => {
   const [watchedEpisodes, setWatchedEpisodes] = useState<AnimeEpisode[]>([]);
   const [itemsCount, setItemsCount] = useState(
-    window.innerWidth > 500 ? 14 : 12
+    window.innerWidth > 500 ? 14 : 12,
   );
   const [trendingAnime, setTrendingAnime] = useState([]);
   const [popularAnime, setPopularAnime] = useState([]);
@@ -169,7 +169,7 @@ const Home = () => {
               (anime: any) =>
                 anime.totalEpisodes !== null &&
                 anime.duration !== null &&
-                anime.releaseDate !== null
+                anime.releaseDate !== null,
             )
             .slice(0, desiredItemCount); // Trim the list to the desired item count
 
@@ -203,7 +203,7 @@ const Home = () => {
   const renderCardGrid = (
     animeData: any[],
     isLoading: boolean,
-    hasError: boolean
+    hasError: boolean,
   ) => (
     <Section>
       {isLoading || hasError ? (
@@ -228,7 +228,7 @@ const Home = () => {
   return (
     <SimpleLayout>
       {error && (
-        <ErrorMessage title="Error Message">
+        <ErrorMessage title='Error Message'>
           <p>Error: {error}</p>
         </ErrorMessage>
       )}
@@ -243,21 +243,21 @@ const Home = () => {
       )}
       <TabContainer>
         <Tab
-          title="Trending Tab"
+          title='Trending Tab'
           $isActive={activeTab === 'trending'}
           onClick={() => handleTabClick('trending')}
         >
           TRENDING
         </Tab>
         <Tab
-          title="Popular Tab"
+          title='Popular Tab'
           $isActive={activeTab === 'popular'}
           onClick={() => handleTabClick('popular')}
         >
           POPULAR
         </Tab>
         <Tab
-          title="Top Anime Tab"
+          title='Top Anime Tab'
           $isActive={activeTab === 'top'}
           onClick={() => handleTabClick('top')}
         >

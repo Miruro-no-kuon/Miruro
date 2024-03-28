@@ -75,7 +75,7 @@ const sections = [
         <br></br>
         <strong>Contact Us</strong>: If you have any questions about these
         terms, please contact us at{' '}
-        <StyledLink href="mailto:miruro@proton.me">
+        <StyledLink href='mailto:miruro@proton.me'>
           miruro@proton.me.
         </StyledLink>
       </Paragraph>
@@ -138,7 +138,7 @@ function PolicyTerms() {
         <br />
         {sections.map((section, index) => (
           <span key={index}>
-            {section.title && <h1 className="title-style">{section.title}</h1>}
+            {section.title && <h1 className='title-style'>{section.title}</h1>}
             {section.content}
           </span>
         ))}

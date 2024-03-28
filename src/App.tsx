@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {
-  Preferences,
+  Profile,
   Navbar,
   Footer,
   Home,
@@ -23,18 +23,18 @@ function App() {
       <ShortcutsPopup />
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/search" element={<SearchSort />} />
-        <Route path="/watch/:animeId" element={<Watch />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/search' element={<SearchSort />} />
+        <Route path='/watch/:animeId' element={<Watch />} />
         <Route
-          path="/watch/:animeId/:animeTitle/:episodeNumber"
+          path='/watch/:animeId/:animeTitle/:episodeNumber'
           element={<Watch />}
         />
-        <Route path="/preferences" element={<Preferences />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/pptos" element={<PolicyTerms />} />
-        <Route path="*" element={<Page404 />} />
+        <Route path='/preferences' element={<Profile />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/pptos' element={<PolicyTerms />} />
+        <Route path='*' element={<Page404 />} />
       </Routes>
       <Footer />
     </Router>

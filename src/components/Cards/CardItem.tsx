@@ -205,13 +205,13 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const animeColor = anime.color || '#999999';
   const displayTitle = useMemo(
     () => anime.title.english || anime.title.romaji || 'No Title',
-    [anime.title.english, anime.title.romaji]
+    [anime.title.english, anime.title.romaji],
   );
 
   const truncateTitle = useMemo(
     () => (title: string, maxLength: number) =>
       title.length > maxLength ? `${title.slice(0, maxLength)}...` : title,
-    []
+    [],
   );
 
   const handleStatusCheck = useMemo(() => {
@@ -259,7 +259,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
                   <img
                     src={imageSrc}
                     onLoad={handleImageLoad}
-                    loading="eager"
+                    loading='eager'
                     alt={
                       anime.title.english || anime.title.romaji + ' Cover Image'
                     }
@@ -284,11 +284,11 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
               </Title>
             </TitleContainer>
             <div>
-              <CardDetails title="Romaji Title">
+              <CardDetails title='Romaji Title'>
                 {' '}
                 {truncateTitle(anime.title.romaji || '', 24)}{' '}
               </CardDetails>
-              <CardDetails title="Card Details">
+              <CardDetails title='Card Details'>
                 <div>{anime.releaseDate}</div>
                 <div>
                   <MdLayers />

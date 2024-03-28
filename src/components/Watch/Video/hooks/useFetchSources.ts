@@ -10,11 +10,11 @@ type VideoSource = {
 export const useFetchSources = (
   episodeId: string,
   setVideoSources: (sources: VideoSource[]) => void,
-  setVideoQualityOptions: (options: string[]) => void
+  setVideoQualityOptions: (options: string[]) => void,
 ) => {
   useEffect(() => {
     const deduplicateAndProcessSources = (
-      sources: VideoSource[]
+      sources: VideoSource[],
     ): VideoSource[] => {
       const uniqueQualities = new Set();
       return sources

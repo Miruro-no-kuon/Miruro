@@ -141,7 +141,7 @@ const calculateSlidesPerView = (windowWidth: number): number => {
 const AnimeEpisodeCardComponent: React.FC = () => {
   const watchedEpisodesData = useMemo(
     () => localStorage.getItem('watched-episodes'),
-    []
+    [],
   );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -165,7 +165,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
       return Object.entries(allEpisodes).map(([animeId, animeEpisodes]) => {
         const lastEpisode = animeEpisodes[animeEpisodes.length - 1];
         const playbackInfo = JSON.parse(
-          localStorage.getItem('all_episode_times') || '{}'
+          localStorage.getItem('all_episode_times') || '{}',
         );
         const playbackPercentage =
           playbackInfo[lastEpisode.id]?.playbackPercentage || 0;
@@ -182,20 +182,21 @@ const AnimeEpisodeCardComponent: React.FC = () => {
               <PlayIcon>
                 <FaPlay />
               </PlayIcon>
-              <div className="episode-info">
-                <p className="episode-title">
+              <div className='episode-info'>
+                <p className='episode-title'>
                   {lastEpisode.id
                     ? lastEpisode.id
                         .split('-')
                         .slice(0, -2)
                         .map(
-                          (part) => part.charAt(0).toUpperCase() + part.slice(1)
+                          (part) =>
+                            part.charAt(0).toUpperCase() + part.slice(1),
                         )
                         .join(' ')
                         .slice(0, 30)
                     : ''}
                 </p>
-                <p className="episode-number">
+                <p className='episode-number'>
                   {windowWidth > 500
                     ? `Episode ${lastEpisode.number}${lastEpisode.title ? `: ${lastEpisode.title}` : ''}`
                     : `Episode ${lastEpisode.number}`}
@@ -231,7 +232,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
         prevEl: '.swiper-button-prev',
       },
     }),
-    [windowWidth]
+    [windowWidth],
   );
 
   return (
@@ -242,11 +243,11 @@ const AnimeEpisodeCardComponent: React.FC = () => {
       <StyledSwiperContainer {...swiperSettings}>
         {episodesToRender}
         <FaChevronCircleLeft
-          className="swiper-button-prev"
+          className='swiper-button-prev'
           style={{ color: 'rgba(255, 255, 255, 0.85)' }}
         />
         <FaChevronCircleRight
-          className="swiper-button-next"
+          className='swiper-button-next'
           style={{ color: 'rgba(255, 255, 255, 0.85)' }}
         />
       </StyledSwiperContainer>

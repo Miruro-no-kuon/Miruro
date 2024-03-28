@@ -35,7 +35,7 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 8;
-  animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
+  animation: ${fadeInAnimation('var(--global-primary-bg-tr)')} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 1000px) {
@@ -315,7 +315,7 @@ const Navbar = () => {
         }
       }
     },
-    [search, isDarkMode]
+    [search, isDarkMode],
   );
 
   useEffect(() => {
@@ -334,7 +334,7 @@ const Navbar = () => {
     (value: string) => {
       navigate(value ? `/search?query=${value}` : '/search');
     },
-    [navigate]
+    [navigate],
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -434,8 +434,8 @@ const Navbar = () => {
   //navigate to preferences
   const navigateToPreferences = () => {
     // Check if the current location's pathname is not '/preferences' before navigating
-    if (location.pathname !== "/preferences") {
-      navigate("/preferences");
+    if (location.pathname !== '/preferences') {
+      navigate('/preferences');
     }
   };
 
@@ -444,8 +444,8 @@ const Navbar = () => {
       <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
         <TopContainer>
           <LogoImg
-            title="MIRURO.tv"
-            to="/home"
+            title='MIRURO.tv'
+            to='/home'
             onClick={() => window.scrollTo(0, 0)}
           >
             見るろ の 久遠
@@ -458,8 +458,8 @@ const Navbar = () => {
                 <IoIosSearch />
               </Icon>
               <SearchInput
-                type="text"
-                placeholder="Search Anime"
+                type='text'
+                placeholder='Search Anime'
                 value={search.searchQuery}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDownOnInput}
@@ -471,7 +471,7 @@ const Navbar = () => {
                   }));
                 }}
                 ref={inputRef}
-                aria-label="Search Anime"
+                aria-label='Search Anime'
               />
               <DropDownSearch
                 searchResults={searchResults}
@@ -486,7 +486,7 @@ const Navbar = () => {
               <ClearButton
                 $query={search.searchQuery}
                 onClick={handleClearSearch}
-                aria-label="Clear Search"
+                aria-label='Clear Search'
               >
                 <FiX />
               </ClearButton>
@@ -502,12 +502,12 @@ const Navbar = () => {
                   setIsInputVisible((prev) => !prev);
                   setIsPaddingExtended((prev) => !prev); // Toggle padding extension when toggling input visibility
                 }}
-                aria-label="Toggle Search Input"
+                aria-label='Toggle Search Input'
               >
                 <IoIosSearch />
               </StyledButton>
             )}
-            <StyledButton onClick={toggleTheme} aria-label="Toggle Dark Mode">
+            <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </StyledButton>
             {/* <StyledButton onClick={navigateToPreferences}>
@@ -522,8 +522,8 @@ const Navbar = () => {
               <IoIosSearch />
             </Icon>
             <SearchInput
-              type="text"
-              placeholder="Search Anime"
+              type='text'
+              placeholder='Search Anime'
               value={search.searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDownOnInput}

@@ -27,7 +27,7 @@ const Iframe = styled.iframe`
 const EmbedPlayer: React.FC<EmbeddedVideoPlayerProps> = ({ src }) => {
   return (
     <Container>
-      <Iframe src={src} frameBorder="0" allowFullScreen></Iframe>
+      <Iframe src={src} frameBorder='0' allowFullScreen></Iframe>
     </Container>
   );
 };

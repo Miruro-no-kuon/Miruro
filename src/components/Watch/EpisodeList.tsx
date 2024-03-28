@@ -238,7 +238,7 @@ const EpisodeList: React.FC<Props> = ({
         ? localStorage.getItem(`layout-preference-${animeId}`)
         : null;
       return (savedMode as 'list' | 'grid' | 'imageList') || defaultLayoutMode;
-    }
+    },
   );
 
   const [selectionInitiatedByUser, setSelectionInitiatedByUser] =
@@ -248,7 +248,7 @@ const EpisodeList: React.FC<Props> = ({
     if (animeId && watchedEpisodes.length > 0) {
       localStorage.setItem(
         `watched-episodes-${animeId}`,
-        JSON.stringify(watchedEpisodes)
+        JSON.stringify(watchedEpisodes),
       );
     }
   }, [animeId, watchedEpisodes]);
@@ -275,11 +275,11 @@ const EpisodeList: React.FC<Props> = ({
         setWatchedEpisodes((prevWatchedEpisodes) => {
           const updatedWatchedEpisodes = [...prevWatchedEpisodes];
           const selectedEpisodeIndex = updatedWatchedEpisodes.findIndex(
-            (episode) => episode.id === id
+            (episode) => episode.id === id,
           );
           if (selectedEpisodeIndex === -1) {
             const selectedEpisode = episodes.find(
-              (episode) => episode.id === id
+              (episode) => episode.id === id,
             );
             if (selectedEpisode) {
               updatedWatchedEpisodes.push(selectedEpisode);
@@ -288,10 +288,10 @@ const EpisodeList: React.FC<Props> = ({
                 'watched-episodes',
                 JSON.stringify({
                   ...JSON.parse(
-                    localStorage.getItem('watched-episodes') || '{}'
+                    localStorage.getItem('watched-episodes') || '{}',
                   ),
                   [animeId]: updatedWatchedEpisodes,
-                })
+                }),
               );
               return updatedWatchedEpisodes;
             }
@@ -300,7 +300,7 @@ const EpisodeList: React.FC<Props> = ({
         });
       }
     },
-    [episodes, animeId]
+    [episodes, animeId],
   );
   const handleEpisodeSelect = useCallback(
     (id: string) => {
@@ -308,7 +308,7 @@ const EpisodeList: React.FC<Props> = ({
       markEpisodeAsWatched(id); // Mark the episode as watched
       onEpisodeSelect(id);
     },
-    [onEpisodeSelect, markEpisodeAsWatched]
+    [onEpisodeSelect, markEpisodeAsWatched],
   );
 
   // Update watched episodes when a new episode is selected or visited
@@ -329,7 +329,7 @@ const EpisodeList: React.FC<Props> = ({
         }
         return options;
       },
-      []
+      [],
     );
   }, [episodes]);
 
@@ -339,7 +339,7 @@ const EpisodeList: React.FC<Props> = ({
       const [start, end] = e.target.value.split('-').map(Number);
       setInterval([start, end]);
     },
-    []
+    [],
   );
 
   // Toggle layout preference
@@ -364,7 +364,7 @@ const EpisodeList: React.FC<Props> = ({
     return episodes.filter(
       (episode) =>
         episode.title?.toLowerCase().includes(searchQuery) ||
-        episode.number.toString().includes(searchQuery)
+        episode.number.toString().includes(searchQuery),
     );
   }, [episodes, searchTerm]);
 
@@ -384,13 +384,13 @@ const EpisodeList: React.FC<Props> = ({
     const defaultLayout = episodes.length <= 26 && !allTitlesNull;
 
     setIsRowLayout(
-      userLayoutPreference !== null ? userLayoutPreference : defaultLayout
+      userLayoutPreference !== null ? userLayoutPreference : defaultLayout,
     );
 
     // Find the selected episode
     if (!selectionInitiatedByUser) {
       const selectedEpisode = episodes.find(
-        (episode) => episode.id === selectedEpisodeId
+        (episode) => episode.id === selectedEpisodeId,
       );
       if (selectedEpisode) {
         // Find the interval containing the selected episode
@@ -471,8 +471,8 @@ const EpisodeList: React.FC<Props> = ({
             <FontAwesomeIcon icon={faSearch} />
           </Icon>
           <SearchInput
-            type="text"
-            placeholder="Search episodes..."
+            type='text'
+            placeholder='Search episodes...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

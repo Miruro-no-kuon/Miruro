@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { FaBell } from "react-icons/fa";
+import React from 'react';
+import styled from 'styled-components';
+import { FaBell } from 'react-icons/fa';
 
 // Props interface
 interface VideoSourceSelectorProps {
@@ -52,7 +52,9 @@ const ButtonBase = styled.button`
   cursor: pointer;
   background-color: var(--global-div);
   color: var(--global-text);
-  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease-in-out;
   text-align: center;
 
   &:hover {
@@ -137,14 +139,14 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         {episodeId ? (
           <>
             <h4>
-              You're watching <strong>Episode {episodeId}.</strong>{" "}
+              You're watching <strong>Episode {episodeId}.</strong>{' '}
             </h4>
             <br />
 
             <p>If current servers don't work, please try other servers.</p>
           </>
         ) : (
-          "Loading episode information..."
+          'Loading episode information...'
         )}
         {airingTime && (
           <>
@@ -165,13 +167,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "default" && language === "sub"
-                        ? "active"
-                        : ""
+                      sourceType === 'default' && language === 'sub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("default");
-                      setLanguage("sub");
+                      setSourceType('default');
+                      setLanguage('sub');
                     }}
                   >
                     Default
@@ -182,13 +184,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "vidstreaming" && language === "sub"
-                        ? "active"
-                        : ""
+                      sourceType === 'vidstreaming' && language === 'sub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("vidstreaming");
-                      setLanguage("sub");
+                      setSourceType('vidstreaming');
+                      setLanguage('sub');
                     }}
                   >
                     Vidstream
@@ -199,13 +201,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "gogo" && language === "sub"
-                        ? "active"
-                        : ""
+                      sourceType === 'gogo' && language === 'sub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("gogo");
-                      setLanguage("sub");
+                      setSourceType('gogo');
+                      setLanguage('sub');
                     }}
                   >
                     Gogo
@@ -219,13 +221,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "default" && language === "dub"
-                        ? "active"
-                        : ""
+                      sourceType === 'default' && language === 'dub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("default");
-                      setLanguage("dub");
+                      setSourceType('default');
+                      setLanguage('dub');
                     }}
                   >
                     Default
@@ -236,13 +238,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "vidstreaming" && language === "dub"
-                        ? "active"
-                        : ""
+                      sourceType === 'vidstreaming' && language === 'dub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("vidstreaming");
-                      setLanguage("dub");
+                      setSourceType('vidstreaming');
+                      setLanguage('dub');
                     }}
                   >
                     Vidstream
@@ -253,13 +255,13 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 <ButtonWrapper>
                   <Button
                     className={
-                      sourceType === "gogo" && language === "dub"
-                        ? "active"
-                        : ""
+                      sourceType === 'gogo' && language === 'dub'
+                        ? 'active'
+                        : ''
                     }
                     onClick={() => {
-                      setSourceType("gogo");
-                      setLanguage("dub");
+                      setSourceType('gogo');
+                      setLanguage('dub');
                     }}
                   >
                     Gogo

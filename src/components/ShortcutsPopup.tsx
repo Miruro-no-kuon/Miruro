@@ -86,7 +86,7 @@ interface KeyboardShortcutsPopupProps {
 const KeyboardShortcutsPopup = ({ onClose }: KeyboardShortcutsPopupProps) => {
   return (
     <Overlay onClick={onClose}>
-      <PopUp className="popup-content" onClick={(e) => e.stopPropagation()}>
+      <PopUp className='popup-content' onClick={(e) => e.stopPropagation()}>
         <tr>
           <td>
             <CloseButton onClick={onClose}>
@@ -191,7 +191,7 @@ const ShortcutsPopup = () => {
   const togglePopup = () => setShowPopup(!showPopup);
 
   return (
-    <div className="App">
+    <div className='App'>
       {showPopup && <KeyboardShortcutsPopup onClose={togglePopup} />}
     </div>
   );

@@ -73,7 +73,7 @@ const CardSkeleton: React.FC<SkeletonProps> = React.memo(
     <SkeletonCard loading={loading}>
       <SkeletonTitle loading={loading} />
     </SkeletonCard>
-  )
+  ),
 );
 
 export default CardSkeleton;

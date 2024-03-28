@@ -141,9 +141,9 @@ function About() {
         <br />
         {sections.map((section, index) => (
           <span key={index}>
-            {section.title && <h1 className="title-style">{section.title}</h1>}
+            {section.title && <h1 className='title-style'>{section.title}</h1>}
             {section.title2 && (
-              <h3 className="title-style">{section.title2}</h3>
+              <h3 className='title-style'>{section.title2}</h3>
             )}
             {section.content}
           </span>

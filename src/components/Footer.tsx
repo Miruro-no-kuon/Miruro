@@ -118,9 +118,9 @@ function Footer() {
           solely provides links to media content hosted by third-party services.
         </Text>
         <StyledLinkList>
-          <FooterLink to="/about">About</FooterLink>
-          <FooterLink to="/pptos">Privacy & ToS</FooterLink>
-          <FooterLink to="/donate">
+          <FooterLink to='/about'>About</FooterLink>
+          <FooterLink to='/pptos'>Privacy & ToS</FooterLink>
+          <FooterLink to='/donate'>
             <FaRegHeart /> Donate
           </FooterLink>
         </StyledLinkList>
@@ -143,8 +143,8 @@ function Footer() {
             <ShareButton
               key={href}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target='_blank'
+              rel='noopener noreferrer'
             >
               <Icon />
             </ShareButton>

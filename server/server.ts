@@ -31,7 +31,7 @@ function getLocalIpAddress() {
   const networkInterfaces = os.networkInterfaces();
   for (const networkInterface of Object.values(networkInterfaces)) {
     const found = networkInterface?.find(
-      (net) => net.family === 'IPv4' && !net.internal
+      (net) => net.family === 'IPv4' && !net.internal,
     );
     if (found) return found.address;
   }
@@ -42,6 +42,6 @@ function getLocalIpAddress() {
 app.listen(PORT, () => {
   const ipAddress = getLocalIpAddress();
   console.log(
-    `Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`
+    `Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`,
   );
 });

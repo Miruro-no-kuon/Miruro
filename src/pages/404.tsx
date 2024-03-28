@@ -62,7 +62,7 @@ const NotFound: React.FC = () => {
         <p>
           <strong>404</strong> | Page Not Found
         </p>
-        <img src={Image404URL} alt="404 Error" />
+        <img src={Image404URL} alt='404 Error' />
       </Idkwhattonamethis>
     </CenteredContent>
   );

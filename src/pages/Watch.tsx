@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaBell } from "react-icons/fa";
+import { FaBell } from 'react-icons/fa';
 import styled from 'styled-components';
 import EpisodeList from '../components/Watch/EpisodeList';
 import { Player } from '../components/Watch/Video/Player';
@@ -135,7 +135,7 @@ interface CurrentEpisode {
   image: string;
 }
 const useCountdown = (targetDate) => {
-  const [timeLeft, setTimeLeft] = useState("");
+  const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -143,19 +143,19 @@ const useCountdown = (targetDate) => {
       const distance = targetDate - now;
       if (distance < 0) {
         clearInterval(timer);
-        setTimeLeft("Airing now or aired");
+        setTimeLeft('Airing now or aired');
         return;
       }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       setTimeLeft(
-        `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`
+        `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`,
       );
     }, 1000);
 
@@ -214,13 +214,13 @@ const Watch: React.FC = () => {
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
   const [sourceType, setSourceType] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || 'default'
+    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || 'default',
   );
   const [embeddedVideoUrl, setEmbeddedVideoUrl] = useState('');
   const [language, setLanguage] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'sub'
+    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'sub',
   );
-  const [downloadLink, setDownloadLink] = useState("");
+  const [downloadLink, setDownloadLink] = useState('');
   const nextEpisodeAiringTime =
     animeInfo && animeInfo.nextAiringEpisode
       ? animeInfo.nextAiringEpisode.airingTime * 1000 // Convert seconds to milliseconds
@@ -236,10 +236,10 @@ const Watch: React.FC = () => {
     // or maintain the setting from the previous anime. This example resets to defaults.
 
     setSourceType(
-      localStorage.getItem(getSourceTypeKey(animeId)) || defaultSourceType
+      localStorage.getItem(getSourceTypeKey(animeId)) || defaultSourceType,
     );
     setLanguage(
-      localStorage.getItem(getLanguageKey(animeId)) || defaultLanguage
+      localStorage.getItem(getLanguageKey(animeId)) || defaultLanguage,
     );
   }, [animeId]);
 
@@ -273,7 +273,7 @@ const Watch: React.FC = () => {
       } catch (error) {
         console.error(
           'Failed to fetch anime data, trying fetchAnimeInfo as a fallback:',
-          error
+          error,
         );
         try {
           const fallbackInfo = await fetchAnimeInfo(animeId);
@@ -283,7 +283,7 @@ const Watch: React.FC = () => {
         } catch (fallbackError) {
           console.error(
             'Also failed to fetch anime info as a fallback:',
-            fallbackError
+            fallbackError,
           );
           // If this fails too, consider showing an error message to the user
         } finally {
@@ -331,7 +331,7 @@ const Watch: React.FC = () => {
               // Try to find the current episode in the new language or default to the last available episode
               return (
                 transformedEpisodes.find(
-                  (ep: any) => ep.number === currentEpisodeNumber
+                  (ep: any) => ep.number === currentEpisodeNumber,
                 ) || transformedEpisodes[transformedEpisodes.length - 1]
               );
             } else if (animeTitle && episodeNumber) {
@@ -344,14 +344,14 @@ const Watch: React.FC = () => {
             } else {
               // Navigate based on the last watched episode saved in localStorage
               const savedEpisodeData = localStorage.getItem(
-                LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId
+                LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
               );
               const savedEpisode = savedEpisodeData
                 ? JSON.parse(savedEpisodeData)
                 : null;
               return savedEpisode
                 ? transformedEpisodes.find(
-                    (ep: any) => ep.number === savedEpisode.number
+                    (ep: any) => ep.number === savedEpisode.number,
                   ) || transformedEpisodes[0]
                 : transformedEpisodes[0];
             }
@@ -367,7 +367,7 @@ const Watch: React.FC = () => {
             const newAnimeTitle = navigateToEpisode.id.split('-episode-')[0];
             navigate(
               `/watch/${animeId}/${newAnimeTitle}/${navigateToEpisode.number}`,
-              { replace: true }
+              { replace: true },
             );
             setLanguageChanged(false); // Reset the languageChanged flag after handling the navigation
           }
@@ -447,7 +447,7 @@ const Watch: React.FC = () => {
           id: selectedEpisode.id,
           title: selectedEpisode.title,
           number: selectedEpisode.number,
-        })
+        }),
       );
 
       updateWatchedEpisodes(selectedEpisode);
@@ -456,14 +456,14 @@ const Watch: React.FC = () => {
         `/watch/${animeId}/${encodeURI(animeTitle)}/${selectedEpisode.number}`,
         {
           replace: true,
-        }
+        },
       );
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       setIsEpisodeChanging(false);
     },
-    [animeId, navigate]
+    [animeId, navigate],
   );
 
   //next episode shortcut with 500ms delay.
@@ -477,7 +477,7 @@ const Watch: React.FC = () => {
       setLastKeypressTime(now);
 
       const currentIndex = episodes.findIndex(
-        (ep) => ep.id === currentEpisode.id
+        (ep) => ep.id === currentEpisode.id,
       );
       if (
         event.key.toUpperCase() === 'N' &&
@@ -538,7 +538,7 @@ const Watch: React.FC = () => {
 
   const updateWatchedEpisodes = (episode: Episode) => {
     const watchedEpisodesJson = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId
+      LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
     );
     const watchedEpisodes: Episode[] = watchedEpisodesJson
       ? JSON.parse(watchedEpisodesJson)
@@ -548,7 +548,7 @@ const Watch: React.FC = () => {
       watchedEpisodes.push(episode);
       localStorage.setItem(
         LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
-        JSON.stringify(watchedEpisodes)
+        JSON.stringify(watchedEpisodes),
       );
     }
   };
@@ -560,7 +560,7 @@ const Watch: React.FC = () => {
       if (embeddedServers && embeddedServers.length > 0) {
         // Attempt to find the "Gogo server" in the list of servers
         const gogoServer = embeddedServers.find(
-          (server: any) => server.name === 'Gogo server'
+          (server: any) => server.name === 'Gogo server',
         );
         // If "Gogo server" is found, use it; otherwise, use the first server
         const selectedServer = gogoServer || embeddedServers[0];
@@ -570,7 +570,7 @@ const Watch: React.FC = () => {
       console.error(
         'Error fetching gogo servers for episode ID:',
         episodeId,
-        error
+        error,
       );
     }
   };
@@ -582,7 +582,7 @@ const Watch: React.FC = () => {
       if (embeddedServers && embeddedServers.length > 0) {
         // Attempt to find the "Vidstreaming" server in the list of servers
         const vidstreamingServer = embeddedServers.find(
-          (server: any) => server.name === 'Vidstreaming'
+          (server: any) => server.name === 'Vidstreaming',
         );
         // If "Vidstreaming" server is found, use it; otherwise, use the first server
         const selectedServer = vidstreamingServer || embeddedServers[0];
@@ -592,7 +592,7 @@ const Watch: React.FC = () => {
       console.error(
         'Error fetching Vidstreaming servers for episode ID:',
         episodeId,
-        error
+        error,
       );
     }
   };
@@ -648,7 +648,7 @@ const Watch: React.FC = () => {
       animeInfo.status === 'Not yet aired' &&
       animeInfo.trailer ? (
         // Display the trailer if the anime has not yet aired and has a trailer
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: 'center' }}>
           <strong>
             <h2>Time until next episode:</h2>
           </strong>
@@ -656,19 +656,19 @@ const Watch: React.FC = () => {
             <h4>
               {animeInfo &&
               animeInfo.nextAiringEpisode &&
-              countdown !== "Airing now or aired" ? (
+              countdown !== 'Airing now or aired' ? (
                 <>
                   <FaBell /> {countdown}
                 </>
               ) : (
-                "Unknown"
+                'Unknown'
               )}
             </h4>
           </p>
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
               allowFullScreen
             />
           )}
@@ -677,7 +677,7 @@ const Watch: React.FC = () => {
         // Condition for displaying the "No episodes found" div
         <NoEpsFoundDiv>
           <h2>No episodes found :(</h2>
-          <GoToHomePageButton href="/home">Home</GoToHomePageButton>
+          <GoToHomePageButton href='/home'>Home</GoToHomePageButton>
         </NoEpsFoundDiv>
       ) : (
         // Render content when episodes are found
@@ -731,7 +731,7 @@ const Watch: React.FC = () => {
               downloadLink={downloadLink}
               episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
               airingTime={
-                animeInfo && animeInfo.status === "Ongoing"
+                animeInfo && animeInfo.status === 'Ongoing'
                   ? countdown
                   : undefined
               }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FiSun, FiMoon } from "react-icons/fi";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { FiSun, FiMoon } from 'react-icons/fi';
 
 const PreferencesContainer = styled.div`
   margin: 0 auto;
@@ -29,7 +29,7 @@ const PreferencesContainer = styled.div`
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
   background: ${({ isSelected }) =>
-    isSelected ? "var(--primary-accent)" : "transparent"};
+    isSelected ? 'var(--primary-accent)' : 'transparent'};
   margin-right: 0.5rem;
   color: var(--global-text);
   font-size: 1rem;
@@ -40,7 +40,7 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   border: none;
   &:hover {
     background-color: ${({ isSelected }) =>
-      isSelected ? "var(--primary-accent)" : "var(--primary-accent)"};
+      isSelected ? 'var(--primary-accent)' : 'var(--primary-accent)'};
   }
   &:focus {
     outline: none;
@@ -55,7 +55,7 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   }
   @media (max-width: 500px) {
     display: flex;
-    margin: ${({ isInputToggle }) => (isInputToggle ? "0" : "0")};
+    margin: ${({ isInputToggle }) => (isInputToggle ? '0' : '0')};
   }
   clear {
   }
@@ -80,9 +80,19 @@ const TableCell = styled.td`
   }
 `;
 
-const StyledDropdown = ({ options, selectedOption, onSelect }) => (
+interface StyledDropdownProps {
+  options: string[];
+  selectedOption: string;
+  onSelect: (option: string) => void;
+}
+
+const StyledDropdown: React.FC<StyledDropdownProps> = ({
+  options,
+  selectedOption,
+  onSelect,
+}) => (
   <>
-    {options.map((option: any) => (
+    {options.map((option) => (
       <StyledButton
         key={option}
         isSelected={selectedOption === option}
@@ -94,27 +104,27 @@ const StyledDropdown = ({ options, selectedOption, onSelect }) => (
   </>
 );
 
-const Preferences: React.FC = () => {
+const Profile: React.FC = () => {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "Preferences | Miruro";
+    document.title = 'Profile | Miruro';
     return () => {
       document.title = previousTitle;
     };
   }, []);
 
-  const [theme, setTheme] = useState("");
-  const [defaultLanguage, setDefaultLanguage] = useState("Sub");
-  const [autoskipIntroOutro, setAutoskipIntroOutro] = useState("Disabled");
-  const [autoPlay, setAutoPlay] = useState("Disabled");
-  const [defaultEpisodeLayout, setdefaultEpisodeLayout] = useState("Auto");
-  const [rating, setRating] = useState("Anilist");
-  const [defaultServers, setDefaultServers] = useState("Default");
+  const [theme, setTheme] = useState('');
+  const [defaultLanguage, setDefaultLanguage] = useState('Sub');
+  const [autoskipIntroOutro, setAutoskipIntroOutro] = useState('Disabled');
+  const [autoPlay, setAutoPlay] = useState('Disabled');
+  const [defaultEpisodeLayout, setDefaultEpisodeLayout] = useState('Auto');
+  const [rating, setRating] = useState('Anilist');
+  const [defaultServers, setDefaultServers] = useState('Default');
 
   return (
     <PreferencesContainer>
       <h2>
-        Preferences <StyledButton>Save</StyledButton>
+        Profile <StyledButton isSelected={false}>Save</StyledButton>
       </h2>
       <PreferencesTable>
         <tbody>
@@ -122,16 +132,16 @@ const Preferences: React.FC = () => {
             <TableCell>Theme</TableCell>
             <TableCell>
               <StyledButton
-                isSelected={theme === "Light"}
-                onClick={() => setTheme("Light")}
-                className="svg"
+                isSelected={theme === 'Light'}
+                onClick={() => setTheme('Light')}
+                className='svg'
               >
                 <FiSun />
               </StyledButton>
               <StyledButton
-                isSelected={theme === "Dark"}
-                onClick={() => setTheme("Dark")}
-                className="svg"
+                isSelected={theme === 'Dark'}
+                onClick={() => setTheme('Dark')}
+                className='svg'
               >
                 <FiMoon />
               </StyledButton>
@@ -141,7 +151,7 @@ const Preferences: React.FC = () => {
             <TableCell>Default language</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Sub", "Dub"]}
+                options={['Sub', 'Dub']}
                 selectedOption={defaultLanguage}
                 onSelect={setDefaultLanguage}
               />
@@ -151,7 +161,7 @@ const Preferences: React.FC = () => {
             <TableCell>Autoskip Intro/Outro</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Disabled", "Enabled"]}
+                options={['Disabled', 'Enabled']}
                 selectedOption={autoskipIntroOutro}
                 onSelect={setAutoskipIntroOutro}
               />
@@ -161,7 +171,7 @@ const Preferences: React.FC = () => {
             <TableCell>AutoPlay</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Disabled", "Enabled"]}
+                options={['Disabled', 'Enabled']}
                 selectedOption={autoPlay}
                 onSelect={setAutoPlay}
               />
@@ -171,9 +181,9 @@ const Preferences: React.FC = () => {
             <TableCell>Default episode layout</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Auto", "Grid", "List", "Image"]}
+                options={['Auto', 'Grid', 'List', 'Image']}
                 selectedOption={defaultEpisodeLayout}
-                onSelect={setdefaultEpisodeLayout}
+                onSelect={setDefaultEpisodeLayout}
               />
             </TableCell>
           </TableRow>
@@ -181,7 +191,7 @@ const Preferences: React.FC = () => {
             <TableCell>Default servers</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Default", "Vidstreaming", "GogoAnime"]}
+                options={['Default', 'Vidstreaming', 'GogoAnime']}
                 selectedOption={defaultServers}
                 onSelect={setDefaultServers}
               />
@@ -191,7 +201,7 @@ const Preferences: React.FC = () => {
             <TableCell>Rating MAL/Anilist</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Anilist", "MyAnimeList"]}
+                options={['Anilist', 'MyAnimeList']}
                 selectedOption={rating}
                 onSelect={setRating}
               />
@@ -201,9 +211,9 @@ const Preferences: React.FC = () => {
             <TableCell>Open Keyboard Shortcuts</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Open"]}
-                // selectedOption={rating}
-                // onSelect={setRating}
+                options={['Open']}
+                selectedOption={'Open'}
+                onSelect={() => {}}
               />
             </TableCell>
           </TableRow>
@@ -211,9 +221,9 @@ const Preferences: React.FC = () => {
             <TableCell>Restore default preferences</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Restore"]}
-                // selectedOption={rating}
-                // onSelect={setRating}
+                options={['Restore']}
+                selectedOption={'Restore'}
+                onSelect={() => {}}
               />
             </TableCell>
           </TableRow>
@@ -221,9 +231,9 @@ const Preferences: React.FC = () => {
             <TableCell>Clear Continue Watching</TableCell>
             <TableCell>
               <StyledDropdown
-                options={["Clear"]}
-                // selectedOption={none}
-                // onSelect={setRating}
+                options={['Clear']}
+                selectedOption={'Clear'}
+                onSelect={() => {}}
               />
             </TableCell>
           </TableRow>
@@ -233,4 +243,4 @@ const Preferences: React.FC = () => {
   );
 };
 
-export default Preferences;
+export default Profile;

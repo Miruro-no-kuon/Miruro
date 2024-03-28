@@ -61,10 +61,10 @@ interface CacheItem {
 function createOptimizedSessionStorageCache(
   maxSize: number,
   maxAge: number,
-  cacheKey: string
+  cacheKey: string,
 ) {
   const cache = new Map<string, CacheItem>(
-    JSON.parse(sessionStorage.getItem(cacheKey) || '[]')
+    JSON.parse(sessionStorage.getItem(cacheKey) || '[]'),
   );
   const keys = new Set<string>(cache.keys());
 
@@ -75,7 +75,7 @@ function createOptimizedSessionStorageCache(
   function updateSessionStorage() {
     sessionStorage.setItem(
       cacheKey,
-      JSON.stringify(Array.from(cache.entries()))
+      JSON.stringify(Array.from(cache.entries())),
     );
   }
 
@@ -117,7 +117,7 @@ function createCache(cacheKey: string) {
   return createOptimizedSessionStorageCache(
     CACHE_SIZE,
     CACHE_MAX_AGE,
-    cacheKey
+    cacheKey,
   );
 }
 
@@ -164,7 +164,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
       throw new Error(
         `Server error: ${
           response.data.statusCode || response.status
-        } ${errorMessage}`
+        } ${errorMessage}`,
       );
     }
 
@@ -185,7 +185,7 @@ export async function fetchAdvancedSearch(
   searchQuery: string = '',
   page: number = 1,
   perPage: number = 16,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ) {
   const queryParams = new URLSearchParams({
     ...(searchQuery && { query: searchQuery }),
@@ -213,7 +213,7 @@ export async function fetchAdvancedSearch(
 // Fetch Anime DATA Function
 export async function fetchAnimeData(
   animeId: string,
-  provider: string = 'gogoanime'
+  provider: string = 'gogoanime',
 ) {
   const params = new URLSearchParams({ provider });
   const url = `${BASE_URL}meta/anilist/data/${animeId}?${params.toString()}`;
@@ -225,7 +225,7 @@ export async function fetchAnimeData(
 // Fetch Anime INFO Function
 export async function fetchAnimeInfo(
   animeId: string,
-  provider: string = 'gogoanime'
+  provider: string = 'gogoanime',
 ) {
   const params = new URLSearchParams({ provider });
   const url = `${BASE_URL}meta/anilist/info/${animeId}?${params.toString()}`;
@@ -239,7 +239,7 @@ async function fetchList(
   type: string,
   page: number = 1,
   perPage: number = 16,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ) {
   let cacheKey: string;
   let url: string;
@@ -252,7 +252,7 @@ async function fetchList(
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
-      perPage.toString()
+      perPage.toString(),
     );
     url = `${BASE_URL}meta/anilist/${type.toLowerCase()}`;
 
@@ -268,7 +268,7 @@ async function fetchList(
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
-      perPage.toString()
+      perPage.toString(),
     );
     url = `${BASE_URL}meta/anilist/${type.toLowerCase()}`;
     // params already defined above
@@ -290,7 +290,7 @@ export const fetchPopularAnime = (page: number, perPage: number) =>
 export async function fetchAnimeEpisodes(
   animeId: string,
   provider: string = 'gogoanime',
-  dub: boolean = false
+  dub: boolean = false,
 ) {
   const params = new URLSearchParams({ provider, dub: dub ? 'true' : 'false' });
   const url = `${BASE_URL}meta/anilist/episodes/${animeId}?${params.toString()}`;
@@ -298,7 +298,7 @@ export async function fetchAnimeEpisodes(
     'animeEpisodes',
     animeId,
     provider,
-    dub ? 'dub' : 'sub'
+    dub ? 'dub' : 'sub',
   );
 
   return fetchFromProxy(url, animeEpisodesCache, cacheKey);
@@ -343,7 +343,7 @@ export async function fetchSkipTimes({
     'skipTimes',
     malId,
     episodeNumber,
-    episodeLength || ''
+    episodeLength || '',
   );
 
   // Use the fetchFromProxy function to make the request and handle caching

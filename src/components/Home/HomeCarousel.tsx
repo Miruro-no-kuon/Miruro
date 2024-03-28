@@ -192,8 +192,8 @@ const PlayButton = styled.button`
 
   @media (max-width: 500px) {
     border-radius: 50%;
-    padding: 1.25rem; /* Adjusted for small devices */
-    font-size: 1rem; /* Adjusted font size for small devices */
+    padding: 1.5rem; /* Adjusted for small devices */
+    font-size: 1.25rem; /* Adjusted font size for small devices */
     span {
       display: none;
     }
@@ -244,7 +244,7 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
   };
 
   const validData = data.filter(
-    (item) => item.title && item.title.english && item.description
+    (item) => item.title && item.title.english && item.description,
   );
 
   return (
@@ -257,10 +257,10 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
             spaceBetween={30}
             slidesPerView={1}
             loop={true}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
+            // autoplay={{
+            //   delay: 3000,
+            //   disableOnInteraction: false,
+            // }}
             navigation={{
               nextEl: '.swiper-button-next',
               prevEl: '.swiper-button-prev',
@@ -286,7 +286,7 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
                     alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
                     $cover={cover} // Managed outside, but kept for styled component
                     $image={image} // Managed outside, but kept for styled component
-                    loading="eager"
+                    loading='eager'
                   />
                   <ContentWrapper>
                     <SlideContent>
@@ -312,7 +312,7 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
                 </SlideImageWrapper>
               </StyledSwiperSlide>
             ))}
-            <div className="swiper-pagination"></div>
+            <div className='swiper-pagination'></div>
           </StyledSwiperContainer>
         </PaginationStyle>
       )}

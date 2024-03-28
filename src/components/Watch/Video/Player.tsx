@@ -48,7 +48,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
   useEffect(() => {
     // Load saved playback info for all episodes from local storage
     const allPlaybackInfo = JSON.parse(
-      localStorage.getItem('all_episode_times') || '{}'
+      localStorage.getItem('all_episode_times') || '{}',
     );
 
     // Extract playback info for the current episode
@@ -63,7 +63,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
       try {
         const response = await fetchAnimeStreamingLinks(episodeId);
         const backupSource = response.sources.find(
-          (source: StreamingSource) => source.quality === 'default'
+          (source: StreamingSource) => source.quality === 'default',
         );
         if (backupSource) {
           setSrc(backupSource.url);
@@ -84,7 +84,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
             malId: malId.toString(), // Convert malId to a string if it's not already
             episodeNumber, // Use the episode number extracted from episodeId
           });
-          console.log('Skip times:', skipTimes);
+          // console.log('Skip times:', skipTimes);
           const vttContent = generateWebVTTFromSkipTimes(skipTimes);
           const blob = new Blob([vttContent], { type: 'text/vtt' });
           const vttBlobUrl = URL.createObjectURL(blob);
@@ -156,7 +156,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
-    _nativeEvent: MediaProviderChangeEvent // Prefixed unused parameter with an underscore
+    _nativeEvent: MediaProviderChangeEvent, // Prefixed unused parameter with an underscore
   ) {
     if (isHLSProvider(provider)) {
       provider.config = {};
@@ -166,7 +166,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
   // Simplified unused parameters with underscores
   function onCanPlay(
     _detail: MediaCanPlayDetail,
-    _nativeEvent: MediaCanPlayEvent
+    _nativeEvent: MediaCanPlayEvent,
   ) {
     // Implementation here...
   }
@@ -184,7 +184,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
 
       // Retrieve the existing playback info from local storage or initialize it if not present
       const allPlaybackInfo = JSON.parse(
-        localStorage.getItem('all_episode_times') || '{}'
+        localStorage.getItem('all_episode_times') || '{}',
       );
 
       // Update the playback info for the current episode
@@ -193,18 +193,18 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
       // Save the updated info back to local storage
       localStorage.setItem(
         'all_episode_times',
-        JSON.stringify(allPlaybackInfo)
+        JSON.stringify(allPlaybackInfo),
       );
     }
   }
 
-  console.log(vttUrl);
+  // console.log(vttUrl);
 
   return (
     <>
       <MediaPlayer
-        className="player"
-        title=""
+        className='player'
+        title=''
         src={src}
         crossorigin
         playsinline
@@ -214,13 +214,13 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
         ref={player}
       >
         <MediaProvider>
-          <Poster className="vds-poster" src={banner} alt="" />
+          <Poster className='vds-poster' src={banner} alt='' />
           {vttUrl && (
             <Track
-              kind="chapters"
+              kind='chapters'
               src={vttUrl}
               default={true}
-              label="Skip Times"
+              label='Skip Times'
             />
           )}
         </MediaProvider>
