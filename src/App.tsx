@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Preferences from "./pages/Preferences";
 import {
+  Preferences,
   Navbar,
   Footer,
   Home,
