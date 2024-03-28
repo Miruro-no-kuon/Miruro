@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import CardItem from "./CardItem";
-import { Anime } from "../../hooks/interface";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import CardItem from './CardItem';
+import { Anime } from '../../hooks/interface';
 
 interface CardGridProps {
   animeData: Anime[];
@@ -34,9 +34,9 @@ const CardGrid: React.FC<CardGridProps> = ({
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [hasNextPage]);
 

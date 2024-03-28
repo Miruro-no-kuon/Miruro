@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,12 +7,12 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
     // You can customize the output directory and publicPath if needed
-    outDir: "dist", // Specify your desired output directory
+    outDir: 'dist', // Specify your desired output directory
     rollupOptions: {
       output: {
         manualChunks: {
-          lodash: ["lodash"],
-          vendor: ["react", "react-dom"],
+          lodash: ['lodash'],
+          vendor: ['react', 'react-dom'],
         },
       },
     },

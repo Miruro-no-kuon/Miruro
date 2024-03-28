@@ -1,4 +1,4 @@
-import { useEffect, RefObject } from "react";
+import { useEffect, RefObject } from 'react';
 
 const useLocalStorage = (
   videoRef: RefObject<HTMLVideoElement>,
@@ -14,16 +14,19 @@ const useLocalStorage = (
 
     const addPauseListener = () => {
       if (videoRef.current) {
-        videoRef.current.addEventListener("pause", handlePause);
+        videoRef.current.addEventListener('pause', handlePause);
       }
     };
 
     const removePauseListener = () => {
       if (videoRef.current) {
-        videoRef.current.removeEventListener("pause", handlePause);
+        videoRef.current.removeEventListener('pause', handlePause);
         if (!videoRef.current.paused) {
           const currentTime = videoRef.current.currentTime;
-          localStorage.setItem(`savedTime-${episodeId}`, currentTime.toString());
+          localStorage.setItem(
+            `savedTime-${episodeId}`,
+            currentTime.toString()
+          );
         }
       }
     };

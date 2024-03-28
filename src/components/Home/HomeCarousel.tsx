@@ -1,10 +1,11 @@
-import { FC } from "react";
-import styled, { keyframes } from "styled-components";
-import { FaPlay } from "react-icons/fa";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
-import { useNavigate } from "react-router-dom";
-import BannerNotFound from "/src/assets/miruro-banner-dark-bg.webp";
+import { FC } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { FaPlay } from 'react-icons/fa';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
+import { useNavigate } from 'react-router-dom';
+import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
+import CarouselSkeleton from '../Skeletons/CarouselSkeleton';
 
 // Correctly type your data
 interface SlideData {
@@ -18,7 +19,6 @@ interface SlideData {
   description: string;
 }
 
-// Check Carousel Skeleton to match height
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
   max-width: 100%;
@@ -50,7 +50,7 @@ const StyledSwiperSlide = styled(SwiperSlide)`
 `;
 
 const DarkOverlay = styled.div`
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -150,7 +150,7 @@ const SlideDescription = styled.p<{
   }
 
   /* Add overflow-y: auto if the content exceeds max height */
-  overflow-y: ${({ $maxLines }) => ($maxLines ? "auto" : "hidden")};
+  overflow-y: ${({ $maxLines }) => ($maxLines ? 'auto' : 'hidden')};
 `;
 
 const PlayButtonWrapper = styled.div`
@@ -220,7 +220,17 @@ const PaginationStyle = styled.div`
 `;
 
 // Adjust the Carousel component to use correctly typed props and state
-const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
+interface CarouselTrendingProps {
+  data: SlideData[];
+  loading: boolean;
+  error?: string | null;
+}
+
+const CarouselTrending: FC<CarouselTrendingProps> = ({
+  data = [],
+  loading,
+  error,
+}) => {
   const navigate = useNavigate();
 
   const handlePlayButtonClick = (id: string) => {
@@ -238,58 +248,75 @@ const CarouselTrending: FC<{ data: SlideData[] }> = ({ data = [] }) => {
   );
 
   return (
-    <PaginationStyle>
-      <StyledSwiperContainer
-        spaceBetween={30}
-        slidesPerView={1}
-        loop={false}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
-        navigation={{
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        }}
-        pagination={{
-          el: ".swiper-pagination",
-          clickable: true,
-          dynamicBullets: true,
-          type: "bullets",
-        }}
-      >
-        {validData.map(({ id, image, cover, title, description }) => (
-          <StyledSwiperSlide key={id} title={title.english || title.romaji}>
-            <SlideImageWrapper>
-              <SlideImage
-                src={cover === image ? BannerNotFound : cover}
-                alt={title.english}
-                $cover={cover} // Managed outside, but kept for styled component
-                $image={image} // Managed outside, but kept for styled component
-                loading="eager"
-              />
-              <ContentWrapper>
-                <SlideContent>
-                  <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
-                  <SlideDescription
-                    dangerouslySetInnerHTML={{ __html: description }}
-                    $maxLines={description.length > 200}
+    <>
+      {loading || error ? (
+        <CarouselSkeleton />
+      ) : (
+        <PaginationStyle>
+          <StyledSwiperContainer
+            spaceBetween={30}
+            slidesPerView={1}
+            loop={true}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            navigation={{
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }}
+            pagination={{
+              el: '.swiper-pagination',
+              clickable: true,
+              dynamicBullets: true,
+              type: 'bullets',
+            }}
+            freeMode={false}
+            virtual={true}
+            grabCursor={true}
+            keyboard={true}
+            touchRatio={1}
+            centeredSlides={true}
+          >
+            {validData.map(({ id, image, cover, title, description }) => (
+              <StyledSwiperSlide key={id} title={title.english || title.romaji}>
+                <SlideImageWrapper>
+                  <SlideImage
+                    src={cover === image ? BannerNotFound : cover}
+                    alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
+                    $cover={cover} // Managed outside, but kept for styled component
+                    $image={image} // Managed outside, but kept for styled component
+                    loading="eager"
                   />
-                </SlideContent>
-                <PlayButtonWrapper>
-                  <PlayButton onClick={() => handlePlayButtonClick(id)}>
-                    <PlayIcon />
-                    <span>Watch Now</span>
-                  </PlayButton>
-                </PlayButtonWrapper>
-              </ContentWrapper>
-              <DarkOverlay />
-            </SlideImageWrapper>
-          </StyledSwiperSlide>
-        ))}
-        <div className="swiper-pagination"></div>
-      </StyledSwiperContainer>
-    </PaginationStyle>
+                  <ContentWrapper>
+                    <SlideContent>
+                      <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
+                      <SlideDescription
+                        dangerouslySetInnerHTML={{ __html: description }}
+                        $maxLines={description.length > 200}
+                      />
+                    </SlideContent>
+                    <PlayButtonWrapper>
+                      <PlayButton
+                        onClick={() => handlePlayButtonClick(id)}
+                        title={
+                          'Watch ' + (title.english || title.romaji) + ' Now'
+                        }
+                      >
+                        <PlayIcon />
+                        <span>WATCH NOW</span>
+                      </PlayButton>
+                    </PlayButtonWrapper>
+                  </ContentWrapper>
+                  <DarkOverlay />
+                </SlideImageWrapper>
+              </StyledSwiperSlide>
+            ))}
+            <div className="swiper-pagination"></div>
+          </StyledSwiperContainer>
+        </PaginationStyle>
+      )}
+    </>
   );
 };
 

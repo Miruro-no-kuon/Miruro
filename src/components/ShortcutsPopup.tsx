@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
-import { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import styled, { keyframes } from 'styled-components';
+import { useState, useEffect } from 'react';
+import { FaTimes } from 'react-icons/fa';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(20px); }
@@ -90,7 +90,7 @@ const KeyboardShortcutsPopup = ({ onClose }: KeyboardShortcutsPopupProps) => {
         <tr>
           <td>
             <CloseButton onClick={onClose}>
-              <FaTimes size={"1rem"} />
+              <FaTimes size={'1rem'} />
             </CloseButton>
           </td>
         </tr>
@@ -168,23 +168,23 @@ const ShortcutsPopup = () => {
     const togglePopupWithShortcut = (e: KeyboardEvent) => {
       if (
         e.target &&
-        ["INPUT", "TEXTAREA", "SELECT"].includes((e.target as Element).tagName)
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as Element).tagName)
       ) {
         return;
       }
 
-      if (e.shiftKey && e.key === "?") {
+      if (e.shiftKey && e.key === '?') {
         e.preventDefault();
         setShowPopup(!showPopup);
-      } else if (e.key === "Escape") {
+      } else if (e.key === 'Escape') {
         setShowPopup(false);
       }
     };
 
-    window.addEventListener("keydown", togglePopupWithShortcut);
+    window.addEventListener('keydown', togglePopupWithShortcut);
 
     return () => {
-      window.removeEventListener("keydown", togglePopupWithShortcut);
+      window.removeEventListener('keydown', togglePopupWithShortcut);
     };
   }, [showPopup]);
 

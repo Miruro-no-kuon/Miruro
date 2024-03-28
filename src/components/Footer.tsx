@@ -1,6 +1,12 @@
-import styled from "styled-components";
-import { FaReddit, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import {
+  FaReddit,
+  FaDiscord,
+  FaTwitter,
+  FaGithub,
+  FaRegHeart,
+} from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const currentYear = new Date().getFullYear();
 
@@ -11,15 +17,15 @@ const PageWrapper = styled.div`
 
 const FooterBaseContainer = styled.footer<{ $isSub: boolean }>`
   color: var(--global-text);
-  padding: ${({ $isSub }) => ($isSub ? "0" : "0.5rem 0")};
+  padding: ${({ $isSub }) => ($isSub ? '0' : '0.5rem 0')};
   display: flex;
   justify-content: space-between;
-  border-top: ${({ $isSub }) => ($isSub ? "0.125rem solid" : "none")}
+  border-top: ${({ $isSub }) => ($isSub ? '0.125rem solid' : 'none')}
     var(--global-secondary-bg);
   flex-direction: column;
 
   @media (max-width: 1000px) {
-    padding: ${({ $isSub }) => ($isSub ? "0 0 1rem 0" : "0.5rem 0")};
+    padding: ${({ $isSub }) => ($isSub ? '0 0 1rem 0' : '0.5rem 0')};
   }
 
   @media (min-width: 601px) {
@@ -27,7 +33,7 @@ const FooterBaseContainer = styled.footer<{ $isSub: boolean }>`
   }
 
   @media (max-width: 600px) {
-    padding: ${({ $isSub }) => ($isSub ? "0" : "0.5rem 0")};
+    padding: ${({ $isSub }) => ($isSub ? '0' : '0.5rem 0')};
   }
 `;
 
@@ -39,6 +45,7 @@ const StyledLinkList = styled.div`
 `;
 
 const FooterLink = styled(Link)`
+  align-items: center;
   padding: 0.5rem 0;
   color: grey;
   font-size: 0.9rem;
@@ -63,7 +70,7 @@ const SocialIconsWrapper = styled.div`
 `;
 
 const FooterLogoImage = styled.img.attrs({
-  alt: "Footer Logo",
+  alt: 'Footer Logo',
 })`
   content: var(--logo-transparent);
   max-width: 4rem;
@@ -72,8 +79,8 @@ const FooterLogoImage = styled.img.attrs({
 
 const Text = styled.div<{ $isSub: boolean }>`
   color: grey;
-  font-size: ${({ $isSub }) => ($isSub ? "0.75rem" : "0.65rem")};
-  margin: ${({ $isSub }) => ($isSub ? "1rem 0 0 0" : "1rem 0")};
+  font-size: ${({ $isSub }) => ($isSub ? '0.75rem' : '0.65rem')};
+  margin: ${({ $isSub }) => ($isSub ? '1rem 0 0 0' : '1rem 0')};
   max-width: 25rem;
 
   strong {
@@ -107,29 +114,31 @@ function Footer() {
       <FooterBaseContainer $isSub={false}>
         <Text $isSub={false}>
           <FooterLogoImage /> <br />
-          This site does not store any files on our server, we only link to the
-          media which is hosted on 3rd party services.
+          This website does not retain any files on its server. Rather, it
+          solely provides links to media content hosted by third-party services.
         </Text>
         <StyledLinkList>
           <FooterLink to="/about">About</FooterLink>
           <FooterLink to="/pptos">Privacy & ToS</FooterLink>
-          <FooterLink to="/donate">🤍 Donate</FooterLink>
+          <FooterLink to="/donate">
+            <FaRegHeart /> Donate
+          </FooterLink>
         </StyledLinkList>
       </FooterBaseContainer>
       <FooterBaseContainer $isSub={true}>
         <Text $isSub={true}>
-          &copy; {currentYear} miruro.tv | Website Made by{" "}
+          &copy; {currentYear} miruro.tv | Website Made by{' '}
           <strong>Miruro no Kuon</strong>
         </Text>
         <SocialIconsWrapper>
           {[
-            { href: "https://twitter.com/miruro_official", Icon: FaTwitter },
-            { href: "https://discord.gg/4kfypZ96K4", Icon: FaDiscord },
+            { href: 'https://twitter.com/miruro_official', Icon: FaTwitter },
+            { href: 'https://discord.gg/4kfypZ96K4', Icon: FaDiscord },
             {
-              href: "https://github.com/Miruro-no-kuon/Miruro",
+              href: 'https://github.com/Miruro-no-kuon/Miruro',
               Icon: FaGithub,
             },
-            { href: "https://www.reddit.com/r/miruro", Icon: FaReddit },
+            { href: 'https://www.reddit.com/r/miruro', Icon: FaReddit },
           ].map(({ href, Icon }) => (
             <ShareButton
               key={href}

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
-import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import CardSkeleton from "../Skeletons/CardSkeleton";
-import { MdLayers } from "react-icons/md"; // For the stacked/layered icon
-import { FaPlay } from "react-icons/fa"; // For the heart icon
-import { BiSolidLike } from "react-icons/bi";
-import { Anime } from "../../hooks/interface";
+import React, { useEffect, useState, useMemo } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import CardSkeleton from '../Skeletons/CardSkeleton';
+import { MdLayers } from 'react-icons/md'; // For the stacked/layered icon
+import { FaPlay } from 'react-icons/fa'; // For the heart icon
+import { BiSolidLike } from 'react-icons/bi';
+import { Anime } from '../../hooks/interface';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -84,22 +84,11 @@ const ImageWrapper = styled.div`
     height: 100%;
     border-radius: var(--global-border-radius);
     transition: 0.3s ease-in-out;
+    transition: filter 0.3s ease-in-out; // Ensure the filter transition is smooth
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:hover::after {
-    opacity: 1;
+  &:hover img {
+    filter: brightness(0.5); // Decrease brightness to 60% on hover
   }
 
   &:hover ${PlayIcon} {
@@ -143,7 +132,7 @@ const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: ${(props) => (props.$isHovered ? props.color : "var(--title-color)")};
+  color: ${(props) => (props.$isHovered ? props.color : 'var(--title-color)')};
   transition: 0.2s ease-in-out;
 
   @media (max-width: 500px) {
@@ -159,7 +148,7 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   padding: 0.2rem;
   font-size: 0.8rem;
   font-weight: bold;
-  color: ${(props) => (props.$isHovered ? props.color : "#ffffff")};
+  color: ${(props) => (props.$isHovered ? props.color : '#ffffff')};
   opacity: 0.9;
   background-color: var(--global-button-shadow);
   border-radius: 0.3rem;
@@ -212,10 +201,10 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     setIsHovered(false);
   };
 
-  const imageSrc = anime.coverImage || anime.image || "";
-  const animeColor = anime.color || "#999999";
+  const imageSrc = anime.coverImage || anime.image || '';
+  const animeColor = anime.color || '#999999';
   const displayTitle = useMemo(
-    () => anime.title.english || anime.title.romaji || "No Title",
+    () => anime.title.english || anime.title.romaji || 'No Title',
     [anime.title.english, anime.title.romaji]
   );
 
@@ -227,11 +216,11 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
 
   const handleStatusCheck = useMemo(() => {
     switch (anime.status) {
-      case "Ongoing":
-      case "RELEASING":
+      case 'Ongoing':
+      case 'RELEASING':
         return <Dot />;
-      case "Completed":
-      case "FINISHED":
+      case 'Completed':
+      case 'FINISHED':
         return <CompletedIndicator />;
       default:
         return null;
@@ -271,25 +260,35 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
                     src={imageSrc}
                     onLoad={handleImageLoad}
                     loading="eager"
-                    alt={anime.title.english || anime.title.romaji}
+                    alt={
+                      anime.title.english || anime.title.romaji + ' Cover Image'
+                    }
                   />
-                  <PlayIcon />
+                  <PlayIcon
+                    title={
+                      'Play ' + (anime.title.english || anime.title.romaji)
+                    }
+                  />
                 </ImageWrapper>
                 {isHovered && displayDetail}
               </AnimeImage>
             </ImageDisplayWrapper>
             <TitleContainer $isHovered={isHovered}>
               {handleStatusCheck}
-              <Title $isHovered={isHovered} color={anime.color}>
+              <Title
+                $isHovered={isHovered}
+                color={anime.color}
+                title={'Title: ' + (anime.title.english || anime.title.romaji)}
+              >
                 {truncateTitle(displayTitle, 35)}
               </Title>
             </TitleContainer>
             <div>
-              <CardDetails>
-                {" "}
-                {truncateTitle(anime.title.romaji || "", 24)}{" "}
+              <CardDetails title="Romaji Title">
+                {' '}
+                {truncateTitle(anime.title.romaji || '', 24)}{' '}
               </CardDetails>
-              <CardDetails>
+              <CardDetails title="Card Details">
                 <div>{anime.releaseDate}</div>
                 <div>
                   <MdLayers />

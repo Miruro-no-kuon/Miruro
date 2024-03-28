@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Anime } from "../hooks/interface";
-import { FaAngleRight } from "react-icons/fa";
-import { MdLayers } from "react-icons/md";
-import { BiSolidLike } from "react-icons/bi";
+import React, { useEffect, useRef } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Anime } from '../hooks/interface';
+import { FaAngleRight } from 'react-icons/fa';
+import { MdLayers } from 'react-icons/md';
+import { BiSolidLike } from 'react-icons/bi';
 
 // Keyframes for animation
 const slideDownAnimation = keyframes`
@@ -19,7 +19,7 @@ const slideDownAnimation2 = keyframes`
 
 // Styled components
 const DropdownContainer = styled.div<{ $isVisible: boolean; width: number }>`
-  display: ${(props) => (props.$isVisible ? "block" : "none")};
+  display: ${(props) => (props.$isVisible ? 'block' : 'none')};
   position: absolute;
   z-index: -1;
   top: 1rem;
@@ -46,16 +46,16 @@ const DropdownContainer = styled.div<{ $isVisible: boolean; width: number }>`
   }
 
   /* Animation effect */
-  visibility: ${(props) => (props.$isVisible ? "visible" : "hidden")};
+  visibility: ${(props) => (props.$isVisible ? 'visible' : 'hidden')};
   max-height: ${(props) =>
-    props.$isVisible ? "500px" : "0"}; /* Adapt max-height accordingly */
+    props.$isVisible ? '500px' : '0'}; /* Adapt max-height accordingly */
 `;
 
 const AnimeDetails = styled.p<{ $isSelected: boolean }>`
   margin: 0;
   animation: ${slideDownAnimation2} 0.5s ease forwards;
   color: ${(props) =>
-    props.$isSelected ? "var(--primary-text);" : "rgba(102, 102, 102, 0.75);"};
+    props.$isSelected ? 'var(--primary-text);' : 'rgba(102, 102, 102, 0.75);'};
   font-size: 0.65rem;
   font-weight: bold;
   padding: 0 0.5rem;
@@ -70,7 +70,7 @@ const ResultItem = styled.div<{ $isSelected: boolean }>`
   margin: 0;
   cursor: pointer;
   background-color: ${(props) =>
-    props.$isSelected ? "var(--primary-accent-bg)" : "transparent"};
+    props.$isSelected ? 'var(--primary-accent-bg)' : 'transparent'};
 
   &:hover {
     background-color: var(--primary-accent-bg);
@@ -87,7 +87,7 @@ const ViewAllItem = styled.div<{ $isSelected: boolean }>`
   padding: 0.5rem 0.25rem;
   cursor: pointer;
   background-color: ${(props) =>
-    props.$isSelected ? "var(--primary-accent-bg)" : "transparent"};
+    props.$isSelected ? 'var(--primary-accent-bg)' : 'transparent'};
 
   &:hover,
   &:active,
@@ -170,12 +170,12 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
 
   useEffect(() => {
     if (isVisible) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isVisible, onClose]);
 
@@ -194,14 +194,14 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
       const totalOptions = searchResults.length; // Not including "View All"
       let newSelectedIndex = selectedIndex !== null ? selectedIndex : -1;
 
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         newSelectedIndex = (newSelectedIndex + 1) % (totalOptions + 1); // +1 for "View All"
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         newSelectedIndex =
           (newSelectedIndex - 1 + totalOptions + 1) % (totalOptions + 1); // +1 for "View All"
-      } else if (e.key === "Enter" && selectedIndex !== null) {
+      } else if (e.key === 'Enter' && selectedIndex !== null) {
         e.preventDefault(); // Prevent form submission
         if (selectedIndex < totalOptions) {
           // Navigate to the selected anime's detail page
@@ -215,8 +215,8 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
       setSelectedIndex(newSelectedIndex);
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isVisible, searchResults, selectedIndex]);
 
   // Handle clicking "View All"
@@ -242,23 +242,23 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           role="listitem" // Enhanced semantic meaning for accessibility
         >
           <AnimeImage
-            src={result.image || result.coverImage || ""} // Fallback for missing images
-            alt={result.title?.english || result.title?.romaji || "n/a"}
+            src={result.image || result.coverImage || ''} // Fallback for missing images
+            alt={result.title?.english || result.title?.romaji || 'n/a'}
           />
           <div>
             <AnimeTitle>
-              {result.title?.english || result.title?.romaji || "n/a"}
+              {result.title?.english || result.title?.romaji || 'n/a'}
             </AnimeTitle>
             <AnimeDetails $isSelected={index === selectedIndex}>
               <span>&nbsp;{result.type}</span>
               <span>&nbsp;&nbsp;</span>
               <BiSolidLike color="#" />
               <span>&nbsp;</span>
-              <span>{result.rating ? result.rating / 10 : "N/A"}&nbsp;</span>
+              <span>{result.rating ? result.rating / 10 : 'N/A'}&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
               <MdLayers color="#" />
               <span>&nbsp;</span>
-              <span>{result.totalEpisodes || "N/A"}&nbsp;</span>
+              <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
             </AnimeDetails>
           </div>
         </ResultItem>
@@ -266,7 +266,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
       <ViewAllItem
         $isSelected={selectedIndex === searchResults.length} // "View All" is selected
         onClick={handleViewAllClick}
-        style={{ justifyContent: "center" }}
+        style={{ justifyContent: 'center' }}
         role="listitem"
         tabIndex={0} // Add tabIndex to make it focusable
       >

@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { FaDownload } from "react-icons/fa";
+import React from 'react';
+import styled from 'styled-components';
+import { FaDownload } from 'react-icons/fa';
 
 // Props interface
 interface VideoSourceSelectorProps {
@@ -103,20 +103,20 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         <Label>Servers</Label>
         <ButtonRow>
           <Button
-            className={sourceType === "default" ? "active" : ""}
-            onClick={() => setSourceType("default")}
+            className={sourceType === 'default' ? 'active' : ''}
+            onClick={() => setSourceType('default')}
           >
             Default
           </Button>
           <Button
-            className={sourceType === "vidstreaming" ? "active" : ""}
-            onClick={() => setSourceType("vidstreaming")}
+            className={sourceType === 'vidstreaming' ? 'active' : ''}
+            onClick={() => setSourceType('vidstreaming')}
           >
             Vidstreaming
           </Button>
           <Button
-            className={sourceType === "gogo" ? "active" : ""}
-            onClick={() => setSourceType("gogo")}
+            className={sourceType === 'gogo' ? 'active' : ''}
+            onClick={() => setSourceType('gogo')}
           >
             Gogo
           </Button>
@@ -126,14 +126,14 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         <Label>Languages</Label>
         <ButtonRow>
           <Button
-            className={language === "sub" ? "active" : ""}
-            onClick={() => setLanguage("sub")}
+            className={language === 'sub' ? 'active' : ''}
+            onClick={() => setLanguage('sub')}
           >
             Sub
           </Button>
           <Button
-            className={language === "dub" ? "active" : ""}
-            onClick={() => setLanguage("dub")}
+            className={language === 'dub' ? 'active' : ''}
+            onClick={() => setLanguage('dub')}
           >
             Dub
           </Button>

@@ -1,17 +1,17 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import styled, { keyframes } from 'styled-components';
 import {
   useNavigate,
   useSearchParams,
   Link,
   useLocation,
-} from "react-router-dom";
-import DropDownSearch from "./DropDownSearch";
-import { fetchAdvancedSearch } from "../hooks/useApi";
-import { FiSun, FiMoon, FiX } from "react-icons/fi";
-import { GoCommandPalette } from "react-icons/go";
-import { IoIosSearch } from "react-icons/io";
-import { Anime } from "../hooks/interface";
+} from 'react-router-dom';
+import DropDownSearch from './DropDownSearch';
+import { fetchAdvancedSearch } from '../hooks/useApi';
+import { FiSun, FiMoon, FiX } from 'react-icons/fi';
+import { GoCommandPalette } from 'react-icons/go';
+import { IoIosSearch } from 'react-icons/io';
+import { Anime } from '../hooks/interface';
 
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
@@ -35,7 +35,7 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 100;
-  animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
+  animation: ${fadeInAnimation('var(--global-primary-bg-tr)')} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 1000px) {
@@ -58,7 +58,9 @@ const LogoImg = styled(Link)`
   color: var(--global-text);
   content: var(--logo-text-transparent);
   cursor: pointer;
-  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition:
+    color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 
   &:hover {
     color: black;
@@ -83,7 +85,7 @@ const InputContainer = styled.div<{ $isVisible: boolean }>`
   padding: 0.6rem;
   border-radius: var(--global-border-radius);
   background-color: var(--global-div);
-  animation: ${fadeInAnimation("var(--global-div)")} 0.1s ease-out;
+  animation: ${fadeInAnimation('var(--global-div)')} 0.1s ease-out;
   animation: ${slideDownAnimation2} 0.5s ease;
 
   @media (max-width: 1000px) {
@@ -93,7 +95,7 @@ const InputContainer = styled.div<{ $isVisible: boolean }>`
   @media (max-width: 500px) {
     max-width: 100%;
     margin-top: 1rem;
-    display: ${({ $isVisible }) => ($isVisible ? "flex" : "none")};
+    display: ${({ $isVisible }) => ($isVisible ? 'flex' : 'none')};
   }
 `;
 
@@ -129,7 +131,9 @@ const SearchInput = styled.input`
   align-items: center;
   padding-top: 0;
   width: 100%;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 `;
 
 const ClearButton = styled.button<{ $query: string }>`
@@ -139,8 +143,10 @@ const ClearButton = styled.button<{ $query: string }>`
   font-size: 1.2rem;
   cursor: pointer;
   opacity: ${({ $query }) => ($query ? 0.5 : 0)};
-  visibility: ${({ $query }) => ($query ? "visible" : "hidden")};
-  transition: color 0.2s, opacity 0.2s;
+  visibility: ${({ $query }) => ($query ? 'visible' : 'hidden')};
+  transition:
+    color 0.2s,
+    opacity 0.2s;
   max-height: 100%;
   display: flex;
   align-items: center;
@@ -164,7 +170,9 @@ const StyledButton = styled.button<{ isInputToggle?: boolean }>`
   border-radius: 0.3rem;
   width: 100%;
   height: 100%;
-  transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  transition:
+    color 0.2s ease-in-out,
+    transform 0.1s ease-in-out;
   border: none;
 
   &:active {
@@ -173,7 +181,7 @@ const StyledButton = styled.button<{ isInputToggle?: boolean }>`
 
   @media (max-width: 500px) {
     display: flex;
-    margin: ${({ isInputToggle }) => (isInputToggle ? "0" : "0")};
+    margin: ${({ isInputToggle }) => (isInputToggle ? '0' : '0')};
   }
 `;
 
@@ -194,7 +202,7 @@ const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
 const detectUserTheme = () => {
   if (
     window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
+    window.matchMedia('(prefers-color-scheme: dark)').matches
   ) {
     return true;
   }
@@ -202,14 +210,14 @@ const detectUserTheme = () => {
 };
 
 const saveThemePreference = (isDarkMode: boolean) => {
-  localStorage.setItem("themePreference", isDarkMode ? "dark" : "light");
+  localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
 };
 
 const getInitialThemePreference = () => {
-  const storedThemePreference = localStorage.getItem("themePreference");
+  const storedThemePreference = localStorage.getItem('themePreference');
 
   if (storedThemePreference) {
-    return storedThemePreference === "dark";
+    return storedThemePreference === 'dark';
   }
 
   return detectUserTheme();
@@ -230,7 +238,7 @@ const Navbar = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [search, setSearch] = useState({
     isSearchFocused: false,
-    searchQuery: searchParams.get("query") || "",
+    searchQuery: searchParams.get('query') || '',
     isDropdownOpen: false,
   });
   const [isInputVisible, setIsInputVisible] = useState(false); // Default to false
@@ -250,7 +258,7 @@ const Navbar = () => {
       }));
       setSearchResults(formattedResults);
     } catch (error) {
-      console.error("Failed to fetch search results:", error);
+      console.error('Failed to fetch search results:', error);
       setSearchResults([]);
     }
   };
@@ -272,35 +280,35 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark-mode", isDarkMode);
+    document.documentElement.classList.toggle('dark-mode', isDarkMode);
   }, [isDarkMode]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "/" && inputRef.current) {
+      if (e.key === '/' && inputRef.current) {
         e.preventDefault();
         inputRef.current.focus();
         setSearch((prevState) => ({
           ...prevState,
           isSearchFocused: true,
         }));
-      } else if (e.key === "Escape" && inputRef.current) {
+      } else if (e.key === 'Escape' && inputRef.current) {
         inputRef.current.blur();
         setSearch((prevState) => ({
           ...prevState,
           isSearchFocused: false,
         }));
         handleCloseDropdown(); // Close dropdown on Escape key
-      } else if (e.shiftKey && e.key.toLowerCase() === "d") {
+      } else if (e.shiftKey && e.key.toLowerCase() === 'd') {
         if (document.activeElement !== inputRef.current) {
           e.preventDefault();
           toggleTheme();
@@ -312,19 +320,19 @@ const Navbar = () => {
 
   useEffect(() => {
     const listener = handleKeyDown as EventListener;
-    document.addEventListener("keydown", listener);
+    document.addEventListener('keydown', listener);
     return () => {
-      document.removeEventListener("keydown", listener);
+      document.removeEventListener('keydown', listener);
     };
   }, [handleKeyDown]);
 
   useEffect(() => {
-    setSearch({ ...search, searchQuery: searchParams.get("query") || "" });
+    setSearch({ ...search, searchQuery: searchParams.get('query') || '' });
   }, [searchParams]);
 
   const navigateWithQuery = useCallback(
     (value: string) => {
-      navigate(value ? `/search?query=${value}` : "/search");
+      navigate(value ? `/search?query=${value}` : '/search');
     },
     [navigate]
   );
@@ -345,7 +353,7 @@ const Navbar = () => {
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission behavior
       if (selectedIndex !== null && searchResults[selectedIndex]) {
         // Navigate to the selected search result if it exists
@@ -381,10 +389,10 @@ const Navbar = () => {
     updateWidth();
 
     // Add event listener for window resize
-    window.addEventListener("resize", updateWidth);
+    window.addEventListener('resize', updateWidth);
 
     // Cleanup function to remove the event listener
-    return () => window.removeEventListener("resize", updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   useEffect(() => {
@@ -397,7 +405,7 @@ const Navbar = () => {
   const handleClearSearch = () => {
     setSearch((prevState) => ({
       ...prevState,
-      searchQuery: "",
+      searchQuery: '',
     }));
     setSearchResults([]);
     setSearch((prevState) => ({
@@ -419,8 +427,8 @@ const Navbar = () => {
       setIsMobileView(window.innerWidth < 500);
     }
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -455,6 +463,7 @@ const Navbar = () => {
                   }));
                 }}
                 ref={inputRef}
+                aria-label="Search Anime"
               />
               <DropDownSearch
                 searchResults={searchResults}
@@ -469,6 +478,7 @@ const Navbar = () => {
               <ClearButton
                 $query={search.searchQuery}
                 onClick={handleClearSearch}
+                aria-label="Clear Search"
               >
                 <FiX />
               </ClearButton>
@@ -484,15 +494,17 @@ const Navbar = () => {
                   setIsInputVisible((prev) => !prev);
                   setIsPaddingExtended((prev) => !prev); // Toggle padding extension when toggling input visibility
                 }}
+                aria-label="Toggle Search Input"
               >
                 <IoIosSearch />
               </StyledButton>
             )}
-            <StyledButton onClick={toggleTheme}>
+            <StyledButton onClick={toggleTheme} aria-label="Toggle Dark Mode">
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </StyledButton>
           </RightContent>
         </TopContainer>
+
         {isMobileView && isInputVisible && (
           <InputContainer $isVisible={isInputVisible}>
             <Icon $isFocused={search.isSearchFocused}>

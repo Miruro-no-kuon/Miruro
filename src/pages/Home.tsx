@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import Carousel from "../components/Home/HomeCarousel";
-import CardGrid, { StyledCardGrid } from "../components/Cards/CardGrid";
-import CarouselSkeleton from "../components/Skeletons/CarouselSkeleton";
-import CardSkeleton from "../components/Skeletons/CardSkeleton";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CarouselTrending from '../components/Home/HomeCarousel';
+import CardGrid, { StyledCardGrid } from '../components/Cards/CardGrid';
+import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
+import CardSkeleton from '../components/Skeletons/CardSkeleton';
 import {
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
-} from "../hooks/useApi";
-import renderWatchedEpisodes from "../components/Home/EpisodeCard";
+} from '../hooks/useApi';
+import AnimeEpisodeCardComponent from '../components/Home/EpisodeCard';
 
 const SimpleLayout = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ const TabContainer = styled.div`
 
 const Tab = styled.button<{ $isActive: boolean }>`
   background: ${({ $isActive }) =>
-    $isActive ? "var(--primary-accent)" : "transparent"};
+    $isActive ? 'var(--primary-accent)' : 'transparent'};
   padding: 0.8rem 1rem 0.8rem 1rem;
   border-radius: var(--global-border-radius);
   border: none;
@@ -97,7 +97,7 @@ const Home = () => {
     top: true,
   });
   const [activeTab, setActiveTab] = useState(() => {
-    const savedData = localStorage.getItem("home tab");
+    const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
       const now = new Date().getTime();
@@ -105,10 +105,10 @@ const Home = () => {
       if (now - timestamp < 24 * 60 * 60 * 1000) {
         return tab;
       } else {
-        localStorage.removeItem("home tab"); // Clear expired data
+        localStorage.removeItem('home tab'); // Clear expired data
       }
     }
-    return "trending"; // Default tab if no/invalid saved data
+    return 'trending'; // Default tab if no/invalid saved data
   });
 
   useEffect(() => {
@@ -116,21 +116,21 @@ const Home = () => {
       setItemsCount(window.innerWidth > 500 ? 14 : 12);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     // Set initial value
     handleResize();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   useEffect(() => {
     const fetchWatchedEpisodes = () => {
-      const watchedEpisodesData = localStorage.getItem("watched-episodes");
+      const watchedEpisodesData = localStorage.getItem('watched-episodes');
       if (watchedEpisodesData) {
         const allEpisodes = JSON.parse(watchedEpisodesData);
-        let latestEpisodes: AnimeEpisode[] = []; // Correctly typed
+        const latestEpisodes: AnimeEpisode[] = []; // Correctly typed
 
         Object.keys(allEpisodes).forEach((animeId) => {
           const episodes = allEpisodes[animeId];
@@ -180,7 +180,7 @@ const Home = () => {
         if (fetchError instanceof Error) {
           setError(fetchError.message);
         } else {
-          setError("An unexpected error occurred");
+          setError('An unexpected error occurred');
         }
       } finally {
         setLoading({ trending: false, popular: false, top: false });
@@ -197,7 +197,7 @@ const Home = () => {
   useEffect(() => {
     const now = new Date().getTime();
     const tabData = JSON.stringify({ tab: activeTab, timestamp: now });
-    localStorage.setItem("home tab", tabData);
+    localStorage.setItem('home tab', tabData);
   }, [activeTab]);
 
   const renderCardGrid = (
@@ -228,42 +228,49 @@ const Home = () => {
   return (
     <SimpleLayout>
       {error && (
-        <ErrorMessage>
+        <ErrorMessage title="Error Message">
           <p>Error: {error}</p>
         </ErrorMessage>
       )}
       {loading.trending || error ? (
         <CarouselSkeleton />
       ) : (
-        <Carousel data={trendingAnime} />
+        <CarouselTrending
+          data={trendingAnime}
+          loading={loading.trending}
+          error={error}
+        />
       )}
-      {renderWatchedEpisodes()}
       <TabContainer>
         <Tab
-          $isActive={activeTab === "trending"}
-          onClick={() => handleTabClick("trending")}
+          title="Trending Tab"
+          $isActive={activeTab === 'trending'}
+          onClick={() => handleTabClick('trending')}
         >
-          Trending
+          TRENDING
         </Tab>
         <Tab
-          $isActive={activeTab === "popular"}
-          onClick={() => handleTabClick("popular")}
+          title="Popular Tab"
+          $isActive={activeTab === 'popular'}
+          onClick={() => handleTabClick('popular')}
         >
-          Popular
+          POPULAR
         </Tab>
         <Tab
-          $isActive={activeTab === "top"}
-          onClick={() => handleTabClick("top")}
+          title="Top Anime Tab"
+          $isActive={activeTab === 'top'}
+          onClick={() => handleTabClick('top')}
         >
-          Top Anime
+          TOP ANIME
         </Tab>
       </TabContainer>
       {/* Render other sections based on activeTab */}
-      {activeTab === "trending" &&
+      {activeTab === 'trending' &&
         renderCardGrid(trendingAnime, loading.trending, !!error)}
-      {activeTab === "popular" &&
+      {activeTab === 'popular' &&
         renderCardGrid(popularAnime, loading.popular, !!error)}
-      {activeTab === "top" && renderCardGrid(topAnime, loading.top, !!error)}
+      {activeTab === 'top' && renderCardGrid(topAnime, loading.top, !!error)}
+      <AnimeEpisodeCardComponent />
     </SimpleLayout>
   );
 };

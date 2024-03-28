@@ -1,5 +1,5 @@
-import React from "react";
-import styled, { keyframes, css } from "styled-components";
+import React from 'react';
+import styled, { keyframes, css } from 'styled-components';
 
 // This function was declared but never used. Either remove it or use it appropriately.
 // const aspectRatio = (width: number, height: number) => `calc(100% * ${width} / ${height})`;

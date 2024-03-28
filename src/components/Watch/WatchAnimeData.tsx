@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import CardGrid from "../Cards/CardGrid";
-import AniList_logo from "../../assets/AniList_logo.png";
-import MAL_logo from "../../assets/MyAnimeList_Logo.png";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CardGrid from '../Cards/CardGrid';
+import AniList_logo from '../../assets/AniList_logo.png';
+import MAL_logo from '../../assets/MyAnimeList_Logo.png';
 // Styled components
 const AnimeDataContainer = styled.div``;
 
@@ -165,7 +165,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
   const [showCharacters, setShowCharacters] = useState(false);
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
-  const [countdown, setCountdown] = useState("");
+  const [countdown, setCountdown] = useState('');
 
   // Toggle description expansion
   const toggleDescription = () => {
@@ -175,7 +175,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
 
   // Remove HTML tags from description
   const removeHTMLTags = (description: string): string => {
-    return description.replace(/<[^>]+>/g, "").replace(/\([^)]*\)/g, "");
+    return description.replace(/<[^>]+>/g, '').replace(/\([^)]*\)/g, '');
   };
 
   // Toggle trailer display
@@ -186,18 +186,18 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
   // Format date string
   function getDateString(date: any) {
     const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return `${monthNames[date.month - 1]} ${date.day}, ${date.year}`;
   }
@@ -239,23 +239,23 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 Type: <strong>{animeData.type}</strong>
               </p>
               <p>
-                Year:{" "}
+                Year:{' '}
                 <strong>
-                  {animeData.releaseDate ? animeData.releaseDate : "Unknown"}
+                  {animeData.releaseDate ? animeData.releaseDate : 'Unknown'}
                 </strong>
               </p>
               <p>
-                Rating:{" "}
+                Rating:{' '}
                 <strong
                   style={{
                     color:
                       animeData.rating >= 85
-                        ? "green"
+                        ? 'green'
                         : animeData.rating >= 70
-                        ? "lightgreen"
-                        : animeData.rating >= 55
-                        ? "orange"
-                        : "red",
+                          ? 'lightgreen'
+                          : animeData.rating >= 55
+                            ? 'orange'
+                            : 'red',
                   }}
                 >
                   {animeData.rating}
@@ -269,7 +269,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <img
                     src={AniList_logo}
                     alt="AniList Logo"
-                    style={{ height: "35px", borderRadius: "30%" }}
+                    style={{ height: '35px', borderRadius: '30%' }}
                   />
                 </a>
                 &nbsp; &nbsp;
@@ -280,7 +280,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <img
                     src={MAL_logo}
                     alt="AniList Logo"
-                    style={{ height: "35px", borderRadius: "30%" }}
+                    style={{ height: '35px', borderRadius: '30%' }}
                   />
                 </a>
               </p>
@@ -291,7 +291,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               {/* Existing Status, Type, Year, Rating Display */}
               {animeData.nextAiringEpisode && (
                 <p>
-                  Time until next episode:{" "}
+                  Time until next episode:{' '}
                   <strong>
                     {/* {new Date(
                       animeData.nextAiringEpisode.airingTime * 1000
@@ -328,24 +328,24 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               </p>
               {animeData.genres.length > 0 && (
                 <p>
-                  Genres: <strong>{animeData.genres.join(", ")}</strong>
+                  Genres: <strong>{animeData.genres.join(', ')}</strong>
                 </p>
               )}
               {animeData.startDate && (
                 <p>
                   Date aired:
                   <strong>
-                    {" "}
+                    {' '}
                     {getDateString(animeData.startDate)}
                     {animeData.endDate
                       ? ` to ${
                           animeData.endDate.month && animeData.endDate.year
                             ? getDateString(animeData.endDate)
-                            : "?"
+                            : '?'
                         }`
-                      : animeData.status === "Ongoing"
-                      ? ""
-                      : " to ?"}
+                      : animeData.status === 'Ongoing'
+                        ? ''
+                        : ' to ?'}
                   </strong>
                 </p>
               )}
@@ -354,10 +354,10 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   Studios: <strong>{animeData.studios}</strong>
                 </p>
               )}
-              {animeData.trailer && animeData.status !== "Not yet aired" && (
+              {animeData.trailer && animeData.status !== 'Not yet aired' && (
                 <>
                   <ShowTrailerButton onClick={toggleTrailer}>
-                    {showTrailer ? "Hide Trailer" : "Show Trailer"}
+                    {showTrailer ? 'Hide Trailer' : 'Show Trailer'}
                   </ShowTrailerButton>
                   {showTrailer && (
                     <VideoTrailer>
@@ -376,14 +376,14 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   <strong>Description: </strong>
                   <ShowMoreButton onClick={toggleDescription}>
                     {isDescriptionExpanded
-                      ? removeHTMLTags(animeData.description || "")
+                      ? removeHTMLTags(animeData.description || '')
                       : `${removeHTMLTags(
-                          animeData.description || ""
+                          animeData.description || ''
                         ).substring(0, 300)}...`}
                     <br />
                     <br />
                     <span
-                      style={{ textAlign: "center", fontWeight: "bold" }}
+                      style={{ textAlign: 'center', fontWeight: 'bold' }}
                     ></span>
                   </ShowMoreButton>
                 </DescriptionText>
@@ -397,13 +397,13 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       {animeData.characters
                         .filter(
                           (character: any) =>
-                            character.role === "MAIN" ||
-                            character.role === "SUPPORTING"
+                            character.role === 'MAIN' ||
+                            character.role === 'SUPPORTING'
                         )
                         .map((character: any) => (
                           <CharacterCard
                             key={character.id}
-                            style={{ textAlign: "center" }}
+                            style={{ textAlign: 'center' }}
                           >
                             <CharacterImages
                               src={character.image}
@@ -422,8 +422,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       {animeData &&
         animeData.relations.filter(
           (relation: any) =>
-            relation.relationType.toUpperCase() === "PREQUEL" ||
-            relation.relationType.toUpperCase() === "SEQUEL"
+            relation.relationType.toUpperCase() === 'PREQUEL' ||
+            relation.relationType.toUpperCase() === 'SEQUEL'
         ).length > 0 && (
           <>
             <AnimeDataText className="bio">
@@ -434,8 +434,8 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                 animeData={animeData.relations
                   .filter(
                     (relation: any) =>
-                      relation.relationType.toUpperCase() === "PREQUEL" ||
-                      relation.relationType.toUpperCase() === "SEQUEL"
+                      relation.relationType.toUpperCase() === 'PREQUEL' ||
+                      relation.relationType.toUpperCase() === 'SEQUEL'
                   )
                   .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
@@ -449,11 +449,11 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       {animeData &&
         animeData.relations.filter(
           (relation: any) =>
-            ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+            ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
               relation.type
             ) &&
-            relation.relationType.toUpperCase() !== "PREQUEL" &&
-            relation.relationType.toUpperCase() !== "SEQUEL"
+            relation.relationType.toUpperCase() !== 'PREQUEL' &&
+            relation.relationType.toUpperCase() !== 'SEQUEL'
         ).length > 0 && (
           <>
             <AnimeDataText className="bio">
@@ -465,15 +465,15 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                   .filter(
                     (relation: any) =>
                       [
-                        "OVA",
-                        "SPECIAL",
-                        "TV",
-                        "MOVIE",
-                        "ONA",
-                        "NOVEL",
+                        'OVA',
+                        'SPECIAL',
+                        'TV',
+                        'MOVIE',
+                        'ONA',
+                        'NOVEL',
                       ].includes(relation.type) &&
-                      relation.relationType.toUpperCase() !== "PREQUEL" &&
-                      relation.relationType.toUpperCase() !== "SEQUEL"
+                      relation.relationType.toUpperCase() !== 'PREQUEL' &&
+                      relation.relationType.toUpperCase() !== 'SEQUEL'
                   )
                   .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
                 totalPages={0}
@@ -487,7 +487,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       {/* Recommendations */}
       {animeData &&
         animeData.recommendations.filter((recommendation: any) =>
-          ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+          ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
             recommendation.type
           )
         ).length > 0 && (
@@ -499,7 +499,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               <CardGrid
                 animeData={animeData.recommendations
                   .filter((recommendation: any) =>
-                    ["OVA", "SPECIAL", "TV", "MOVIE", "ONA", "NOVEL"].includes(
+                    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
                       recommendation.type
                     )
                   )

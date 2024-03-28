@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { useEffect } from "react";
+import styled from 'styled-components';
+import { useEffect } from 'react';
 const colors = {
-  textColor: "var(--global-text)",
-  buttonBackground: "var(--global-button-bg)",
-  buttonText: "var(--global-button-text)",
-  buttonHoverBackground: "var(--global-button-hover-bg)",
-  adBackground: "var(--global-div)",
-  customColor: "var(--your-custom-color)",
-  paddingSize: "1rem",
+  textColor: 'var(--global-text)',
+  buttonBackground: 'var(--global-button-bg)',
+  buttonText: 'var(--global-button-text)',
+  buttonHoverBackground: 'var(--global-button-hover-bg)',
+  adBackground: 'var(--global-div)',
+  customColor: 'var(--your-custom-color)',
+  paddingSize: '1rem',
 };
 
 const StyledLink = styled.a`
@@ -40,7 +40,7 @@ const MainContent = styled.div`
 
 const sections = [
   {
-    title: "Privacy Policy",
+    title: 'Privacy Policy',
     content: (
       <Paragraph>
         <strong>Data Collection</strong>: We collect minimal user data necessary
@@ -74,7 +74,7 @@ const sections = [
         <br></br>
         <br></br>
         <strong>Contact Us</strong>: If you have any questions about these
-        terms, please contact us at{" "}
+        terms, please contact us at{' '}
         <StyledLink href="mailto:miruro@proton.me">
           miruro@proton.me.
         </StyledLink>
@@ -82,7 +82,7 @@ const sections = [
     ),
   },
   {
-    title: "Terms of Service",
+    title: 'Terms of Service',
     content: (
       <Paragraph>
         <strong>Acceptance of Terms</strong>: By using Miruro, you agree to
@@ -126,7 +126,7 @@ const sections = [
 function PolicyTerms() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "Policy & Terms"; // Set the title when the component mounts
+    document.title = 'Policy & Terms'; // Set the title when the component mounts
     return () => {
       // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;

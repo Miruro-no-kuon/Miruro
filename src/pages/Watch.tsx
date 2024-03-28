@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import EpisodeList from "../components/Watch/EpisodeList";
-import VideoPlayer from "../components/Watch/Video/VideoPlayer";
-import EmbeddedVideoPlayer from "../components/Watch/Video/EmbeddedVideoPlayer";
-import AnimeData from "../components/Watch/WatchAnimeData";
-import VideoSourceSelector from "../components/Watch/VideSourceSelector";
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import EpisodeList from '../components/Watch/EpisodeList';
+import { Player } from '../components/Watch/Video/Player';
+import EmbedPlayer from '../components/Watch/Video/EmbedPlayer';
+import AnimeData from '../components/Watch/WatchAnimeData';
+import VideoSourceSelector from '../components/Watch/VideSourceSelector';
 import {
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
   fetchAnimeData,
   fetchAnimeInfo,
-} from "../hooks/useApi";
-import VideoPlayerSkeleton from "../components/Skeletons/VideoPlayerSkeleton";
+} from '../hooks/useApi';
+import VideoPlayerSkeleton from '../components/Skeletons/VideoPlayerSkeleton';
 
 // Styled Components
 
@@ -114,8 +114,8 @@ const IframeTrailer = styled.iframe`
 // Constants
 
 const LOCAL_STORAGE_KEYS = {
-  LAST_WATCHED_EPISODE: "last-watched-",
-  WATCHED_EPISODES: "watched-episodes-",
+  LAST_WATCHED_EPISODE: 'last-watched-',
+  WATCHED_EPISODES: 'watched-episodes-',
 };
 
 // Interfaces
@@ -138,7 +138,7 @@ const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
 const getLanguageKey = (animeId: any) => `language-${animeId}`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
-  const [videoPlayerWidth, setVideoPlayerWidth] = useState("100%"); // Default to 100%
+  const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%'); // Default to 100%
 
   const updateVideoPlayerWidth = useCallback(() => {
     if (videoPlayerContainerRef.current) {
@@ -149,13 +149,13 @@ const Watch: React.FC = () => {
 
   useEffect(() => {
     updateVideoPlayerWidth(); // Update on mount
-    window.addEventListener("resize", updateVideoPlayerWidth); // Update on resize
+    window.addEventListener('resize', updateVideoPlayerWidth); // Update on resize
 
-    return () => window.removeEventListener("resize", updateVideoPlayerWidth); // Cleanup
+    return () => window.removeEventListener('resize', updateVideoPlayerWidth); // Cleanup
   }, [updateVideoPlayerWidth]);
 
   const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
-    useState<string>("100%");
+    useState<string>('100%');
 
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId: string;
@@ -169,12 +169,12 @@ const Watch: React.FC = () => {
 
   const navigate = useNavigate();
   const [selectedBackgroundImage, setSelectedBackgroundImage] =
-    useState<string>("");
+    useState<string>('');
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisode, setCurrentEpisode] = useState<CurrentEpisode>({
-    id: "0",
+    id: '0',
     number: 1,
-    image: "",
+    image: '',
   });
   const [animeInfo, setAnimeInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -182,16 +182,16 @@ const Watch: React.FC = () => {
   const [showNoEpisodesMessage, setShowNoEpisodesMessage] = useState(false);
   const [lastKeypressTime, setLastKeypressTime] = useState(0);
   const [sourceType, setSourceType] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || "default"
+    () => localStorage.getItem(STORAGE_KEYS.SOURCE_TYPE) || 'default'
   );
-  const [embeddedVideoUrl, setEmbeddedVideoUrl] = useState("");
+  const [embeddedVideoUrl, setEmbeddedVideoUrl] = useState('');
   const [language, setLanguage] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || "sub"
+    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'sub'
   );
-  const [downloadLink, setDownloadLink] = useState("");
+  const [downloadLink, setDownloadLink] = useState('');
   useEffect(() => {
-    const defaultSourceType = "default";
-    const defaultLanguage = "sub";
+    const defaultSourceType = 'default';
+    const defaultLanguage = 'sub';
 
     // Optionally, you can implement logic here to decide if you want to reset to defaults
     // or maintain the setting from the previous anime. This example resets to defaults.
@@ -218,7 +218,7 @@ const Watch: React.FC = () => {
 
     const fetchInfo = async () => {
       if (!animeId) {
-        console.error("Anime ID is null.");
+        console.error('Anime ID is null.');
         setLoading(false);
         return;
       }
@@ -233,7 +233,7 @@ const Watch: React.FC = () => {
         }
       } catch (error) {
         console.error(
-          "Failed to fetch anime data, trying fetchAnimeInfo as a fallback:",
+          'Failed to fetch anime data, trying fetchAnimeInfo as a fallback:',
           error
         );
         try {
@@ -243,7 +243,7 @@ const Watch: React.FC = () => {
           }
         } catch (fallbackError) {
           console.error(
-            "Also failed to fetch anime info as a fallback:",
+            'Also failed to fetch anime info as a fallback:',
             fallbackError
           );
           // If this fails too, consider showing an error message to the user
@@ -268,15 +268,15 @@ const Watch: React.FC = () => {
       if (!animeId) return;
 
       try {
-        const isDub = language === "dub";
+        const isDub = language === 'dub';
         const animeData = await fetchAnimeEpisodes(animeId, undefined, isDub);
         if (isMounted && animeData) {
           const transformedEpisodes = animeData
-            .filter((ep: any) => ep.id.includes("-episode-")) // Continue excluding entries without '-episode-'
+            .filter((ep: any) => ep.id.includes('-episode-')) // Continue excluding entries without '-episode-'
             .map((ep: any) => ({
               ...ep,
               // Extract episode number directly from the ID
-              number: parseInt(ep.id.split("-episode-")[1]) || ep.number,
+              number: parseInt(ep.id.split('-episode-')[1]) || ep.number,
               id: ep.id,
               title: ep.title,
               image: ep.image,
@@ -325,7 +325,7 @@ const Watch: React.FC = () => {
               image: navigateToEpisode.image,
             });
 
-            const newAnimeTitle = navigateToEpisode.id.split("-episode-")[0];
+            const newAnimeTitle = navigateToEpisode.id.split('-episode-')[0];
             navigate(
               `/watch/${animeId}/${newAnimeTitle}/${navigateToEpisode.number}`,
               { replace: true }
@@ -334,7 +334,7 @@ const Watch: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Failed to fetch episodes:", error);
+        console.error('Failed to fetch episodes:', error);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -366,7 +366,7 @@ const Watch: React.FC = () => {
   useEffect(() => {
     const updateBackgroundImage = () => {
       const episodeImage = currentEpisode.image;
-      const bannerImage = animeInfo?.cover;
+      const bannerImage = animeInfo?.cover || animeInfo?.artwork[3].img;
 
       if (episodeImage && episodeImage !== animeInfo.image) {
         const img = new Image();
@@ -386,7 +386,7 @@ const Watch: React.FC = () => {
       }
     };
 
-    if (animeInfo && currentEpisode.id !== "0") {
+    if (animeInfo && currentEpisode.id !== '0') {
       updateBackgroundImage();
     }
   }, [animeInfo, currentEpisode]);
@@ -394,7 +394,7 @@ const Watch: React.FC = () => {
   const handleEpisodeSelect = useCallback(
     async (selectedEpisode: Episode) => {
       setIsEpisodeChanging(true);
-      const animeTitle = selectedEpisode.id.split("-episode")[0];
+      const animeTitle = selectedEpisode.id.split('-episode')[0];
 
       setCurrentEpisode({
         id: selectedEpisode.id,
@@ -430,7 +430,7 @@ const Watch: React.FC = () => {
   //next episode shortcut with 500ms delay.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!event.shiftKey || !["N", "P"].includes(event.key.toUpperCase()))
+      if (!event.shiftKey || !['N', 'P'].includes(event.key.toUpperCase()))
         return;
       const now = Date.now();
       if (now - lastKeypressTime < 200) return; // Debounce check
@@ -441,49 +441,49 @@ const Watch: React.FC = () => {
         (ep) => ep.id === currentEpisode.id
       );
       if (
-        event.key.toUpperCase() === "N" &&
+        event.key.toUpperCase() === 'N' &&
         currentIndex < episodes.length - 1
       ) {
         // Move to next episode
         const nextEpisode = episodes[currentIndex + 1];
         handleEpisodeSelect(nextEpisode);
-      } else if (event.key.toUpperCase() === "P" && currentIndex > 0) {
+      } else if (event.key.toUpperCase() === 'P' && currentIndex > 0) {
         // Move to previous episode
         const prevEpisode = episodes[currentIndex - 1];
         handleEpisodeSelect(prevEpisode);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [episodes, currentEpisode, handleEpisodeSelect, lastKeypressTime]);
 
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        "Miruro | " +
+        'Miruro | ' +
         (animeInfo.title.english ||
           animeInfo.title.romaji ||
           animeInfo.title.romaji ||
-          "");
+          '');
     } else {
-      document.title = "Miruro";
+      document.title = 'Miruro';
     }
 
     const handleKeyPress = (event: KeyboardEvent) => {
       const isSearchBox =
         event.target instanceof HTMLInputElement &&
-        (event.target.type === "text" || event.target.type === "search");
+        (event.target.type === 'text' || event.target.type === 'search');
 
-      if (event.code === "Space" && !isSearchBox) {
+      if (event.code === 'Space' && !isSearchBox) {
         event.preventDefault();
       }
     };
 
-    document.addEventListener("keydown", handleKeyPress);
+    document.addEventListener('keydown', handleKeyPress);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener('keydown', handleKeyPress);
     };
   }, [animeInfo]);
 
@@ -521,7 +521,7 @@ const Watch: React.FC = () => {
       if (embeddedServers && embeddedServers.length > 0) {
         // Attempt to find the "Gogo server" in the list of servers
         const gogoServer = embeddedServers.find(
-          (server: any) => server.name === "Gogo server"
+          (server: any) => server.name === 'Gogo server'
         );
         // If "Gogo server" is found, use it; otherwise, use the first server
         const selectedServer = gogoServer || embeddedServers[0];
@@ -529,7 +529,7 @@ const Watch: React.FC = () => {
       }
     } catch (error) {
       console.error(
-        "Error fetching gogo servers for episode ID:",
+        'Error fetching gogo servers for episode ID:',
         episodeId,
         error
       );
@@ -543,7 +543,7 @@ const Watch: React.FC = () => {
       if (embeddedServers && embeddedServers.length > 0) {
         // Attempt to find the "Vidstreaming" server in the list of servers
         const vidstreamingServer = embeddedServers.find(
-          (server: any) => server.name === "Vidstreaming"
+          (server: any) => server.name === 'Vidstreaming'
         );
         // If "Vidstreaming" server is found, use it; otherwise, use the first server
         const selectedServer = vidstreamingServer || embeddedServers[0];
@@ -551,7 +551,7 @@ const Watch: React.FC = () => {
       }
     } catch (error) {
       console.error(
-        "Error fetching Vidstreaming servers for episode ID:",
+        'Error fetching Vidstreaming servers for episode ID:',
         episodeId,
         error
       );
@@ -560,9 +560,9 @@ const Watch: React.FC = () => {
 
   // Call this function with the appropriate episode ID when an episode is selected
   useEffect(() => {
-    if (sourceType === "vidstreaming" && currentEpisode.id) {
+    if (sourceType === 'vidstreaming' && currentEpisode.id) {
       fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
-    } else if (sourceType === "gogo" && currentEpisode.id) {
+    } else if (sourceType === 'gogo' && currentEpisode.id) {
       fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
     }
   }, [sourceType, currentEpisode.id]);
@@ -576,9 +576,9 @@ const Watch: React.FC = () => {
     };
 
     updateMaxHeight();
-    window.addEventListener("resize", updateMaxHeight);
+    window.addEventListener('resize', updateMaxHeight);
 
-    return () => window.removeEventListener("resize", updateMaxHeight);
+    return () => window.removeEventListener('resize', updateMaxHeight);
   }, []);
 
   useEffect(() => {
@@ -592,7 +592,7 @@ const Watch: React.FC = () => {
           setAnimeInfo(info); // Update animeInfo state
         }
       } catch (error) {
-        console.error("Failed to fetch anime info:", error);
+        console.error('Failed to fetch anime info:', error);
       }
     };
 
@@ -606,10 +606,10 @@ const Watch: React.FC = () => {
   return (
     <WatchContainer>
       {animeInfo &&
-      animeInfo.status === "Not yet aired" &&
+      animeInfo.status === 'Not yet aired' &&
       animeInfo.trailer ? (
         // Display the trailer if the anime has not yet aired and has a trailer
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: 'center' }}>
           {animeInfo.nextAiringEpisode && (
             <p>
               <h2>Time until next episode:</h2>
@@ -664,15 +664,14 @@ const Watch: React.FC = () => {
               <VideoPlayerContainer ref={videoPlayerContainerRef}>
                 {loading ? (
                   <VideoPlayerSkeleton />
-                ) : sourceType === "default" ? (
-                  <VideoPlayer
+                ) : sourceType === 'default' ? (
+                  <Player
                     episodeId={currentEpisode.id}
-                    bannerImage={selectedBackgroundImage}
-                    isEpisodeChanging={isEpisodeChanging}
-                    setDownloadLink={setDownloadLink}
+                    malId={animeInfo?.malId}
+                    banner={selectedBackgroundImage}
                   />
                 ) : (
-                  <EmbeddedVideoPlayer src={embeddedVideoUrl} />
+                  <EmbedPlayer src={embeddedVideoUrl} />
                 )}
               </VideoPlayerContainer>
               <EpisodeListContainer style={{ maxHeight: maxEpisodeListHeight }}>
@@ -700,7 +699,7 @@ const Watch: React.FC = () => {
       <DataWrapper>
         <SourceAndData style={{ width: videoPlayerWidth }}>
           {/* Conditionally render VideoSourceSelector based on anime airing status */}
-          {animeInfo && animeInfo.status !== "Not yet aired" && (
+          {animeInfo && animeInfo.status !== 'Not yet aired' && (
             <VideoSourceSelector
               sourceType={sourceType}
               setSourceType={setSourceType}

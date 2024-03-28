@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import styled, { keyframes } from "styled-components";
-import Image404URL from "/src/assets/404-Page-not-found.gif";
+import React, { useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import Image404URL from '/src/assets/404.webp';
 
 const FadeIn = keyframes`
   0% { opacity: 0.4; }
@@ -42,19 +42,15 @@ const CenteredContent = styled.div`
     img {
       max-width: 80%;
     }
-
-    h2,
-    h3 {
-      font-size: 1rem;
-      max-width: 80%;
-    }
   }
 `;
+
+const Idkwhattonamethis = styled.div``;
 
 const NotFound: React.FC = () => {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "404 | Page Not Found";
+    document.title = '404 | Page Not Found';
     return () => {
       document.title = previousTitle;
     };
@@ -62,8 +58,12 @@ const NotFound: React.FC = () => {
 
   return (
     <CenteredContent>
-      <h2>404 | Page Not Found</h2>
-      <img src={Image404URL} alt="404 Error" />
+      <Idkwhattonamethis>
+        <p>
+          <strong>404</strong> | Page Not Found
+        </p>
+        <img src={Image404URL} alt="404 Error" />
+      </Idkwhattonamethis>
     </CenteredContent>
   );
 };

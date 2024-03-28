@@ -4,16 +4,16 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-} from "react";
-import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from 'react';
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlay,
   faThList,
   faTh,
   faSearch,
   faImage,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
 
 // Define TypeScript interfaces for episode and props
 interface Episode {
@@ -63,7 +63,7 @@ const ListContainer = styled.div<{ $maxHeight: string }>`
 const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   display: grid;
   grid-template-columns: ${({ $isRowLayout }) =>
-    $isRowLayout ? "1fr" : "repeat(auto-fill, minmax(4rem, 1fr))"};
+    $isRowLayout ? '1fr' : 'repeat(auto-fill, minmax(4rem, 1fr))'};
   gap: 0.4rem;
   padding: 0.6rem;
   overflow-y: auto;
@@ -87,46 +87,48 @@ const ListItem = styled.button<{
   $isRowLayout: boolean;
   $isWatched: boolean;
 }>`
-  transition: padding 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition:
+    padding 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
   animation: ${popInAnimation} 0.3s ease forwards;
   background-color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched
-        ? "var(--primary-accent)" // Selected and watched
-        : "var(--primary-accent-bg)" // Selected but not watched
+        ? 'var(--primary-accent)' // Selected and watched
+        : 'var(--primary-accent-bg)' // Selected but not watched
       : $isWatched
-      ? "var(--primary-accent-bg); filter: brightness(0.8);" // Not selected but watched
-      : "var(--global-tertiary-bg)"};
+        ? 'var(--primary-accent-bg); filter: brightness(0.8);' // Not selected but watched
+        : 'var(--global-tertiary-bg)'};
 
   border: none;
   border-radius: var(--global-border-radius);
   color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched
-        ? "var(--global-text)" // Selected and watched
-        : "var(--global-text)" // Selected but not watched
+        ? 'var(--global-text)' // Selected and watched
+        : 'var(--global-text)' // Selected but not watched
       : $isWatched
-      ? "var(--primary-accent); filter: brightness(0.8);" // Not selected but watched
-      : "grey"}; // Not selected and not watched
+        ? 'var(--primary-accent); filter: brightness(0.8);' // Not selected but watched
+        : 'grey'}; // Not selected and not watched
 
   padding: ${({ $isRowLayout }) =>
-    $isRowLayout ? "0.6rem 0.5rem" : "0.4rem 0"};
-  text-align: ${({ $isRowLayout }) => ($isRowLayout ? "left" : "center")};
+    $isRowLayout ? '0.6rem 0.5rem' : '0.4rem 0'};
+  text-align: ${({ $isRowLayout }) => ($isRowLayout ? 'left' : 'center')};
   cursor: pointer;
   justify-content: ${({ $isRowLayout }) =>
-    $isRowLayout ? "space-between" : "center"};
+    $isRowLayout ? 'space-between' : 'center'};
   align-items: center;
 
   &:hover {
     ${({ $isSelected, $isWatched }) =>
       $isSelected
         ? $isWatched
-          ? "filter: brightness(1.1)" // Selected and watched
-          : "filter: brightness(1.1)" // Selected but not watched
+          ? 'filter: brightness(1.1)' // Selected and watched
+          : 'filter: brightness(1.1)' // Selected but not watched
         : $isWatched
-        ? "filter: brightness(1.1)" // Not selected but watched
-        : "background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff"};
-    padding-left: ${({ $isRowLayout }) => ($isRowLayout ? "1rem" : "")};
+          ? 'filter: brightness(1.1)' // Not selected but watched
+          : 'background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff'};
+    padding-left: ${({ $isRowLayout }) => ($isRowLayout ? '1rem' : '')};
   }
 `;
 
@@ -154,7 +156,9 @@ const LayoutToggle = styled.button`
   cursor: pointer;
   color: var(--global-text);
   border-radius: var(--global-border-radius);
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
 
   &:hover {
     background-color: var(--global-button-hover-bg);
@@ -169,7 +173,9 @@ const SearchContainer = styled.div`
   padding: 0.5rem;
   margin: 0 0.5rem;
   border-radius: var(--global-border-radius);
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
 
   &:hover {
     background-color: var(--global-button-hover-bg);
@@ -221,17 +227,17 @@ const EpisodeList: React.FC<Props> = ({
   const [userLayoutPreference, setUserLayoutPreference] = useState<
     boolean | null
   >(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [watchedEpisodes, setWatchedEpisodes] = useState<Episode[]>([]);
   const defaultLayoutMode = episodes.every((episode) => episode.title)
-    ? "list"
-    : "grid";
-  const [displayMode, setDisplayMode] = useState<"list" | "grid" | "imageList">(
+    ? 'list'
+    : 'grid';
+  const [displayMode, setDisplayMode] = useState<'list' | 'grid' | 'imageList'>(
     () => {
       const savedMode = animeId
         ? localStorage.getItem(`layout-preference-${animeId}`)
         : null;
-      return (savedMode as "list" | "grid" | "imageList") || defaultLayoutMode;
+      return (savedMode as 'list' | 'grid' | 'imageList') || defaultLayoutMode;
     }
   );
 
@@ -250,7 +256,7 @@ const EpisodeList: React.FC<Props> = ({
   useEffect(() => {
     if (animeId) {
       localStorage.setItem(`layout-preference-${animeId}`, displayMode);
-      const watched = localStorage.getItem("watched-episodes");
+      const watched = localStorage.getItem('watched-episodes');
       if (watched) {
         const watchedEpisodesObject = JSON.parse(watched);
         const watchedEpisodesForAnime = watchedEpisodesObject[animeId];
@@ -279,10 +285,10 @@ const EpisodeList: React.FC<Props> = ({
               updatedWatchedEpisodes.push(selectedEpisode);
               // Update the watched episodes object in local storage
               localStorage.setItem(
-                "watched-episodes",
+                'watched-episodes',
                 JSON.stringify({
                   ...JSON.parse(
-                    localStorage.getItem("watched-episodes") || "{}"
+                    localStorage.getItem('watched-episodes') || '{}'
                   ),
                   [animeId]: updatedWatchedEpisodes,
                 })
@@ -330,7 +336,7 @@ const EpisodeList: React.FC<Props> = ({
   // Handle interval change
   const handleIntervalChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const [start, end] = e.target.value.split("-").map(Number);
+      const [start, end] = e.target.value.split('-').map(Number);
       setInterval([start, end]);
     },
     []
@@ -340,11 +346,11 @@ const EpisodeList: React.FC<Props> = ({
   const toggleLayoutPreference = useCallback(() => {
     setDisplayMode((prevMode) => {
       const nextMode =
-        prevMode === "list"
-          ? "grid"
-          : prevMode === "grid"
-          ? "imageList"
-          : "list";
+        prevMode === 'list'
+          ? 'grid'
+          : prevMode === 'grid'
+            ? 'imageList'
+            : 'list';
       if (animeId) {
         localStorage.setItem(`layout-preference-${animeId}`, nextMode);
       }
@@ -434,7 +440,7 @@ const EpisodeList: React.FC<Props> = ({
 
           container.scrollTo({
             top: desiredScrollPosition,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
 
           setSelectionInitiatedByUser(false);
@@ -472,14 +478,14 @@ const EpisodeList: React.FC<Props> = ({
           />
         </SearchContainer>
         <LayoutToggle onClick={toggleLayoutPreference}>
-          {displayMode === "list" && <FontAwesomeIcon icon={faThList} />}
-          {displayMode === "grid" && <FontAwesomeIcon icon={faTh} />}
-          {displayMode === "imageList" && <FontAwesomeIcon icon={faImage} />}
+          {displayMode === 'list' && <FontAwesomeIcon icon={faThList} />}
+          {displayMode === 'grid' && <FontAwesomeIcon icon={faTh} />}
+          {displayMode === 'imageList' && <FontAwesomeIcon icon={faImage} />}
         </LayoutToggle>
       </ControlsContainer>
       <EpisodeGrid
         key={`episode-grid-${displayMode}`}
-        $isRowLayout={displayMode === "list" || displayMode === "imageList"}
+        $isRowLayout={displayMode === 'list' || displayMode === 'imageList'}
         ref={episodeGridRef}
       >
         {displayedEpisodes.map((episode) => {
@@ -491,14 +497,14 @@ const EpisodeList: React.FC<Props> = ({
               key={episode.id}
               $isSelected={$isSelected}
               $isRowLayout={
-                displayMode === "list" || displayMode === "imageList"
+                displayMode === 'list' || displayMode === 'imageList'
               }
               $isWatched={$isWatched}
               onClick={() => handleEpisodeSelect(episode.id)}
               aria-selected={$isSelected}
               ref={(el) => (episodeRefs.current[episode.id] = el)} // Reference to each episode's button
             >
-              {displayMode === "imageList" ? (
+              {displayMode === 'imageList' ? (
                 <>
                   <div>
                     <EpisodeNumber>{episode.number}. </EpisodeNumber>
@@ -509,15 +515,15 @@ const EpisodeList: React.FC<Props> = ({
                     alt={`Episode ${episode.number} - ${episode.title}`}
                   />
                 </>
-              ) : displayMode === "grid" ? (
+              ) : displayMode === 'grid' ? (
                 <>
                   <div
                     style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
                     }}
                   >
                     {$isSelected ? (

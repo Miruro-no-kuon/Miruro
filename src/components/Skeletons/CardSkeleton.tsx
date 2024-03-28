@@ -1,5 +1,5 @@
-import React from "react";
-import styled, { keyframes, css } from "styled-components";
+import React from 'react';
+import styled, { keyframes, css } from 'styled-components';
 
 interface SkeletonProps {
   loading?: boolean;

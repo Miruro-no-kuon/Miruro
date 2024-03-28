@@ -1,5 +1,5 @@
-import { useEffect, RefObject } from "react";
-import Hls from "hls.js";
+import { useEffect, RefObject } from 'react';
+import Hls from 'hls.js';
 
 const useHLS = (videoRef: RefObject<HTMLVideoElement>, source: string) => {
   useEffect(() => {

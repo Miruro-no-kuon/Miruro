@@ -1,15 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Disable zooming -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <meta
       name="description"
       content="Miruro no Kuon - Anime Streaming Site with minimal UI 🍜. Enjoy HD fast streaming of your favorite anime, manga reading, and explore anime-related forums on www.miruro.tv. Discover a world of anime entertainment at Miruro no Kuon!"
     />
     <!-- Link to web app manifest -->
     <link rel="manifest" href="/manifest.json" />
+
     <!-- Main Favicon -->
+    <script>
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        // If in PWA mode, create and append the theme-color meta tag
+        var metaThemeColor = document.createElement('meta');
+        metaThemeColor.name = 'theme-color';
+        metaThemeColor.content = '#080808'; // Set to your PWA theme color
+        document.getElementsByTagName('head')[0].appendChild(metaThemeColor);
+      }
+    </script>
     <link rel="icon" type="image/png" href="/android-chrome-512x512.png" />
     <!-- Apple touch Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -25,11 +39,6 @@
     />
     <!-- Title of the website -->
     <title>Miruro</title>
-    <!-- Disable zooming -->
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
     <!-- Internal styles -->
     <link rel="stylesheet" href="/src/styles/globals.css" />
   </head>
@@ -42,18 +51,18 @@
     <script>
       // Check user's theme preference or default to system preference
       const themePreference =
-        localStorage.getItem("themePreference") ||
+        localStorage.getItem('themePreference') ||
         (window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light");
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light');
       // Get the root HTML element
       const rootElement = document.documentElement;
       // Apply dark mode class if preferred theme is dark
-      if (themePreference === "dark") {
-        rootElement.classList.add("dark-mode");
+      if (themePreference === 'dark') {
+        rootElement.classList.add('dark-mode');
       } else {
-        rootElement.classList.remove("dark-mode");
+        rootElement.classList.remove('dark-mode');
       }
     </script>
   </body>

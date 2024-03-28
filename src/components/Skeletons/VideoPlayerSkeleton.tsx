@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 
 const popInAnimation = keyframes`
   0% {
@@ -36,7 +36,8 @@ const PlayerSkeleton = styled.div`
   width: 100%;
   height: 0;
   border-radius: var(--global-border-radius);
-  animation: ${SkeletonPulse} 2.5s ease-in-out infinite,
+  animation:
+    ${SkeletonPulse} 2.5s ease-in-out infinite,
     ${popInAnimation} 0.5s ease-out;
 `;
 
