@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import DropDownSearch from "./DropDownSearch";
 import { fetchAdvancedSearch } from "../hooks/useApi";
-import { FiSun, FiMoon, FiX } from "react-icons/fi";
+import { FiSun, FiMoon, FiX, FiMenu } from "react-icons/fi";
 import { GoCommandPalette } from "react-icons/go";
 import { IoIosSearch } from "react-icons/io";
 import { Anime } from "../hooks/interface";
@@ -423,6 +423,14 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  //navigate to preferences
+  const navigateToPreferences = () => {
+    // Check if the current location's pathname is not '/preferences' before navigating
+    if (location.pathname !== "/preferences") {
+      navigate("/preferences");
+    }
+  };
+
   return (
     <>
       <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
@@ -491,6 +499,9 @@ const Navbar = () => {
             <StyledButton onClick={toggleTheme}>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </StyledButton>
+            {/* <StyledButton onClick={navigateToPreferences}>
+              <FiMenu />
+            </StyledButton> */}
           </RightContent>
         </TopContainer>
         {isMobileView && isInputVisible && (

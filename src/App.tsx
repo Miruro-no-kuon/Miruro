@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Watch from "./pages/Watch";
 import SearchResults from "./pages/SearchResults";
 import PageNotFound from "./pages/404";
+import Preferences from "./pages/Preferences";
 import About from "./pages/About";
 import PolicyTerms from "./pages/PolicyTerms";
 import ShortcutsPopup from "./components/ShortcutsPopup";
@@ -109,6 +110,7 @@ function App() {
           path="/watch/:animeId/:animeTitle/:episodeNumber"
           element={<Watch />}
         />
+        <Route path="/preferences" element={<Preferences />} />
         <Route path="/about" element={<About />} />
         <Route path="/pptos" element={<PolicyTerms />} />
         <Route path="*" element={<PageNotFound />} />

@@ -104,7 +104,7 @@ const IframeTrailer = styled.iframe`
   border: none;
   top: 0;
   left: 0;
-  width: 50%;
+  width: 70%;
   height: 100%;
   text-items: center;
   @media (max-width: 1000px) {
