@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { FaBell } from "react-icons/fa";
 import styled from 'styled-components';
 import EpisodeList from '../components/Watch/EpisodeList';
 import { Player } from '../components/Watch/Video/Player';
@@ -99,10 +100,11 @@ const GoToHomePageButton = styled.a`
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9;
   position: relative;
+  border-radius: var(--global-border-radius);
   border: none;
   top: 0;
   left: 0;
-  width: 50%;
+  width: 70%;
   height: 100%;
   text-items: center;
   @media (max-width: 1000px) {
@@ -132,6 +134,36 @@ interface CurrentEpisode {
   number: number;
   image: string;
 }
+const useCountdown = (targetDate) => {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const distance = targetDate - now;
+      if (distance < 0) {
+        clearInterval(timer);
+        setTimeLeft("Airing now or aired");
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeLeft(
+        `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`
+      );
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return timeLeft;
+};
 
 // Main Component
 const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
@@ -188,7 +220,14 @@ const Watch: React.FC = () => {
   const [language, setLanguage] = useState(
     () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'sub'
   );
-  const [downloadLink, setDownloadLink] = useState('');
+  const [downloadLink, setDownloadLink] = useState("");
+  const nextEpisodeAiringTime =
+    animeInfo && animeInfo.nextAiringEpisode
+      ? animeInfo.nextAiringEpisode.airingTime * 1000 // Convert seconds to milliseconds
+      : null;
+  const nextEpisodenumber = animeInfo?.nextAiringEpisode?.episode;
+  const countdown = useCountdown(nextEpisodeAiringTime);
+
   useEffect(() => {
     const defaultSourceType = 'default';
     const defaultLanguage = 'sub';
@@ -609,39 +648,23 @@ const Watch: React.FC = () => {
       animeInfo.status === 'Not yet aired' &&
       animeInfo.trailer ? (
         // Display the trailer if the anime has not yet aired and has a trailer
-        <div style={{ textAlign: 'center' }}>
-          {animeInfo.nextAiringEpisode && (
-            <p>
-              <h2>Time until next episode:</h2>
-              <h4>
-                {/* {new Date(
-                      animeData.nextAiringEpisode.airingTime * 1000
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZoneName: "short",
-                    })}{" "} */}
-                (
-                {(() => {
-                  const secondsUntilAiring =
-                    animeInfo.nextAiringEpisode.airingTime -
-                    Math.floor(Date.now() / 1000);
-                  const days = Math.floor(secondsUntilAiring / (3600 * 24));
-                  const hours = Math.floor(
-                    (secondsUntilAiring % (3600 * 24)) / 3600
-                  );
-                  const minutes = Math.floor((secondsUntilAiring % 3600) / 60);
-                  const seconds = Math.floor(secondsUntilAiring % 60);
-
-                  return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-                })()}
-                )
-              </h4>
-            </p>
-          )}
+        <div style={{ textAlign: "center" }}>
+          <strong>
+            <h2>Time until next episode:</h2>
+          </strong>
+          <p>
+            <h4>
+              {animeInfo &&
+              animeInfo.nextAiringEpisode &&
+              countdown !== "Airing now or aired" ? (
+                <>
+                  <FaBell /> {countdown}
+                </>
+              ) : (
+                "Unknown"
+              )}
+            </h4>
+          </p>
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
@@ -706,6 +729,13 @@ const Watch: React.FC = () => {
               language={language}
               setLanguage={setLanguage}
               downloadLink={downloadLink}
+              episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
+              airingTime={
+                animeInfo && animeInfo.status === "Ongoing"
+                  ? countdown
+                  : undefined
+              }
+              nextEpisodenumber={nextEpisodenumber}
             />
           )}
           {animeInfo && <AnimeData animeData={animeInfo} />}

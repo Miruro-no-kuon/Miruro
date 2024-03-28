@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import DropDownSearch from './DropDownSearch';
 import { fetchAdvancedSearch } from '../hooks/useApi';
-import { FiSun, FiMoon, FiX } from 'react-icons/fi';
+import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
 import { Anime } from '../hooks/interface';
@@ -34,8 +34,8 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   background-color: var(--global-primary-bg-tr);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  z-index: 100;
-  animation: ${fadeInAnimation('var(--global-primary-bg-tr)')} 0.5s ease-out;
+  z-index: 8;
+  animation: ${fadeInAnimation("var(--global-primary-bg-tr)")} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 1000px) {
@@ -431,6 +431,14 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  //navigate to preferences
+  const navigateToPreferences = () => {
+    // Check if the current location's pathname is not '/preferences' before navigating
+    if (location.pathname !== "/preferences") {
+      navigate("/preferences");
+    }
+  };
+
   return (
     <>
       <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
@@ -502,6 +510,9 @@ const Navbar = () => {
             <StyledButton onClick={toggleTheme} aria-label="Toggle Dark Mode">
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </StyledButton>
+            {/* <StyledButton onClick={navigateToPreferences}>
+              <FiMenu />
+            </StyledButton> */}
           </RightContent>
         </TopContainer>
 

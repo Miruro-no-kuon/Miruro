@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Preferences from "./pages/Preferences";
 import {
   Navbar,
   Footer,
@@ -30,6 +31,7 @@ function App() {
           path="/watch/:animeId/:animeTitle/:episodeNumber"
           element={<Watch />}
         />
+        <Route path="/preferences" element={<Preferences />} />
         <Route path="/about" element={<About />} />
         <Route path="/pptos" element={<PolicyTerms />} />
         <Route path="*" element={<Page404 />} />
