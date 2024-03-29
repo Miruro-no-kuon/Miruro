@@ -235,7 +235,7 @@ const EpisodeList: React.FC<Props> = ({
   const [displayMode, setDisplayMode] = useState<'list' | 'grid' | 'imageList'>(
     () => {
       const savedMode = animeId
-        ? localStorage.getItem(`layout-preference-${animeId}`)
+        ? localStorage.getItem(`listLayout-[${animeId}]`)
         : null;
       return (savedMode as 'list' | 'grid' | 'imageList') || defaultLayoutMode;
     },
@@ -255,7 +255,7 @@ const EpisodeList: React.FC<Props> = ({
   // Load watched episodes from local storage when animeId changes
   useEffect(() => {
     if (animeId) {
-      localStorage.setItem(`layout-preference-${animeId}`, displayMode);
+      localStorage.setItem(`listLayout-[${animeId}]`, displayMode);
       const watched = localStorage.getItem('watched-episodes');
       if (watched) {
         const watchedEpisodesObject = JSON.parse(watched);
@@ -352,7 +352,7 @@ const EpisodeList: React.FC<Props> = ({
             ? 'imageList'
             : 'list';
       if (animeId) {
-        localStorage.setItem(`layout-preference-${animeId}`, nextMode);
+        localStorage.setItem(`listLayout-[${animeId}]`, nextMode);
       }
       return nextMode;
     });

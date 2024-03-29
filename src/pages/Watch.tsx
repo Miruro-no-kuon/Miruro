@@ -166,8 +166,8 @@ const useCountdown = (targetDate) => {
 };
 
 // Main Component
-const getSourceTypeKey = (animeId: any) => `sourceType-${animeId}`;
-const getLanguageKey = (animeId: any) => `language-${animeId}`;
+const getSourceTypeKey = (animeId: any) => `source-[${animeId}]`;
+const getLanguageKey = (animeId: any) => `subOrDub-[${animeId}]`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
   const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%'); // Default to 100%
@@ -195,8 +195,8 @@ const Watch: React.FC = () => {
     episodeNumber?: string;
   }>();
   const STORAGE_KEYS = {
-    SOURCE_TYPE: `sourceType-${animeId}`,
-    LANGUAGE: `language-${animeId}`,
+    SOURCE_TYPE: `source-[${animeId}]`,
+    LANGUAGE: `subOrDub-[${animeId}]`,
   };
 
   const navigate = useNavigate();

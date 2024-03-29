@@ -8,6 +8,7 @@ import {
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
+  fetchRecentEpisodes, // Import the fetch function for recent episodes
 } from '../hooks/useApi';
 import AnimeEpisodeCardComponent from '../components/Home/EpisodeCard';
 
@@ -90,11 +91,13 @@ const Home = () => {
   const [trendingAnime, setTrendingAnime] = useState([]);
   const [popularAnime, setPopularAnime] = useState([]);
   const [topAnime, setTopAnime] = useState([]);
+  const [recentEpisodes, setRecentEpisodes] = useState([]); // State for recent episodes
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState({
     trending: true,
     popular: true,
     top: true,
+    recent: true, // Flag for recent episodes loading state
   });
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem('home tab');
@@ -156,10 +159,11 @@ const Home = () => {
         // Reset error state on new fetch attempt
         setError(null);
 
-        const [trending, popular, top] = await Promise.all([
+        const [trending, popular, top, recent] = await Promise.all([
           fetchTrendingAnime(1, fetchCount),
           fetchPopularAnime(1, fetchCount),
           fetchTopAnime(1, fetchCount),
+          fetchRecentEpisodes(1, fetchCount), // Fetch recent episodes
         ]);
 
         // Filter out anime without totalEpisodes, duration, or releaseDate
@@ -176,6 +180,7 @@ const Home = () => {
         setTrendingAnime(filterAndTrimAnime(trending));
         setPopularAnime(filterAndTrimAnime(popular));
         setTopAnime(filterAndTrimAnime(top));
+        setRecentEpisodes(recent.results); // Set recent episodes
       } catch (fetchError) {
         if (fetchError instanceof Error) {
           setError(fetchError.message);
@@ -183,7 +188,12 @@ const Home = () => {
           setError('An unexpected error occurred');
         }
       } finally {
-        setLoading({ trending: false, popular: false, top: false });
+        setLoading({
+          trending: false,
+          popular: false,
+          top: false,
+          recent: false,
+        });
       }
     };
 
@@ -263,6 +273,13 @@ const Home = () => {
         >
           TOP ANIME
         </Tab>
+        <Tab
+          title='Recent Episodes Tab'
+          $isActive={activeTab === 'recent'}
+          onClick={() => handleTabClick('recent')}
+        >
+          RECENT EPISODES
+        </Tab>
       </TabContainer>
       {/* Render other sections based on activeTab */}
       {activeTab === 'trending' &&
@@ -270,6 +287,8 @@ const Home = () => {
       {activeTab === 'popular' &&
         renderCardGrid(popularAnime, loading.popular, !!error)}
       {activeTab === 'top' && renderCardGrid(topAnime, loading.top, !!error)}
+      {activeTab === 'recent' &&
+        renderCardGrid(recentEpisodes, loading.recent, !!error)}
       <AnimeEpisodeCardComponent />
     </SimpleLayout>
   );

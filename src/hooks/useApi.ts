@@ -108,7 +108,7 @@ function createOptimizedSessionStorageCache(
 
 // Constants for cache configuration
 // Cache size and max age constants
-const CACHE_SIZE = 10;
+const CACHE_SIZE = 20;
 const CACHE_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Factory function for cache creation
@@ -348,4 +348,25 @@ export async function fetchSkipTimes({
 
   // Use the fetchFromProxy function to make the request and handle caching
   return fetchFromProxy(url.toString(), createCache('SkipTimes'), cacheKey);
+}
+
+// Fetch Recent Anime Episodes Function
+export async function fetchRecentEpisodes(
+  page: number = 1,
+  perPage: number = 18,
+  provider: string = 'gogoanime',
+) {
+  // Construct the URL with query parameters for fetching recent episodes
+  const params = new URLSearchParams({
+    page: page.toString(),
+    perPage: perPage.toString(),
+    provider: provider, // Default to 'gogoanime' if no provider is specified
+  });
+
+  // Using the BASE_URL defined at the top of your file
+  const url = `${BASE_URL}meta/anilist/recent-episodes?${params.toString()}`;
+  const cacheKey = generateCacheKey('recentEpisodes', page.toString(), perPage.toString(), provider);
+
+  // Utilize the existing fetchFromProxy function to handle the request and caching logic
+  return fetchFromProxy(url, createCache('RecentEpisodes'), cacheKey);
 }

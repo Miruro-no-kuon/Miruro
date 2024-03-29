@@ -212,6 +212,11 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
         onCanPlay={onCanPlay}
         onTimeUpdate={onTimeUpdate} // Call onTimeUpdate when time changes
         ref={player}
+        aspectRatio='16/9'
+        load='eager'
+        posterLoad='eager'
+        streamType="on-demand"
+        storage="storage-key"
       >
         <MediaProvider>
           <Poster className='vds-poster' src={banner} alt='' />
@@ -219,7 +224,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
             <Track
               kind='chapters'
               src={vttUrl}
-              default={true}
+              default
               label='Skip Times'
             />
           )}

@@ -1,10 +1,6 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
-interface SkeletonProps {
-  loading?: boolean;
-}
-
 const aspectRatio = (width: number, height: number): string =>
   `calc(100% * ${width} / ${height})`;
 
@@ -33,25 +29,21 @@ const popInAnimation = keyframes`
 `;
 
 // Update your styled components to use the css helper for animations
-const SkeletonCard = styled.div<SkeletonProps>`
+const SkeletonCard = styled.div`
   width: 100%;
   max-width: 100%;
   height: 0;
   padding-top: ${aspectRatio(184, 133)};
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
-  margin-bottom: 2.5rem;
+  margin-bottom: 5.15rem;
 
-  ${({ loading }) =>
-    !loading &&
-    css`
-      animation: ${css`
-        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
-      `};
-    `}
+  animation: ${css`
+    ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+  `};
 `;
 
-const SkeletonTitle = styled.div<SkeletonProps>`
+const SkeletonTitle = styled.div`
   width: 80%;
   height: 1.3rem;
   background: var(--global-card-bg);
@@ -59,21 +51,29 @@ const SkeletonTitle = styled.div<SkeletonProps>`
   margin-top: 0.5rem;
   margin-left: 0.3rem;
 
-  ${({ loading }) =>
-    !loading &&
-    css`
-      animation: ${css`
-        ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
-      `};
-    `}
+  animation: ${css`
+    ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+  `};
 `;
 
-const CardSkeleton: React.FC<SkeletonProps> = React.memo(
-  ({ loading = false }) => (
-    <SkeletonCard loading={loading}>
-      <SkeletonTitle loading={loading} />
-    </SkeletonCard>
-  ),
-);
+const SkeletonDetails = styled.div`
+  width: 60%;
+  height: 2.8125rem;
+  background: var(--global-card-bg);
+  border-radius: var(--global-border-radius);
+  margin-top: 0.5rem;
+  margin-left: 0.3rem;
+
+  animation: ${css`
+    ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
+  `};
+`;
+
+const CardSkeleton: React.FC = React.memo(() => (
+  <SkeletonCard>
+    <SkeletonTitle />
+    <SkeletonDetails />
+  </SkeletonCard>
+));
 
 export default CardSkeleton;

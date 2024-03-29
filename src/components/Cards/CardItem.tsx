@@ -34,12 +34,9 @@ const StyledCardItem = styled.div`
 
 const ImageDisplayWrapper = styled.div`
   transition: 0.2s ease-in-out;
-  &:hover {
-    transform: translateY(-10px);
-  }
-  @media (max-width: 500px) {
+  @media (min-width: 501px) {
     &:hover {
-      transform: translateY(0px);
+      transform: translateY(-10px);
     }
   }
 `;
@@ -148,7 +145,7 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   padding: 0.2rem;
   font-size: 0.8rem;
   font-weight: bold;
-  color: ${(props) => (props.$isHovered ? props.color : '#ffffff')};
+  color: ${(props) => (props.color)};
   opacity: 0.9;
   background-color: var(--global-button-shadow);
   border-radius: 0.3rem;
