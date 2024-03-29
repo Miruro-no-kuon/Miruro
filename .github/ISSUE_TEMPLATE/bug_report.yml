@@ -1,38 +1,63 @@
-
-name: 🐞 Bug report
-description: File a report to help us improve
+name: 🐞 Bug Report
+description: Help us enhance our app by reporting bugs.
 title: "[Bug]: "
 labels: ["bug", "triage"]
 assignees:
   - akionii
   - trying559
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
   - type: input
-    id: contact
+    id: bug-description
     attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
-    validations:
-      required: false
-  - type: textarea
-    id: what-happened
-    attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      label: Bug Description
+      description: Describe the bug in a clear and concise manner.
+      placeholder: "Example: The video player fails to load..."
     validations:
       required: true
-  - type: dropdown
-    id: version
+
+  - type: textarea
+    id: steps-to-reproduce
     attributes:
-      label: Version
-      description: What version of our software are you running?
+      label: Steps to Reproduce
+      description: Detail the steps to reproduce the issue.
+      placeholder: "1. Go to '...'\n2. Click on '...'\n3. See error"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: Expected vs Actual Behavior
+      description: Describe what you expected to happen and what actually happened.
+      placeholder: "Expected: The video plays smoothly.\nActual: The video fails to load."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Add any other context or screenshots about the problem here.
+      placeholder: "Example: This issue occurs only on Chrome..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "Thank you for contributing to our project by submitting a bug report!"
+
+  - type: input
+    id: contact-info
+    attributes:
+      label: Contact Information (Optional)
+      description: Provide your email if you're open to follow-up questions.
+      placeholder: "example@email.com"
+
+  - type: dropdown
+    id: app-version
+    attributes:
+      label: App Version
+      description: Select the version of the app where you encountered the bug.
       options:
         - 0.3.5
         - 0.3.4
@@ -46,26 +71,29 @@ body:
       default: 0
     validations:
       required: true
+
   - type: dropdown
-    id: browsers
+    id: browsers-affected
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: Browsers Affected
       multiple: true
       options:
         - Firefox
         - Chrome
         - Safari
         - Microsoft Edge
+
   - type: textarea
     id: logs
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      label: Logs (if applicable)
+      description: Include any relevant log output.
       render: shell
+
   - type: checkboxes
-    id: terms
+    id: code-of-conduct
     attributes:
       label: Code of Conduct
       options:
-        - label: I agree to follow this project's Code of Conduct
+        - label: I agree to follow this project's Code of Conduct.
           required: true
