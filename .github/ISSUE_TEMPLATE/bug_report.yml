@@ -1,6 +1,5 @@
 
 name: 🐞 Bug report
-about: Describe your issue here
 description: File a report to help us improve
 title: "[Bug]: "
 labels: ["bug", "triage"]
