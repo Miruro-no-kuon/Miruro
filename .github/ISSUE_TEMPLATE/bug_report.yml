@@ -1,5 +1,5 @@
-name: 🐞 Bug Report
-description: Help us enhance our app by reporting bugs.
+name: 🐞 Oops, Found a Bug!
+description: Spotted something off with our app? Let us know and help us squash those bugs.
 title: "[Bug]: "
 labels: ["bug", "triage"]
 assignees:
@@ -9,55 +9,55 @@ body:
   - type: input
     id: bug-description
     attributes:
-      label: Bug Description
-      description: Describe the bug in a clear and concise manner.
-      placeholder: "Example: The video player fails to load..."
+      label: What went wrong?
+      description: Tell us about the bug like you're telling a friend. Keep it simple and clear.
+      placeholder: "Like, when I try to play a video, it just won’t start..."
     validations:
       required: true
 
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps to Reproduce
-      description: Detail the steps to reproduce the issue.
-      placeholder: "1. Go to '...'\n2. Click on '...'\n3. See error"
+      label: How'd you stumble upon it?
+      description: Walk us through how you found this bug, step by step.
+      placeholder: "1. I was on the homepage\n2. Clicked on the play button\n3. And boom, nothing happened"
     validations:
       required: true
 
   - type: textarea
     id: expected-vs-actual
     attributes:
-      label: Expected vs Actual Behavior
-      description: Describe what you expected to happen and what actually happened.
-      placeholder: "Expected: The video plays smoothly.\nActual: The video fails to load."
+      label: What you hoped for vs. What actually happened
+      description: Share what you were expecting and then what really went down.
+      placeholder: "Hoped for: A cool video starts playing.\nBut actually: Got a whole lot of nothing."
     validations:
       required: true
 
   - type: textarea
     id: additional-info
     attributes:
-      label: Additional Information
-      description: Add any other context or screenshots about the problem here.
-      placeholder: "Example: This issue occurs only on Chrome..."
+      label: Anything else we should know?
+      description: Got more details or a screenshot? Throw them in here.
+      placeholder: "FYI: This only happens in Chrome for me..."
     validations:
       required: false
 
   - type: markdown
     attributes:
-      value: "Thank you for contributing to our project by submitting a bug report!"
+      value: "Super thankful you're helping us out by flagging this issue!"
 
   - type: input
     id: contact-info
     attributes:
-      label: Contact Information (Optional)
-      description: Provide your email if you're open to follow-up questions.
-      placeholder: "example@email.com"
+      label: How can we reach you? (Totally Optional)
+      description: Drop your email here if you're cool with us reaching out for more info.
+      placeholder: "yourname@example.com"
 
   - type: dropdown
     id: app-version
     attributes:
-      label: App Version
-      description: Select the version of the app where you encountered the bug.
+      label: Which version was acting up?
+      description: Pick the app version that was giving you grief.
       options:
         - 0.3.5
         - 0.3.4
@@ -75,7 +75,7 @@ body:
   - type: dropdown
     id: browsers-affected
     attributes:
-      label: Browsers Affected
+      label: Which browsers were a bummer?
       multiple: true
       options:
         - Firefox
@@ -86,14 +86,14 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Logs (if applicable)
-      description: Include any relevant log output.
+      label: Got logs?
+      description: If you've got some techy details or logs, we'd love to see them.
       render: shell
 
   - type: checkboxes
     id: code-of-conduct
     attributes:
-      label: Code of Conduct
+      label: Code of Conduct Agreement
       options:
         - label: I agree to follow this project's Code of Conduct.
           required: true
