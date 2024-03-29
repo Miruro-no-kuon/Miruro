@@ -3,9 +3,9 @@ name: Bug Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - octocat
+  - akionii
+  - trying559
 body:
   - type: markdown
     attributes:
@@ -66,7 +66,6 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-    #   description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
