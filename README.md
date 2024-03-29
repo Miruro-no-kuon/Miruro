@@ -32,7 +32,7 @@
   - Mobile responsive
   - Fast page load
   - White/Dark theme
-  - Page to see your continue watching
+  - Continue watching section
 - Watch Page
   - Player
     - Autoplay next episode
@@ -41,6 +41,7 @@
 - Coming Soon
   - Profile page to see your watch list
   - Comment section
+  - Anilist/MAL login integration
 
 <div style="text-align: left;">
   <h3>Home Page</h3>
@@ -147,7 +148,7 @@ If you have any questions or feedback, please reach out to us at [miruro@proton.
 
 - Join our **[Discord](https://discord.gg/4kfypZ96K4)**
 
-<a href="https://discord.com/invite/Uaaw6R8y">
+<a href="https://discord.com/invite/4kfypZ96K4">
 
 ![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)
 </a>
