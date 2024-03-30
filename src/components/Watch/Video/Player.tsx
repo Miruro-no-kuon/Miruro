@@ -25,6 +25,7 @@ type PlayerProps = {
   episodeId: string;
   banner?: string;
   malId?: string;
+  updateDownloadLink: (link: string) => void;
 };
 
 // Define a type for the source object structure within your response
@@ -33,7 +34,12 @@ type StreamingSource = {
   quality: string;
 };
 
-export function Player({ episodeId, banner, malId }: PlayerProps) {
+export function Player({
+  episodeId,
+  banner,
+  malId,
+  updateDownloadLink,
+}: PlayerProps) {
   const player = useRef<MediaPlayerInstance>(null);
   const [src, setSrc] = useState('');
   const [vttUrl, setVttUrl] = useState<string>('');
@@ -67,6 +73,8 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
         );
         if (backupSource) {
           setSrc(backupSource.url);
+          // Assuming `response.download` exists and contains the URL
+          updateDownloadLink(response.download); // Update parent component's state
         } else {
           console.error('Backup source not found');
         }
@@ -104,7 +112,7 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
         URL.revokeObjectURL(vttUrl); // Clean up the Blob URL when the component unmounts
       }
     };
-  }, [episodeId, malId]);
+  }, [episodeId, malId, updateDownloadLink]);
 
   useEffect(() => {
     // Set the current time of the player when it's ready
@@ -215,18 +223,13 @@ export function Player({ episodeId, banner, malId }: PlayerProps) {
         aspectRatio='16/9'
         load='eager'
         posterLoad='eager'
-        streamType="on-demand"
-        storage="storage-key"
+        streamType='on-demand'
+        storage='storage-key'
       >
         <MediaProvider>
           <Poster className='vds-poster' src={banner} alt='' />
           {vttUrl && (
-            <Track
-              kind='chapters'
-              src={vttUrl}
-              default
-              label='Skip Times'
-            />
+            <Track kind='chapters' src={vttUrl} default label='Skip Times' />
           )}
         </MediaProvider>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaDownload } from 'react-icons/fa';
 
 // Props interface
 interface VideoSourceSelectorProps {
@@ -69,6 +69,26 @@ const Button = styled(ButtonBase)`
   }
 `;
 
+const DownloadLink = styled.a`
+  display: inline-block; // Ensures it can be styled like a button
+  padding: 0.25rem;
+  padding-left: 0rem;
+  font-size: 0.9rem;
+  border: none;
+  font-weight: bold;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  text-align: center;
+  text-decoration: none; // Removes underline from links
+  margin-left: 0.5rem;
+  &:hover {
+    background-color: var(--primary-accent);
+    transform: scale(1.05);
+  }
+`;
+
 const ResponsiveTableContainer = styled.div`
   background-color: var(--global-div-tr);
   padding: 0.6rem;
@@ -81,7 +101,6 @@ const ResponsiveTableContainer = styled.div`
 const EpisodeInfoColumn = styled.div`
   flex-grow: 1;
   display: block;
-  align-text: center;
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
   padding: 0.6rem;
@@ -101,6 +120,7 @@ const EpisodeInfoColumn = styled.div`
   h4 {
     margin: 0rem;
     font-size: 1.15rem;
+    margin-bottom: 1rem;
   }
   @media (max-width: 500px) {
     p {
@@ -108,8 +128,8 @@ const EpisodeInfoColumn = styled.div`
       margin: 0rem;
     }
     h4 {
-      margin: 0rem;
       font-size: 1rem;
+      margin-bottom: 0rem;
     }
   }
 `;
@@ -129,6 +149,7 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
   setSourceType,
   language,
   setLanguage,
+  downloadLink,
   episodeId,
   airingTime,
   nextEpisodenumber,
@@ -139,10 +160,16 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         {episodeId ? (
           <>
             <h4>
-              You're watching <strong>Episode {episodeId}.</strong>{' '}
+              You're watching <strong>Episode {episodeId}</strong>
+              <DownloadLink
+                href={downloadLink}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <FaDownload />
+                Download
+              </DownloadLink>
             </h4>
-            <br />
-
             <p>If current servers don't work, please try other servers.</p>
           </>
         ) : (
@@ -151,7 +178,7 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         {airingTime && (
           <>
             <p>
-              The next episode ({nextEpisodenumber}) will air in
+              The next episode, <strong>{nextEpisodenumber}</strong> will air in
               <FaBell />
               <strong> {airingTime}</strong>.
             </p>

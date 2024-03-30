@@ -31,7 +31,7 @@ function App() {
           path='/watch/:animeId/:animeTitle/:episodeNumber'
           element={<Watch />}
         />
-        <Route path='/preferences' element={<Profile />} />
+        <Route path='/profile' element={<Profile />} />
         <Route path='/about' element={<About />} />
         <Route path='/pptos' element={<PolicyTerms />} />
         <Route path='*' element={<Page404 />} />

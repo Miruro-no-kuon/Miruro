@@ -23,7 +23,7 @@ const PreferencesContainer = styled.div`
   }
   h2 {
     align-items: left;
-    align-text: left;
+    text-align: left;
   }
 `;
 
