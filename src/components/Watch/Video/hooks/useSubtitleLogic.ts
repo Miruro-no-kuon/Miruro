@@ -1,17 +1,17 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 const useSubtitleLogic = (
   videoRef,
   subtitleTracks,
   subtitlesEnabled,
-  setSubtitlesEnabled
+  setSubtitlesEnabled,
 ) => {
   useEffect(() => {
     let isMounted = true;
 
     const cleanupTextTracks = () => {
       if (videoRef.current) {
-        const existingTracks = videoRef.current.querySelectorAll("track");
+        const existingTracks = videoRef.current.querySelectorAll('track');
         existingTracks.forEach((track) => videoRef.current.removeChild(track));
       }
     };
@@ -19,12 +19,12 @@ const useSubtitleLogic = (
     const addDefaultSubtitleTrack = () => {
       if (videoRef.current && subtitleTracks.length > 0) {
         const defaultLanguageTrack = subtitleTracks.find(
-          (track) => track.label === "English"
+          (track) => track.label === 'English',
         );
 
         if (defaultLanguageTrack) {
-          const trackElement = document.createElement("track");
-          trackElement.kind = "subtitles";
+          const trackElement = document.createElement('track');
+          trackElement.kind = 'subtitles';
           trackElement.label = defaultLanguageTrack.label;
           trackElement.src = defaultLanguageTrack.src;
           trackElement.default = true;
@@ -48,7 +48,7 @@ const useSubtitleLogic = (
     if (videoRef.current && subtitleTracks.length > 0) {
       const textTracks = videoRef.current.textTracks;
       for (const track of textTracks) {
-        track.mode = subtitlesEnabled ? "showing" : "hidden";
+        track.mode = subtitlesEnabled ? 'showing' : 'hidden';
       }
     }
   }, [videoRef, subtitlesEnabled, subtitleTracks]);
@@ -60,7 +60,7 @@ const useSubtitleLogic = (
       const textTracks = videoRef.current.textTracks;
       for (const track of textTracks) {
         track.mode =
-          track.label === selectedSubtitleLabel ? "showing" : "hidden";
+          track.label === selectedSubtitleLabel ? 'showing' : 'hidden';
       }
     }
   };

@@ -1,126 +1,47 @@
-import express, { Request, Response } from "express";
-import fetch from "node-fetch";
-import cors from "cors";
-import path from "path";
-import { createLogger, transports, format, Logger } from "winston";
-import chalk from "chalk";
+// Importing necessary modules
+import express from 'express';
+import path from 'path';
+import os from 'os';
 
+// Initialize Express app
 const app = express();
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
-const { combine, timestamp, printf } = format;
+// Configuration settings
+const PORT = process.env.PORT || 5173;
+const DIST_DIR = path.join(__dirname, '../dist');
+const INDEX_FILE = path.join(DIST_DIR, 'index.html');
 
-const colors: { [key: string]: Function } = {
-  error: chalk.red.bold,
-  warn: chalk.yellow.bold,
-  info: chalk.green.bold,
-  gray: chalk.gray,
-};
+// Middleware to serve static files from DIST_DIR
+app.use(express.static(DIST_DIR));
 
-const logger: Logger = createLogger({
-  level: "info",
-  format: combine(
-    timestamp(),
-    printf(({ timestamp, level, message }) => {
-      const formattedLevel = colors[level]
-        ? colors[level](level.toUpperCase())
-        : level.toUpperCase();
-      const parts = message.split("from ");
-      const formattedMessage = `${formattedLevel}: ${parts[0]
-        }${colors.gray("from ")}${colors.gray(parts[1])}`;
-
-      return `${timestamp} ${formattedMessage}\n`;
-    })
-  ),
-  transports: [
-    new transports.Console(),
-    new transports.File({ filename: "server.log" }),
-  ],
-});
-
-app.use(cors());
-app.use(express.static(path.join(__dirname, "../dist")));
-
-const proxyHandler = async (
-  req: Request,
-  res: Response,
-  contentType: string
-): Promise<void> => {
-  const url: string | string[] | undefined = req.query.url as string;
-  if (!url) {
-    const errorMessage: string = "URL parameter is required";
-    logger.error(errorMessage);
-    res.status(400).send(errorMessage);
-    return; // Return early without continuing further
-  }
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${contentType} data from ${url}`);
-    }
-
-    // Check if content type is JSON and parse accordingly
-    const data =
-      contentType === "application/json"
-        ? await response.json()
-        : await response.text();
-    res.header("Content-Type", contentType);
-    res.send(data);
-    logger.info(`Successfully fetched ${contentType} data from ${url}`);
-  } catch (error) {
-    handleError(res, contentType, error);
-  }
-};
-
-
-const handleError = (res: Response, contentType: string, error: any): void => {
-  const errorMessage = `Error fetching ${contentType}: ${error.message}`;
-  logger.error(errorMessage);
-  res.status(500).send(`Error occurred while fetching ${contentType} data`);
-};
-
-
-app.get("/api/vtt", async (req: Request, res: Response) => {
-  try {
-    await proxyHandler(req, res, "text/vtt");
-  } catch (error) {
-    handleError(res, "text/vtt", error);
-  }
-});
-
-app.get("/api/m3u8", async (req: Request, res: Response) => {
-  try {
-    await proxyHandler(req, res, "application/x-mpegURL");
-  } catch (error) {
-    handleError(res, "application/x-mpegURL", error);
-  }
-});
-
-app.get("/api/text", async (req: Request, res: Response) => {
-  try {
-    await proxyHandler(req, res, "text/plain");
-  } catch (error) {
-    handleError(res, "text/plain", error);
-  }
-});
-
-app.get("/api/json", async (req: Request, res: Response) => {
-  try {
-    await proxyHandler(req, res, "application/json");
-  } catch (error) {
-    handleError(res, "application/json", error);
-  }
-});
-
-app.get("*", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "../dist", "index.html"), (err) => {
+// Fallback route for SPA handling, serving the index.html file
+app.get('*', (req, res) => {
+  res.sendFile(INDEX_FILE, (err) => {
     if (err) {
-      handleError(res, "index.html", err);
+      console.error('Error serving index.html:', err);
+      return res
+        .status(500)
+        .send('An error occurred while serving the application');
     }
   });
 });
 
+// Function to get the first non-internal IPv4 address
+function getLocalIpAddress() {
+  const networkInterfaces = os.networkInterfaces();
+  for (const networkInterface of Object.values(networkInterfaces)) {
+    const found = networkInterface?.find(
+      (net) => net.family === 'IPv4' && !net.internal,
+    );
+    if (found) return found.address;
+  }
+  return 'localhost';
+}
+
+// Start the Express server
 app.listen(PORT, () => {
-  logger.info(`Server is running on http://localhost:${PORT}\n`);
+  const ipAddress = getLocalIpAddress();
+  console.log(
+    `Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`,
+  );
 });

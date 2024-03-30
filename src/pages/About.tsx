@@ -1,14 +1,14 @@
-import styled from "styled-components";
-import { useEffect } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import styled from 'styled-components';
+import { useEffect } from 'react';
+import { FaCheckCircle } from 'react-icons/fa';
 const colors = {
-  textColor: "var(--global-text)",
-  buttonBackground: "var(--global-button-bg)",
-  buttonText: "var(--global-button-text)",
-  buttonHoverBackground: "var(--global-button-hover-bg)",
-  adBackground: "var(--global-ad-bg)",
-  customColor: "var(--your-custom-color)",
-  paddingSize: "1rem",
+  textColor: 'var(--global-text)',
+  buttonBackground: 'var(--global-button-bg)',
+  buttonText: 'var(--global-button-text)',
+  buttonHoverBackground: 'var(--global-button-hover-bg)',
+  adBackground: 'var(--global-div)',
+  customColor: 'var(--your-custom-color)',
+  paddingSize: '1rem',
 };
 
 const SplashContainer = styled.div`
@@ -22,7 +22,7 @@ const Keyword = styled.span`
   margin-right: 0.2rem;
 
   ::before {
-    content: "\u25A0";
+    content: '\u25A0';
     font-size: 0.8rem;
     position: absolute;
     top: 0;
@@ -49,7 +49,7 @@ const MainContent = styled.div`
 
 const sections = [
   {
-    title: "About",
+    title: 'About',
     title2: "What's Miruro?",
     content: (
       <Paragraph>
@@ -60,7 +60,7 @@ const sections = [
     ),
   },
   {
-    title2: "Is Miruro safe?",
+    title2: 'Is Miruro safe?',
     content: (
       <Paragraph>
         Yes. We started this site to improve UX and are committed to keeping our
@@ -71,54 +71,54 @@ const sections = [
     ),
   },
   {
-    title2: "Why Miruro?",
+    title2: 'Why Miruro?',
     content: (
       <>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Content Library:
-          </strong>{" "}
+          </strong>{' '}
           We have a vast collection of both old and new anime, making us one of
           the largest anime libraries on the web.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Streaming Experience:
-          </strong>{" "}
-          Enjoy <Keyword>fast and reliable</Keyword> streaming with our{" "}
+          </strong>{' '}
+          Enjoy <Keyword>fast and reliable</Keyword> streaming with our{' '}
           <Keyword>top-of-the-line servers</Keyword>.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Quality/Resolution:
-          </strong>{" "}
+          </strong>{' '}
           Our videos are available in <Keyword>high resolution</Keyword>, and we
           offer quality settings to suit your internet speed.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Frequent Updates:
-          </strong>{" "}
-          Our content is updated hourly to provide you with the{" "}
+          </strong>{' '}
+          Our content is updated hourly to provide you with the{' '}
           <Keyword>latest releases</Keyword>.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> User-Friendly Interface:
-          </strong>{" "}
+          </strong>{' '}
           We focus on <Keyword>simplicity and ease of use</Keyword>.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Device Compatibility:
-          </strong>{" "}
-          Miruro works seamlessly on both{" "}
+          </strong>{' '}
+          Miruro works seamlessly on both{' '}
           <Keyword>desktop and mobile devices</Keyword>.
         </Paragraph>
         <Paragraph>
           <strong>
             <FaCheckCircle /> Community:
-          </strong>{" "}
+          </strong>{' '}
           Join our active <Keyword>community of anime lovers</Keyword>.
         </Paragraph>
       </>
@@ -129,7 +129,7 @@ const sections = [
 function About() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "About"; // Set the title when the component mounts
+    document.title = 'About'; // Set the title when the component mounts
     return () => {
       // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;
@@ -140,13 +140,13 @@ function About() {
       <MainContent>
         <br />
         {sections.map((section, index) => (
-          <div key={index}>
-            {section.title && <h1 className="title-style">{section.title}</h1>}
+          <span key={index}>
+            {section.title && <h1 className='title-style'>{section.title}</h1>}
             {section.title2 && (
-              <h3 className="title-style">{section.title2}</h3>
+              <h3 className='title-style'>{section.title2}</h3>
             )}
             {section.content}
-          </div>
+          </span>
         ))}
       </MainContent>
     </SplashContainer>
