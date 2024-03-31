@@ -430,11 +430,11 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  //navigate to preferences
-  const navigateToPreferences = () => {
-    // Check if the current location's pathname is not '/preferences' before navigating
-    if (location.pathname !== '/preferences') {
-      navigate('/preferences');
+  //navigate to profile
+  const navigateToProfile = () => {
+    // Check if the current location's pathname is not '/profile' before navigating
+    if (location.pathname !== '/profile') {
+      navigate('/profile');
     }
   };
 
@@ -509,7 +509,7 @@ const Navbar = () => {
             <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </StyledButton>
-            {/* <StyledButton onClick={navigateToPreferences}>
+            {/* <StyledButton onClick={navigateToProfile}>
               <FiMenu />
             </StyledButton> */}
           </RightContent>

@@ -4,7 +4,6 @@ import {
   FaDiscord,
   FaTwitter,
   FaGithub,
-  FaRegHeart,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -120,8 +119,8 @@ function Footer() {
         <StyledLinkList>
           <FooterLink to='/about'>About</FooterLink>
           <FooterLink to='/pptos'>Privacy & ToS</FooterLink>
-          <FooterLink to='/donate'>
-            <FaRegHeart /> Donate
+          <FooterLink to='https://ko-fi.com/yourdev'>
+             Donate {"<3"}
           </FooterLink>
         </StyledLinkList>
       </FooterBaseContainer>

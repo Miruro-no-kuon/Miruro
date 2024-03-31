@@ -641,6 +641,9 @@ const Watch: React.FC = () => {
       isMounted = false;
     };
   }, [animeId]); // Dependency array to re-run the effect when animeId changes
+  const updateDownloadLink = useCallback((link: string) => {
+    setDownloadLink(link);
+  }, []);
 
   return (
     <WatchContainer>
@@ -692,6 +695,7 @@ const Watch: React.FC = () => {
                     episodeId={currentEpisode.id}
                     malId={animeInfo?.malId}
                     banner={selectedBackgroundImage}
+                    updateDownloadLink={updateDownloadLink}
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />
