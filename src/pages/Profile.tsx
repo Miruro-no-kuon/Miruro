@@ -7,7 +7,7 @@ const PreferencesContainer = styled.div`
   margin-top: 2rem;
   margin-bottom: 0rem;
   display: block;
-  background-color: var(--global-div);
+  background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
   padding: 1rem;
   padding-top: 0.25rem;
@@ -15,29 +15,29 @@ const PreferencesContainer = styled.div`
   align-items: center;
   justify-content: center;
   max-width: 40rem;
+  font-size: 1rem;
   @media (max-width: 500px) {
     margin-top: 1rem;
     margin-bottom: 0rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    font-size: 0.9rem;
   }
   h2 {
     align-items: left;
-    align-text: left;
+    text-align: left;
   }
 `;
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
   background: ${({ isSelected }) =>
-    isSelected ? 'var(--primary-accent)' : 'transparent'};
+    isSelected ? 'var(--primary-accent)' : 'var(--global-div)'};
   margin-right: 0.5rem;
   color: var(--global-text);
-  font-size: 1rem;
   cursor: pointer;
   padding: 0.3rem 0.6rem;
   border-radius: var(--global-border-radius);
   transition: background-color 0.3s;
   border: none;
+  font-size: 1rem;
   &:hover {
     background-color: ${({ isSelected }) =>
       isSelected ? 'var(--primary-accent)' : 'var(--primary-accent)'};
@@ -54,6 +54,12 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
     padding-bottom: 0rem;
   }
   @media (max-width: 500px) {
+    font-size: 0.9rem;
+
+    svg {
+      font-size: 1rem;
+      padding-bottom: 0rem;
+    }
     display: flex;
     margin: ${({ isInputToggle }) => (isInputToggle ? '0' : '0')};
   }
@@ -104,16 +110,44 @@ const StyledDropdown: React.FC<StyledDropdownProps> = ({
   </>
 );
 
-const Profile: React.FC = () => {
-  useEffect(() => {
-    const previousTitle = document.title;
-    document.title = 'Profile | Miruro';
-    return () => {
-      document.title = previousTitle;
-    };
-  }, []);
+const getInitialThemePreference = () => {
+  const storedThemePreference = localStorage.getItem('themePreference');
+  if (storedThemePreference) {
+    return storedThemePreference === 'dark';
+  } else {
+    // Check system theme when no preference is stored in localStorage
+    return (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    );
+  }
+};
 
-  const [theme, setTheme] = useState('');
+const saveThemePreference = (isDarkMode: any) => {
+  localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+};
+
+const Profile = () => {
+  // Other useState hooks remain unchanged...
+  const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
+
+  useEffect(() => {
+    // Apply the theme based on the isDarkMode state
+    document.documentElement.classList.toggle('dark-mode', isDarkMode);
+    // Save the theme preference to localStorage whenever it changes
+    saveThemePreference(isDarkMode);
+  }, [isDarkMode]);
+
+  // Function to set the theme to dark mode
+  const setDarkTheme = () => {
+    setIsDarkMode(true);
+  };
+
+  // Function to set the theme to light mode
+  const setLightTheme = () => {
+    setIsDarkMode(false);
+  };
+
   const [defaultLanguage, setDefaultLanguage] = useState('Sub');
   const [autoskipIntroOutro, setAutoskipIntroOutro] = useState('Disabled');
   const [autoPlay, setAutoPlay] = useState('Disabled');
@@ -124,7 +158,8 @@ const Profile: React.FC = () => {
   return (
     <PreferencesContainer>
       <h2>
-        Profile <StyledButton isSelected={false}>Save</StyledButton>
+        Profile Settings
+        {/* <StyledButton isSelected={false}>Save</StyledButton> */}
       </h2>
       <PreferencesTable>
         <tbody>
@@ -132,15 +167,15 @@ const Profile: React.FC = () => {
             <TableCell>Theme</TableCell>
             <TableCell>
               <StyledButton
-                isSelected={theme === 'Light'}
-                onClick={() => setTheme('Light')}
+                isSelected={!isDarkMode}
+                onClick={setLightTheme}
                 className='svg'
               >
                 <FiSun />
               </StyledButton>
               <StyledButton
-                isSelected={theme === 'Dark'}
-                onClick={() => setTheme('Dark')}
+                isSelected={isDarkMode}
+                onClick={setDarkTheme}
                 className='svg'
               >
                 <FiMoon />
