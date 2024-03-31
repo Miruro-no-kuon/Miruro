@@ -151,8 +151,8 @@ const Home = () => {
 
   useEffect(() => {
     const desiredItemCount = itemsCount;
-    // Increase initial fetch count by 20% to account for filtering
-    const fetchCount = Math.ceil(itemsCount * 1.2);
+    // Increase initial fetch count by 40% to account for filtering
+    const fetchCount = Math.ceil(itemsCount * 1.4);
 
     const fetchData = async () => {
       try {
