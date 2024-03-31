@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import CardGrid from '../Cards/CardGrid';
+import { CardGrid } from '../../index';
 import AniList_logo from '../../assets/logos/anilsmall.png';
 import MAL_logo from '../../assets/logos/malsmall.png';
 import anil_big from '../../assets/logos/anilbig.png';
@@ -595,7 +595,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                         relation.relationType.toUpperCase() === 'SEQUEL',
                     )
                     .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
                   hasNextPage={false}
                   onLoadMore={() => {}}
                 />
@@ -631,7 +630,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                         relation.relationType.toUpperCase() !== 'SEQUEL',
                     )
                     .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
                   hasNextPage={false}
                   onLoadMore={() => {}}
                 />
@@ -662,7 +660,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                       ].includes(recommendation.type),
                     )
                     .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
                   hasNextPage={false}
                   onLoadMore={() => {}}
                 />

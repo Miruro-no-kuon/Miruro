@@ -36,7 +36,7 @@ const SkeletonCard = styled.div`
   padding-top: ${aspectRatio(184, 133)};
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
-  margin-bottom: 5.15rem;
+  margin-bottom: 5.25rem;
 
   animation: ${css`
     ${pulseAnimation} 1s infinite, ${popInAnimation} 1s infinite
@@ -44,7 +44,7 @@ const SkeletonCard = styled.div`
 `;
 
 const SkeletonTitle = styled.div`
-  width: 80%;
+  
   height: 1.3rem;
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
@@ -57,8 +57,8 @@ const SkeletonTitle = styled.div`
 `;
 
 const SkeletonDetails = styled.div`
-  width: 60%;
-  height: 2.8125rem;
+  width: 80%;
+  height: 1.2rem;
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);
   margin-top: 0.5rem;
@@ -72,6 +72,7 @@ const SkeletonDetails = styled.div`
 const CardSkeleton: React.FC = React.memo(() => (
   <SkeletonCard>
     <SkeletonTitle />
+    <SkeletonDetails />
     <SkeletonDetails />
   </SkeletonCard>
 ));

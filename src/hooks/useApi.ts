@@ -1,15 +1,19 @@
 import axios from 'axios';
 
-// Environment variables
-// Defining base URL and other constants from environment variables
-const BASE_URL = import.meta.env.VITE_BACKEND_URL as string;
-const SKIP_TIMES = import.meta.env.VITE_SKIP_TIMES as string;
-const PROXY_URL = import.meta.env.VITE_PROXY_URL as string;
+// Utility function to ensure URL ends with a slash
+function ensureUrlEndsWithSlash(url: string): string {
+  return url.endsWith('/') ? url : `${url}/`;
+}
+
+// Adjusting environment variables to ensure they end with a slash
+const BASE_URL = ensureUrlEndsWithSlash(import.meta.env.VITE_BACKEND_URL as string);
+const SKIP_TIMES = ensureUrlEndsWithSlash(import.meta.env.VITE_SKIP_TIMES as string);
+const PROXY_URL = ensureUrlEndsWithSlash(import.meta.env.VITE_PROXY_URL as string);
+
+// Creating axios instance with proxy server base URL
+const PROXY_SERVER_BASE_URL = `${PROXY_URL}api/json`;
 
 // Axios instance
-// Creating axios instance with proxy server base URL
-const PROXY_SERVER_BASE_URL = `${PROXY_URL}/api/json`;
-
 const axiosInstance = axios.create({
   baseURL: PROXY_SERVER_BASE_URL,
   timeout: 10000,

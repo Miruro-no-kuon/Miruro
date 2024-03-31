@@ -27,7 +27,12 @@ const PreferencesContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button<{ isSelected: boolean }>`
+interface StyledButtonProps {
+  isSelected: boolean;
+  isInputToggle?: boolean; // Define isInputToggle as an optional prop
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
   background: ${({ isSelected }) =>
     isSelected ? 'var(--primary-accent)' : 'transparent'};
   margin-right: 0.5rem;

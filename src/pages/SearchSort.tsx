@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
-import CardGrid from '../components/Cards/CardGrid';
-import { StyledCardGrid } from '../components/Cards/CardGrid';
-import { fetchAdvancedSearch } from '../hooks/useApi';
-import CardSkeleton from '../components/Skeletons/CardSkeleton';
+import {
+  CardGrid,
+  StyledCardGrid, 
+  fetchAdvancedSearch,
+  CardSkeleton,
+} from '../index';
 
 const Container = styled.div`
   min-height: 65vh;

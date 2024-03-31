@@ -17,8 +17,8 @@ import {
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from '@vidstack/react/player/layouts/default';
-import { fetchSkipTimes } from '../../../hooks/useApi';
-import { fetchAnimeStreamingLinks } from '../../../hooks/useApi';
+import { fetchSkipTimes, fetchAnimeStreamingLinks } from '../../../index'; // Adjust the import path to correctly point to your index.ts location
+
 
 // Define types for your props
 type PlayerProps = {
