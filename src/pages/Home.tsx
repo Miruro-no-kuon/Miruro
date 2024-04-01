@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CarouselTrending from '../components/Home/HomeCarousel';
-import CardGrid, { StyledCardGrid } from '../components/Cards/CardGrid';
-import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
-import CardSkeleton from '../components/Skeletons/CardSkeleton';
 import {
+  HomeCarousel as CarouselTrending,
+  CardGrid,
+  StyledCardGrid, // Assuming StyledCardGrid is a named export you want to use directly
+  CarouselSkeleton,
+  CardSkeleton,
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
-  fetchRecentEpisodes, // Import the fetch function for recent episodes
-} from '../hooks/useApi';
-import AnimeEpisodeCardComponent from '../components/Home/EpisodeCard';
+  fetchRecentEpisodes,
+  EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
+} from '../index'; // Adjust the import path to point correctly to your index.ts location
+
 
 const SimpleLayout = styled.div`
   display: flex;

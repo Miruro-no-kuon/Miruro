@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import CardSkeleton from '../Skeletons/CardSkeleton';
+import { Link } from 'react-router-dom';
+import { CardSkeleton, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { MdLayers } from 'react-icons/md'; // For the stacked/layered icon
-import { FaPlay } from 'react-icons/fa'; // For the heart icon
-import { BiSolidLike } from 'react-icons/bi';
-import { Anime } from '../../hooks/interface';
+import { FaPlay } from 'react-icons/fa'; // For the play icon
+import { BiSolidLike } from 'react-icons/bi'; // Assuming this is correct, though the usual import might be `BiLike` from `react-icons/bi` for a solid like icon
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -17,8 +16,10 @@ const slideRightAnimation = keyframes`
   100% { opacity: 1; transform: translateY(0); }
 `;
 
-const StyledCardWrapper = styled.div`
+const StyledCardWrapper = styled(Link)`
+  color: var(--global-text);
   animation: ${slideUpAnimation} 0.4s ease;
+  text-decoration: none;
   &:hover {
     z-index: 2;
   }
@@ -177,7 +178,6 @@ const CardDetails = styled.div`
 const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -186,10 +186,6 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
 
     return () => clearTimeout(timer);
   }, [anime.id]);
-
-  const handleCardClick = () => {
-    navigate(`/watch/${anime.id}`);
-  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -244,7 +240,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
         <CardSkeleton />
       ) : (
         <StyledCardWrapper
-          onClick={handleCardClick}
+          to={`/watch/${anime.id}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           color={animeColor}

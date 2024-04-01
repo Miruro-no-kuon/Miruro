@@ -179,7 +179,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
                 src={lastEpisode.image}
                 alt={`Cover for ${lastEpisode.id}`}
               />
-              <PlayIcon>
+              <PlayIcon aria-label='Play Episode'>
                 <FaPlay />
               </PlayIcon>
               <div className='episode-info'>
@@ -215,7 +215,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
 
   const swiperSettings = useMemo(
     () => ({
-      spaceBetween: 10,
+      spaceBetween: 20,
       slidesPerView: calculateSlidesPerView(windowWidth),
       loop: true,
       freeMode: true,

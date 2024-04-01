@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import CardItem from './CardItem';
+import { CardItem } from '../../index';
 import { Anime } from '../../hooks/interface';
 
 interface CardGridProps {

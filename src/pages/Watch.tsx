@@ -2,18 +2,18 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import styled from 'styled-components';
-import EpisodeList from '../components/Watch/EpisodeList';
-import { Player } from '../components/Watch/Video/Player';
-import EmbedPlayer from '../components/Watch/Video/EmbedPlayer';
-import AnimeData from '../components/Watch/WatchAnimeData';
-import VideoSourceSelector from '../components/Watch/VideSourceSelector';
 import {
+  EpisodeList,
+  Player,
+  EmbedPlayer,
+  WatchAnimeData as AnimeData,
+  VideoSourceSelector,
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
   fetchAnimeData,
   fetchAnimeInfo,
-} from '../hooks/useApi';
-import VideoPlayerSkeleton from '../components/Skeletons/VideoPlayerSkeleton';
+  VideoPlayerSkeleton,
+} from '../index';
 
 // Styled Components
 

@@ -6,12 +6,11 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import DropDownSearch from './DropDownSearch';
-import { fetchAdvancedSearch } from '../hooks/useApi';
+import DropDownSearch from './DropDownSearch'; // Assuming this is a local component not exported through index.ts
+import { fetchAdvancedSearch, type Anime } from '../'; // Adjust the import path to point to your index.ts correctly
 import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
-import { Anime } from '../hooks/interface';
 
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
