@@ -83,9 +83,11 @@ const DownloadLink = styled.a`
   text-align: center;
   text-decoration: none; // Removes underline from links
   margin-left: 0.5rem;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease-in-out;
   &:hover {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
   }
 `;
 
@@ -112,6 +114,7 @@ const EpisodeInfoColumn = styled.div`
   }
   svg {
     margin-left: 0.5rem;
+    font-size: 0.8rem;
   }
   p {
     font-size: 0.9rem;
@@ -166,8 +169,7 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                <FaDownload />
-                Download
+                <FaDownload /> Download
               </DownloadLink>
             </h4>
             <p>If current servers don't work, please try other servers.</p>

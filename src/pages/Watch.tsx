@@ -469,6 +469,12 @@ const Watch: React.FC = () => {
   //next episode shortcut with 500ms delay.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if the event target is an input or textarea element
+      const targetTagName = (event.target as HTMLElement).tagName.toLowerCase();
+      if (targetTagName === 'input' || targetTagName === 'textarea') {
+        return; // Exit the function if event is from input or textarea
+      }
+
       if (!event.shiftKey || !['N', 'P'].includes(event.key.toUpperCase()))
         return;
       const now = Date.now();

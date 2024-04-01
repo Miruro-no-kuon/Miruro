@@ -19,7 +19,13 @@ import {
 } from '@vidstack/react/player/layouts/default';
 import { fetchSkipTimes } from '../../../hooks/useApi';
 import { fetchAnimeStreamingLinks } from '../../../hooks/useApi';
-
+import styled from 'styled-components';
+import {
+  TbPlayerTrackPrevFilled,
+  TbPlayerTrackNextFilled,
+} from 'react-icons/tb';
+import { FaCheck } from 'react-icons/fa6';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
 // Define types for your props
 type PlayerProps = {
   episodeId: string;
@@ -34,6 +40,38 @@ type StreamingSource = {
   quality: string;
 };
 
+const ButtonBase = styled.button`
+  padding: 0.25rem;
+  font-size: 0.8rem;
+  border: none;
+  margin-right: 0.25rem;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  svg {
+    margin-bottom: -0.1rem;
+    color: grey;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.7rem;
+  }
+`;
+
+const Button = styled(ButtonBase)`
+  &.active {
+    background-color: var(--primary-accent);
+  }
+  ${({ autoskip }) =>
+    autoskip &&
+    `
+    color: #d69e00; // Text color
+    svg {
+      color: #d69e00; // Icon color
+    }
+  `}
+`;
+
 export function Player({
   episodeId,
   banner,
@@ -44,7 +82,12 @@ export function Player({
   const [src, setSrc] = useState('');
   const [vttUrl, setVttUrl] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<number>(0); // State to hold the current time
-
+  // State for controlling the new features
+  const [autoPlay, setAutoPlay] = useState(false);
+  const [autoNext, setAutoNext] = useState(false);
+  const [autoSkip, setAutoSkip] = useState(false);
+  const [skipTimes, setSkipTimes] = useState([]);
+  // Handlers for button clicks
   // Utility function to extract episode number from episodeId
   const getEpisodeNumber = (id: string) => {
     const parts = id.split('-');
@@ -52,6 +95,13 @@ export function Player({
   };
 
   useEffect(() => {
+    const savedAutoPlay = localStorage.getItem('autoPlay') === 'true';
+    const savedAutoNext = localStorage.getItem('autoNext') === 'true';
+    const savedAutoSkip = localStorage.getItem('autoSkip') === 'true';
+
+    setAutoPlay(savedAutoPlay);
+    setAutoNext(savedAutoNext);
+    setAutoSkip(savedAutoSkip);
     // Load saved playback info for all episodes from local storage
     const allPlaybackInfo = JSON.parse(
       localStorage.getItem('all_episode_times') || '{}',
@@ -88,15 +138,15 @@ export function Player({
       if (malId && episodeId) {
         const episodeNumber = getEpisodeNumber(episodeId);
         try {
-          const skipTimes = await fetchSkipTimes({
+          const response = await fetchSkipTimes({
             malId: malId.toString(), // Convert malId to a string if it's not already
             episodeNumber, // Use the episode number extracted from episodeId
           });
-          // console.log('Skip times:', skipTimes);
-          const vttContent = generateWebVTTFromSkipTimes(skipTimes);
+          const vttContent = generateWebVTTFromSkipTimes(response); // Assuming response is directly usable or adjust accordingly
           const blob = new Blob([vttContent], { type: 'text/vtt' });
           const vttBlobUrl = URL.createObjectURL(blob);
           setVttUrl(vttBlobUrl);
+          setSkipTimes(response.results); // Update skipTimes state with fetched data
         } catch (error) {
           console.error('Failed to fetch skip times', error);
         }
@@ -113,7 +163,15 @@ export function Player({
       }
     };
   }, [episodeId, malId, updateDownloadLink]);
-
+  useEffect(() => {
+    if (autoPlay && player.current) {
+      player.current
+        .play()
+        .catch((e) =>
+          console.log('Playback failed to start automatically:', e),
+        );
+    }
+  }, [autoPlay, src]);
   useEffect(() => {
     // Set the current time of the player when it's ready
     if (player.current && currentTime) {
@@ -181,10 +239,11 @@ export function Player({
 
   function onTimeUpdate() {
     if (player.current) {
-      const currentTime = player.current.currentTime;
-      const duration = player.current.duration || 1; // Prevent division by zero to avoid NaN
-      const playbackPercentage = (currentTime / duration) * 100;
+      const currentTime = player.current.currentTime; // Get the current playback time
+      const duration = player.current.duration || 1; // Get the video duration, defaulting to 1 to avoid division by zero
 
+      // Update the playback information
+      const playbackPercentage = (currentTime / duration) * 100;
       const playbackInfo = {
         currentTime,
         playbackPercentage,
@@ -195,16 +254,41 @@ export function Player({
         localStorage.getItem('all_episode_times') || '{}',
       );
 
-      // Update the playback info for the current episode
+      // Update the playback info for the current episode in the local storage
       allPlaybackInfo[episodeId] = playbackInfo;
-
-      // Save the updated info back to local storage
       localStorage.setItem(
         'all_episode_times',
         JSON.stringify(allPlaybackInfo),
       );
+
+      // Auto-skip logic: Check if autoSkip is enabled and there are skip times available
+      if (autoSkip && skipTimes.length) {
+        const skipInterval = skipTimes.find(
+          ({ interval }) =>
+            currentTime >= interval.startTime && currentTime < interval.endTime,
+        );
+
+        // If a skip interval is found, move the playback time to the end of this interval
+        if (skipInterval) {
+          player.current.currentTime = skipInterval.interval.endTime;
+        }
+      }
     }
   }
+  const toggleAutoPlay = () => {
+    setAutoPlay(!autoPlay);
+    localStorage.setItem('autoPlay', !autoPlay);
+  };
+
+  const toggleAutoNext = () => {
+    setAutoNext(!autoNext);
+    localStorage.setItem('autoNext', !autoNext);
+  };
+
+  const toggleAutoSkip = () => {
+    setAutoSkip(!autoSkip);
+    localStorage.setItem('autoSkip', !autoSkip);
+  };
 
   // console.log(vttUrl);
 
@@ -214,6 +298,7 @@ export function Player({
         className='player'
         title=''
         src={src}
+        autoplay={autoPlay}
         crossorigin
         playsinline
         onProviderChange={onProviderChange}
@@ -239,6 +324,29 @@ export function Player({
           // thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt"
         />
       </MediaPlayer>
+      <div
+        className='player-menu'
+        style={{
+          backgroundColor: 'var(--global-div-tr)',
+          borderRadius: 'var(--global-border-radius)', // Corrected syntax
+        }}
+      >
+        <Button onClick={toggleAutoPlay}>
+          {autoPlay ? <FaCheck /> : <RiCheckboxBlankFill />} Autoplay
+        </Button>
+        <Button autoskip onClick={toggleAutoSkip}>
+          {autoSkip ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Skip
+        </Button>
+        <Button>
+          <TbPlayerTrackPrevFilled /> Prev
+        </Button>
+        <Button>
+          <TbPlayerTrackNextFilled /> Next
+        </Button>
+        <Button onClick={toggleAutoNext}>
+          {autoNext ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Next
+        </Button>
+      </div>
     </>
   );
 }

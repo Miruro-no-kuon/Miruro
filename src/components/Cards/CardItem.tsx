@@ -145,7 +145,7 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   padding: 0.2rem;
   font-size: 0.8rem;
   font-weight: bold;
-  color: ${(props) => (props.color)};
+  color: ${(props) => props.color};
   opacity: 0.9;
   background-color: var(--global-button-shadow);
   border-radius: 0.3rem;
@@ -157,7 +157,6 @@ const CardDetails = styled.div`
   animation: ${slideRightAnimation} 0.4s ease forwards;
   width: 100%;
   font-family: Arial;
-
   font-weight: bold;
   font-size: 0.75rem;
   color: rgba(102, 102, 102, 0.75);
@@ -167,10 +166,12 @@ const CardDetails = styled.div`
   align-items: center;
   padding: 0.25rem 0rem;
   gap: 0.5rem;
-
   white-space: nowrap;
   overflow: hidden; // Ensures that overflow text is hidden
   text-overflow: ellipsis; // Adds an ellipsis to indicate that text has been cut off
+  svg {
+    margin-bottom: -0.1rem;
+  }
 `;
 
 const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
