@@ -93,7 +93,8 @@ export function Player({
     const parts = id.split('-');
     return parts[parts.length - 1];
   };
-
+  const episodeNumber = getEpisodeNumber(episodeId);
+  const animeVideoTitle = document.title.replace('Miruro | ', '');
   useEffect(() => {
     const savedAutoPlay = localStorage.getItem('autoPlay') === 'true';
     const savedAutoNext = localStorage.getItem('autoNext') === 'true';
@@ -291,12 +292,11 @@ export function Player({
   };
 
   // console.log(vttUrl);
-
   return (
     <>
       <MediaPlayer
         className='player'
-        title=''
+        title={`${animeVideoTitle} - Episode ${episodeNumber}`}
         src={src}
         autoplay={autoPlay}
         crossorigin
