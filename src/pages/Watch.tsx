@@ -7,6 +7,7 @@ import {
   Player,
   EmbedPlayer,
   WatchAnimeData as AnimeData,
+  WatchAnimeDataSideBar as AnimeDataSidebar,
   VideoSourceSelector,
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
@@ -37,12 +38,19 @@ const DataWrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr; // Aim for a 3:1 ratio
   width: 100%; // Make sure this container can expand enough
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SourceAndData = styled.div``;
 
-const RalationsTable = styled.div``;
-
+const RalationsTable = styled.div`
+  margin-top: 7.5rem;
+  @media (max-width: 1000px) {
+    margin-top: 0rem;
+  }
+`;
 const VideoPlayerContainer = styled.div`
   position: relative;
   width: 100%;
@@ -751,7 +759,7 @@ const Watch: React.FC = () => {
           {animeInfo && <AnimeData animeData={animeInfo} />}
         </SourceAndData>
         <RalationsTable>
-          {/* Second row content (optional for your use case) */}
+          {animeInfo && <AnimeDataSidebar animeData={animeInfo} />}
         </RalationsTable>
       </DataWrapper>
     </WatchContainer>

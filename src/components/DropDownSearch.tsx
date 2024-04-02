@@ -5,7 +5,8 @@ import { Anime } from '../hooks/interface';
 import { FaAngleRight } from 'react-icons/fa';
 import { MdLayers } from 'react-icons/md';
 import { BiSolidLike } from 'react-icons/bi';
-
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
 // Keyframes for animation
 const slideDownAnimation = keyframes`
   0% { transform: translateY(0px); max-height: 0; }
@@ -252,13 +253,13 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
             <AnimeDetails $isSelected={index === selectedIndex}>
               <span>&nbsp;{result.type}</span>
               <span>&nbsp;&nbsp;</span>
-              <BiSolidLike color='#' />
+              <TbCardsFilled color='#' />
+              <span>&nbsp;</span>
+              <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
+              <FaStar color='#' />
               <span>&nbsp;</span>
               <span>{result.rating ? result.rating / 10 : 'N/A'}&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
-              <MdLayers color='#' />
-              <span>&nbsp;</span>
-              <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
             </AnimeDetails>
           </div>
         </ResultItem>
