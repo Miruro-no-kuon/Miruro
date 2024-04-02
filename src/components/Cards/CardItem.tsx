@@ -2,10 +2,9 @@ import React, { useEffect, useState, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { CardSkeleton, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
-import { MdLayers } from 'react-icons/md'; // For the stacked/layered icon
 import { FaPlay } from 'react-icons/fa'; // For the play icon
-import { BiSolidLike } from 'react-icons/bi'; // Assuming this is correct, though the usual import might be `BiLike` from `react-icons/bi` for a solid like icon
-
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -97,7 +96,7 @@ const ImageWrapper = styled.div`
 const TitleContainer = styled.div<{ $isHovered: boolean }>`
   display: flex;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.25rem;
   margin-top: 0.35rem;
   border-radius: var(--global-border-radius);
   cursor: pointer;
@@ -112,7 +111,8 @@ const IndicatorDot = styled.div`
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  margin-right: 0.5rem;
+  margin: 0rem;
+  margin-right: 0.4rem;
 `;
 
 const Dot = styled(IndicatorDot)`
@@ -171,7 +171,7 @@ const CardDetails = styled.div`
   overflow: hidden; // Ensures that overflow text is hidden
   text-overflow: ellipsis; // Adds an ellipsis to indicate that text has been cut off
   svg {
-    margin-bottom: -0.1rem;
+    margin-right: -0.4rem;
   }
 `;
 
@@ -279,19 +279,22 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
             </TitleContainer>
             <div>
               <CardDetails title='Romaji Title'>
-                {' '}
-                {truncateTitle(anime.title.romaji || '', 24)}{' '}
+                {truncateTitle(anime.title.romaji || '', 24)}
               </CardDetails>
               <CardDetails title='Card Details'>
-                <div>{anime.releaseDate}</div>
-                <div>
-                  <MdLayers />
-                  {anime.totalEpisodes || anime.episodes}
-                </div>
-                <div>
-                  <BiSolidLike />
-                  {anime.rating / 10}
-                </div>
+                {anime.releaseDate}
+                {(anime.totalEpisodes || anime.episodes) && (
+                  <>
+                    <TbCardsFilled />
+                    {anime.totalEpisodes || anime.episodes}
+                  </>
+                )}
+                {anime.rating && (
+                  <>
+                    <FaStar />
+                    {anime.rating}
+                  </>
+                )}
               </CardDetails>
             </div>
           </StyledCardItem>
