@@ -16,7 +16,7 @@ const Sidebar = styled.div`
     margin: 0;
     padding: 0 0 0.5rem 0;
     color: var(--global-text);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
 
     @media (max-width: 500px) {

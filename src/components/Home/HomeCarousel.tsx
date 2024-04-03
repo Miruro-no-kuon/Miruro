@@ -6,6 +6,9 @@ import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
 import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
 import CarouselSkeleton from '../Skeletons/CarouselSkeleton';
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa6';
 
 // Correctly type your data
 interface SlideData {
@@ -17,6 +20,13 @@ interface SlideData {
     english: string;
   };
   description: string;
+  status: string;
+  rating: number;
+  releaseDate: number;
+  genres: string[];
+  totalEpisodes: number;
+  duration: number;
+  type: string;
 }
 
 const StyledSwiperContainer = styled(Swiper)`
@@ -123,18 +133,38 @@ const SlideTitle = styled.h2`
   }
 `;
 
+const SlideInfo = styled.p`
+  color: var(--white, #fff);
+  font-size: 0.9rem;
+  margin: auto;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  text-overflow: ellipsis;
+  svg {
+    margin-left: 0.5rem;
+  }
+  @media (max-width: 1000px) {
+    font-size: 0.8rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.7rem;
+  }
+`;
+
 const SlideDescription = styled.p<{
   $maxLines: boolean;
 }>`
   color: var(--white, #ccc);
   background: transparent;
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-size: clamp(0.9rem, 1.5vw, 0.9rem);
   line-height: 1.2;
   margin-bottom: 0;
-  max-width: 50%;
+  max-width: 60%;
   max-height: 5rem;
   overflow: hidden;
   -webkit-line-clamp: 3;
+  margin-top: 0.25rem;
 
   @media (max-width: 1000px) {
     line-height: 1.2;
@@ -246,7 +276,7 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
   const validData = data.filter(
     (item) => item.title && item.title.english && item.description,
   );
-
+  const formatGenres = (genres: string[]): string => genres.join(', ');
   return (
     <>
       {loading || error ? (
@@ -278,40 +308,62 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
             touchRatio={1}
             centeredSlides={true}
           >
-            {validData.map(({ id, image, cover, title, description }) => (
-              <StyledSwiperSlide key={id} title={title.english || title.romaji}>
-                <SlideImageWrapper>
-                  <SlideImage
-                    src={cover === image ? BannerNotFound : cover}
-                    alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
-                    $cover={cover} // Managed outside, but kept for styled component
-                    $image={image} // Managed outside, but kept for styled component
-                    loading='eager'
-                  />
-                  <ContentWrapper>
-                    <SlideContent>
-                      <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
-                      <SlideDescription
-                        dangerouslySetInnerHTML={{ __html: description }}
-                        $maxLines={description.length > 200}
-                      />
-                    </SlideContent>
-                    <PlayButtonWrapper>
-                      <PlayButton
-                        onClick={() => handlePlayButtonClick(id)}
-                        title={
-                          'Watch ' + (title.english || title.romaji) + ' Now'
-                        }
-                      >
-                        <PlayIcon />
-                        <span>WATCH NOW</span>
-                      </PlayButton>
-                    </PlayButtonWrapper>
-                  </ContentWrapper>
-                  <DarkOverlay />
-                </SlideImageWrapper>
-              </StyledSwiperSlide>
-            ))}
+            {validData.map(
+              ({
+                id,
+                image,
+                cover,
+                title,
+                description,
+                status,
+                rating,
+                genres,
+                totalEpisodes,
+                duration,
+                type,
+              }) => (
+                <StyledSwiperSlide
+                  key={id}
+                  title={title.english || title.romaji}
+                >
+                  <SlideImageWrapper>
+                    <SlideImage
+                      src={cover === image ? BannerNotFound : cover}
+                      alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
+                      $cover={cover} // Managed outside, but kept for styled component
+                      $image={image} // Managed outside, but kept for styled component
+                      loading='eager'
+                    />
+                    <ContentWrapper>
+                      <SlideContent>
+                        <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
+                        <SlideInfo>
+                          {type} <TbCardsFilled /> {totalEpisodes} <FaStar />{' '}
+                          {rating}
+                          <FaClock /> {duration} mins
+                        </SlideInfo>
+                        <SlideDescription
+                          dangerouslySetInnerHTML={{ __html: description }}
+                          $maxLines={description.length > 200}
+                        />
+                      </SlideContent>
+                      <PlayButtonWrapper>
+                        <PlayButton
+                          onClick={() => handlePlayButtonClick(id)}
+                          title={
+                            'Watch ' + (title.english || title.romaji) + ' Now'
+                          }
+                        >
+                          <PlayIcon />
+                          <span>WATCH NOW</span>
+                        </PlayButton>
+                      </PlayButtonWrapper>
+                    </ContentWrapper>
+                    <DarkOverlay />
+                  </SlideImageWrapper>
+                </StyledSwiperSlide>
+              ),
+            )}
             <div className='swiper-pagination'></div>
           </StyledSwiperContainer>
         </PaginationStyle>

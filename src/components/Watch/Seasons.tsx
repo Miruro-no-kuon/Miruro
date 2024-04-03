@@ -96,9 +96,7 @@ interface SeasonsProps {
   relations: AnimeRelation[];
 }
 
-const Seasons: React.FC<SeasonsProps> = ({
-  relations,
-}) => {
+const Seasons: React.FC<SeasonsProps> = ({ relations }) => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Function to handle card click

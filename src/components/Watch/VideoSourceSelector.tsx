@@ -93,7 +93,7 @@ const DownloadLink = styled.a`
     transform 0.2s ease-in-out;
 
   svg {
-    font-size: 1rem; // Adjust icon size
+    font-size: 0.9rem; // Adjust icon size
   }
 
   &:hover {

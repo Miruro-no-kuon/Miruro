@@ -26,6 +26,7 @@
   --global-div-tr: rgba(224, 224, 224, 0.5);
   --global-border: rgba(8, 8, 8, 0.1);
   --global-text: #333333;
+  --global-text-muted: #888;
   --global-card-bg: #ffffff;
   --global-card-title-bg: #e8e8e8;
   --global-card-shadow: rgba(0, 0, 0, 0.2);
@@ -57,6 +58,7 @@
   --global-div-tr: rgba(20, 20, 20, 0.5);
   --global-border: rgba(245, 245, 245, 0.1);
   --global-text: #e8e8e8;
+  --global-text-muted: #696969;
   --global-card-bg: #181818;
   --global-card-shadow: rgba(0, 0, 0, 0.6);
   --global-card-button-shadow: rgba(255, 255, 255, 0.6);
