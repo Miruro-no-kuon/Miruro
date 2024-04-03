@@ -1,7 +1,7 @@
 {
   "name": "miruro_no_kuon",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.4.2",
   "type": "module",
   "scripts": {
     "dev": "vite --port 8080",
@@ -73,14 +73,14 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@types/react-slick": "^0.23.13",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "vite": "4.x"
+    "vite": "5.x"
   },
   "module": "index.ts",
   "peerDependencies": {

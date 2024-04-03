@@ -59,6 +59,9 @@ body:
       label: Which version was acting up?
       description: Pick the app version that was giving you grief.
       options:
+        - 0.4.2
+        - 0.4.1
+        - 0.4.0
         - 0.3.5
         - 0.3.4
         - 0.3.3
