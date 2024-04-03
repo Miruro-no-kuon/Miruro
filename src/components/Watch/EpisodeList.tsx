@@ -64,8 +64,8 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   display: grid;
   grid-template-columns: ${({ $isRowLayout }) =>
     $isRowLayout ? '1fr' : 'repeat(auto-fill, minmax(4rem, 1fr))'};
-  gap: 0.4rem;
-  padding: 0.6rem;
+  gap: 0.29rem;
+  padding: 0.4rem;
   overflow-y: auto;
   flex-grow: 1;
 `;
@@ -141,7 +141,7 @@ const ControlsContainer = styled.div`
 `;
 
 const SelectInterval = styled.select`
-  padding: 0.75rem;
+  padding: 0.5rem;
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   border: none;

@@ -185,6 +185,9 @@ const MalAnilistimg = styled.img`
   &:hover {
     transform: scale(1.05);
   }
+  &:active {
+    transform: scale(0.9);
+  }
   @media (max-width: 500px) {
     width: 4rem;
     height: 2rem;

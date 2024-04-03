@@ -7,7 +7,7 @@ const SeasonCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  gap: 20px;
+  gap: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   @media (max-width: 500px) {
@@ -19,13 +19,17 @@ const SeasonCard = styled.div`
   background-size: cover;
   background-position: center;
   aspect-ratio: 2 / 1;
-  width: 8rem;
+  padding: 0.9rem;
+  width: 12rem;
+  @media (max-width: 500px) {
+    width: 8rem;
+    padding: 1.3rem;
+  }
   position: relative;
   display: flex;
   align-items: left; /* Center children vertically */
   justify-content: left; /* Center children horizontally */
   text-align: center; /* Ensure text is centered */
-  padding: 1.3rem;
   border-radius: 1rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -49,6 +53,9 @@ const SeasonCard = styled.div`
   &:hover {
     transform: scale(1.05);
   }
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 const Content = styled.div`
@@ -57,19 +64,27 @@ const Content = styled.div`
 `;
 
 const SeasonName = styled.div`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  @media (max-width: 500px) {
+    width: 8rem;
+  }
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 `;
 
 const RelationType = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.3rem;
+  @media (max-width: 500px) {
+    font-size: 1.1rem;
 
+    width: 8rem;
+    margin-bottom: 0.25rem;
+  }
+  font-weight: bold;
   color: white;
   border-radius: var(--global-border-radius);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  margin-bottom: 8px; /* Space between relation type and season name */
+  margin-bottom: 0.75rem;
 `;
 
 interface AnimeRelation {
