@@ -42,7 +42,7 @@ const TabContainer = styled.div`
 const Tab = styled.button<{ $isActive: boolean }>`
   background: ${({ $isActive }) =>
     $isActive ? 'var(--primary-accent)' : 'transparent'};
-  padding: 0.8rem 1rem 0.8rem 1rem;
+  padding: 1rem;
   border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
@@ -86,7 +86,7 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
-  const [watchedEpisodes, setWatchedEpisodes] = useState<AnimeEpisode[]>([]);
+  const [/* watchedEpisodes */, setWatchedEpisodes] = useState<AnimeEpisode[]>([]);
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 14 : 12,
   );

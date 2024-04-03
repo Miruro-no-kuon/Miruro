@@ -3,10 +3,9 @@ import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Anime } from '../hooks/interface';
 import { FaAngleRight } from 'react-icons/fa';
-import { MdLayers } from 'react-icons/md';
-import { BiSolidLike } from 'react-icons/bi';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
+
 // Keyframes for animation
 const slideDownAnimation = keyframes`
   0% { transform: translateY(0px); max-height: 0; }
@@ -76,7 +75,7 @@ const ResultItem = styled.div<{ $isSelected: boolean }>`
   &:hover {
     background-color: var(--primary-accent-bg);
     ${AnimeDetails} {
-      color: var(--primary-text);
+      color: var(--global-text);
     }
   }
 `;

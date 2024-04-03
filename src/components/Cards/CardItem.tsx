@@ -5,6 +5,7 @@ import { CardSkeleton, type Anime } from '../../index'; // Adjust the import pat
 import { FaPlay } from 'react-icons/fa'; // For the play icon
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
+
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -96,8 +97,9 @@ const ImageWrapper = styled.div`
 const TitleContainer = styled.div<{ $isHovered: boolean }>`
   display: flex;
   align-items: center;
-  padding: 0.25rem;
+  padding: 0.5rem;
   margin-top: 0.35rem;
+  gap: 0.4rem;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   transition: background 0.2s ease;
@@ -112,7 +114,6 @@ const IndicatorDot = styled.div`
   height: 0.5rem;
   border-radius: 50%;
   margin: 0rem;
-  margin-right: 0.4rem;
 `;
 
 const Dot = styled(IndicatorDot)`

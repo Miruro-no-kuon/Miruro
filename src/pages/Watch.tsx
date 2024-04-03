@@ -7,7 +7,7 @@ import {
   Player,
   EmbedPlayer,
   WatchAnimeData as AnimeData,
-  WatchAnimeDataSideBar as AnimeDataSidebar,
+  RecommendedList,
   VideoSourceSelector,
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
@@ -22,6 +22,7 @@ const WatchContainer = styled.div``;
 
 const WatchWrapper = styled.div`
   font-size: 0.9rem;
+  gap: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,20 +37,19 @@ const WatchWrapper = styled.div`
 
 const DataWrapper = styled.div`
   display: grid;
-  grid-template-columns: 3fr 1fr; // Aim for a 3:1 ratio
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr; // Aim for a 3:1 ratio
   width: 100%; // Make sure this container can expand enough
   @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto;
   }
 `;
 
 const SourceAndData = styled.div``;
 
 const RalationsTable = styled.div`
-  margin-top: 7.5rem;
-  @media (max-width: 1000px) {
-    margin-top: 0rem;
-  }
+  paddding: 0;
+  margin-top: 1rem;
 `;
 const VideoPlayerContainer = styled.div`
   position: relative;
@@ -59,14 +59,9 @@ const VideoPlayerContainer = styled.div`
   @media (min-width: 1000px) {
     flex: 1 1 auto;
   }
-
-  @media (max-width: 1000px) {
-    padding-bottom: 0.8rem;
-  }
 `;
 
 const EpisodeListContainer = styled.div`
-  padding-left: 0.8rem;
   width: 100%;
   max-height: 100%;
 
@@ -96,13 +91,16 @@ const GoToHomePageButton = styled.a`
   border-radius: var(--global-border-radius);
   background-color: var(--primary-accent);
   margin-top: 1rem;
-  padding: 0.7rem 0.8rem;
-  transform: translate(-50%, -50%) scaleX(1.1);
+  padding: 1rem;
+  transform: translate(-50%, -50%);
   transition: transform 0.2s ease-in-out;
   text-decoration: none;
 
   &:hover {
-    transform: translate(-50%, -50%) scaleX(1.1) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  &:active {
+    transform: translate(-50%, -50%) scale(0.95);
   }
 `;
 const IframeTrailer = styled.iframe`
@@ -694,7 +692,7 @@ const Watch: React.FC = () => {
         // Condition for displaying the "No episodes found" div
         <NoEpsFoundDiv>
           <h2>No episodes found :(</h2>
-          <GoToHomePageButton href='/home'>Home</GoToHomePageButton>
+          <GoToHomePageButton href='/home'>Go back Home</GoToHomePageButton>
         </NoEpsFoundDiv>
       ) : (
         // Render content when episodes are found
@@ -737,31 +735,35 @@ const Watch: React.FC = () => {
           )}
         </WatchWrapper>
       )}
-      <DataWrapper>
-        <SourceAndData style={{ width: videoPlayerWidth }}>
-          {/* Conditionally render VideoSourceSelector based on anime airing status */}
-          {animeInfo && animeInfo.status !== 'Not yet aired' && (
-            <VideoSourceSelector
-              sourceType={sourceType}
-              setSourceType={setSourceType}
-              language={language}
-              setLanguage={setLanguage}
-              downloadLink={downloadLink}
-              episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
-              airingTime={
-                animeInfo && animeInfo.status === 'Ongoing'
-                  ? countdown
-                  : undefined
-              }
-              nextEpisodenumber={nextEpisodenumber}
-            />
-          )}
-          {animeInfo && <AnimeData animeData={animeInfo} />}
-        </SourceAndData>
-        <RalationsTable>
-          {animeInfo && <AnimeDataSidebar animeData={animeInfo} />}
-        </RalationsTable>
-      </DataWrapper>
+      {loading ? (
+        <VideoPlayerSkeleton />
+      ) : (
+        <DataWrapper>
+          <SourceAndData style={{ width: videoPlayerWidth }}>
+            {/* Conditionally render VideoSourceSelector based on anime airing status */}
+            {animeInfo && animeInfo.status !== 'Not yet aired' && (
+              <VideoSourceSelector
+                sourceType={sourceType}
+                setSourceType={setSourceType}
+                language={language}
+                setLanguage={setLanguage}
+                downloadLink={downloadLink}
+                episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
+                airingTime={
+                  animeInfo && animeInfo.status === 'Ongoing'
+                    ? countdown
+                    : undefined
+                }
+                nextEpisodenumber={nextEpisodenumber}
+              />
+            )}
+            {animeInfo && <AnimeData animeData={animeInfo} />}
+          </SourceAndData>
+          <RalationsTable>
+            {animeInfo && <RecommendedList animeData={animeInfo} />}
+          </RalationsTable>
+        </DataWrapper>
+      )}
     </WatchContainer>
   );
 };

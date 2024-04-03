@@ -29,7 +29,7 @@ const Button = styled.button<{ $autoskip?: boolean }>`
   font-size: 0.8rem;
   border: none;
   margin-right: 0.25rem;
-  border-radius: 0.1rem;
+  border-radius: var(--global-border-radius);
   cursor: pointer;
   background-color: var(--global-div);
   color: var(--global-text);
@@ -303,7 +303,13 @@ export function Player({
           // thumbnails='https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt'
         />
       </MediaPlayer>
-      <div className='player-menu'>
+      <div
+        className='player-menu'
+        style={{
+          backgroundColor: 'var(--global-div-tr)',
+          borderRadius: 'var(--global-border-radius)', // Corrected syntax
+        }}
+      >
         <Button onClick={toggleAutoPlay}>
           {autoPlay ? <FaCheck /> : <RiCheckboxBlankFill />} Autoplay
         </Button>

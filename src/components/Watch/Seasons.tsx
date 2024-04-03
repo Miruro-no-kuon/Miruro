@@ -92,11 +92,11 @@ interface AnimeRelation {
   type: string;
 }
 
-interface WatchAnimeDataSeasonsProps {
+interface SeasonsProps {
   relations: AnimeRelation[];
 }
 
-const WatchAnimeDataSeasons: React.FC<WatchAnimeDataSeasonsProps> = ({
+const Seasons: React.FC<SeasonsProps> = ({
   relations,
 }) => {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -135,4 +135,4 @@ const WatchAnimeDataSeasons: React.FC<WatchAnimeDataSeasonsProps> = ({
   );
 };
 
-export default WatchAnimeDataSeasons;
+export default Seasons;

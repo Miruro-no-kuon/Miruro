@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { CardGrid } from '../../index';
 import AniList_logo from '../../assets/logos/anilsmall.png';
 import MAL_logo from '../../assets/logos/malsmall.png';
-import WatchAnimeDataSeasons from '../../components/Watch/WatchAnimeDataSeasons';
+import Seasons from './Seasons';
 import anil_big from '../../assets/logos/anilbig.png';
 import mal_big from '../../assets/logos/malbig.jpg';
 import { SiAnilist } from 'react-icons/si';
@@ -30,7 +30,7 @@ const AnimeDataContainer = styled.div`
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  padding-top: 0.8rem;
+  padding-top: 1rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -163,7 +163,6 @@ const ShowTrailerButton = styled(Button)`
   margin-bottom: 0.5rem;
   &:hover {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
     z-index: 2;
   }
   @media (max-width: 500px) {
@@ -387,7 +386,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               {animeData.trailer && animeData.status !== 'Not yet aired' && (
                 <ShowTrailerButton onClick={toggleTrailer}>
                   <p>
-                    <strong>Show Trailer</strong>
+                    <strong>TRAILER</strong>
                   </p>
                 </ShowTrailerButton>
               )}
@@ -596,7 +595,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
           ) && (
             <>
               <p className='Card-Sections-Titles'>SEASONS</p>
-              <WatchAnimeDataSeasons
+              <Seasons
                 relations={animeData.relations.filter(
                   (relation: any) =>
                     relation.relationType.toUpperCase() === 'PREQUEL' ||

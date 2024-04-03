@@ -14,11 +14,15 @@ interface VideoSourceSelectorProps {
   nextEpisodenumber?: string;
 }
 
-const Container = styled.div`
-  display: flex;
+// Adjust the Container for responsive layout
+const UpdatedContainer = styled.div`
   justify-content: center;
-  width: 100%;
-  padding-top: 0.8rem;
+  margin-top: 1rem;
+  gap: 1rem;
+  display: flex;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;
 
 const Table = styled.table`
@@ -70,22 +74,28 @@ const Button = styled(ButtonBase)`
 `;
 
 const DownloadLink = styled.a`
-  display: inline-block; // Ensures it can be styled like a button
+  display: inline-flex; // Use inline-flex to easily center the icon
+  align-items: center; // Align the icon vertically center
   padding: 0.25rem;
-  padding-left: 0rem;
+  gap: 0.25rem;
   font-size: 0.9rem;
-  border: none;
   font-weight: bold;
+  border: none;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   background-color: var(--global-div);
   color: var(--global-text);
   text-align: center;
-  text-decoration: none; // Removes underline from links
+  text-decoration: none;
   margin-left: 0.5rem;
   transition:
     background-color 0.3s ease,
     transform 0.2s ease-in-out;
+
+  svg {
+    font-size: 1rem; // Adjust icon size
+  }
+
   &:hover {
     background-color: var(--primary-accent);
   }
@@ -106,19 +116,14 @@ const EpisodeInfoColumn = styled.div`
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
   padding: 0.6rem;
-  margin-right: 0.8rem;
   @media (max-width: 1000px) {
     display: block;
     margin-bottom: 10px;
     margin-right: 0rem;
   }
-  svg {
-    margin-left: 0.5rem;
-    font-size: 0.8rem;
-  }
   p {
     font-size: 0.9rem;
-    margin: 0rem;
+    margin: 0;
   }
   h4 {
     margin: 0rem;
@@ -134,16 +139,6 @@ const EpisodeInfoColumn = styled.div`
       font-size: 1rem;
       margin-bottom: 0rem;
     }
-  }
-`;
-
-// Adjust the Container for responsive layout
-const UpdatedContainer = styled(Container)`
-  display: flex;
-  width: 100%;
-  justify-content: space-between; // Adjust based on layout needs
-  @media (max-width: 1000px) {
-    flex-direction: column;
   }
 `;
 
@@ -169,7 +164,8 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                <FaDownload /> Download
+                DOWNLOAD
+                <FaDownload />
               </DownloadLink>
             </h4>
             <p>If current servers don't work, please try other servers.</p>
