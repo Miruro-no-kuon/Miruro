@@ -137,9 +137,10 @@ Please be aware that self-hosting this application is strictly limited to person
 
 #### Deploy your own Miruro Instance
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_PROXY_URL,VITE_IS_LOCAL,PORT&project-name=miruro&repository-name=miruro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_SKIP_TIMES,VITE_PROXY_URL,PORT&project-name=miruro&repository-name=miruro)
 
-https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e
+[![Vercel Deploy Guide](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)
+
 
 ## License 📝
 
