@@ -14,6 +14,7 @@ import {
   fetchAnimeData,
   fetchAnimeInfo,
   VideoPlayerSkeleton,
+  Seasons,
 } from '../index';
 
 // Styled Components
@@ -735,35 +736,31 @@ const Watch: React.FC = () => {
           )}
         </WatchWrapper>
       )}
-      {loading ? (
-        <VideoPlayerSkeleton />
-      ) : (
-        <DataWrapper>
-          <SourceAndData style={{ width: videoPlayerWidth }}>
-            {/* Conditionally render VideoSourceSelector based on anime airing status */}
-            {animeInfo && animeInfo.status !== 'Not yet aired' && (
-              <VideoSourceSelector
-                sourceType={sourceType}
-                setSourceType={setSourceType}
-                language={language}
-                setLanguage={setLanguage}
-                downloadLink={downloadLink}
-                episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
-                airingTime={
-                  animeInfo && animeInfo.status === 'Ongoing'
-                    ? countdown
-                    : undefined
-                }
-                nextEpisodenumber={nextEpisodenumber}
-              />
-            )}
-            {animeInfo && <AnimeData animeData={animeInfo} />}
-          </SourceAndData>
-          <RalationsTable>
-            {animeInfo && <RecommendedList animeData={animeInfo} />}
-          </RalationsTable>
-        </DataWrapper>
-      )}
+      <DataWrapper>
+        <SourceAndData style={{ width: videoPlayerWidth }}>
+          {/* Conditionally render VideoSourceSelector based on anime airing status */}
+          {animeInfo && animeInfo.status !== 'Not yet aired' && (
+            <VideoSourceSelector
+              sourceType={sourceType}
+              setSourceType={setSourceType}
+              language={language}
+              setLanguage={setLanguage}
+              downloadLink={downloadLink}
+              episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
+              airingTime={
+                animeInfo && animeInfo.status === 'Ongoing'
+                  ? countdown
+                  : undefined
+              }
+              nextEpisodenumber={nextEpisodenumber}
+            />
+          )}
+          {animeInfo && <AnimeData animeData={animeInfo} />}
+        </SourceAndData>
+        <RalationsTable>
+          {animeInfo && <RecommendedList animeData={animeInfo} />}
+        </RalationsTable>
+      </DataWrapper>
     </WatchContainer>
   );
 };
