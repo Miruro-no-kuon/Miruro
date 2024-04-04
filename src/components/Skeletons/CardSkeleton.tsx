@@ -44,7 +44,6 @@ const SkeletonCard = styled.div`
 `;
 
 const SkeletonTitle = styled.div`
-  
   height: 1.3rem;
   background: var(--global-card-bg);
   border-radius: var(--global-border-radius);

@@ -50,7 +50,9 @@ const AnimeEpisodeCard = styled(Link)`
   transition: 0.2s ease-in-out;
   transition-delay: 0.25s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     box-shadow: 2px 2px 10px var(--global-card-hover-shadow);
     ${PlayIcon} {
       opacity: 1;
@@ -62,7 +64,9 @@ const AnimeEpisodeCard = styled(Link)`
   }
 
   @media (min-width: 768px) {
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
       transform: translateY(-10px);
     }
   }

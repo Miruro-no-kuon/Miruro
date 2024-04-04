@@ -13,7 +13,6 @@ import {
   EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
 } from '../index'; // Adjust the import path to point correctly to your index.ts location
 
-
 const SimpleLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,7 +54,9 @@ const Tab = styled.button<{ $isActive: boolean }>`
 
   transition: background-color 0.3s ease;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background: var(--primary-accent);
   }
   @media (max-width: 500px) {
@@ -86,7 +87,9 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
-  const [/* watchedEpisodes */, setWatchedEpisodes] = useState<AnimeEpisode[]>([]);
+  const [, /* watchedEpisodes */ setWatchedEpisodes] = useState<AnimeEpisode[]>(
+    [],
+  );
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 14 : 12,
   );
@@ -203,7 +206,7 @@ const Home = () => {
   }, [itemsCount]);
 
   useEffect(() => {
-    document.title = `Miruro | Watch Anime for Free in HD`;
+    document.title = `Miruro | Watch HD Anime for Free`;
   }, [activeTab]);
 
   useEffect(() => {

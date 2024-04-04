@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import {
-  FaReddit,
-  FaDiscord,
-  FaTwitter,
-  FaGithub,
-} from 'react-icons/fa';
+import { FaReddit, FaDiscord, FaTwitter, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const currentYear = new Date().getFullYear();
@@ -57,7 +52,9 @@ const FooterLink = styled(Link)`
     align-self: end;
   }
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     color: var(--global-button-text);
   }
 `;
@@ -96,7 +93,9 @@ const ShareButton = styled.a`
     font-size: 1.2rem;
   }
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     transform: scale(1.15);
     color: var(--global-button-text);
     text-decoration: underline;
@@ -119,9 +118,7 @@ function Footer() {
         <StyledLinkList>
           <FooterLink to='/about'>About</FooterLink>
           <FooterLink to='/pptos'>Privacy & ToS</FooterLink>
-          <FooterLink to='https://ko-fi.com/yourdev'>
-             Donate {"<3"}
-          </FooterLink>
+          <FooterLink to='https://ko-fi.com/yourdev'>Donate {'<3'}</FooterLink>
         </StyledLinkList>
       </FooterBaseContainer>
       <FooterBaseContainer $isSub={true}>

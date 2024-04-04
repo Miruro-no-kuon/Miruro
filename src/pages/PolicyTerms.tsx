@@ -14,7 +14,9 @@ const StyledLink = styled.a`
   color: #744aff;
   text-decoration: none;
   font-weight: bold;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     text-decoration: underline;
   }
 `;

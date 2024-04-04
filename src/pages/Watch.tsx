@@ -8,7 +8,7 @@ import {
   EmbedPlayer,
   WatchAnimeData as AnimeData,
   RecommendedList,
-  VideoSourceSelector,
+  MediaSource,
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
   fetchAnimeData,
@@ -97,7 +97,9 @@ const GoToHomePageButton = styled.a`
   transition: transform 0.2s ease-in-out;
   text-decoration: none;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     transform: translate(-50%, -50%) scale(1.05);
   }
   &:active {
@@ -738,9 +740,9 @@ const Watch: React.FC = () => {
       )}
       <DataWrapper>
         <SourceAndData style={{ width: videoPlayerWidth }}>
-          {/* Conditionally render VideoSourceSelector based on anime airing status */}
+          {/* Conditionally render MediaSource based on anime airing status */}
           {animeInfo && animeInfo.status !== 'Not yet aired' && (
-            <VideoSourceSelector
+            <MediaSource
               sourceType={sourceType}
               setSourceType={setSourceType}
               language={language}

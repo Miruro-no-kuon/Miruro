@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FaBell, FaDownload } from 'react-icons/fa';
 
 // Props interface
-interface VideoSourceSelectorProps {
+interface MediaSourceProps {
   sourceType: string;
   setSourceType: (sourceType: string) => void;
   language: string;
@@ -57,13 +57,15 @@ const ButtonBase = styled.button`
   background-color: var(--global-div);
   color: var(--global-text);
   transition:
-    background-color 0.3s ease,
+    background-color 0.2s ease,
     transform 0.2s ease-in-out;
   text-align: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
+    transform: scale(1.025);
   }
   &:active {
     transform: scale(0.9);
@@ -99,8 +101,9 @@ const DownloadLink = styled.a`
     font-size: 0.9rem; // Adjust icon size
   }
 
-  &:hover {
-    background-color: var(--primary-accent);
+  &:hover,
+  &:active,
+  &:focus { background-color: var(--primary-accent);
   }
 `;
 
@@ -144,7 +147,7 @@ const EpisodeInfoColumn = styled.div`
   }
 `;
 
-const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
+export const MediaSource: React.FC<MediaSourceProps> = ({
   sourceType,
   setSourceType,
   language,
@@ -302,5 +305,3 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
     </UpdatedContainer>
   );
 };
-
-export default VideoSourceSelector;

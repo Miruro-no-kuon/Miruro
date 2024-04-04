@@ -9,7 +9,7 @@
   "plugins": ["prettier-plugin-tailwindcss"],
   "arrowParens": "always",
   "bracketSpacing": true,
-  "jsxSingleQuote": true, 
+  "jsxSingleQuote": true,
   "bracketSameLine": false,
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,

@@ -61,7 +61,9 @@ const LogoImg = styled(Link)`
     color 0.2s ease-in-out,
     transform 0.2s ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     color: black;
     transform: scale(1.05);
   }
@@ -150,7 +152,9 @@ const ClearButton = styled.button<{ $query: string }>`
   display: flex;
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     color: var(--global-text);
     opacity: 1;
   }
@@ -189,7 +193,9 @@ const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     opacity: 1;
   }
 

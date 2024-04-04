@@ -24,7 +24,7 @@ export { default as VideoPlayerSkeleton } from './components/Skeletons/VideoPlay
 export { default as EpisodeList } from './components/Watch/EpisodeList';
 export { default as EmbedPlayer } from './components/Watch/Video/EmbedPlayer';
 export { Player } from './components/Watch/Video/Player'; // Notice: This is not a default export
-export { default as VideoSourceSelector } from './components/Watch/VideoSourceSelector';
+export { MediaSource } from './components/Watch/Video/MediaSource';
 export { default as WatchAnimeData } from './components/Watch/WatchAnimeData';
 export { default as RecommendedList } from './components/Watch/RecommendedList';
 export { default as Seasons } from './components/Watch/Seasons';
