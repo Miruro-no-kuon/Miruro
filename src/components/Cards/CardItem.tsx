@@ -20,7 +20,9 @@ const StyledCardWrapper = styled(Link)`
   color: var(--global-text);
   animation: ${slideUpAnimation} 0.4s ease;
   text-decoration: none;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     z-index: 2;
   }
 `;
@@ -36,7 +38,9 @@ const StyledCardItem = styled.div`
 const ImageDisplayWrapper = styled.div`
   transition: 0.2s ease-in-out;
   @media (min-width: 501px) {
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
       transform: translateY(-10px);
     }
   }
@@ -104,7 +108,9 @@ const TitleContainer = styled.div<{ $isHovered: boolean }>`
   cursor: pointer;
   transition: background 0.2s ease;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background: var(--global-card-title-bg);
   }
 `;

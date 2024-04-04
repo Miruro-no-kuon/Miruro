@@ -211,7 +211,9 @@ const PlayButton = styled.button`
   display: flex;
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
     transform: scale(1.05); /* Slightly larger scale on hover */
   }

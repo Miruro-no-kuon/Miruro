@@ -119,7 +119,9 @@ const ListItem = styled.button<{
     $isRowLayout ? 'space-between' : 'center'};
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     ${({ $isSelected, $isWatched }) =>
       $isSelected
         ? $isWatched
@@ -160,7 +162,9 @@ const LayoutToggle = styled.button`
     background-color 0.15s,
     color 0.15s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--global-button-hover-bg);
   }
 `;
@@ -177,7 +181,9 @@ const SearchContainer = styled.div`
     background-color 0.15s,
     color 0.15s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--global-button-hover-bg);
   }
 `;

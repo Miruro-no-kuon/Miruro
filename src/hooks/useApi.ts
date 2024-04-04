@@ -6,9 +6,15 @@ function ensureUrlEndsWithSlash(url: string): string {
 }
 
 // Adjusting environment variables to ensure they end with a slash
-const BASE_URL = ensureUrlEndsWithSlash(import.meta.env.VITE_BACKEND_URL as string);
-const SKIP_TIMES = ensureUrlEndsWithSlash(import.meta.env.VITE_SKIP_TIMES as string);
-const PROXY_URL = ensureUrlEndsWithSlash(import.meta.env.VITE_PROXY_URL as string);
+const BASE_URL = ensureUrlEndsWithSlash(
+  import.meta.env.VITE_BACKEND_URL as string,
+);
+const SKIP_TIMES = ensureUrlEndsWithSlash(
+  import.meta.env.VITE_SKIP_TIMES as string,
+);
+const PROXY_URL = ensureUrlEndsWithSlash(
+  import.meta.env.VITE_PROXY_URL as string,
+);
 
 // Creating axios instance with proxy server base URL
 const PROXY_SERVER_BASE_URL = `${PROXY_URL}api/json`;
@@ -369,7 +375,12 @@ export async function fetchRecentEpisodes(
 
   // Using the BASE_URL defined at the top of your file
   const url = `${BASE_URL}meta/anilist/recent-episodes?${params.toString()}`;
-  const cacheKey = generateCacheKey('recentEpisodes', page.toString(), perPage.toString(), provider);
+  const cacheKey = generateCacheKey(
+    'recentEpisodes',
+    page.toString(),
+    perPage.toString(),
+    provider,
+  );
 
   // Utilize the existing fetchFromProxy function to handle the request and caching logic
   return fetchFromProxy(url, createCache('RecentEpisodes'), cacheKey);

@@ -315,7 +315,10 @@ const SearchSort = () => {
         <FilterSection>
           <FilterLabel>Genres</FilterLabel>
           <Select
-            components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+            components={{
+              ...animatedComponents,
+              IndicatorSeparator: () => null,
+            }}
             isMulti
             options={genreOptions}
             onChange={setSelectedGenres}
@@ -327,7 +330,10 @@ const SearchSort = () => {
         <FilterSection>
           <FilterLabel>Year</FilterLabel>
           <Select
-            components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+            components={{
+              ...animatedComponents,
+              IndicatorSeparator: () => null,
+            }}
             options={yearOptions}
             onChange={setSelectedYear}
             value={selectedYear}
@@ -339,7 +345,10 @@ const SearchSort = () => {
         <FilterSection>
           <FilterLabel>Season</FilterLabel>
           <Select
-            components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+            components={{
+              ...animatedComponents,
+              IndicatorSeparator: () => null,
+            }}
             isMulti
             options={seasonOptions}
             onChange={setSelectedSeason}
@@ -351,7 +360,10 @@ const SearchSort = () => {
         <FilterSection>
           <FilterLabel>Format</FilterLabel>
           <Select
-            components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+            components={{
+              ...animatedComponents,
+              IndicatorSeparator: () => null,
+            }}
             options={formatOptions}
             onChange={(selectedOption) => setSelectedFormat(selectedOption)}
             value={selectedFormat}
@@ -363,7 +375,10 @@ const SearchSort = () => {
         <FilterSection>
           <FilterLabel>Status</FilterLabel>
           <Select
-            components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+            components={{
+              ...animatedComponents,
+              IndicatorSeparator: () => null,
+            }}
             options={statusOptions}
             onChange={(selectedOption) => setSelectedStatus(selectedOption)}
             value={selectedStatus}

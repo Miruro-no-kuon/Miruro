@@ -139,7 +139,9 @@ const Button = styled.button`
   transition: background-color 0.3s ease;
   outline: none;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
   }
 
@@ -161,7 +163,9 @@ const ShowTrailerButton = styled(Button)`
   color: var(--global-text);
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent);
     z-index: 2;
   }
@@ -182,7 +186,9 @@ const MalAnilistimg = styled.img`
   transition: transform 0.2s ease-in-out;
   width: 5rem;
   object-fit: cover;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     transform: scale(1.05);
   }
   @media (max-width: 500px) {

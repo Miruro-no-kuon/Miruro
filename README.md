@@ -141,7 +141,6 @@ Please be aware that self-hosting this application is strictly limited to person
 
 [![Vercel Deploy Guide](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)
 
-
 ## License 📝
 
 Hey there! Just so you know, this project follows a Custom BY-NC License. What does that mean? Well, you're welcome to use, share, and tinker with the code as long as it's for non-commercial purposes. Oh, and don't forget to give credit to our platform, [miruro.com](https://www.miruro.com). If you're thinking of using it for commercial stuff, sorry, that's a no-go. For all the details, check out the [LICENSE](LICENSE) file. Got questions or need special permissions? Feel free to shoot us a message!

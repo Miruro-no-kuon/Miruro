@@ -46,7 +46,9 @@ const SeasonCard = styled.div`
   }
   transition: transform 0.2s ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     transform: scale(1.05);
   }
 `;

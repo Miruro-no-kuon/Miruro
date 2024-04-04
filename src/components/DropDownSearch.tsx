@@ -72,7 +72,9 @@ const ResultItem = styled.div<{ $isSelected: boolean }>`
   background-color: ${(props) =>
     props.$isSelected ? 'var(--primary-accent-bg)' : 'transparent'};
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
     ${AnimeDetails} {
       color: var(--global-text);

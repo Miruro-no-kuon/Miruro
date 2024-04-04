@@ -43,7 +43,9 @@ const StyledButton = styled.button<StyledButtonProps>`
   transition: background-color 0.3s;
   border: none;
   font-size: 1rem;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: ${({ isSelected }) =>
       isSelected ? 'var(--primary-accent)' : 'var(--primary-accent)'};
   }
