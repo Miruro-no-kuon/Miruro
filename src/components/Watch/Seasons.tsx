@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link } from 'react-router-dom';
 
-// Styled Components
 const SeasonCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -15,7 +14,7 @@ const SeasonCardContainer = styled.div`
   }
 `;
 
-const SeasonCard = styled.div`
+const SeasonCard = styled(Link)`
   background-size: cover;
   background-position: center;
   padding: 0.9rem;
@@ -28,13 +27,14 @@ const SeasonCard = styled.div`
   }
   position: relative;
   display: flex;
-  align-items: center; /* Center children vertically */
-  justify-content: center; /* Center children horizontally */
-  text-align: center; /* Ensure text is centered */
-  border-radius: 1rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 0.3rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
+  text-decoration: none;
 
   &::before {
     content: '';
@@ -43,10 +43,8 @@ const SeasonCard = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-    border-radius: var(
-      --global-border-radius
-    ); /* Match parent's border radius */
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: var(--global-border-radius);
     z-index: 1;
   }
   transition: transform 0.2s ease-in-out;
@@ -54,16 +52,16 @@ const SeasonCard = styled.div`
   &:hover,
   &:active,
   &:focus {
-    transform: scale(1.05);
+    transform: translateY(-5px);
   }
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.975);
   }
 `;
 
 const Content = styled.div`
   position: relative;
-  z-index: 2; /* Ensure content is above the overlay */
+  z-index: 2;
 `;
 
 const SeasonName = styled.div`
@@ -111,27 +109,15 @@ interface AnimeRelation {
   type: string;
 }
 
-interface SeasonsProps {
-  relations: AnimeRelation[];
-}
-
-const Seasons: React.FC<SeasonsProps> = ({ relations }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
-
-  // Function to handle card click
-  const handleCardClick = (id: number) => {
-    navigate(`/watch/${id}`); // Navigate to the corresponding anime page
-  };
-
-  // Sort relations so that PREQUELs come before SEQUELs
+const Seasons: React.FC<{ relations: AnimeRelation[] }> = ({ relations }) => {
   const sortedRelations = relations.sort((a, b) => {
     if (a.relationType === 'PREQUEL' && b.relationType !== 'PREQUEL') {
-      return -1; // a comes first
+      return -1;
     }
     if (a.relationType !== 'PREQUEL' && b.relationType === 'PREQUEL') {
-      return 1; // b comes first
+      return 1;
     }
-    return 0; // no change in order
+    return 0;
   });
 
   return (
@@ -139,13 +125,19 @@ const Seasons: React.FC<SeasonsProps> = ({ relations }) => {
       {sortedRelations.map((relation) => (
         <SeasonCard
           key={relation.id}
+          to={`/watch/${relation.id}`}
+          title={`Watch ${relation.title.english || relation.title.romaji || relation.title.userPreferred}`}
+          aria-label={`Watch ${relation.title.english || relation.title.romaji || relation.title.userPreferred}`}
           style={{ backgroundImage: `url(${relation.image})` }}
-          onClick={() => handleCardClick(relation.id)} // Add the onClick event handler
         >
+          <img
+            src={relation.image}
+            alt={`${relation.title.english || relation.title.romaji || relation.title.userPreferred} Cover`}
+            style={{ display: 'none' }}
+          />
           <Content>
             <RelationType>{relation.relationType}</RelationType>
             <SeasonName>
-              {}
               {relation.title.english ||
                 relation.title.romaji ||
                 relation.title.userPreferred}

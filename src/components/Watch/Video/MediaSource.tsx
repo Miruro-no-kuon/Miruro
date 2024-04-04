@@ -68,7 +68,7 @@ const ButtonBase = styled.button`
     transform: scale(1.025);
   }
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.975);
   }
 `;
 

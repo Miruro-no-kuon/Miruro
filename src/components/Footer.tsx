@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const currentYear = new Date().getFullYear();
-
 const PageWrapper = styled.div`
   padding: 0 1rem;
   margin-top: 2rem;
@@ -109,44 +107,69 @@ const ShareButton = styled.a`
 function Footer() {
   return (
     <PageWrapper>
-      <FooterBaseContainer $isSub={false}>
-        <Text $isSub={false}>
-          <FooterLogoImage /> <br />
-          This website does not retain any files on its server. Rather, it
-          solely provides links to media content hosted by third-party services.
-        </Text>
-        <StyledLinkList>
-          <FooterLink to='/about'>About</FooterLink>
-          <FooterLink to='/pptos'>Privacy & ToS</FooterLink>
-          <FooterLink to='https://ko-fi.com/yourdev'>Donate {'<3'}</FooterLink>
-        </StyledLinkList>
-      </FooterBaseContainer>
-      <FooterBaseContainer $isSub={true}>
-        <Text $isSub={true}>
-          &copy; {currentYear} miruro.tv | Website Made by{' '}
-          <strong>Miruro no Kuon</strong>
-        </Text>
-        <SocialIconsWrapper>
-          {[
-            { href: 'https://twitter.com/miruro_official', Icon: FaTwitter },
-            { href: 'https://discord.gg/4kfypZ96K4', Icon: FaDiscord },
-            {
-              href: 'https://github.com/Miruro-no-kuon/Miruro',
-              Icon: FaGithub,
-            },
-            { href: 'https://www.reddit.com/r/miruro', Icon: FaReddit },
-          ].map(({ href, Icon }) => (
-            <ShareButton
-              key={href}
-              href={href}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <Icon />
-            </ShareButton>
-          ))}
-        </SocialIconsWrapper>
-      </FooterBaseContainer>
+      <footer>
+        <FooterBaseContainer aria-label='Main Footer' $isSub={false}>
+          <Text as='p' $isSub={false}>
+            <FooterLogoImage alt='Footer Logo' /> <br />
+            This website does not retain any files on its server. Rather, it
+            solely provides links to media content hosted by third-party
+            services.
+          </Text>
+          <StyledLinkList aria-label='Footer Links'>
+            <FooterLink to='/about' title='About Us'>
+              About
+            </FooterLink>
+            <FooterLink to='/pptos' title='Privacy Policy and Terms of Service'>
+              Privacy & ToS
+            </FooterLink>
+            <FooterLink to='https://ko-fi.com/yourdev' title='Donate to Us'>
+              Donate {'<3'}
+            </FooterLink>
+          </StyledLinkList>
+        </FooterBaseContainer>
+        <FooterBaseContainer aria-label='Sub Footer' $isSub={true}>
+          <Text as='p' $isSub={true}>
+            &copy; {new Date().getFullYear()} miruro.tv | Website Made by{' '}
+            <strong>Miruro no Kuon</strong>
+          </Text>
+          <nav aria-label='Social Links'>
+            <SocialIconsWrapper>
+              {[
+                {
+                  href: 'https://twitter.com/miruro_official',
+                  Icon: FaTwitter,
+                  label: 'Twitter',
+                },
+                {
+                  href: 'https://discord.gg/4kfypZ96K4',
+                  Icon: FaDiscord,
+                  label: 'Discord',
+                },
+                {
+                  href: 'https://github.com/Miruro-no-kuon/Miruro',
+                  Icon: FaGithub,
+                  label: 'GitHub',
+                },
+                {
+                  href: 'https://www.reddit.com/r/miruro',
+                  Icon: FaReddit,
+                  label: 'Reddit',
+                },
+              ].map(({ href, Icon, label }) => (
+                <ShareButton
+                  key={href}
+                  href={href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label={`Miruro on ${label}`}
+                >
+                  <Icon aria-hidden='true' />
+                </ShareButton>
+              ))}
+            </SocialIconsWrapper>
+          </nav>
+        </FooterBaseContainer>
+      </footer>
     </PageWrapper>
   );
 }

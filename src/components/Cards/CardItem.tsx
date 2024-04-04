@@ -156,7 +156,7 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   color: ${(props) => props.color};
   opacity: 0.9;
   background-color: var(--global-button-shadow);
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   backdrop-filter: blur(10px);
   transition: 0.2s ease-in-out;
 `);

@@ -5,7 +5,7 @@ import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 
 const slideUpAnimation = keyframes`
-  0% { opacity: 0; transform: translateY(10px); }
+  0% { opacity: 0.4; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 `;
 
@@ -93,16 +93,15 @@ interface AnimeDataProps {
 }
 
 const RecommendedList: React.FC<AnimeDataProps> = ({ animeData }) => {
-  // Filtering for recommendations remains unchanged
   const filteredRecommendations = animeData.recommendations.filter((rec) =>
-    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type),
+    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type || ''),
   );
 
-  // Updated filtering for relations to exclude SEQUEL and PREQUEL based on relationType
   const filteredRelations = animeData.relations.filter(
     (rel) =>
-      ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rel.type) &&
-      !['SEQUEL', 'PREQUEL'].includes(rel.relationType),
+      ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
+        rel.type || '',
+      ) && !['SEQUEL', 'PREQUEL'].includes(rel.relationType || ''),
   );
 
   return (
@@ -117,20 +116,28 @@ const RecommendedList: React.FC<AnimeDataProps> = ({ animeData }) => {
                 to={`/watch/${relation.id}`}
                 key={relation.id}
                 style={{ textDecoration: 'none', color: 'inherit' }}
+                title={`Watch ${relation.title.userPreferred}`} // Adding meaningful title
+                aria-label={`Watch ${relation.title.userPreferred}`} // Improving accessibility
               >
                 <Card style={{ animationDelay: `${index * 0.1}s` }}>
                   <AnimeImage
                     src={relation.image}
                     alt={relation.title.userPreferred}
+                    loading='lazy' // Improve loading times and efficiency
                   />
                   <Info>
                     <Title>
-                      {relation.title.english || relation.title.romaji}
+                      {relation.title.english ??
+                        relation.title.romaji ??
+                        relation.title.userPreferred}
                     </Title>
-                    <Details>
+                    <Details
+                      aria-label={`Details about ${relation.title.userPreferred}`}
+                    >
                       {`${relation.type || ''} `}
-                      <TbCardsFilled /> {`${relation.episodes}  `}
-                      <FaStar /> {`${relation.rating}  `}
+                      <TbCardsFilled aria-hidden='true' />{' '}
+                      {`${relation.episodes}  `}
+                      <FaStar aria-hidden='true' /> {`${relation.rating}  `}
                     </Details>
                   </Info>
                 </Card>
@@ -149,21 +156,29 @@ const RecommendedList: React.FC<AnimeDataProps> = ({ animeData }) => {
                 to={`/watch/${recommendation.id}`}
                 key={recommendation.id}
                 style={{ textDecoration: 'none', color: 'inherit' }}
+                title={`Watch ${recommendation.title.userPreferred}`} // Adding meaningful title
+                aria-label={`Watch ${recommendation.title.userPreferred}`} // Improving accessibility
               >
                 <Card style={{ animationDelay: `${index * 0.1}s` }}>
                   <AnimeImage
                     src={recommendation.image}
                     alt={recommendation.title.userPreferred}
+                    loading='lazy' // Improve loading times and efficiency
                   />
                   <Info>
                     <Title>
-                      {recommendation.title.english ||
-                        recommendation.title.romaji}
+                      {recommendation.title.english ??
+                        recommendation.title.romaji ??
+                        recommendation.title.userPreferred}
                     </Title>
-                    <Details>
+                    <Details
+                      aria-label={`Details about ${recommendation.title.userPreferred}`}
+                    >
                       {`${recommendation.type} `}
-                      <TbCardsFilled /> {`${recommendation.episodes}  `}
-                      <FaStar /> {`${recommendation.rating}  `}
+                      <TbCardsFilled aria-hidden='true' />{' '}
+                      {`${recommendation.episodes}  `}
+                      <FaStar aria-hidden='true' />{' '}
+                      {`${recommendation.rating}  `}
                     </Details>
                   </Info>
                 </Card>

@@ -170,7 +170,7 @@ const StyledButton = styled.button<{ isInputToggle?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   width: 100%;
   height: 100%;
   transition:

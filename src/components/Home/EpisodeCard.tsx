@@ -178,6 +178,10 @@ const AnimeEpisodeCardComponent: React.FC = () => {
             <AnimeEpisodeCard
               to={`/watch/${animeId}`}
               style={{ textDecoration: 'none' }}
+              title={
+                'Continue Watching ' +
+                `Episode ${lastEpisode.number}${lastEpisode.title ? `: ${lastEpisode.title}` : ''}`
+              }
             >
               <img
                 src={lastEpisode.image}
@@ -223,7 +227,6 @@ const AnimeEpisodeCardComponent: React.FC = () => {
       slidesPerView: calculateSlidesPerView(windowWidth),
       loop: true,
       freeMode: true,
-      centerSlides: false,
       grabCursor: true,
       keyboard: true,
       touchRatio: 1.2,
@@ -240,20 +243,36 @@ const AnimeEpisodeCardComponent: React.FC = () => {
   );
 
   return (
-    <Section>
+    <Section aria-labelledby='continueWatchingTitle'>
       {episodesToRender.length > 0 && (
-        <ContinueWatchingTitle>CONTINUE WATCHING</ContinueWatchingTitle>
+        <ContinueWatchingTitle id='continueWatchingTitle'>
+          CONTINUE WATCHING
+        </ContinueWatchingTitle>
       )}
-      <StyledSwiperContainer {...swiperSettings}>
+      <StyledSwiperContainer {...swiperSettings} aria-label='Episodes carousel'>
         {episodesToRender}
-        <FaChevronCircleLeft
+        <button
+          aria-label='Previous episode'
           className='swiper-button-prev'
-          style={{ color: 'rgba(255, 255, 255, 0.85)' }}
-        />
-        <FaChevronCircleRight
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255, 255, 255, 0.85)',
+          }}
+        >
+          <FaChevronCircleLeft aria-hidden='true' />
+        </button>
+        <button
+          aria-label='Next episode'
           className='swiper-button-next'
-          style={{ color: 'rgba(255, 255, 255, 0.85)' }}
-        />
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255, 255, 255, 0.85)',
+          }}
+        >
+          <FaChevronCircleRight aria-hidden='true' />
+        </button>
       </StyledSwiperContainer>
     </Section>
   );

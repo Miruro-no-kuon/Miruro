@@ -28,7 +28,7 @@ const DropdownContainer = styled.div<{ $isVisible: boolean; width: number }>`
   overflow-y: auto;
   background-color: var(--global-div);
   border-top: none;
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   padding-top: 2.5rem;
   animation: ${slideDownAnimation} 0.5s ease forwards;
 
