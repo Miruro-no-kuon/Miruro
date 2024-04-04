@@ -18,17 +18,18 @@ const SeasonCardContainer = styled.div`
 const SeasonCard = styled.div`
   background-size: cover;
   background-position: center;
-  aspect-ratio: 2 / 1;
   padding: 0.9rem;
-  width: 12rem;
+  height: 6rem;
+  width: 20rem;
   @media (max-width: 500px) {
+    height: 3rem;
     width: 8rem;
     padding: 1.3rem;
   }
   position: relative;
   display: flex;
-  align-items: left; /* Center children vertically */
-  justify-content: left; /* Center children horizontally */
+  align-items: center; /* Center children vertically */
+  justify-content: center; /* Center children horizontally */
   text-align: center; /* Ensure text is centered */
   border-radius: 1rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -64,9 +65,11 @@ const Content = styled.div`
 `;
 
 const SeasonName = styled.div`
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   @media (max-width: 500px) {
+    display: none;
     width: 8rem;
+    font-size: 0.8rem;
   }
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
@@ -76,7 +79,6 @@ const RelationType = styled.div`
   font-size: 1.3rem;
   @media (max-width: 500px) {
     font-size: 1.1rem;
-
     width: 8rem;
     margin-bottom: 0.25rem;
   }
@@ -140,7 +142,12 @@ const Seasons: React.FC<SeasonsProps> = ({ relations }) => {
         >
           <Content>
             <RelationType>{relation.relationType}</RelationType>
-            <SeasonName>{relation.title.userPreferred}</SeasonName>
+            <SeasonName>
+              {}
+              {relation.title.english ||
+                relation.title.romaji ||
+                relation.title.userPreferred}
+            </SeasonName>
           </Content>
         </SeasonCard>
       ))}

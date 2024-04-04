@@ -607,7 +607,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               />
             </>
           )}
-
+        {/* 
         {animeData &&
           animeData.relations.filter(
             (relation: any) =>
@@ -642,7 +642,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               </Relations>
               <br></br>
             </>
-          )}
+          )} */}
         {/* Recommendations */}
         {/* {animeData &&
           animeData.recommendations.filter((recommendation: any) =>

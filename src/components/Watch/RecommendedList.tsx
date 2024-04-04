@@ -11,7 +11,6 @@ const slideUpAnimation = keyframes`
 
 const Sidebar = styled.div`
   transition: 0.2s ease-in-out;
-
   .Section-Title {
     margin: 0;
     padding: 0 0 0.5rem 0;
@@ -71,9 +70,10 @@ const Details = styled.p`
   color: rgba(102, 102, 102, 0.75);
 `;
 
-interface Recommendation {
+interface CommonProps {
   id: string;
-  type: string;
+  type?: string; // Type might not be needed for relations if using relationType
+  relationType?: string; // Adding relationType for relations
   image: string;
   title: {
     english?: string;
@@ -84,23 +84,62 @@ interface Recommendation {
   rating: number;
 }
 
+// Merged Interface for both Recommendations and Relations
 interface AnimeDataProps {
   animeData: {
-    recommendations: Recommendation[];
+    recommendations: CommonProps[];
+    relations: CommonProps[];
   };
 }
 
 const RecommendedList: React.FC<AnimeDataProps> = ({ animeData }) => {
-  const filteredRecommendations = animeData?.recommendations.filter(
-    (recommendation) =>
-      ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-        recommendation.type,
-      ),
+  // Filtering for recommendations remains unchanged
+  const filteredRecommendations = animeData.recommendations.filter((rec) =>
+    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type),
+  );
+
+  // Updated filtering for relations to exclude SEQUEL and PREQUEL based on relationType
+  const filteredRelations = animeData.relations.filter(
+    (rel) =>
+      ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rel.type) &&
+      !['SEQUEL', 'PREQUEL'].includes(rel.relationType),
   );
 
   return (
     <Sidebar>
-      {filteredRecommendations && filteredRecommendations.length > 0 && (
+      {filteredRelations.length > 0 && (
+        <>
+          <p className='Section-Title'>RELATED</p>
+          {filteredRelations
+            .slice(0, window.innerWidth > 500 ? 4 : 3)
+            .map((relation, index) => (
+              <Link
+                to={`/watch/${relation.id}`}
+                key={relation.id}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <Card style={{ animationDelay: `${index * 0.1}s` }}>
+                  <AnimeImage
+                    src={relation.image}
+                    alt={relation.title.userPreferred}
+                  />
+                  <Info>
+                    <Title>
+                      {relation.title.english || relation.title.romaji}
+                    </Title>
+                    <Details>
+                      {`${relation.type || ''} `}
+                      <TbCardsFilled /> {`${relation.episodes}  `}
+                      <FaStar /> {`${relation.rating}  `}
+                    </Details>
+                  </Info>
+                </Card>
+              </Link>
+            ))}
+          <br></br>
+        </>
+      )}
+      {filteredRecommendations.length > 0 && (
         <>
           <p className='Section-Title'>RECOMMENDED</p>
           {filteredRecommendations
