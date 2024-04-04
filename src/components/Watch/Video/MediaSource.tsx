@@ -67,6 +67,9 @@ const ButtonBase = styled.button`
     background-color: var(--primary-accent);
     transform: scale(1.025);
   }
+  &:active {
+    transform: scale(0.9);
+  }
 `;
 
 const Button = styled(ButtonBase)`
@@ -121,7 +124,6 @@ const EpisodeInfoColumn = styled.div`
   padding: 0.6rem;
   @media (max-width: 1000px) {
     display: block;
-    margin-bottom: 10px;
     margin-right: 0rem;
   }
   p {
@@ -179,7 +181,7 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
         {airingTime && (
           <>
             <p>
-              The next episode, <strong>{nextEpisodenumber}</strong> will air in
+              Episode <strong>{nextEpisodenumber}</strong> will air in{' '}
               <FaBell />
               <strong> {airingTime}</strong>.
             </p>

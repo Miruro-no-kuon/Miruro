@@ -177,7 +177,7 @@ const formatOptions = [
 const statusOptions = [
   anyOption,
   { value: 'RELEASING', label: 'Releasing' },
-  { value: 'NOT YET AIRED', label: 'Not Yet Aired' },
+  { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
   { value: 'FINISHED', label: 'Finished' },
   { value: 'CANCELLED', label: 'Cancelled' },
   { value: 'HIATUS', label: 'Hiatus' },

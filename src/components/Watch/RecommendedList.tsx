@@ -18,10 +18,6 @@ const Sidebar = styled.div`
     color: var(--global-text);
     font-size: 1.25rem;
     font-weight: bold;
-
-    @media (max-width: 500px) {
-      font-size: 1.25rem;
-    }
   }
 `;
 
@@ -61,10 +57,12 @@ const Info = styled.div``;
 const Title = styled.p`
   top: 0;
   margin: 0;
+  margin-bottom: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-size: 0.9rem;
 `;
 
 const Details = styled.p`
