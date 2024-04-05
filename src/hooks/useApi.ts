@@ -194,7 +194,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
 export async function fetchAdvancedSearch(
   searchQuery: string = '',
   page: number = 1,
-  perPage: number = 16,
+  perPage: number = 20,
   options: FetchOptions = {},
 ) {
   const queryParams = new URLSearchParams({

@@ -27,7 +27,7 @@ const CardGrid: React.FC<CardGridProps> = ({
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
 
-      const threshold = 1000;
+      const threshold = 0;
 
       if (windowHeight + scrollTop >= documentHeight - threshold) {
         handleLoadMore();

@@ -244,7 +244,7 @@ const Home = () => {
     <SimpleLayout>
       {error && (
         <ErrorMessage title='Error Message'>
-          <p>Error: {error}</p>
+          <p>ERROR: {error}</p>
         </ErrorMessage>
       )}
       {loading.trending || error ? (

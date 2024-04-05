@@ -4,6 +4,7 @@ export { default as Carousel } from './components/Carousel';
 export { default as DropDownSearch } from './components/DropDownSearch';
 export { default as Footer } from './components/Footer';
 export { default as Navbar } from './components/Navbar';
+export { Filters } from './components/Filters';
 export { default as ShortcutsPopup } from './components/ShortcutsPopup';
 
 // TODO Cards
