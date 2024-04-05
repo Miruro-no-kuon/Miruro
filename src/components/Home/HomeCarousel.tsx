@@ -9,25 +9,7 @@ import CarouselSkeleton from '../Skeletons/CarouselSkeleton';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
-
-// Correctly type your data
-interface SlideData {
-  id: string;
-  image: string;
-  cover: string;
-  title: {
-    romaji: string;
-    english: string;
-  };
-  description: string;
-  status: string;
-  rating: number;
-  releaseDate: number;
-  genres: string[];
-  totalEpisodes: number;
-  duration: number;
-  type: string;
-}
+import { Anime } from '../../hooks/interface';
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -253,7 +235,7 @@ const PaginationStyle = styled.div`
 
 // Adjust the Carousel component to use correctly typed props and state
 interface CarouselTrendingProps {
-  data: SlideData[];
+  data: Anime[];
   loading: boolean;
   error?: string | null;
 }
@@ -331,9 +313,9 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
                   <SlideImageWrapper>
                     <SlideImage
                       src={cover === image ? BannerNotFound : cover}
-                      alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
-                      $cover={cover} // Managed outside, but kept for styled component
-                      $image={image} // Managed outside, but kept for styled component
+                      alt={title.english || title.romaji + ' Banner Image'}
+                      $cover={cover}
+                      $image={image}
                       loading='eager'
                     />
                     <ContentWrapper>

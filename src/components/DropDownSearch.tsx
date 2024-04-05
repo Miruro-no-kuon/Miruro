@@ -244,7 +244,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           role='listitem' // Enhanced semantic meaning for accessibility
         >
           <AnimeImage
-            src={result.image || result.coverImage || ''} // Fallback for missing images
+            src={result.image || ''} // Fallback for missing images
             alt={result.title?.english || result.title?.romaji || 'n/a'}
           />
           <div>

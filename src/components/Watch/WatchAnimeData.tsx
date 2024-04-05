@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { CardGrid } from '../../index';
 import AniList_logo from '../../assets/logos/anilsmall.png';
 import MAL_logo from '../../assets/logos/malsmall.png';
 import Seasons from './Seasons';
-import anil_big from '../../assets/logos/anilbig.png';
-import mal_big from '../../assets/logos/malbig.jpg';
-import { SiAnilist } from 'react-icons/si';
-import { SiMyanimelist } from 'react-icons/si';
-// Styled components
+import { Anime } from '../../hooks/interface';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(20px); }
@@ -208,44 +203,6 @@ const ShowMoreButton = styled.div`
     transform 0.2s ease-in-out;
 `;
 
-const Relations = styled.div`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 20px;
-  margin-top: 1rem;
-`;
-
-const AnimeCharacterContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 20px;
-  padding: 0.6rem;
-`;
-
-const CharacterCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-`;
-
-const CharacterImages = styled.img`
-  max-height: 9rem;
-  height: auto;
-  border-radius: var(--global-border-radius);
-  @media (max-width: 1000px) {
-    max-height: 7rem;
-  }
-`;
-
-const CharacterName = styled.div`
-  text-align: center;
-  word-wrap: break-word;
-`;
-
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9;
   margin-bottom: 2rem;
@@ -292,52 +249,31 @@ const TrailerOverlayContent = styled.div`
   }
 `;
 
-interface AnimeDataProps {
-  animeData: any;
-}
-
-// Main component
-const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
-  // State
-  const [showCharacters, setShowCharacters] = useState(false);
+const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
-  const [showAllCharacters, setShowAllCharacters] = useState(false);
 
-  // Function to toggle showAllCharacters state
-  const toggleShowAllCharacters = () => {
-    setShowAllCharacters(!showAllCharacters);
-  };
-  const renderedCharacters = animeData.characters.filter(
-    (character) => showAllCharacters || character.role === 'MAIN',
-  );
-  //Reset description expansion after url id change
   const getAnimeIdFromUrl = () => {
     const pathParts = window.location.pathname.split('/');
-    // Assuming the ID is always the third segment in the path `/watch/:id/:title`
     return pathParts[2];
   };
-  // Toggle description expansion
+
   const toggleDescription = () => {
     setDescriptionExpanded(!isDescriptionExpanded);
-    setShowCharacters(!isDescriptionExpanded);
   };
-  //Reset description expansion after url id change
-  useEffect(() => {
-    setDescriptionExpanded(false); // Reset to false whenever the anime ID changes
-  }, [getAnimeIdFromUrl()]); // Depend on the current anime ID
 
-  // Remove HTML tags from description
+  useEffect(() => {
+    setDescriptionExpanded(false);
+  }, [getAnimeIdFromUrl()]);
+
   const removeHTMLTags = (description: string): string => {
     return description.replace(/<[^>]+>/g, '').replace(/\([^)]*\)/g, '');
   };
 
-  // Toggle trailer display
   const toggleTrailer = () => {
     setShowTrailer(!showTrailer);
   };
 
-  // Effect for Escape key event listener
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && showTrailer) {
@@ -345,38 +281,18 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       }
     };
 
-    // Add event listener
     document.addEventListener('keydown', handleKeyDown);
 
-    // Clean up function to remove event listener
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [showTrailer]);
 
-  // Format date string
-  function getDateString(date: any) {
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return `${monthNames[date.month - 1]} ${date.day}, ${date.year}`;
-  }
-  //ANime season text formatting
-  function capitalizeFirstLetter(str: any) {
-    if (!str) return str; // Return the original string if it's falsy
+  function capitalizeFirstLetter(str: string) {
+    if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
+
   const isScreenUnder500px = () => window.innerWidth < 500;
 
   return (
@@ -568,30 +484,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               </p>
             </AnimeDataText>
           )}
-          {/* {animeData.characters && animeData.characters.length > 0 && (
-            <>
-              <p>
-                <strong>Characters: </strong>
-                <ShowMoreButton onClick={toggleShowAllCharacters}>
-                  {showAllCharacters ? 'Show Less' : 'Show More'}
-                </ShowMoreButton>
-              </p>
-              <AnimeCharacterContainer>
-                {renderedCharacters.map((character) => (
-                  <CharacterCard
-                    key={character.id}
-                    style={{ textAlign: 'center' }}
-                  >
-                    <CharacterImages
-                      src={character.image}
-                      alt={character.name.full}
-                    />
-                    <CharacterName>{character.name.full}</CharacterName>
-                  </CharacterCard>
-                ))}
-              </AnimeCharacterContainer>
-            </>
-          )} */}
         </AnimeDataContainer>
       )}
       <AnimeDataText>
@@ -613,71 +505,6 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               />
             </>
           )}
-        {/* 
-        {animeData &&
-          animeData.relations.filter(
-            (relation: any) =>
-              ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-                relation.type,
-              ) &&
-              relation.relationType.toUpperCase() !== 'PREQUEL' &&
-              relation.relationType.toUpperCase() !== 'SEQUEL',
-          ).length > 0 && (
-            <>
-              <p className='Card-Sections-Titles'>RELATED</p>
-              <Relations>
-                <CardGrid
-                  animeData={animeData.relations
-                    .filter(
-                      (relation: any) =>
-                        [
-                          'OVA',
-                          'SPECIAL',
-                          'TV',
-                          'MOVIE',
-                          'ONA',
-                          'NOVEL',
-                        ].includes(relation.type) &&
-                        relation.relationType.toUpperCase() !== 'PREQUEL' &&
-                        relation.relationType.toUpperCase() !== 'SEQUEL',
-                    )
-                    .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  hasNextPage={false}
-                  onLoadMore={() => {}}
-                />
-              </Relations>
-              <br></br>
-            </>
-          )} */}
-        {/* Recommendations */}
-        {/* {animeData &&
-          animeData.recommendations.filter((recommendation: any) =>
-            ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-              recommendation.type,
-            ),
-          ).length > 0 && (
-            <>
-              <p className='Card-Sections-Titles'>RECOMMENDATIONS</p>
-              <Relations>
-                <CardGrid
-                  animeData={animeData.recommendations
-                    .filter((recommendation: any) =>
-                      [
-                        'OVA',
-                        'SPECIAL',
-                        'TV',
-                        'MOVIE',
-                        'ONA',
-                        'NOVEL',
-                      ].includes(recommendation.type),
-                    )
-                    .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  hasNextPage={false}
-                  onLoadMore={() => {}}
-                />
-              </Relations>
-            </>
-          )} */}
       </AnimeDataText>
     </>
   );

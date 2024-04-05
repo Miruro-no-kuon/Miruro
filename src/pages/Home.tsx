@@ -12,6 +12,7 @@ import {
   fetchRecentEpisodes,
   EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
 } from '../index'; // Adjust the import path to point correctly to your index.ts location
+import { Episode } from '../index';
 
 const SimpleLayout = styled.div`
   display: flex;
@@ -21,13 +22,6 @@ const SimpleLayout = styled.div`
   max-width: 125rem;
   border-radius: var(--global-border-radius);
 `;
-
-interface AnimeEpisode {
-  id: string;
-  title?: string;
-  number: number;
-  image: string;
-}
 
 const TabContainer = styled.div`
   display: flex; /* Make it a flex container */
@@ -87,9 +81,7 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
-  const [, /* watchedEpisodes */ setWatchedEpisodes] = useState<AnimeEpisode[]>(
-    [],
-  );
+  const [, /* watchedEpisodes */ setWatchedEpisodes] = useState<Episode[]>([]);
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 14 : 12,
   );
@@ -138,7 +130,7 @@ const Home = () => {
       const watchedEpisodesData = localStorage.getItem('watched-episodes');
       if (watchedEpisodesData) {
         const allEpisodes = JSON.parse(watchedEpisodesData);
-        const latestEpisodes: AnimeEpisode[] = []; // Correctly typed
+        const latestEpisodes: Episode[] = []; // Correctly typed
 
         Object.keys(allEpisodes).forEach((animeId) => {
           const episodes = allEpisodes[animeId];

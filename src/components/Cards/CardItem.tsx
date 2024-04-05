@@ -202,7 +202,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     setIsHovered(false);
   };
 
-  const imageSrc = anime.coverImage || anime.image || '';
+  const imageSrc = anime.image || '';
   const animeColor = anime.color || '#999999';
   const displayTitle = useMemo(
     () => anime.title.english || anime.title.romaji || 'No Title',

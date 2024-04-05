@@ -16,6 +16,7 @@ import {
   VideoPlayerSkeleton,
   Seasons,
 } from '../index';
+import { Episode } from '../index';
 
 // Styled Components
 
@@ -106,6 +107,7 @@ const GoToHomePageButton = styled.a`
     transform: translate(-50%, -50%) scale(0.95);
   }
 `;
+
 const IframeTrailer = styled.iframe`
   aspect-ratio: 16/9;
   position: relative;
@@ -129,24 +131,14 @@ const LOCAL_STORAGE_KEYS = {
   WATCHED_EPISODES: 'watched-episodes-',
 };
 
-// Interfaces
-
-interface Episode {
-  id: string;
-  number: number;
-  title: string;
-  image: string;
-}
-
-interface CurrentEpisode {
-  id: string;
-  number: number;
-  image: string;
-}
-const useCountdown = (targetDate) => {
+const useCountdown = (targetDate: number | null) => {
   const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
+    if (!targetDate) {
+      return; // Exit early if targetDate is null or undefined
+    }
+
     const timer = setInterval(() => {
       const now = Date.now();
       const distance = targetDate - now;
@@ -175,8 +167,8 @@ const useCountdown = (targetDate) => {
 };
 
 // Main Component
-const getSourceTypeKey = (animeId: any) => `source-[${animeId}]`;
-const getLanguageKey = (animeId: any) => `subOrDub-[${animeId}]`;
+const getSourceTypeKey = (animeId: string | undefined) => `source-[${animeId}]`;
+const getLanguageKey = (animeId: string | undefined) => `subOrDub-[${animeId}]`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
   const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%'); // Default to 100%
@@ -199,7 +191,7 @@ const Watch: React.FC = () => {
     useState<string>('100%');
 
   const { animeId, animeTitle, episodeNumber } = useParams<{
-    animeId: string;
+    animeId?: string;
     animeTitle?: string;
     episodeNumber?: string;
   }>();
@@ -212,10 +204,14 @@ const Watch: React.FC = () => {
   const [selectedBackgroundImage, setSelectedBackgroundImage] =
     useState<string>('');
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [currentEpisode, setCurrentEpisode] = useState<CurrentEpisode>({
+  const [currentEpisode, setCurrentEpisode] = useState<Episode>({
     id: '0',
     number: 1,
+    title: '',
     image: '',
+    description: '',
+    imageHash: '',
+    airDate: '',
   });
   const [animeInfo, setAnimeInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -245,10 +241,11 @@ const Watch: React.FC = () => {
     // or maintain the setting from the previous anime. This example resets to defaults.
 
     setSourceType(
-      localStorage.getItem(getSourceTypeKey(animeId)) || defaultSourceType,
+      localStorage.getItem(getSourceTypeKey(animeId || '')) ||
+        defaultSourceType,
     );
     setLanguage(
-      localStorage.getItem(getLanguageKey(animeId)) || defaultLanguage,
+      localStorage.getItem(getLanguageKey(animeId || '')) || defaultLanguage,
     );
   }, [animeId]);
 
@@ -336,7 +333,7 @@ const Watch: React.FC = () => {
           const navigateToEpisode = (() => {
             if (languageChanged) {
               const currentEpisodeNumber =
-                parseInt(episodeNumber) || currentEpisode.number;
+                episodeNumber || currentEpisode.number;
               // Try to find the current episode in the new language or default to the last available episode
               return (
                 transformedEpisodes.find(
@@ -371,6 +368,10 @@ const Watch: React.FC = () => {
               id: navigateToEpisode.id,
               number: navigateToEpisode.number,
               image: navigateToEpisode.image,
+              title: navigateToEpisode.title,
+              description: navigateToEpisode.description,
+              imageHash: navigateToEpisode.imageHash,
+              airDate: navigateToEpisode.airDate,
             });
 
             const newAnimeTitle = navigateToEpisode.id.split('-episode-')[0];
@@ -448,6 +449,10 @@ const Watch: React.FC = () => {
         id: selectedEpisode.id,
         number: selectedEpisode.number,
         image: selectedEpisode.image,
+        title: selectedEpisode.title,
+        description: selectedEpisode.description,
+        imageHash: selectedEpisode.imageHash,
+        airDate: selectedEpisode.airDate,
       });
 
       localStorage.setItem(
@@ -639,8 +644,12 @@ const Watch: React.FC = () => {
     let isMounted = true;
 
     const fetchInfo = async () => {
+      if (!animeId) {
+        console.error('Anime ID is undefined.');
+        return; // Exit if animeId is undefined
+      }
+
       try {
-        // Assuming fetchAnimeData is your method to fetch anime data
         const info = await fetchAnimeData(animeId);
         if (isMounted) {
           setAnimeInfo(info); // Update animeInfo state
@@ -656,6 +665,7 @@ const Watch: React.FC = () => {
       isMounted = false;
     };
   }, [animeId]); // Dependency array to re-run the effect when animeId changes
+
   const updateDownloadLink = useCallback((link: string) => {
     setDownloadLink(link);
   }, []);
@@ -748,7 +758,7 @@ const Watch: React.FC = () => {
               language={language}
               setLanguage={setLanguage}
               downloadLink={downloadLink}
-              episodeId={currentEpisode.number.toString()} // Ensure this is a string if your component expects it
+              episodeId={currentEpisode.number.toString()}
               airingTime={
                 animeInfo && animeInfo.status === 'Ongoing'
                   ? countdown

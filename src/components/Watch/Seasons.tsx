@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Relation } from '../../hooks/interface';
 
 const SeasonCardContainer = styled.div`
   display: flex;
@@ -89,27 +90,7 @@ const RelationType = styled.div`
   margin-bottom: 0.75rem;
 `;
 
-interface AnimeRelation {
-  id: number;
-  malId: number;
-  relationType: string;
-  title: {
-    romaji: string;
-    english: string;
-    native: string;
-    userPreferred: string;
-  };
-  status: string;
-  episodes: number | null;
-  image: string;
-  imageHash: string;
-  cover: string;
-  coverHash: string;
-  rating: number;
-  type: string;
-}
-
-const Seasons: React.FC<{ relations: AnimeRelation[] }> = ({ relations }) => {
+const Seasons: React.FC<{ relations: Relation[] }> = ({ relations }) => {
   const sortedRelations = relations.sort((a, b) => {
     if (a.relationType === 'PREQUEL' && b.relationType !== 'PREQUEL') {
       return -1;

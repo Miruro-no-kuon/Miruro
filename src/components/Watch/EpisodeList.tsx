@@ -14,14 +14,7 @@ import {
   faSearch,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
-
-// Define TypeScript interfaces for episode and props
-interface Episode {
-  id: string;
-  number: number;
-  title: string;
-  image: string;
-}
+import { Episode } from '../../hooks/interface';
 
 interface Props {
   animeId: string | undefined;

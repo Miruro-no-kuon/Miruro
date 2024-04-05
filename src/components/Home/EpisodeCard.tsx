@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
+import { Episode } from '../../hooks/interface';
 
 const popInAnimation = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
@@ -127,13 +128,6 @@ const ContinueWatchingTitle = styled.h2`
   margin-bottom: 0; // Adjust the margin as needed
 `;
 
-interface AnimeEpisode {
-  id: string;
-  title?: string;
-  number: number;
-  image: string;
-}
-
 const calculateSlidesPerView = (windowWidth: number): number => {
   if (windowWidth >= 1200) return 5;
   if (windowWidth >= 1000) return 4;
@@ -164,7 +158,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
   const episodesToRender = useMemo(() => {
     if (!watchedEpisodesData) return [];
     try {
-      const allEpisodes: Record<string, AnimeEpisode[]> =
+      const allEpisodes: Record<string, Episode[]> =
         JSON.parse(watchedEpisodesData);
       return Object.entries(allEpisodes).map(([animeId, animeEpisodes]) => {
         const lastEpisode = animeEpisodes[animeEpisodes.length - 1];

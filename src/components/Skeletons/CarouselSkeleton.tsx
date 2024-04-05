@@ -28,11 +28,7 @@ const popInAnimation = keyframes`
   }
 `;
 
-interface SkeletonProps {
-  loading?: boolean;
-}
-
-const SkeletonSlide = styled.div<SkeletonProps>`
+const SkeletonSlide = styled.div<{loading?: boolean}>`
   width: 100%;
   max-width: 100%;
   height: 24rem;
@@ -61,7 +57,7 @@ const SkeletonImage = styled.div`
   border-radius: var(--global-border-radius);
 `;
 
-const CarouselSkeleton: React.FC<SkeletonProps> = ({ loading }) => (
+const CarouselSkeleton: React.FC<{loading?: boolean}> = ({ loading }) => (
   <SkeletonSlide loading={loading}>
     <SkeletonImage />
   </SkeletonSlide>

@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
+import { Anime } from '../../hooks/interface';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -70,29 +71,7 @@ const Details = styled.p`
   color: rgba(102, 102, 102, 0.75);
 `;
 
-interface CommonProps {
-  id: string;
-  type?: string; // Type might not be needed for relations if using relationType
-  relationType?: string; // Adding relationType for relations
-  image: string;
-  title: {
-    english?: string;
-    romaji: string;
-    userPreferred: string;
-  };
-  episodes: number;
-  rating: number;
-}
-
-// Merged Interface for both Recommendations and Relations
-interface AnimeDataProps {
-  animeData: {
-    recommendations: CommonProps[];
-    relations: CommonProps[];
-  };
-}
-
-const RecommendedList: React.FC<AnimeDataProps> = ({ animeData }) => {
+const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
   const filteredRecommendations = animeData.recommendations.filter((rec) =>
     ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type || ''),
   );

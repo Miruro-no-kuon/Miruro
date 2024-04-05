@@ -79,11 +79,7 @@ const PopUp = styled.thead`
   max-width: 90vw;
 `;
 
-interface KeyboardShortcutsPopupProps {
-  onClose: () => void;
-}
-
-const KeyboardShortcutsPopup = ({ onClose }: KeyboardShortcutsPopupProps) => {
+const KeyboardShortcutsPopup = ({ onClose }: { onClose: () => void }) => {
   return (
     <Overlay onClick={onClose}>
       <PopUp className='popup-content' onClick={(e) => e.stopPropagation()}>
