@@ -46,8 +46,8 @@ const DataWrapper = styled.div`
   }
 `;
 
-const SourceAndData = styled.div<{ videoPlayerWidth: string }>`
-  width: ${({ videoPlayerWidth }) => videoPlayerWidth};
+const SourceAndData = styled.div<{ $videoPlayerWidth: string }>`
+  width: ${({ $videoPlayerWidth }) => $videoPlayerWidth};
 `;
 
 const RalationsTable = styled.div`
@@ -796,7 +796,7 @@ const Watch: React.FC = () => {
         </WatchWrapper>
       )}
       <DataWrapper>
-        <SourceAndData videoPlayerWidth={videoPlayerWidth}>
+        <SourceAndData $videoPlayerWidth={videoPlayerWidth}>
           {/* Conditionally render MediaSource based on anime airing status */}
           {animeInfo && animeInfo.status !== 'Not yet aired' && (
             <MediaSource

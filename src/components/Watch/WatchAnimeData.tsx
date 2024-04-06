@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import AniList_logo from '../../assets/logos/anilsmall.png';
-import MAL_logo from '../../assets/logos/malsmall.png';
 import Seasons from './Seasons';
 import { Anime } from '../../hooks/interface';
+import { SiMyanimelist, SiAnilist } from 'react-icons/si';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(20px); }
@@ -176,20 +175,27 @@ const MalAniContainer = styled.div`
   margin-right: 1rem;
 `;
 
-const MalAnilistimg = styled.img`
-  border-radius: var(--global-border-radius);
+const MalAnilistSvg = styled.div`
   height: 2.5rem;
-  transition: transform 0.2s ease-in-out;
   width: 5rem;
-  object-fit: cover;
+  border-radius: var(--global-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition: 0.1s ease-in-out;
+
   &:hover,
   &:active,
   &:focus {
     transform: scale(1.05);
   }
+
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.975);
   }
+
   @media (max-width: 500px) {
     width: 4rem;
     height: 2rem;
@@ -333,7 +339,10 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    <MalAnilistimg src={AniList_logo} alt='AniList Logo' />
+                    {/* <MalAnilistimg src={AniList_logo} alt='AniList Logo' /> */}
+                    <MalAnilistSvg>
+                      <SiAnilist /> {/* Adjust size as needed */}{' '}
+                    </MalAnilistSvg>
                   </a>
                 )}
                 {animeData.malId && (
@@ -342,7 +351,10 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    <MalAnilistimg src={MAL_logo} alt='MyAnimeList Logo' />
+                    {/* <MalAnilistimg src={MAL_logo} alt='MyAnimeList Logo' /> */}
+                    <MalAnilistSvg>
+                      <SiMyanimelist style={{ padding: 0 }} />{' '}
+                    </MalAnilistSvg>
                   </a>
                 )}
               </MalAniContainer>

@@ -218,7 +218,7 @@ const PlayButton = styled.button`
 const PlayIcon = styled(FaPlay)`
   margin-right: 0.5rem;
   @media (max-width: 500px) {
-    margin-right: 0;
+    margin: 0 0 0 0.25rem;
   }
 `;
 const PaginationStyle = styled.div`
