@@ -120,16 +120,27 @@ const IndicatorDot = styled.div`
   height: 0.5rem;
   border-radius: 50%;
   margin: 0rem;
-`;
-
-const Dot = styled(IndicatorDot)`
-  background-color: #aaff00;
   flex-shrink: 0;
 `;
 
 const CompletedIndicator = styled(IndicatorDot)`
-  background-color: #00aaff;
-  flex-shrink: 0;
+  background-color: var(--completed-indicator-color);
+`;
+
+const CancelledIndicator = styled(IndicatorDot)`
+  background-color: var(--cancelled-indicator-color);
+`;
+
+const NotYetAiredIndicator = styled(IndicatorDot)`
+  background-color: var(--not-yet-aired-indicator-color);
+`;
+
+const OngoingIndicator = styled(IndicatorDot)`
+  background-color: var(--ongoing-dot-color);
+`;
+
+const DefaultIndicator = styled(IndicatorDot)`
+  background-color: var(--default-indicator-color);
 `;
 
 const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
@@ -218,13 +229,15 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const handleStatusCheck = useMemo(() => {
     switch (anime.status) {
       case 'Ongoing':
-      case 'RELEASING':
-        return <Dot />;
+        return <OngoingIndicator />;
       case 'Completed':
-      case 'FINISHED':
         return <CompletedIndicator />;
+      case 'Cancelled':
+        return <CancelledIndicator />;
+      case 'Not yet aired':
+        return <NotYetAiredIndicator />;
       default:
-        return null;
+        return <DefaultIndicator />;
     }
   }, [anime.status]);
 

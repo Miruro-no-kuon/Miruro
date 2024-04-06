@@ -31,18 +31,21 @@ const Card = styled.div`
   cursor: pointer;
   margin-bottom: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  animation: ${slideUpAnimation} 0.5s ease-in-out; /* Apply fade-in animation */
-  animation-fill-mode: backwards; /* Ensure elements stay in initial position until animation starts */
+  animation: ${slideUpAnimation} 0.5s ease-in-out;
+  animation-fill-mode: backwards;
   transition:
     background-color 0s ease-in-out,
     margin-left 0.2s ease-in-out 0.1s;
-
   &:hover,
   &:active,
   &:focus {
     background-color: var(--global-div-tr);
     margin-left: 0.35rem;
-  }
+    @media (max-width: 500px) {
+      /* No animatoin for devices under 500px */
+      background-color: unset;
+      margin-left: unset;
+    }
 `;
 
 const AnimeImage = styled.img`
@@ -54,15 +57,54 @@ const AnimeImage = styled.img`
 
 const Info = styled.div``;
 
+const IndicatorDot = styled.div`
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  margin: 0rem;
+  flex-shrink: 0;
+`;
+
+const CompletedIndicator = styled(IndicatorDot)`
+  background-color: var(--completed-indicator-color);
+`;
+
+const CancelledIndicator = styled(IndicatorDot)`
+  background-color: var(--cancelled-indicator-color);
+`;
+
+const NotYetAiredIndicator = styled(IndicatorDot)`
+  background-color: var(--not-yet-aired-indicator-color);
+`;
+
+const OngoingIndicator = styled(IndicatorDot)`
+  background-color: var(--ongoing-dot-color);
+`;
+
+const DefaultIndicator = styled(IndicatorDot)`
+  background-color: var(--default-indicator-color);
+`;
+
+const TitleWithDot = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin-top: 0.35rem;
+  gap: 0.4rem;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  transition: background 0.2s ease;
+`;
+
 const Title = styled.p`
   top: 0;
-  margin: 0;
   margin-bottom: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 0.9rem;
+  margin: 0;
 `;
 
 const Details = styled.p`
@@ -76,11 +118,10 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
     ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type || ''),
   );
 
-  const filteredRelations = animeData.relations.filter(
-    (rel) =>
-      ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-        rel.type || '',
-      ) && !['SEQUEL', 'PREQUEL'].includes(rel.relationType || ''),
+  const filteredRelations = animeData.relations.filter((rel) =>
+    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL', 'MANGA'].includes(
+      rel.type || '',
+    ),
   );
 
   return (
@@ -89,7 +130,7 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
         <>
           <p className='Section-Title'>RELATED</p>
           {filteredRelations
-            .slice(0, window.innerWidth > 500 ? 4 : 3)
+            .slice(0, window.innerWidth > 500 ? 5 : 3)
             .map((relation, index) => (
               <Link
                 to={`/watch/${relation.id}`}
@@ -105,11 +146,28 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     loading='lazy' // Improve loading times and efficiency
                   />
                   <Info>
-                    <Title>
-                      {relation.title.english ??
-                        relation.title.romaji ??
-                        relation.title.userPreferred}
-                    </Title>
+                    <TitleWithDot>
+                      {/* Logic to determine which IndicatorDot to use based on status */}
+                      {(() => {
+                        switch (relation.status) {
+                          case 'Completed':
+                            return <CompletedIndicator />;
+                          case 'Cancelled':
+                            return <CancelledIndicator />;
+                          case 'Not yet aired':
+                            return <NotYetAiredIndicator />;
+                          case 'Ongoing':
+                            return <OngoingIndicator />;
+                          default:
+                            return <DefaultIndicator />;
+                        }
+                      })()}
+                      <Title>
+                        {relation.title.english ??
+                          relation.title.romaji ??
+                          relation.title.userPreferred}
+                      </Title>
+                    </TitleWithDot>
                     <Details
                       aria-label={`Details about ${relation.title.userPreferred}`}
                     >
@@ -129,27 +187,43 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
         <>
           <p className='Section-Title'>RECOMMENDED</p>
           {filteredRecommendations
-            .slice(0, window.innerWidth > 500 ? 5 : 4)
+            .slice(0, window.innerWidth > 500 ? 5 : 3)
             .map((recommendation, index) => (
               <Link
                 to={`/watch/${recommendation.id}`}
                 key={recommendation.id}
                 style={{ textDecoration: 'none', color: 'inherit' }}
                 title={`Watch ${recommendation.title.userPreferred}`} // Adding meaningful title
-                aria-label={`Watch ${recommendation.title.userPreferred}`} // Improving accessibility
               >
                 <Card style={{ animationDelay: `${index * 0.1}s` }}>
                   <AnimeImage
                     src={recommendation.image}
                     alt={recommendation.title.userPreferred}
-                    loading='lazy' // Improve loading times and efficiency
+                    loading='lazy'
                   />
                   <Info>
-                    <Title>
-                      {recommendation.title.english ??
-                        recommendation.title.romaji ??
-                        recommendation.title.userPreferred}
-                    </Title>
+                    <TitleWithDot>
+                      {/* Logic to determine which IndicatorDot to use based on status */}
+                      {(() => {
+                        switch (recommendation.status) {
+                          case 'Completed':
+                            return <CompletedIndicator />;
+                          case 'Cancelled':
+                            return <CancelledIndicator />;
+                          case 'Not yet aired':
+                            return <NotYetAiredIndicator />;
+                          case 'Ongoing':
+                            return <OngoingIndicator />;
+                          default:
+                            return <DefaultIndicator />;
+                        }
+                      })()}
+                      <Title>
+                        {recommendation.title.english ??
+                          recommendation.title.romaji ??
+                          recommendation.title.userPreferred}
+                      </Title>
+                    </TitleWithDot>
                     <Details
                       aria-label={`Details about ${recommendation.title.userPreferred}`}
                     >

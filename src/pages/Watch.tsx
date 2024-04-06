@@ -14,7 +14,6 @@ import {
   fetchAnimeData,
   fetchAnimeInfo,
   SkeletonPlayer,
-  Seasons,
 } from '../index';
 import { Episode } from '../index';
 
@@ -232,6 +231,9 @@ const Watch: React.FC = () => {
       : null;
   const nextEpisodenumber = animeInfo?.nextAiringEpisode?.episode;
   const countdown = useCountdown(nextEpisodeAiringTime);
+  const currentEpisodeIndex = episodes.findIndex(
+    (ep) => ep.id === currentEpisode.id,
+  );
 
   useEffect(() => {
     const defaultSourceType = 'default';
@@ -318,14 +320,18 @@ const Watch: React.FC = () => {
         if (isMounted && animeData) {
           const transformedEpisodes = animeData
             .filter((ep: any) => ep.id.includes('-episode-')) // Continue excluding entries without '-episode-'
-            .map((ep: any) => ({
-              ...ep,
-              // Extract episode number directly from the ID
-              number: parseInt(ep.id.split('-episode-')[1]) || ep.number,
-              id: ep.id,
-              title: ep.title,
-              image: ep.image,
-            }));
+            .map((ep: any) => {
+              const episodePart = ep.id.split('-episode-')[1];
+              // New regex to capture the episode number including cases like "7-5"
+              const episodeNumberMatch = episodePart.match(/^(\d+(?:-\d+)?)/);
+              return {
+                ...ep,
+                number: episodeNumberMatch ? episodeNumberMatch[0] : ep.number,
+                id: ep.id,
+                title: ep.title,
+                image: ep.image,
+              };
+            });
 
           setEpisodes(transformedEpisodes);
 
@@ -670,6 +676,36 @@ const Watch: React.FC = () => {
     setDownloadLink(link);
   }, []);
 
+  //Auto Next episode logic
+  const handleEpisodeEnd = async () => {
+    const nextEpisodeIndex = currentEpisodeIndex + 1;
+
+    if (nextEpisodeIndex >= episodes.length) {
+      console.log('No more episodes.');
+      return; // No more episodes to play
+    }
+
+    const nextEpisode = episodes[nextEpisodeIndex];
+    handleEpisodeSelect(nextEpisode);
+  };
+
+  // Next and previous Episode logic through Videplayer Buttons
+  const onPrevEpisode = () => {
+    const prevIndex = currentEpisodeIndex - 1;
+    if (prevIndex >= 0) {
+      const prevEpisode = episodes[prevIndex];
+      handleEpisodeSelect(prevEpisode);
+    }
+  };
+
+  const onNextEpisode = () => {
+    const nextIndex = currentEpisodeIndex + 1;
+    if (nextIndex < episodes.length) {
+      const nextEpisode = episodes[nextIndex];
+      handleEpisodeSelect(nextEpisode);
+    }
+  };
+
   return (
     <WatchContainer>
       {animeInfo &&
@@ -721,6 +757,9 @@ const Watch: React.FC = () => {
                     malId={animeInfo?.malId}
                     banner={selectedBackgroundImage}
                     updateDownloadLink={updateDownloadLink}
+                    onEpisodeEnd={handleEpisodeEnd}
+                    onPrevEpisode={onPrevEpisode}
+                    onNextEpisode={onNextEpisode}
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />

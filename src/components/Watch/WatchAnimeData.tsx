@@ -47,7 +47,7 @@ const AnimeDataContainerMiddle = styled.div`
 
 const AnimeDataContainerBottom = styled.div`
   margin-top: 0.6rem;
-  @media (max-width: 500px) {
+  @media (max-width: 750px) {
     margin-top: 0rem;
   }
 `;
@@ -101,6 +101,7 @@ const AnimeDataText = styled.div`
   }
   .Description {
     line-height: 1rem;
+    max-width: 50rem;
   }
   strong {
     color: var(--global-text);
@@ -380,51 +381,77 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                         Type: <strong>{animeData.type}</strong>
                       </p>
                     )}
-                    {animeData.releaseDate && (
+                    {animeData.releaseDate ? (
                       <p>
-                        Year:{' '}
-                        <strong>
-                          {animeData.releaseDate
-                            ? animeData.releaseDate
-                            : 'Unknown'}
-                        </strong>
+                        Year: <strong>{animeData.releaseDate}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Year: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.status && (
                       <p>
-                        Status: <strong>{animeData.status}</strong>
+                        Status:{' '}
+                        <strong>
+                          {animeData.status === 'Completed'
+                            ? 'Finished'
+                            : animeData.status === 'Ongoing'
+                              ? 'Airing'
+                              : animeData.status}
+                        </strong>
                       </p>
                     )}
-                    {animeData.rating && (
+                    {animeData.rating ? (
                       <p>
                         Rating: <strong>{animeData.rating}</strong>
                       </p>
+                    ) : (
+                      <p>
+                        Rating: <strong>Unknown</strong>
+                      </p>
                     )}
-                    {animeData.studios && (
+                    {animeData.studios && animeData.studios.length > 0 ? (
                       <p>
                         Studios: <strong>{animeData.studios}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Studios: <strong>Unknown</strong>
                       </p>
                     )}
                   </AnimeDataText>
                 </AnimeDataContainerMiddle>
                 <AnimeDataContainerBottom>
                   <AnimeDataText>
-                    {animeData.totalEpisodes && (
+                    {animeData.totalEpisodes !== null ? (
                       <p>
                         Episodes: <strong>{animeData.totalEpisodes}</strong>
                       </p>
+                    ) : (
+                      <p>
+                        Episodes: <strong>Unknown</strong>
+                      </p>
                     )}
-                    {animeData.duration && (
+                    {animeData.duration ? (
                       <p>
                         Duration: <strong>{animeData.duration} min</strong>
                       </p>
+                    ) : (
+                      <p>
+                        Duration: <strong>Unknown</strong>
+                      </p>
                     )}
-                    {animeData.season && (
+                    {animeData.season ? (
                       <p>
                         Season:{' '}
                         <strong>
                           {capitalizeFirstLetter(animeData.season)}
                         </strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Season: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.countryOfOrigin && (
@@ -460,9 +487,13 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                         </strong>
                       </p>
                     )} */}
-                    {animeData.genres && (
+                    {animeData.genres && animeData.genres.length > 0 ? (
                       <p>
                         Genres: <strong>{animeData.genres.join(', ')}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Genres: <strong>Unknown</strong>
                       </p>
                     )}
                   </AnimeDataText>

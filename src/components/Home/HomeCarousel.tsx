@@ -206,7 +206,8 @@ const PlayButton = styled.button`
 
   @media (max-width: 500px) {
     border-radius: 50%;
-    padding: 1.5rem; /* Adjusted for small devices */
+    padding: 1.4rem; /* Adjusted for small devices */
+    padding-right: 1.5rem;
     font-size: 1.25rem; /* Adjusted font size for small devices */
     span {
       display: none;
