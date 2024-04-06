@@ -1,25 +1,21 @@
 // * ==== Components ====
 // TODO Basic UI Components
-export { default as Carousel } from './components/Carousel';
-export { default as DropDownSearch } from './components/DropDownSearch';
-export { default as Footer } from './components/Footer';
-export { default as Navbar } from './components/Navbar';
-export { Filters } from './components/Filters';
-export { default as ShortcutsPopup } from './components/ShortcutsPopup';
+export { default as Navbar } from './components/Navigation/Navbar';
+export { default as Footer } from './components/Navigation/Footer';
+export { DropDownSearch } from './components/Navigation/DropSearch';
+export { Filters } from './components/Navigation/Filters';
+export { ShortcutsPopup } from './components/ShortcutsPopup';
 
 // TODO Cards
-export { default as CardGrid } from './components/Cards/CardGrid';
 export * from './components/Cards/CardGrid';
 export { default as CardItem } from './components/Cards/CardItem';
 
 // TODO Home Page Specific
-export { default as EpisodeCard } from './components/Home/EpisodeCard';
-export { default as HomeCarousel } from './components/Home/HomeCarousel';
+export { EpisodeCard } from './components/Home/EpisodeCard';
+export { HomeCarousel } from './components/Home/HomeCarousel';
 
 // TODO Skeletons for Loading States
-export { default as CardSkeleton } from './components/Skeletons/CardSkeleton';
-export { default as CarouselSkeleton } from './components/Skeletons/CarouselSkeleton';
-export { default as VideoPlayerSkeleton } from './components/Skeletons/VideoPlayerSkeleton';
+export { SkeletonCard, SkeletonSlide, SkeletonPlayer } from './components/Skeletons/Skeletons';
 
 // TODO Watching Anime Functionality
 export { default as EpisodeList } from './components/Watch/EpisodeList';
@@ -31,7 +27,7 @@ export { default as RecommendedList } from './components/Watch/RecommendedList';
 export { default as Seasons } from './components/Watch/Seasons';
 
 // * ==== Hooks ====
-// Utilizing API and Other Functionalities
+// TODO Utilizing API and Other Functionalities
 export * from './hooks/useApi';
 export * from './hooks/interface';
 export * from './hooks/useScroll';

@@ -157,7 +157,7 @@ const KeyboardShortcutsPopup = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-const ShortcutsPopup = () => {
+export const ShortcutsPopup = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
@@ -192,5 +192,3 @@ const ShortcutsPopup = () => {
     </div>
   );
 };
-
-export default ShortcutsPopup;

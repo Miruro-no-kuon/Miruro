@@ -6,7 +6,7 @@ import {
   CardGrid,
   StyledCardGrid,
   fetchAdvancedSearch,
-  CardSkeleton,
+  SkeletonCard,
 } from '../index';
 
 // Define types for genre, year, season, format, and status
@@ -18,7 +18,6 @@ type Format = Option;
 type Status = Option;
 
 const Container = styled.div`
-  min-height: 65vh;
   margin-top: 1rem;
 
   @media (min-width: 1500px) {
@@ -150,7 +149,7 @@ const SearchSort = () => {
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 17 }).map((_, index) => (
-            <CardSkeleton key={index} />
+            <SkeletonCard key={index} />
           ))}
         </StyledCardGrid>
       ) : (

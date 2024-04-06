@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Anime } from '../hooks/interface';
+import { Anime } from '../../hooks/interface';
 import { FaAngleRight } from 'react-icons/fa';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
@@ -142,7 +142,7 @@ interface DropDownSearchProps {
   containerWidth: number;
 }
 
-const DropDownSearch: React.FC<DropDownSearchProps> = ({
+export const DropDownSearch: React.FC<DropDownSearchProps> = ({
   searchResults,
   onClose,
   isVisible,
@@ -278,5 +278,3 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
     </DropdownContainer>
   );
 };
-
-export default DropDownSearch;

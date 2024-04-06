@@ -63,12 +63,10 @@ const SocialIconsWrapper = styled.div`
   gap: 1rem;
 `;
 
-const FooterLogoImage = styled.img.attrs({
-  alt: 'Footer Logo',
-})`
+const FooterLogoImage = styled.img`
   content: var(--logo-transparent);
   max-width: 4rem;
-  height: auto;
+  height: 4.375rem;
 `;
 
 const Text = styled.div<{ $isSub: boolean }>`

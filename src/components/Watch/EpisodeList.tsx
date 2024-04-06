@@ -168,6 +168,7 @@ const SearchContainer = styled.div`
   background-color: var(--global-secondary-bg);
   border: 1px solid var(--global-shadow);
   padding: 0.5rem;
+  gap: 0.25rem;
   margin: 0 0.5rem;
   border-radius: var(--global-border-radius);
   transition:
@@ -185,7 +186,6 @@ const SearchInput = styled.input`
   border: none;
   background-color: transparent;
   color: var(--global-text);
-  margin-left: 0.5rem;
   outline: none;
   width: 100%;
 

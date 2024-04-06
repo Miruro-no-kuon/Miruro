@@ -81,7 +81,8 @@ const Button = styled(ButtonBase)`
 const DownloadLink = styled.a`
   display: inline-flex; // Use inline-flex to easily center the icon
   align-items: center; // Align the icon vertically center
-  padding: 0.25rem;
+  margin-left: 0.5rem;
+  padding: 0.5rem;
   gap: 0.25rem;
   font-size: 0.9rem;
   font-weight: bold;
@@ -92,18 +93,22 @@ const DownloadLink = styled.a`
   color: var(--global-text);
   text-align: center;
   text-decoration: none;
-  margin-left: 0.5rem;
   transition:
     background-color 0.3s ease,
     transform 0.2s ease-in-out;
 
   svg {
-    font-size: 0.9rem; // Adjust icon size
+    font-size: 0.8rem; // Adjust icon size
   }
 
   &:hover,
   &:active,
-  &:focus { background-color: var(--primary-accent);
+  &:focus {
+    background-color: var(--primary-accent);
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
   }
 `;
 
@@ -162,17 +167,14 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
       <EpisodeInfoColumn>
         {episodeId ? (
           <>
-            <h4>
-              You're watching <strong>Episode {episodeId}</strong>
-              <DownloadLink
-                href={downloadLink}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                DOWNLOAD
-                <FaDownload />
-              </DownloadLink>
-            </h4>
+            You're watching <strong>Episode {episodeId}</strong>
+            <DownloadLink
+              href={downloadLink}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <FaDownload />
+            </DownloadLink>
             <p>If current servers don't work, please try other servers.</p>
           </>
         ) : (

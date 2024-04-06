@@ -4,8 +4,8 @@ import {
   HomeCarousel as CarouselTrending,
   CardGrid,
   StyledCardGrid, // Assuming StyledCardGrid is a named export you want to use directly
-  CarouselSkeleton,
-  CardSkeleton,
+  SkeletonSlide,
+  SkeletonCard,
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
@@ -216,7 +216,7 @@ const Home = () => {
       {isLoading || hasError ? (
         <StyledCardGrid>
           {Array.from({ length: 14 }, (_, index) => (
-            <CardSkeleton key={index} />
+            <SkeletonCard key={index} />
           ))}
         </StyledCardGrid>
       ) : (
@@ -240,7 +240,7 @@ const Home = () => {
         </ErrorMessage>
       )}
       {loading.trending || error ? (
-        <CarouselSkeleton />
+        <SkeletonSlide />
       ) : (
         <CarouselTrending
           data={trendingAnime}

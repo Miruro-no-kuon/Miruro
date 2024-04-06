@@ -22,20 +22,22 @@ function App() {
       <Navbar />
       <ShortcutsPopup />
       <ScrollToTop />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/search' element={<SearchSort />} />
-        <Route path='/watch/:animeId' element={<Watch />} />
-        <Route
-          path='/watch/:animeId/:animeTitle/:episodeNumber'
-          element={<Watch />}
-        />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/pptos' element={<PolicyTerms />} />
-        <Route path='*' element={<Page404 />} />
-      </Routes>
+      <div style={{ minHeight: '85rem' }}>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/search' element={<SearchSort />} />
+          <Route path='/watch/:animeId' element={<Watch />} />
+          <Route
+            path='/watch/:animeId/:animeTitle/:episodeNumber'
+            element={<Watch />}
+          />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/pptos' element={<PolicyTerms />} />
+          <Route path='*' element={<Page404 />} />
+        </Routes>
+      </div>
       <Footer />
     </Router>
   );

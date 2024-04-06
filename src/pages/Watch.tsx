@@ -13,7 +13,7 @@ import {
   fetchAnimeEpisodes,
   fetchAnimeData,
   fetchAnimeInfo,
-  VideoPlayerSkeleton,
+  SkeletonPlayer,
   Seasons,
 } from '../index';
 import { Episode } from '../index';
@@ -714,7 +714,7 @@ const Watch: React.FC = () => {
             <>
               <VideoPlayerContainer ref={videoPlayerContainerRef}>
                 {loading ? (
-                  <VideoPlayerSkeleton />
+                  <SkeletonPlayer />
                 ) : sourceType === 'default' ? (
                   <Player
                     episodeId={currentEpisode.id}
@@ -728,7 +728,7 @@ const Watch: React.FC = () => {
               </VideoPlayerContainer>
               <EpisodeListContainer style={{ maxHeight: maxEpisodeListHeight }}>
                 {loading ? (
-                  <VideoPlayerSkeleton />
+                  <SkeletonPlayer />
                 ) : (
                   <EpisodeList
                     animeId={animeId}

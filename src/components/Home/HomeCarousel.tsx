@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
 import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
-import CarouselSkeleton from '../Skeletons/CarouselSkeleton';
+import { SkeletonSlide } from '../../index';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
@@ -234,13 +234,13 @@ const PaginationStyle = styled.div`
 `;
 
 // Adjust the Carousel component to use correctly typed props and state
-interface CarouselTrendingProps {
+interface HomeCarouselProps {
   data: Anime[];
   loading: boolean;
   error?: string | null;
 }
 
-const CarouselTrending: FC<CarouselTrendingProps> = ({
+export const HomeCarousel: FC<HomeCarouselProps> = ({
   data = [],
   loading,
   error,
@@ -264,7 +264,7 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
   return (
     <>
       {loading || error ? (
-        <CarouselSkeleton />
+        <SkeletonSlide />
       ) : (
         <PaginationStyle>
           <StyledSwiperContainer
@@ -355,5 +355,3 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
     </>
   );
 };
-
-export default CarouselTrending;

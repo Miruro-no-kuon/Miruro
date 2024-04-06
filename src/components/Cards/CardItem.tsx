@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { CardSkeleton, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
+import { SkeletonCard, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { FaPlay } from 'react-icons/fa'; // For the play icon
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
@@ -189,7 +189,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 0);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [anime.id]);
@@ -244,7 +244,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   return (
     <>
       {loading ? (
-        <CardSkeleton />
+        <SkeletonCard />
       ) : (
         <StyledCardWrapper
           to={`/watch/${anime.id}`}

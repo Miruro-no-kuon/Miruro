@@ -187,12 +187,14 @@ const FiltersContainer = styled.div`
   align-items: center;
   display: flex;
   gap: 2rem;
+  z-index: 5;
   margin-bottom: 20px;
   flex-wrap: wrap;
 `;
 
 const FilterSection = styled.div`
   display: flex;
+  z-index: 5;
   flex-direction: column;
   align-items: start;
   margin-bottom: 2rem;
