@@ -59,6 +59,9 @@ type PlayerProps = {
   banner?: string;
   malId?: string;
   updateDownloadLink: (link: string) => void;
+  onEpisodeEnd: () => Promise<void>;
+  onPrevEpisode: () => void;
+  onNextEpisode: () => void;
 };
 
 type StreamingSource = {
@@ -79,6 +82,9 @@ export function Player({
   banner,
   malId,
   updateDownloadLink,
+  onEpisodeEnd,
+  onPrevEpisode,
+  onNextEpisode,
 }: PlayerProps) {
   const player = useRef<MediaPlayerInstance>(null);
   const [src, setSrc] = useState('');
@@ -291,6 +297,16 @@ export function Player({
     localStorage.setItem('autoSkip', (!autoSkip).toString());
   };
 
+  const handlePlaybackEnded = async () => {
+    if (!autoNext) return;
+
+    try {
+      await onEpisodeEnd();
+    } catch (error) {
+      console.error('Error moving to the next episode:', error);
+    }
+  };
+
   return (
     <>
       <MediaPlayer
@@ -309,6 +325,7 @@ export function Player({
         streamType='on-demand'
         storage='storage-key'
         keyTarget='player'
+        onEnded={handlePlaybackEnded}
         keyShortcuts={{
           togglePaused: 'k K Space',
           toggleMuted: 'm M',
@@ -368,10 +385,10 @@ export function Player({
         <Button $autoskip onClick={toggleAutoSkip}>
           {autoSkip ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Skip
         </Button>
-        <Button>
+        <Button onClick={() => onPrevEpisode()}>
           <TbPlayerTrackPrevFilled /> Prev
         </Button>
-        <Button>
+        <Button onClick={() => onNextEpisode()}>
           <TbPlayerTrackNextFilled /> Next
         </Button>
         <Button onClick={toggleAutoNext}>

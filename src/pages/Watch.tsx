@@ -231,6 +231,9 @@ const Watch: React.FC = () => {
       : null;
   const nextEpisodenumber = animeInfo?.nextAiringEpisode?.episode;
   const countdown = useCountdown(nextEpisodeAiringTime);
+  const currentEpisodeIndex = episodes.findIndex(
+    (ep) => ep.id === currentEpisode.id,
+  );
 
   useEffect(() => {
     const defaultSourceType = 'default';
@@ -673,6 +676,36 @@ const Watch: React.FC = () => {
     setDownloadLink(link);
   }, []);
 
+  //Auto Next episode logic
+  const handleEpisodeEnd = async () => {
+    const nextEpisodeIndex = currentEpisodeIndex + 1;
+
+    if (nextEpisodeIndex >= episodes.length) {
+      console.log('No more episodes.');
+      return; // No more episodes to play
+    }
+
+    const nextEpisode = episodes[nextEpisodeIndex];
+    handleEpisodeSelect(nextEpisode);
+  };
+
+  // Next and previous Episode logic through Videplayer Buttons
+  const onPrevEpisode = () => {
+    const prevIndex = currentEpisodeIndex - 1;
+    if (prevIndex >= 0) {
+      const prevEpisode = episodes[prevIndex];
+      handleEpisodeSelect(prevEpisode);
+    }
+  };
+
+  const onNextEpisode = () => {
+    const nextIndex = currentEpisodeIndex + 1;
+    if (nextIndex < episodes.length) {
+      const nextEpisode = episodes[nextIndex];
+      handleEpisodeSelect(nextEpisode);
+    }
+  };
+
   return (
     <WatchContainer>
       {animeInfo &&
@@ -724,6 +757,9 @@ const Watch: React.FC = () => {
                     malId={animeInfo?.malId}
                     banner={selectedBackgroundImage}
                     updateDownloadLink={updateDownloadLink}
+                    onEpisodeEnd={handleEpisodeEnd}
+                    onPrevEpisode={onPrevEpisode}
+                    onNextEpisode={onNextEpisode}
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />
