@@ -139,6 +139,17 @@ const SearchSort = () => {
     };
   }, [initiateFetchAdvancedSearch]); // Include all dependencies here
 
+  const resetFilters = () => {
+    setSelectedGenres([]);
+    setSelectedYear(anyOption);
+    setSelectedSeason([]);
+    setSelectedFormat(anyOption);
+    setSelectedStatus(anyOption);
+    setSelectedSort({ value: 'POPULARITY', label: 'Popularity' }); // Assuming 'Popularity' is the default
+    setSortDirection('DESC'); // Assuming 'DESC' is the default
+    // Add any other states that need to be reset
+  };
+
   return (
     <Container>
       <Filters
@@ -158,6 +169,7 @@ const SearchSort = () => {
         setSelectedSort={setSelectedSort} // New
         sortDirection={sortDirection} // New
         setSortDirection={setSortDirection} // New
+        resetFilters={resetFilters}
       />
 
       {isLoading && page === 1 ? (

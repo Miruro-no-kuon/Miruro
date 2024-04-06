@@ -28,7 +28,7 @@ const selectStyles = {
   }),
   control: (provided: any) => ({
     ...provided,
-    width: '10rem', // Set a minimum width for the dropdown container
+    width: '12rem', // Set a minimum width for the dropdown container
     backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown control background
     borderColor: 'transparent', // Customizing the border color
     color: 'var(--global-text)', // Customizing the text color
@@ -36,10 +36,13 @@ const selectStyles = {
     '&:hover': {
       borderColor: 'var(--primary-accent)', // Customizing the border color on hover
     },
+    '@media (max-width: 500px)': {
+      width: '10rem', // Adjust width under 500px screen width
+    },
   }),
   menu: (provided: any) => ({
     ...provided,
-    backgroundColor: 'var(--global-primary-bg)', // Customizing the dropdown menu background
+    backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown menu background
     borderColor: 'var(--global-border)', // Customizing the border color of the menu
     color: 'var(--global-text)', // Customizing the text color of the menu
   }),
@@ -49,11 +52,13 @@ const selectStyles = {
       ? 'var(--primary-accent-bg)' // Background color for selected option
       : state.isFocused
         ? 'var(--global-div)' // Background color for option under the cursor
-        : 'var(--global-primary-bg)', // Default background color
-    color: state.isSelected ? 'var(--global-primary-bg)' : 'var(--global-text)',
+        : 'var(--global-secondary-bg)', // Default background color
+    color: state.isSelected
+      ? 'var(--global-secondary-bg)'
+      : 'var(--global-text)',
     '&:hover': {
       backgroundColor: 'var(--primary-accent-bg)',
-      color: 'var(--global-primary-bg)',
+      color: 'var(--global-secondary-bg)',
     },
   }),
   multiValue: (provided: any) => ({
@@ -68,7 +73,7 @@ const selectStyles = {
     ...provided,
     '&:hover': {
       backgroundColor: 'var(--primary-accent)',
-      color: 'var(--global-primary-bg)',
+      color: 'var(--global-secondary-bg)',
     },
   }),
 };
@@ -163,39 +168,6 @@ const SearchInput = styled.input`
   }
 `;
 
-const FilterSelect: React.FC<FilterProps> = ({
-  label,
-  options,
-  onChange,
-  value,
-  isMulti = false,
-}) => (
-  <FilterSection>
-    <FilterLabel>
-      {label === 'Search' && <LuSlidersHorizontal />}
-      {label}
-    </FilterLabel>
-    {label === 'Search' ? (
-      <SearchInput
-        type='text'
-        value={value}
-        onChange={(e) => onChange && onChange(e.target.value)}
-        placeholder=''
-      />
-    ) : (
-      <Select
-        components={{ ...animatedComponents, IndicatorSeparator: () => null }}
-        isMulti={isMulti}
-        options={options}
-        onChange={onChange}
-        value={value}
-        placeholder='Any'
-        styles={selectStyles}
-      />
-    )}
-  </FilterSection>
-);
-
 const FiltersContainer = styled.div`
   justify-content: left;
   align-items: center;
@@ -226,8 +198,8 @@ const FilterLabel = styled.label`
 
 const ButtonBase = styled.button`
   flex: 1; // Make the button expand to fill the wrapper
-  padding: 0.5rem;
-  max-width: 5rem;
+  padding: 0.6rem;
+  max-width: 10rem;
   border: none;
   font-weight: bold;
   border-radius: var(--global-border-radius);
@@ -257,7 +229,50 @@ const Button = styled(ButtonBase)`
   }
 `;
 
+const ClearButton = styled(ButtonBase)`
+  margin-top: 1.75rem;
+  max-width: 7rem;
+
+  @media (max-width: 1000px) {
+    margin-top: 0.5rem;
+  }
+`;
+
 const animatedComponents = makeAnimated();
+
+const FilterSelect: React.FC<FilterProps> = ({
+  label,
+  options,
+  onChange,
+  value,
+  isMulti = false,
+}) => (
+  <FilterSection>
+    <FilterLabel>
+      {label === 'Search' && <LuSlidersHorizontal />}
+      {label}
+    </FilterLabel>
+    {label === 'Search' ? (
+      <SearchInput
+        type='text'
+        value={value}
+        onChange={(e) => onChange && onChange(e.target.value)}
+        placeholder=''
+      />
+    ) : (
+      <Select
+        components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+        isMulti={isMulti}
+        options={options}
+        onChange={onChange}
+        value={value}
+        placeholder='Any'
+        styles={selectStyles}
+        isSearchable={false} // Disable the ability to type or search within the dropdown
+      />
+    )}
+  </FilterSection>
+);
 
 export const Filters: React.FC<{
   query: string;
@@ -276,6 +291,7 @@ export const Filters: React.FC<{
   setSelectedSort: React.Dispatch<React.SetStateAction<Option>>;
   sortDirection: 'DESC' | 'ASC';
   setSortDirection: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
+  resetFilters: () => void;
 }> = ({
   query,
   setQuery,
@@ -293,6 +309,7 @@ export const Filters: React.FC<{
   setSelectedSort,
   sortDirection,
   setSortDirection,
+  resetFilters,
 }) => (
   <FiltersContainer>
     <FilterSelect label='Search' value={query} onChange={setQuery} />
@@ -328,18 +345,19 @@ export const Filters: React.FC<{
       onChange={setSelectedStatus}
       value={selectedStatus}
     />
-    <FilterSelect
+    {/* <FilterSelect
       label='Sort By'
       options={sortOptions}
       onChange={setSelectedSort}
       value={selectedSort}
-    />
-    <Button
+    /> */}
+    {/* <Button
       onClick={() =>
         setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
       }
     >
       {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
-    </Button>
+    </Button> */}
+    <ClearButton onClick={resetFilters}>Clear Filters</ClearButton>
   </FiltersContainer>
 );
