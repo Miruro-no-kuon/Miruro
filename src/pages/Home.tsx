@@ -160,8 +160,10 @@ const Home = () => {
           fetchTrendingAnime(1, fetchCount),
           fetchPopularAnime(1, fetchCount),
           fetchTopAnime(1, fetchCount),
-          fetchRecentEpisodes(1, fetchCount), // Fetch recent episodes
+          fetchRecentEpisodes(1, fetchCount),
         ]);
+        const recentEpisodesTrimmed = recent.results.slice(0, 14); // Always trim to 14
+        setRecentEpisodes(recentEpisodesTrimmed);
 
         // Filter out anime without totalEpisodes, duration, or releaseDate
         const filterAndTrimAnime = (animeList: any) =>
@@ -177,7 +179,6 @@ const Home = () => {
         setTrendingAnime(filterAndTrimAnime(trending));
         setPopularAnime(filterAndTrimAnime(popular));
         setTopAnime(filterAndTrimAnime(top));
-        setRecentEpisodes(recent.results); // Set recent episodes
       } catch (fetchError) {
         if (fetchError instanceof Error) {
           setError(fetchError.message);
@@ -275,7 +276,7 @@ const Home = () => {
           $isActive={activeTab === 'recent'}
           onClick={() => handleTabClick('recent')}
         >
-          RECENT EPISODES
+          RECENTLY UPDATED
         </Tab>
       </TabContainer>
       {/* Render other sections based on activeTab */}

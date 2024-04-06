@@ -28,7 +28,7 @@ const selectStyles = {
   }),
   control: (provided: any) => ({
     ...provided,
-    width: '12rem', // Set a minimum width for the dropdown container
+    width: '10rem', // Set a minimum width for the dropdown container
     backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown control background
     borderColor: 'transparent', // Customizing the border color
     color: 'var(--global-text)', // Customizing the text color
@@ -128,14 +128,28 @@ const statusOptions = [
   { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
   { value: 'FINISHED', label: 'Finished' },
   { value: 'CANCELLED', label: 'Cancelled' },
-  { value: 'HIATUS', label: 'Hiatus' },
+];
+
+const sortOptions = [
+  { value: 'POPULARITY', label: 'Popularity' },
+  { value: 'TRENDING', label: 'Trending' },
+  { value: 'UPDATED_AT', label: 'Last Updated' },
+  { value: 'START_DATE', label: 'Start Date' },
+  { value: 'END_DATE', label: 'End Date' },
+  { value: 'FAVOURITES', label: 'Favorites' },
+  { value: 'SCORE', label: 'Score' },
+  { value: 'TITLE_ROMAJI', label: 'Title (Romaji)' },
+  { value: 'TITLE_ENGLISH', label: 'Title (English)' },
+  { value: 'TITLE_NATIVE', label: 'Title (Native)' },
+  { value: 'EPISODES', label: 'Episodes' },
+  { value: 'ID', label: 'ID' },
 ];
 
 const SearchInput = styled.input`
   display: flex;
   flex: 1;
   border: none;
-  width: 11rem;
+  width: 9rem;
   height: 1.2rem;
   align-items: center;
   color: var(--global-text);
@@ -186,16 +200,19 @@ const FiltersContainer = styled.div`
   justify-content: left;
   align-items: center;
   display: flex;
-  gap: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
+  gap: 2rem;
+  @media (max-width: 501px) {
+    gap: 0.5rem;
+    justify-content: center;
+  }
 `;
 
 const FilterSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  margin-bottom: 2rem;
 `;
 
 const FilterLabel = styled.label`
@@ -204,6 +221,39 @@ const FilterLabel = styled.label`
   margin-left: 0.25rem;
   svg {
     margin-right: 0.5rem;
+  }
+`;
+
+const ButtonBase = styled.button`
+  flex: 1; // Make the button expand to fill the wrapper
+  padding: 0.5rem;
+  max-width: 5rem;
+  border: none;
+  font-weight: bold;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    background-color: var(--primary-accent);
+  }
+  &:active,
+  &:focus {
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
+  }
+`;
+
+const Button = styled(ButtonBase)`
+  &.active {
+    background-color: var(--primary-accent);
   }
 `;
 
@@ -222,6 +272,10 @@ export const Filters: React.FC<{
   setSelectedFormat: React.Dispatch<React.SetStateAction<Option>>;
   selectedStatus: Option;
   setSelectedStatus: React.Dispatch<React.SetStateAction<Option>>;
+  selectedSort: Option;
+  setSelectedSort: React.Dispatch<React.SetStateAction<Option>>;
+  sortDirection: 'DESC' | 'ASC';
+  setSortDirection: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
 }> = ({
   query,
   setQuery,
@@ -235,6 +289,10 @@ export const Filters: React.FC<{
   setSelectedFormat,
   selectedStatus,
   setSelectedStatus,
+  selectedSort,
+  setSelectedSort,
+  sortDirection,
+  setSortDirection,
 }) => (
   <FiltersContainer>
     <FilterSelect label='Search' value={query} onChange={setQuery} />
@@ -259,7 +317,7 @@ export const Filters: React.FC<{
       value={selectedSeason}
     />
     <FilterSelect
-      label='Format'
+      label='Type'
       options={formatOptions}
       onChange={setSelectedFormat}
       value={selectedFormat}
@@ -270,5 +328,18 @@ export const Filters: React.FC<{
       onChange={setSelectedStatus}
       value={selectedStatus}
     />
+    <FilterSelect
+      label='Sort By'
+      options={sortOptions}
+      onChange={setSelectedSort}
+      value={selectedSort}
+    />
+    <Button
+      onClick={() =>
+        setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
+      }
+    >
+      {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
+    </Button>
   </FiltersContainer>
 );

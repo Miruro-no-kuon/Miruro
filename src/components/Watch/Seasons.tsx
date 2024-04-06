@@ -51,12 +51,11 @@ const SeasonCard = styled(Link)`
   transition: transform 0.2s ease-in-out;
 
   &:hover,
-  &:active,
-  &:focus {
+  &:active &:focus {
     transform: translateY(-5px);
-  }
-  &:active {
-    transform: scale(0.975);
+    @media (max-width: 500px) {
+      transform: none;
+    }
   }
 `;
 

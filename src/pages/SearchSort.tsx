@@ -44,6 +44,11 @@ const SearchSort = () => {
   const [selectedSeason, setSelectedSeason] = useState<Season[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<Format>(anyOption);
   const [selectedStatus, setSelectedStatus] = useState<Status>(anyOption);
+  const [selectedSort, setSelectedSort] = useState<Option>({
+    value: 'POPULARITY',
+    label: 'Popularity ',
+  });
+  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>('DESC');
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -67,6 +72,8 @@ const SearchSort = () => {
 
   const initiateFetchAdvancedSearch = useCallback(async () => {
     setIsLoading(true);
+    const sortParam = `${selectedSort.value}_${sortDirection}`;
+
     try {
       const yearFilter = selectedYear.value || undefined;
       const formatFilter = selectedFormat.value || undefined;
@@ -78,6 +85,7 @@ const SearchSort = () => {
         season: selectedSeason.map((s) => s.value).join(','),
         format: formatFilter,
         status: statusFilter,
+        sort: [sortParam], // Wrap sortParam in an array
       });
 
       if (page === 1) {
@@ -99,6 +107,7 @@ const SearchSort = () => {
     selectedSeason,
     selectedFormat,
     selectedStatus,
+    sortDirection,
   ]);
 
   const handleLoadMore = () => {
@@ -122,7 +131,7 @@ const SearchSort = () => {
     // Debounce to minimize fetches during rapid state changes
     delayTimeout.current = window.setTimeout(() => {
       initiateFetchAdvancedSearch();
-    }, 0);
+    }, 300);
 
     // Cleanup timeout on unmount or before executing a new fetch
     return () => {
@@ -145,6 +154,10 @@ const SearchSort = () => {
         setSelectedFormat={setSelectedFormat}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
+        selectedSort={selectedSort} // New
+        setSelectedSort={setSelectedSort} // New
+        sortDirection={sortDirection} // New
+        setSortDirection={setSortDirection} // New
       />
 
       {isLoading && page === 1 ? (

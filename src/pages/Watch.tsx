@@ -14,7 +14,6 @@ import {
   fetchAnimeData,
   fetchAnimeInfo,
   VideoPlayerSkeleton,
-  Seasons,
 } from '../index';
 import { Episode } from '../index';
 
@@ -318,14 +317,18 @@ const Watch: React.FC = () => {
         if (isMounted && animeData) {
           const transformedEpisodes = animeData
             .filter((ep: any) => ep.id.includes('-episode-')) // Continue excluding entries without '-episode-'
-            .map((ep: any) => ({
-              ...ep,
-              // Extract episode number directly from the ID
-              number: parseInt(ep.id.split('-episode-')[1]) || ep.number,
-              id: ep.id,
-              title: ep.title,
-              image: ep.image,
-            }));
+            .map((ep: any) => {
+              const episodePart = ep.id.split('-episode-')[1];
+              // New regex to capture the episode number including cases like "7-5"
+              const episodeNumberMatch = episodePart.match(/^(\d+(?:-\d+)?)/);
+              return {
+                ...ep,
+                number: episodeNumberMatch ? episodeNumberMatch[0] : ep.number,
+                id: ep.id,
+                title: ep.title,
+                image: ep.image,
+              };
+            });
 
           setEpisodes(transformedEpisodes);
 
