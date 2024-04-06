@@ -339,9 +339,8 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    {/* <MalAnilistimg src={AniList_logo} alt='AniList Logo' /> */}
                     <MalAnilistSvg>
-                      <SiAnilist /> {/* Adjust size as needed */}{' '}
+                      <SiAnilist size={'1.5rem'} />
                     </MalAnilistSvg>
                   </a>
                 )}
@@ -351,9 +350,8 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    {/* <MalAnilistimg src={MAL_logo} alt='MyAnimeList Logo' /> */}
                     <MalAnilistSvg>
-                      <SiMyanimelist style={{ padding: 0 }} />{' '}
+                      <SiMyanimelist size={'2.75rem'} />
                     </MalAnilistSvg>
                   </a>
                 )}
