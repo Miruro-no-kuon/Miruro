@@ -102,7 +102,7 @@ const ShareButton = styled.a`
   }
 `;
 
-function Footer() {
+export function Footer() {
   return (
     <PageWrapper>
       <footer>
@@ -171,5 +171,3 @@ function Footer() {
     </PageWrapper>
   );
 }
-
-export default Footer;

@@ -329,16 +329,18 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
               <MalAniContainer>
                 {animeData.id && (
                   <a
-                    href={`https://anilist.co/anime/${animeData.id}`}
+                    href={`https://anilist.co/${!animeData.type ? 'anime' : animeData.type.toLowerCase() === 'manga' || animeData.type.toLowerCase() === 'novel' ? 'manga' : 'anime'}/${animeData.id}`}
                     target='_blank'
+                    rel='noopener noreferrer'
                   >
                     <MalAnilistimg src={AniList_logo} alt='AniList Logo' />
                   </a>
                 )}
                 {animeData.malId && (
                   <a
-                    href={`https://myanimelist.net/anime/${animeData.malId}`}
+                    href={`https://myanimelist.net/${!animeData.type ? 'anime' : animeData.type.toLowerCase() === 'manga' || animeData.type.toLowerCase() === 'novel' ? 'manga' : 'anime'}/${animeData.malId}`}
                     target='_blank'
+                    rel='noopener noreferrer'
                   >
                     <MalAnilistimg src={MAL_logo} alt='MyAnimeList Logo' />
                   </a>

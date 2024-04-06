@@ -233,7 +233,7 @@ const getInitialThemePreference = () => {
   return detectUserTheme();
 };
 
-const Navbar = () => {
+export const Navbar = () => {
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -577,5 +577,3 @@ const Navbar = () => {
     </>
   );
 };
-
-export default Navbar;

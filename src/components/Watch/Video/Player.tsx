@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import './player.css';
+import './PlayerStyles.css';
 import {
   isHLSProvider,
   MediaPlayer,

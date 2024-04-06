@@ -175,7 +175,8 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
             >
               <FaDownload />
             </DownloadLink>
-            <br/><br/>
+            <br />
+            <br />
             <p>If current servers don't work, please try other servers.</p>
           </>
         ) : (

@@ -200,7 +200,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 300);
+    }, 0);
 
     return () => clearTimeout(timer);
   }, [anime.id]);

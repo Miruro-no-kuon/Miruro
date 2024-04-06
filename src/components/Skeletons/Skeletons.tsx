@@ -82,9 +82,9 @@ export const SkeletonSlide: React.FC<{ loading?: boolean }> = React.memo(
 );
 
 const SkeletonContainer = styled.div`
-  gap: 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.2rem;
 `;
 
 const PlayerSkeleton = styled(BaseSkeleton)`
@@ -97,9 +97,19 @@ const PlayerSkeleton = styled(BaseSkeleton)`
     ${playerPopInAnimation} 0.5s ease-out;
 `;
 
+const PlayerButtons = styled(BaseSkeleton)`
+  position: relative;
+  height: 23px;
+  width: 100%;
+  animation:
+    ${SkeletonPulse} 2.5s ease-in-out infinite,
+    ${playerPopInAnimation} 0.5s ease-out;
+`;
+
 export const SkeletonPlayer = React.memo(() => (
   <SkeletonContainer>
     <PlayerSkeleton />
+    <PlayerButtons />
   </SkeletonContainer>
 ));
 

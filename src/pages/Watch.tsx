@@ -7,7 +7,7 @@ import {
   Player,
   EmbedPlayer,
   WatchAnimeData as AnimeData,
-  RecommendedList,
+  AnimeDataList,
   MediaSource,
   fetchAnimeEmbeddedEpisodes,
   fetchAnimeEpisodes,
@@ -46,7 +46,9 @@ const DataWrapper = styled.div`
   }
 `;
 
-const SourceAndData = styled.div``;
+const SourceAndData = styled.div<{ videoPlayerWidth: string }>`
+  width: ${({ videoPlayerWidth }) => videoPlayerWidth};
+`;
 
 const RalationsTable = styled.div`
   paddding: 0;
@@ -108,7 +110,6 @@ const GoToHomePageButton = styled.a`
 `;
 
 const IframeTrailer = styled.iframe`
-  aspect-ratio: 16/9;
   position: relative;
   border-radius: var(--global-border-radius);
   border: none;
@@ -177,13 +178,19 @@ const Watch: React.FC = () => {
       const width = `${videoPlayerContainerRef.current.offsetWidth}px`;
       setVideoPlayerWidth(width);
     }
-  }, []);
+  }, [setVideoPlayerWidth, videoPlayerContainerRef]);
 
   useEffect(() => {
     updateVideoPlayerWidth(); // Update on mount
-    window.addEventListener('resize', updateVideoPlayerWidth); // Update on resize
 
-    return () => window.removeEventListener('resize', updateVideoPlayerWidth); // Cleanup
+    // Enhanced to ensure the function itself is correctly triggered
+    const handleResize = () => {
+      updateVideoPlayerWidth();
+    };
+
+    window.addEventListener('resize', handleResize); // Update on resize
+
+    return () => window.removeEventListener('resize', handleResize); // Cleanup on unmount
   }, [updateVideoPlayerWidth]);
 
   const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
@@ -194,6 +201,7 @@ const Watch: React.FC = () => {
     animeTitle?: string;
     episodeNumber?: string;
   }>();
+
   const STORAGE_KEYS = {
     SOURCE_TYPE: `source-[${animeId}]`,
     LANGUAGE: `subOrDub-[${animeId}]`,
@@ -788,7 +796,7 @@ const Watch: React.FC = () => {
         </WatchWrapper>
       )}
       <DataWrapper>
-        <SourceAndData style={{ width: videoPlayerWidth }}>
+        <SourceAndData videoPlayerWidth={videoPlayerWidth}>
           {/* Conditionally render MediaSource based on anime airing status */}
           {animeInfo && animeInfo.status !== 'Not yet aired' && (
             <MediaSource
@@ -809,7 +817,7 @@ const Watch: React.FC = () => {
           {animeInfo && <AnimeData animeData={animeInfo} />}
         </SourceAndData>
         <RalationsTable>
-          {animeInfo && <RecommendedList animeData={animeInfo} />}
+          {animeInfo && <AnimeDataList animeData={animeInfo} />}
         </RalationsTable>
       </DataWrapper>
     </WatchContainer>

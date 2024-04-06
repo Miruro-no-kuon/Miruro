@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Filters,
+  SearchFilters,
   CardGrid,
   StyledCardGrid,
   fetchAdvancedSearch,
@@ -130,7 +130,7 @@ const SearchSort = () => {
     // Debounce to minimize fetches during rapid state changes
     delayTimeout.current = window.setTimeout(() => {
       initiateFetchAdvancedSearch();
-    }, 300);
+    }, 0);
 
     // Cleanup timeout on unmount or before executing a new fetch
     return () => {
@@ -151,7 +151,7 @@ const SearchSort = () => {
 
   return (
     <Container>
-      <Filters
+      <SearchFilters
         query={query}
         setQuery={setQuery}
         selectedGenres={selectedGenres}

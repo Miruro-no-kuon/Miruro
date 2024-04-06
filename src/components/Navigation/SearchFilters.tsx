@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -36,11 +36,14 @@ const selectStyles = {
     '&:hover': {
       borderColor: 'var(--primary-accent)', // Customizing the border color on hover
     },
+    '@media (max-width: 500px)': {
+      width: '10rem', // Adjust width under 500px screen width
+    },
   }),
   menu: (provided: any) => ({
     ...provided,
     zIndex: 5,
-    backgroundColor: 'var(--global-primary-bg)', // Customizing the dropdown menu background
+    backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown menu background
     borderColor: 'var(--global-border)', // Customizing the border color of the menu
     color: 'var(--global-text)', // Customizing the text color of the menu
   }),
@@ -50,11 +53,13 @@ const selectStyles = {
       ? 'var(--primary-accent-bg)' // Background color for selected option
       : state.isFocused
         ? 'var(--global-div)' // Background color for option under the cursor
-        : 'var(--global-primary-bg)', // Default background color
-    color: state.isSelected ? 'var(--global-primary-bg)' : 'var(--global-text)',
+        : 'var(--global-secondary-bg)', // Default background color
+    color: state.isSelected
+      ? 'var(--global-secondary-bg)'
+      : 'var(--global-text)',
     '&:hover': {
       backgroundColor: 'var(--primary-accent-bg)',
-      color: 'var(--global-primary-bg)',
+      color: 'var(--global-secondary-bg)',
     },
   }),
   multiValue: (provided: any) => ({
@@ -69,7 +74,7 @@ const selectStyles = {
     ...provided,
     '&:hover': {
       backgroundColor: 'var(--primary-accent)',
-      color: 'var(--global-primary-bg)',
+      color: 'var(--global-secondary-bg)',
     },
   }),
 };
@@ -129,14 +134,28 @@ const statusOptions = [
   { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
   { value: 'FINISHED', label: 'Finished' },
   { value: 'CANCELLED', label: 'Cancelled' },
-  { value: 'HIATUS', label: 'Hiatus' },
+];
+
+const sortOptions = [
+  { value: 'POPULARITY', label: 'Popularity' },
+  { value: 'TRENDING', label: 'Trending' },
+  { value: 'UPDATED_AT', label: 'Last Updated' },
+  { value: 'START_DATE', label: 'Start Date' },
+  { value: 'END_DATE', label: 'End Date' },
+  { value: 'FAVOURITES', label: 'Favorites' },
+  { value: 'SCORE', label: 'Score' },
+  { value: 'TITLE_ROMAJI', label: 'Title (Romaji)' },
+  { value: 'TITLE_ENGLISH', label: 'Title (English)' },
+  { value: 'TITLE_NATIVE', label: 'Title (Native)' },
+  { value: 'EPISODES', label: 'Episodes' },
+  { value: 'ID', label: 'ID' },
 ];
 
 const SearchInput = styled.input`
   display: flex;
   flex: 1;
   border: none;
-  width: 11rem;
+  width: 9rem;
   height: 1.2rem;
   align-items: center;
   color: var(--global-text);
@@ -150,53 +169,23 @@ const SearchInput = styled.input`
   }
 `;
 
-const FilterSelect: React.FC<FilterProps> = ({
-  label,
-  options,
-  onChange,
-  value,
-  isMulti = false,
-}) => (
-  <FilterSection>
-    <FilterLabel>
-      {label === 'Search' && <LuSlidersHorizontal />}
-      {label}
-    </FilterLabel>
-    {label === 'Search' ? (
-      <SearchInput
-        type='text'
-        value={value}
-        onChange={(e) => onChange && onChange(e.target.value)}
-        placeholder=''
-      />
-    ) : (
-      <Select
-        components={{ ...animatedComponents, IndicatorSeparator: () => null }}
-        isMulti={isMulti}
-        options={options}
-        onChange={onChange}
-        value={value}
-        placeholder='Any'
-        styles={selectStyles}
-      />
-    )}
-  </FilterSection>
-);
-
 const FiltersContainer = styled.div`
   justify-content: left;
   align-items: center;
   display: flex;
-  gap: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
+  gap: 2rem;
+  @media (max-width: 501px) {
+    gap: 0.5rem;
+    justify-content: center;
+  }
 `;
 
 const FilterSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  margin-bottom: 2rem;
 `;
 
 const FilterLabel = styled.label`
@@ -208,9 +197,101 @@ const FilterLabel = styled.label`
   }
 `;
 
+const ButtonBase = styled.button`
+  flex: 1; // Make the button expand to fill the wrapper
+  padding: 0.6rem;
+  max-width: 10rem;
+  border: none;
+  font-weight: bold;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    background-color: var(--primary-accent);
+  }
+  &:active,
+  &:focus {
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
+  }
+`;
+
+const Button = styled(ButtonBase)`
+  &.active {
+    background-color: var(--primary-accent);
+  }
+`;
+
+const ClearButton = styled(ButtonBase)`
+  margin-top: 1.75rem;
+  max-width: 7rem;
+
+  @media (max-width: 1000px) {
+    margin-top: 0.5rem;
+  }
+`;
+
 const animatedComponents = makeAnimated();
 
-export const Filters: React.FC<{
+const FilterSelect: React.FC<FilterProps> = ({
+  label,
+  options,
+  onChange,
+  value,
+  isMulti = false,
+}) => {
+  // Local state to handle input value and debounce
+  const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
+    // Set up a delay for executing the onChange handler
+    const handler = setTimeout(() => {
+      onChange && onChange(inputValue);
+    }, 300); // 300ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue, onChange]);
+
+  return (
+    <FilterSection>
+      <FilterLabel>
+        {label === 'Search' && <LuSlidersHorizontal />}
+        {label}
+      </FilterLabel>
+      {label === 'Search' ? (
+        <SearchInput
+          type='text'
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder=''
+        />
+      ) : (
+        <Select
+          components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+          isMulti={isMulti}
+          options={options}
+          onChange={onChange}
+          value={value}
+          placeholder='Any'
+          styles={selectStyles}
+          isSearchable={false}
+        />
+      )}
+    </FilterSection>
+  );
+};
+
+export const SearchFilters: React.FC<{
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   selectedGenres: Option[];
@@ -223,6 +304,11 @@ export const Filters: React.FC<{
   setSelectedFormat: React.Dispatch<React.SetStateAction<Option>>;
   selectedStatus: Option;
   setSelectedStatus: React.Dispatch<React.SetStateAction<Option>>;
+  selectedSort: Option;
+  setSelectedSort: React.Dispatch<React.SetStateAction<Option>>;
+  sortDirection: 'DESC' | 'ASC';
+  setSortDirection: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
+  resetFilters: () => void;
 }> = ({
   query,
   setQuery,
@@ -236,6 +322,11 @@ export const Filters: React.FC<{
   setSelectedFormat,
   selectedStatus,
   setSelectedStatus,
+  selectedSort,
+  setSelectedSort,
+  sortDirection,
+  setSortDirection,
+  resetFilters,
 }) => (
   <FiltersContainer>
     <FilterSelect label='Search' value={query} onChange={setQuery} />
@@ -260,7 +351,7 @@ export const Filters: React.FC<{
       value={selectedSeason}
     />
     <FilterSelect
-      label='Format'
+      label='Type'
       options={formatOptions}
       onChange={setSelectedFormat}
       value={selectedFormat}
@@ -271,5 +362,19 @@ export const Filters: React.FC<{
       onChange={setSelectedStatus}
       value={selectedStatus}
     />
+    {/* <FilterSelect
+      label='Sort By'
+      options={sortOptions}
+      onChange={setSelectedSort}
+      value={selectedSort}
+    /> */}
+    {/* <Button
+      onClick={() =>
+        setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
+      }
+    >
+      {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
+    </Button> */}
+    <ClearButton onClick={resetFilters}>Clear Filters</ClearButton>
   </FiltersContainer>
 );

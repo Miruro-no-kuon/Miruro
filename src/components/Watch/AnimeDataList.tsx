@@ -42,15 +42,13 @@ const Card = styled.div`
     background-color: var(--global-div-tr);
     margin-left: 0.35rem;
     @media (max-width: 500px) {
-      /* No animatoin for devices under 500px */
-      background-color: unset;
       margin-left: unset;
     }
 `;
 
 const AnimeImage = styled.img`
   width: 4rem;
-  height: 6rem;
+  height: 6rem;S
   object-fit: cover;
   border-radius: var(--global-border-radius);
 `;
@@ -113,7 +111,7 @@ const Details = styled.p`
   color: rgba(102, 102, 102, 0.75);
 `;
 
-const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
+export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
   const filteredRecommendations = animeData.recommendations.filter((rec) =>
     ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type || ''),
   );
@@ -242,5 +240,3 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
     </Sidebar>
   );
 };
-
-export default RecommendedList;
