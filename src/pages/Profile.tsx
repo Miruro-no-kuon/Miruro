@@ -27,7 +27,12 @@ const PreferencesContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button<{ isSelected: boolean }>`
+interface StyledButtonProps {
+  isSelected: boolean;
+  isInputToggle?: boolean; // Define isInputToggle as an optional prop
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
   background: ${({ isSelected }) =>
     isSelected ? 'var(--primary-accent)' : 'var(--global-div)'};
   margin-right: 0.5rem;
@@ -38,7 +43,9 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   transition: background-color 0.3s;
   border: none;
   font-size: 1rem;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: ${({ isSelected }) =>
       isSelected ? 'var(--primary-accent)' : 'var(--primary-accent)'};
   }

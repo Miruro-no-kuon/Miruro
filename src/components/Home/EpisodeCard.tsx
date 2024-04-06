@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
+import { Episode } from '../../hooks/interface';
 
 const popInAnimation = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
@@ -50,7 +51,9 @@ const AnimeEpisodeCard = styled(Link)`
   transition: 0.2s ease-in-out;
   transition-delay: 0.25s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     box-shadow: 2px 2px 10px var(--global-card-hover-shadow);
     ${PlayIcon} {
       opacity: 1;
@@ -62,7 +65,9 @@ const AnimeEpisodeCard = styled(Link)`
   }
 
   @media (min-width: 768px) {
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
       transform: translateY(-10px);
     }
   }
@@ -123,13 +128,6 @@ const ContinueWatchingTitle = styled.h2`
   margin-bottom: 0; // Adjust the margin as needed
 `;
 
-interface AnimeEpisode {
-  id: string;
-  title?: string;
-  number: number;
-  image: string;
-}
-
 const calculateSlidesPerView = (windowWidth: number): number => {
   if (windowWidth >= 1200) return 5;
   if (windowWidth >= 1000) return 4;
@@ -138,7 +136,7 @@ const calculateSlidesPerView = (windowWidth: number): number => {
   return 2;
 };
 
-const AnimeEpisodeCardComponent: React.FC = () => {
+export const EpisodeCard: React.FC = () => {
   const watchedEpisodesData = useMemo(
     () => localStorage.getItem('watched-episodes'),
     [],
@@ -160,7 +158,7 @@ const AnimeEpisodeCardComponent: React.FC = () => {
   const episodesToRender = useMemo(() => {
     if (!watchedEpisodesData) return [];
     try {
-      const allEpisodes: Record<string, AnimeEpisode[]> =
+      const allEpisodes: Record<string, Episode[]> =
         JSON.parse(watchedEpisodesData);
       return Object.entries(allEpisodes).map(([animeId, animeEpisodes]) => {
         const lastEpisode = animeEpisodes[animeEpisodes.length - 1];
@@ -174,12 +172,16 @@ const AnimeEpisodeCardComponent: React.FC = () => {
             <AnimeEpisodeCard
               to={`/watch/${animeId}`}
               style={{ textDecoration: 'none' }}
+              title={
+                'Continue Watching ' +
+                `Episode ${lastEpisode.number}${lastEpisode.title ? `: ${lastEpisode.title}` : ''}`
+              }
             >
               <img
                 src={lastEpisode.image}
                 alt={`Cover for ${lastEpisode.id}`}
               />
-              <PlayIcon>
+              <PlayIcon aria-label='Play Episode'>
                 <FaPlay />
               </PlayIcon>
               <div className='episode-info'>
@@ -215,11 +217,10 @@ const AnimeEpisodeCardComponent: React.FC = () => {
 
   const swiperSettings = useMemo(
     () => ({
-      spaceBetween: 10,
+      spaceBetween: 20,
       slidesPerView: calculateSlidesPerView(windowWidth),
       loop: true,
       freeMode: true,
-      centerSlides: false,
       grabCursor: true,
       keyboard: true,
       touchRatio: 1.2,
@@ -236,23 +237,37 @@ const AnimeEpisodeCardComponent: React.FC = () => {
   );
 
   return (
-    <Section>
+    <Section aria-labelledby='continueWatchingTitle'>
       {episodesToRender.length > 0 && (
-        <ContinueWatchingTitle>CONTINUE WATCHING</ContinueWatchingTitle>
+        <ContinueWatchingTitle id='continueWatchingTitle'>
+          CONTINUE WATCHING
+        </ContinueWatchingTitle>
       )}
-      <StyledSwiperContainer {...swiperSettings}>
+      <StyledSwiperContainer {...swiperSettings} aria-label='Episodes carousel'>
         {episodesToRender}
-        <FaChevronCircleLeft
+        <button
+          aria-label='Previous episode'
           className='swiper-button-prev'
-          style={{ color: 'rgba(255, 255, 255, 0.85)' }}
-        />
-        <FaChevronCircleRight
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255, 255, 255, 0.85)',
+          }}
+        >
+          <FaChevronCircleLeft aria-hidden='true' />
+        </button>
+        <button
+          aria-label='Next episode'
           className='swiper-button-next'
-          style={{ color: 'rgba(255, 255, 255, 0.85)' }}
-        />
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255, 255, 255, 0.85)',
+          }}
+        >
+          <FaChevronCircleRight aria-hidden='true' />
+        </button>
       </StyledSwiperContainer>
     </Section>
   );
 };
-
-export default AnimeEpisodeCardComponent;

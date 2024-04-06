@@ -1,7 +1,7 @@
 {
   "name": "miruro_no_kuon",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.4.2",
   "type": "module",
   "scripts": {
     "dev": "vite --port 8080",
@@ -56,6 +56,7 @@
     "react-lazy-load-image-component": "^1.6.0",
     "react-player": "^2.14.1",
     "react-router-dom": "latest",
+    "react-select": "^5.8.0",
     "react-slick": "^0.30.2",
     "scrollreveal": "^4.0.9",
     "slick-carousel": "^1.8.1",

@@ -3,8 +3,9 @@
   "short_name": "miruro",
   "description": "Blazing Fast HD Anime Streaming",
   "lang": "en",
+  "background_color": "#080808",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "standalone",
   "scope": "/",
   "start_url": "/",
   "screenshots": [

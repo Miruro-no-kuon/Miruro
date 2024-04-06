@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import CardSkeleton from '../Skeletons/CardSkeleton';
-import { MdLayers } from 'react-icons/md'; // For the stacked/layered icon
-import { FaPlay } from 'react-icons/fa'; // For the heart icon
-import { BiSolidLike } from 'react-icons/bi';
-import { Anime } from '../../hooks/interface';
+import { Link } from 'react-router-dom';
+import { SkeletonCard, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
+import { FaPlay } from 'react-icons/fa'; // For the play icon
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -17,9 +16,13 @@ const slideRightAnimation = keyframes`
   100% { opacity: 1; transform: translateY(0); }
 `;
 
-const StyledCardWrapper = styled.div`
+const StyledCardWrapper = styled(Link)`
+  color: var(--global-text);
   animation: ${slideUpAnimation} 0.4s ease;
-  &:hover {
+  text-decoration: none;
+  &:hover,
+  &:active,
+  &:focus {
     z-index: 2;
   }
 `;
@@ -35,7 +38,9 @@ const StyledCardItem = styled.div`
 const ImageDisplayWrapper = styled.div`
   transition: 0.2s ease-in-out;
   @media (min-width: 501px) {
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
       transform: translateY(-10px);
     }
   }
@@ -98,11 +103,14 @@ const TitleContainer = styled.div<{ $isHovered: boolean }>`
   align-items: center;
   padding: 0.5rem;
   margin-top: 0.35rem;
+  gap: 0.4rem;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   transition: background 0.2s ease;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background: var(--global-card-title-bg);
   }
 `;
@@ -111,17 +119,28 @@ const IndicatorDot = styled.div`
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  margin-right: 0.5rem;
-`;
-
-const Dot = styled(IndicatorDot)`
-  background-color: #aaff00;
+  margin: 0rem;
   flex-shrink: 0;
 `;
 
 const CompletedIndicator = styled(IndicatorDot)`
-  background-color: #00aaff;
-  flex-shrink: 0;
+  background-color: var(--completed-indicator-color);
+`;
+
+const CancelledIndicator = styled(IndicatorDot)`
+  background-color: var(--cancelled-indicator-color);
+`;
+
+const NotYetAiredIndicator = styled(IndicatorDot)`
+  background-color: var(--not-yet-aired-indicator-color);
+`;
+
+const OngoingIndicator = styled(IndicatorDot)`
+  background-color: var(--ongoing-dot-color);
+`;
+
+const DefaultIndicator = styled(IndicatorDot)`
+  background-color: var(--default-indicator-color);
 `;
 
 const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
@@ -145,10 +164,10 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
   padding: 0.2rem;
   font-size: 0.8rem;
   font-weight: bold;
-  color: ${(props) => (props.color)};
+  color: ${(props) => props.color};
   opacity: 0.9;
   background-color: var(--global-button-shadow);
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   backdrop-filter: blur(10px);
   transition: 0.2s ease-in-out;
 `);
@@ -157,7 +176,6 @@ const CardDetails = styled.div`
   animation: ${slideRightAnimation} 0.4s ease forwards;
   width: 100%;
   font-family: Arial;
-
   font-weight: bold;
   font-size: 0.75rem;
   color: rgba(102, 102, 102, 0.75);
@@ -167,16 +185,17 @@ const CardDetails = styled.div`
   align-items: center;
   padding: 0.25rem 0rem;
   gap: 0.5rem;
-
   white-space: nowrap;
   overflow: hidden; // Ensures that overflow text is hidden
   text-overflow: ellipsis; // Adds an ellipsis to indicate that text has been cut off
+  svg {
+    margin-right: -0.4rem;
+  }
 `;
 
 const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -186,10 +205,6 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     return () => clearTimeout(timer);
   }, [anime.id]);
 
-  const handleCardClick = () => {
-    navigate(`/watch/${anime.id}`);
-  };
-
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -198,7 +213,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     setIsHovered(false);
   };
 
-  const imageSrc = anime.coverImage || anime.image || '';
+  const imageSrc = anime.image || '';
   const animeColor = anime.color || '#999999';
   const displayTitle = useMemo(
     () => anime.title.english || anime.title.romaji || 'No Title',
@@ -214,13 +229,15 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   const handleStatusCheck = useMemo(() => {
     switch (anime.status) {
       case 'Ongoing':
-      case 'RELEASING':
-        return <Dot />;
+        return <OngoingIndicator />;
       case 'Completed':
-      case 'FINISHED':
         return <CompletedIndicator />;
+      case 'Cancelled':
+        return <CancelledIndicator />;
+      case 'Not yet aired':
+        return <NotYetAiredIndicator />;
       default:
-        return null;
+        return <DefaultIndicator />;
     }
   }, [anime.status]);
 
@@ -240,10 +257,10 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
   return (
     <>
       {loading ? (
-        <CardSkeleton />
+        <SkeletonCard />
       ) : (
         <StyledCardWrapper
-          onClick={handleCardClick}
+          to={`/watch/${anime.id}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           color={animeColor}
@@ -282,19 +299,22 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
             </TitleContainer>
             <div>
               <CardDetails title='Romaji Title'>
-                {' '}
-                {truncateTitle(anime.title.romaji || '', 24)}{' '}
+                {truncateTitle(anime.title.romaji || '', 24)}
               </CardDetails>
               <CardDetails title='Card Details'>
-                <div>{anime.releaseDate}</div>
-                <div>
-                  <MdLayers />
-                  {anime.totalEpisodes || anime.episodes}
-                </div>
-                <div>
-                  <BiSolidLike />
-                  {anime.rating / 10}
-                </div>
+                {anime.releaseDate}
+                {(anime.totalEpisodes || anime.episodes) && (
+                  <>
+                    <TbCardsFilled />
+                    {anime.totalEpisodes || anime.episodes}
+                  </>
+                )}
+                {anime.rating && (
+                  <>
+                    <FaStar />
+                    {anime.rating}
+                  </>
+                )}
               </CardDetails>
             </div>
           </StyledCardItem>

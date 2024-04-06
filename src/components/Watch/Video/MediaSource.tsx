@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FaBell, FaDownload } from 'react-icons/fa';
 
 // Props interface
-interface VideoSourceSelectorProps {
+interface MediaSourceProps {
   sourceType: string;
   setSourceType: (sourceType: string) => void;
   language: string;
@@ -14,11 +14,15 @@ interface VideoSourceSelectorProps {
   nextEpisodenumber?: string;
 }
 
-const Container = styled.div`
-  display: flex;
+// Adjust the Container for responsive layout
+const UpdatedContainer = styled.div`
   justify-content: center;
-  width: 100%;
-  padding-top: 0.8rem;
+  margin-top: 1rem;
+  gap: 1rem;
+  display: flex;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;
 
 const Table = styled.table`
@@ -53,13 +57,18 @@ const ButtonBase = styled.button`
   background-color: var(--global-div);
   color: var(--global-text);
   transition:
-    background-color 0.3s ease,
+    background-color 0.2s ease,
     transform 0.2s ease-in-out;
   text-align: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
   }
 `;
 
@@ -70,22 +79,36 @@ const Button = styled(ButtonBase)`
 `;
 
 const DownloadLink = styled.a`
-  display: inline-block; // Ensures it can be styled like a button
-  padding: 0.25rem;
-  padding-left: 0rem;
+  display: inline-flex; // Use inline-flex to easily center the icon
+  align-items: center; // Align the icon vertically center
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  gap: 0.25rem;
   font-size: 0.9rem;
-  border: none;
   font-weight: bold;
+  border: none;
   border-radius: var(--global-border-radius);
   cursor: pointer;
   background-color: var(--global-div);
   color: var(--global-text);
   text-align: center;
-  text-decoration: none; // Removes underline from links
-  margin-left: 0.5rem;
-  &:hover {
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease-in-out;
+
+  svg {
+    font-size: 0.8rem; // Adjust icon size
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
   }
 `;
 
@@ -104,18 +127,13 @@ const EpisodeInfoColumn = styled.div`
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
   padding: 0.6rem;
-  margin-right: 0.8rem;
   @media (max-width: 1000px) {
     display: block;
-    margin-bottom: 10px;
     margin-right: 0rem;
-  }
-  svg {
-    margin-left: 0.5rem;
   }
   p {
     font-size: 0.9rem;
-    margin: 0rem;
+    margin: 0;
   }
   h4 {
     margin: 0rem;
@@ -134,17 +152,7 @@ const EpisodeInfoColumn = styled.div`
   }
 `;
 
-// Adjust the Container for responsive layout
-const UpdatedContainer = styled(Container)`
-  display: flex;
-  width: 100%;
-  justify-content: space-between; // Adjust based on layout needs
-  @media (max-width: 1000px) {
-    flex-direction: column;
-  }
-`;
-
-const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
+export const MediaSource: React.FC<MediaSourceProps> = ({
   sourceType,
   setSourceType,
   language,
@@ -159,17 +167,16 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
       <EpisodeInfoColumn>
         {episodeId ? (
           <>
-            <h4>
-              You're watching <strong>Episode {episodeId}</strong>
-              <DownloadLink
-                href={downloadLink}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <FaDownload />
-                Download
-              </DownloadLink>
-            </h4>
+            You're watching <strong>Episode {episodeId}</strong>
+            <DownloadLink
+              href={downloadLink}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <FaDownload />
+            </DownloadLink>
+            <br />
+            <br />
             <p>If current servers don't work, please try other servers.</p>
           </>
         ) : (
@@ -178,7 +185,7 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
         {airingTime && (
           <>
             <p>
-              The next episode, <strong>{nextEpisodenumber}</strong> will air in
+              Episode <strong>{nextEpisodenumber}</strong> will air in{' '}
               <FaBell />
               <strong> {airingTime}</strong>.
             </p>
@@ -302,5 +309,3 @@ const VideoSourceSelector: React.FC<VideoSourceSelectorProps> = ({
     </UpdatedContainer>
   );
 };
-
-export default VideoSourceSelector;

@@ -5,19 +5,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
 import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
-import CarouselSkeleton from '../Skeletons/CarouselSkeleton';
-
-// Correctly type your data
-interface SlideData {
-  id: string;
-  image: string;
-  cover: string;
-  title: {
-    romaji: string;
-    english: string;
-  };
-  description: string;
-}
+import { SkeletonSlide } from '../../index';
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa6';
+import { Anime } from '../../hooks/interface';
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -123,18 +115,38 @@ const SlideTitle = styled.h2`
   }
 `;
 
+const SlideInfo = styled.p`
+  color: var(--white, #fff);
+  font-size: 0.9rem;
+  margin: auto;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  text-overflow: ellipsis;
+  svg {
+    margin-left: 0.5rem;
+  }
+  @media (max-width: 1000px) {
+    font-size: 0.8rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.7rem;
+  }
+`;
+
 const SlideDescription = styled.p<{
   $maxLines: boolean;
 }>`
   color: var(--white, #ccc);
   background: transparent;
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-size: clamp(0.9rem, 1.5vw, 0.9rem);
   line-height: 1.2;
   margin-bottom: 0;
-  max-width: 50%;
+  max-width: 60%;
   max-height: 5rem;
   overflow: hidden;
   -webkit-line-clamp: 3;
+  margin-top: 0.25rem;
 
   @media (max-width: 1000px) {
     line-height: 1.2;
@@ -181,7 +193,9 @@ const PlayButton = styled.button`
   display: flex;
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
     transform: scale(1.05); /* Slightly larger scale on hover */
   }
@@ -192,7 +206,8 @@ const PlayButton = styled.button`
 
   @media (max-width: 500px) {
     border-radius: 50%;
-    padding: 1.5rem; /* Adjusted for small devices */
+    padding: 1.4rem; /* Adjusted for small devices */
+    padding-right: 1.5rem;
     font-size: 1.25rem; /* Adjusted font size for small devices */
     span {
       display: none;
@@ -203,7 +218,7 @@ const PlayButton = styled.button`
 const PlayIcon = styled(FaPlay)`
   margin-right: 0.5rem;
   @media (max-width: 500px) {
-    margin-right: 0;
+    margin: 0 0 0 0.25rem;
   }
 `;
 const PaginationStyle = styled.div`
@@ -220,13 +235,13 @@ const PaginationStyle = styled.div`
 `;
 
 // Adjust the Carousel component to use correctly typed props and state
-interface CarouselTrendingProps {
-  data: SlideData[];
+interface HomeCarouselProps {
+  data: Anime[];
   loading: boolean;
   error?: string | null;
 }
 
-const CarouselTrending: FC<CarouselTrendingProps> = ({
+export const HomeCarousel: FC<HomeCarouselProps> = ({
   data = [],
   loading,
   error,
@@ -246,11 +261,11 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
   const validData = data.filter(
     (item) => item.title && item.title.english && item.description,
   );
-
+  const formatGenres = (genres: string[]): string => genres.join(', ');
   return (
     <>
       {loading || error ? (
-        <CarouselSkeleton />
+        <SkeletonSlide />
       ) : (
         <PaginationStyle>
           <StyledSwiperContainer
@@ -278,40 +293,62 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
             touchRatio={1}
             centeredSlides={true}
           >
-            {validData.map(({ id, image, cover, title, description }) => (
-              <StyledSwiperSlide key={id} title={title.english || title.romaji}>
-                <SlideImageWrapper>
-                  <SlideImage
-                    src={cover === image ? BannerNotFound : cover}
-                    alt={title.english || title.romaji + ' Banner Image'} // Added alt text with relevant keywords
-                    $cover={cover} // Managed outside, but kept for styled component
-                    $image={image} // Managed outside, but kept for styled component
-                    loading='eager'
-                  />
-                  <ContentWrapper>
-                    <SlideContent>
-                      <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
-                      <SlideDescription
-                        dangerouslySetInnerHTML={{ __html: description }}
-                        $maxLines={description.length > 200}
-                      />
-                    </SlideContent>
-                    <PlayButtonWrapper>
-                      <PlayButton
-                        onClick={() => handlePlayButtonClick(id)}
-                        title={
-                          'Watch ' + (title.english || title.romaji) + ' Now'
-                        }
-                      >
-                        <PlayIcon />
-                        <span>WATCH NOW</span>
-                      </PlayButton>
-                    </PlayButtonWrapper>
-                  </ContentWrapper>
-                  <DarkOverlay />
-                </SlideImageWrapper>
-              </StyledSwiperSlide>
-            ))}
+            {validData.map(
+              ({
+                id,
+                image,
+                cover,
+                title,
+                description,
+                status,
+                rating,
+                genres,
+                totalEpisodes,
+                duration,
+                type,
+              }) => (
+                <StyledSwiperSlide
+                  key={id}
+                  title={title.english || title.romaji}
+                >
+                  <SlideImageWrapper>
+                    <SlideImage
+                      src={cover === image ? BannerNotFound : cover}
+                      alt={title.english || title.romaji + ' Banner Image'}
+                      $cover={cover}
+                      $image={image}
+                      loading='eager'
+                    />
+                    <ContentWrapper>
+                      <SlideContent>
+                        <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
+                        <SlideInfo>
+                          {type} <TbCardsFilled /> {totalEpisodes} <FaStar />{' '}
+                          {rating}
+                          <FaClock /> {duration} mins
+                        </SlideInfo>
+                        <SlideDescription
+                          dangerouslySetInnerHTML={{ __html: description }}
+                          $maxLines={description.length > 200}
+                        />
+                      </SlideContent>
+                      <PlayButtonWrapper>
+                        <PlayButton
+                          onClick={() => handlePlayButtonClick(id)}
+                          title={
+                            'Watch ' + (title.english || title.romaji) + ' Now'
+                          }
+                        >
+                          <PlayIcon />
+                          <span>WATCH NOW</span>
+                        </PlayButton>
+                      </PlayButtonWrapper>
+                    </ContentWrapper>
+                    <DarkOverlay />
+                  </SlideImageWrapper>
+                </StyledSwiperSlide>
+              ),
+            )}
             <div className='swiper-pagination'></div>
           </StyledSwiperContainer>
         </PaginationStyle>
@@ -319,5 +356,3 @@ const CarouselTrending: FC<CarouselTrendingProps> = ({
     </>
   );
 };
-
-export default CarouselTrending;

@@ -6,12 +6,11 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import DropDownSearch from './DropDownSearch';
-import { fetchAdvancedSearch } from '../hooks/useApi';
+import { DropDownSearch } from '../../index'; // Assuming this is a local component not exported through index.ts
+import { fetchAdvancedSearch, type Anime } from '../..'; // Adjust the import path to point to your index.ts correctly
 import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
-import { Anime } from '../hooks/interface';
 
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
@@ -43,6 +42,11 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   }
 `;
 
+const NavbarWrapper = styled.div`
+  max-width: 105rem;
+  margin: auto;
+`;
+
 const TopContainer = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -62,7 +66,9 @@ const LogoImg = styled(Link)`
     color 0.2s ease-in-out,
     transform 0.2s ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     color: black;
     transform: scale(1.05);
   }
@@ -151,7 +157,9 @@ const ClearButton = styled.button<{ $query: string }>`
   display: flex;
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     color: var(--global-text);
     opacity: 1;
   }
@@ -167,7 +175,7 @@ const StyledButton = styled.button<{ isInputToggle?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   width: 100%;
   height: 100%;
   transition:
@@ -190,7 +198,9 @@ const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
   cursor: pointer;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0.5)};
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     opacity: 1;
   }
 
@@ -223,7 +233,7 @@ const getInitialThemePreference = () => {
   return detectUserTheme();
 };
 
-const Navbar = () => {
+export const Navbar = () => {
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -442,18 +452,86 @@ const Navbar = () => {
   return (
     <>
       <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
-        <TopContainer>
-          <LogoImg
-            title='MIRURO.tv'
-            to='/home'
-            onClick={() => window.scrollTo(0, 0)}
-          >
-            見るろ の 久遠
-          </LogoImg>
+        <NavbarWrapper>
+          <TopContainer>
+            <LogoImg
+              title='MIRURO.tv'
+              to='/home'
+              onClick={() => window.scrollTo(0, 0)}
+            >
+              見るろ の 久遠
+            </LogoImg>
 
-          {/* Render InputContainer within the navbar for screens larger than 500px */}
-          {!isMobileView && (
-            <InputContainer ref={inputContainerRef} $isVisible={isInputVisible}>
+            {/* Render InputContainer within the navbar for screens larger than 500px */}
+            {!isMobileView && (
+              <InputContainer
+                ref={inputContainerRef}
+                $isVisible={isInputVisible}
+              >
+                <Icon $isFocused={search.isSearchFocused}>
+                  <IoIosSearch />
+                </Icon>
+                <SearchInput
+                  type='text'
+                  placeholder='Search Anime'
+                  value={search.searchQuery}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDownOnInput}
+                  onFocus={() => {
+                    setSearch((prevState) => ({
+                      ...prevState,
+                      isDropdownOpen: true,
+                      isSearchFocused: true,
+                    }));
+                  }}
+                  ref={inputRef}
+                  aria-label='Search Anime'
+                />
+                <DropDownSearch
+                  searchResults={searchResults}
+                  onClose={handleCloseDropdown}
+                  isVisible={search.isDropdownOpen}
+                  selectedIndex={selectedIndex}
+                  setSelectedIndex={setSelectedIndex}
+                  searchQuery={search.searchQuery}
+                  containerWidth={inputContainerWidth}
+                />
+
+                <ClearButton
+                  $query={search.searchQuery}
+                  onClick={handleClearSearch}
+                  aria-label='Clear Search'
+                >
+                  <FiX />
+                </ClearButton>
+                <Icon $isFocused={search.isSearchFocused}>
+                  <GoCommandPalette />
+                </Icon>
+              </InputContainer>
+            )}
+            <RightContent>
+              {isMobileView && (
+                <StyledButton
+                  onClick={() => {
+                    setIsInputVisible((prev) => !prev);
+                    setIsPaddingExtended((prev) => !prev); // Toggle padding extension when toggling input visibility
+                  }}
+                  aria-label='Toggle Search Input'
+                >
+                  <IoIosSearch />
+                </StyledButton>
+              )}
+              <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
+                {isDarkMode ? <FiSun /> : <FiMoon />}
+              </StyledButton>
+              {/* <StyledButton onClick={navigateToProfile}>
+              <FiMenu />
+            </StyledButton> */}
+            </RightContent>
+          </TopContainer>
+
+          {isMobileView && isInputVisible && (
+            <InputContainer $isVisible={isInputVisible}>
               <Icon $isFocused={search.isSearchFocused}>
                 <IoIosSearch />
               </Icon>
@@ -471,7 +549,6 @@ const Navbar = () => {
                   }));
                 }}
                 ref={inputRef}
-                aria-label='Search Anime'
               />
               <DropDownSearch
                 searchResults={searchResults}
@@ -486,81 +563,17 @@ const Navbar = () => {
               <ClearButton
                 $query={search.searchQuery}
                 onClick={handleClearSearch}
-                aria-label='Clear Search'
               >
                 <FiX />
               </ClearButton>
-              <Icon $isFocused={search.isSearchFocused}>
+              <SlashToggleBtn $isFocused={search.isSearchFocused}>
                 <GoCommandPalette />
-              </Icon>
+              </SlashToggleBtn>
             </InputContainer>
           )}
-          <RightContent>
-            {isMobileView && (
-              <StyledButton
-                onClick={() => {
-                  setIsInputVisible((prev) => !prev);
-                  setIsPaddingExtended((prev) => !prev); // Toggle padding extension when toggling input visibility
-                }}
-                aria-label='Toggle Search Input'
-              >
-                <IoIosSearch />
-              </StyledButton>
-            )}
-            <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
-              {isDarkMode ? <FiSun /> : <FiMoon />}
-            </StyledButton>
-            {/* <StyledButton onClick={navigateToProfile}>
-              <FiMenu />
-            </StyledButton> */}
-          </RightContent>
-        </TopContainer>
-
-        {isMobileView && isInputVisible && (
-          <InputContainer $isVisible={isInputVisible}>
-            <Icon $isFocused={search.isSearchFocused}>
-              <IoIosSearch />
-            </Icon>
-            <SearchInput
-              type='text'
-              placeholder='Search Anime'
-              value={search.searchQuery}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDownOnInput}
-              onFocus={() => {
-                setSearch((prevState) => ({
-                  ...prevState,
-                  isDropdownOpen: true,
-                  isSearchFocused: true,
-                }));
-              }}
-              ref={inputRef}
-            />
-            <DropDownSearch
-              searchResults={searchResults}
-              onClose={handleCloseDropdown}
-              isVisible={search.isDropdownOpen}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              searchQuery={search.searchQuery}
-              containerWidth={inputContainerWidth}
-            />
-
-            <ClearButton
-              $query={search.searchQuery}
-              onClick={handleClearSearch}
-            >
-              <FiX />
-            </ClearButton>
-            <SlashToggleBtn $isFocused={search.isSearchFocused}>
-              <GoCommandPalette />
-            </SlashToggleBtn>
-          </InputContainer>
-        )}
+        </NavbarWrapper>
       </StyledNavbar>
       {/* Conditionally render InputContainer below the navbar for mobile view when visibility is toggled */}
     </>
   );
 };
-
-export default Navbar;

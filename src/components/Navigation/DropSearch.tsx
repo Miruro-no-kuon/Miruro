@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Anime } from '../hooks/interface';
+import { Anime } from '../../hooks/interface';
 import { FaAngleRight } from 'react-icons/fa';
-import { MdLayers } from 'react-icons/md';
-import { BiSolidLike } from 'react-icons/bi';
+import { TbCardsFilled } from 'react-icons/tb';
+import { FaStar } from 'react-icons/fa';
 
 // Keyframes for animation
 const slideDownAnimation = keyframes`
@@ -28,7 +28,7 @@ const DropdownContainer = styled.div<{ $isVisible: boolean; width: number }>`
   overflow-y: auto;
   background-color: var(--global-div);
   border-top: none;
-  border-radius: 0.3rem;
+  border-radius: var(--global-border-radius);
   padding-top: 2.5rem;
   animation: ${slideDownAnimation} 0.5s ease forwards;
 
@@ -72,10 +72,12 @@ const ResultItem = styled.div<{ $isSelected: boolean }>`
   background-color: ${(props) =>
     props.$isSelected ? 'var(--primary-accent-bg)' : 'transparent'};
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
     ${AnimeDetails} {
-      color: var(--primary-text);
+      color: var(--global-text);
     }
   }
 `;
@@ -140,7 +142,7 @@ interface DropDownSearchProps {
   containerWidth: number;
 }
 
-const DropDownSearch: React.FC<DropDownSearchProps> = ({
+export const DropDownSearch: React.FC<DropDownSearchProps> = ({
   searchResults,
   onClose,
   isVisible,
@@ -242,7 +244,7 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
           role='listitem' // Enhanced semantic meaning for accessibility
         >
           <AnimeImage
-            src={result.image || result.coverImage || ''} // Fallback for missing images
+            src={result.image || ''} // Fallback for missing images
             alt={result.title?.english || result.title?.romaji || 'n/a'}
           />
           <div>
@@ -252,13 +254,13 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
             <AnimeDetails $isSelected={index === selectedIndex}>
               <span>&nbsp;{result.type}</span>
               <span>&nbsp;&nbsp;</span>
-              <BiSolidLike color='#' />
+              <TbCardsFilled color='#' />
+              <span>&nbsp;</span>
+              <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
+              <FaStar color='#' />
               <span>&nbsp;</span>
               <span>{result.rating ? result.rating / 10 : 'N/A'}&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
-              <MdLayers color='#' />
-              <span>&nbsp;</span>
-              <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
             </AnimeDetails>
           </div>
         </ResultItem>
@@ -276,5 +278,3 @@ const DropDownSearch: React.FC<DropDownSearchProps> = ({
     </DropdownContainer>
   );
 };
-
-export default DropDownSearch;

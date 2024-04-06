@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import CardItem from './CardItem';
+import { CardItem } from '../../index';
 import { Anime } from '../../hooks/interface';
 
 interface CardGridProps {
@@ -9,7 +9,7 @@ interface CardGridProps {
   onLoadMore: () => void;
 }
 
-const CardGrid: React.FC<CardGridProps> = ({
+export const CardGrid: React.FC<CardGridProps> = ({
   animeData,
   hasNextPage,
   onLoadMore,
@@ -27,7 +27,11 @@ const CardGrid: React.FC<CardGridProps> = ({
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
 
-      const threshold = 1000;
+      let threshold = 0;
+
+      if (window.innerWidth <= 450) {
+        threshold = 250;
+      }
 
       if (windowHeight + scrollTop >= documentHeight - threshold) {
         handleLoadMore();
@@ -77,5 +81,3 @@ export const StyledCardGrid = styled.div`
     gap: 0.9rem;
   }
 `;
-
-export default CardGrid;

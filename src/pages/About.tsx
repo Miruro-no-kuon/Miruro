@@ -1,15 +1,5 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
-const colors = {
-  textColor: 'var(--global-text)',
-  buttonBackground: 'var(--global-button-bg)',
-  buttonText: 'var(--global-button-text)',
-  buttonHoverBackground: 'var(--global-button-hover-bg)',
-  adBackground: 'var(--global-div)',
-  customColor: 'var(--your-custom-color)',
-  paddingSize: '1rem',
-};
 
 const SplashContainer = styled.div`
   margin-top: -2rem;
@@ -17,7 +7,7 @@ const SplashContainer = styled.div`
 
 const Keyword = styled.span`
   font-weight: bold;
-  color: ${colors.customColor};
+  color: var(--your-custom-color);
   position: relative;
   margin-right: 0.2rem;
 
@@ -27,22 +17,22 @@ const Keyword = styled.span`
     position: absolute;
     top: 0;
     left: -0.5rem;
-    color: ${colors.customColor};
+    color: var(--your-custom-color);
   }
 `;
 
 const Paragraph = styled.p`
   font-size: 1rem;
-  margin-bottom: ${colors.paddingSize};
+  margin-bottom: 1rem;
   line-height: 1.6;
-  color: ${colors.textColor};
+  color: var(--global-text);
 `;
 
 const MainContent = styled.div`
   max-width: 50rem;
   margin: 0 auto;
-  padding: ${colors.paddingSize};
-  color: ${colors.textColor};
+  padding: 1rem;
+  color: var(--global-text);
   font-size: 1rem;
   line-height: 1.6;
 `;
@@ -75,51 +65,35 @@ const sections = [
     content: (
       <>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Content Library:
-          </strong>{' '}
-          We have a vast collection of both old and new anime, making us one of
-          the largest anime libraries on the web.
+          <strong>Content Library:</strong> We have a vast collection of both
+          old and new anime, making us one of the largest anime libraries on the
+          web.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Streaming Experience:
-          </strong>{' '}
-          Enjoy <Keyword>fast and reliable</Keyword> streaming with our{' '}
+          <strong>Streaming Experience:</strong> Enjoy{' '}
+          <Keyword>fast and reliable</Keyword> streaming with our{' '}
           <Keyword>top-of-the-line servers</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Quality/Resolution:
-          </strong>{' '}
-          Our videos are available in <Keyword>high resolution</Keyword>, and we
-          offer quality settings to suit your internet speed.
+          <strong>Quality/Resolution:</strong> Our videos are available in{' '}
+          <Keyword>high resolution</Keyword>, and we offer quality settings to
+          suit your internet speed.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Frequent Updates:
-          </strong>{' '}
-          Our content is updated hourly to provide you with the{' '}
-          <Keyword>latest releases</Keyword>.
+          <strong>Frequent Updates:</strong> Our content is updated hourly to
+          provide you with the <Keyword>latest releases</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> User-Friendly Interface:
-          </strong>{' '}
-          We focus on <Keyword>simplicity and ease of use</Keyword>.
+          <strong>User-Friendly Interface:</strong> We focus on{' '}
+          <Keyword>simplicity and ease of use</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Device Compatibility:
-          </strong>{' '}
-          Miruro works seamlessly on both{' '}
+          <strong>Device Compatibility:</strong> Miruro works seamlessly on both{' '}
           <Keyword>desktop and mobile devices</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>
-            <FaCheckCircle /> Community:
-          </strong>{' '}
-          Join our active <Keyword>community of anime lovers</Keyword>.
+          <strong>Community:</strong> Join our active{' '}
+          <Keyword>community of anime lovers</Keyword>.
         </Paragraph>
       </>
     ),
@@ -135,6 +109,7 @@ function About() {
       document.title = previousTitle;
     };
   }, []);
+
   return (
     <SplashContainer>
       <MainContent>

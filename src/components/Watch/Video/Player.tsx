@@ -1,37 +1,80 @@
-import './player.css';
 import { useEffect, useRef, useState } from 'react';
+import './PlayerStyles.css';
 import {
   isHLSProvider,
   MediaPlayer,
   MediaProvider,
   Poster,
   Track,
-  type MediaCanPlayDetail,
-  type MediaCanPlayEvent,
-  type MediaPlayerInstance,
   type MediaProviderAdapter,
   type MediaProviderChangeEvent,
+  type MediaPlayerInstance,
 } from '@vidstack/react';
+import styled from 'styled-components';
+import { fetchSkipTimes, fetchAnimeStreamingLinks } from '../../../index';
 import {
   DefaultAudioLayout,
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from '@vidstack/react/player/layouts/default';
-import { fetchSkipTimes } from '../../../hooks/useApi';
-import { fetchAnimeStreamingLinks } from '../../../hooks/useApi';
+import {
+  TbPlayerTrackPrevFilled,
+  TbPlayerTrackNextFilled,
+} from 'react-icons/tb';
+import { FaCheck } from 'react-icons/fa6';
+import { RiCheckboxBlankFill } from 'react-icons/ri';
 
-// Define types for your props
+const Button = styled.button<{ $autoskip?: boolean }>`
+  padding: 0.25rem;
+  font-size: 0.8rem;
+  border: none;
+  margin-right: 0.25rem;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  svg {
+    margin-bottom: -0.1rem;
+    color: grey;
+  }
+  @media (max-width: 500px) {
+    font-size: 0.7rem;
+  }
+
+  &.active {
+    background-color: var(--primary-accent);
+  }
+  ${({ $autoskip }) =>
+    $autoskip &&
+    `
+    color: #d69e00; 
+    svg {
+      color: #d69e00; 
+    }
+  `}
+`;
+
 type PlayerProps = {
   episodeId: string;
   banner?: string;
   malId?: string;
   updateDownloadLink: (link: string) => void;
+  onEpisodeEnd: () => Promise<void>;
+  onPrevEpisode: () => void;
+  onNextEpisode: () => void;
 };
 
-// Define a type for the source object structure within your response
 type StreamingSource = {
   url: string;
   quality: string;
+};
+
+type SkipTime = {
+  interval: {
+    startTime: number;
+    endTime: number;
+  };
+  skipType: string;
 };
 
 export function Player({
@@ -39,32 +82,44 @@ export function Player({
   banner,
   malId,
   updateDownloadLink,
+  onEpisodeEnd,
+  onPrevEpisode,
+  onNextEpisode,
 }: PlayerProps) {
   const player = useRef<MediaPlayerInstance>(null);
   const [src, setSrc] = useState('');
   const [vttUrl, setVttUrl] = useState<string>('');
-  const [currentTime, setCurrentTime] = useState<number>(0); // State to hold the current time
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [autoPlay, setAutoPlay] = useState(false);
+  const [autoNext, setAutoNext] = useState(false);
+  const [autoSkip, setAutoSkip] = useState(false);
+  const [skipTimes, setSkipTimes] = useState<SkipTime[]>([]);
 
-  // Utility function to extract episode number from episodeId
   const getEpisodeNumber = (id: string) => {
     const parts = id.split('-');
     return parts[parts.length - 1];
   };
+  const episodeNumber = getEpisodeNumber(episodeId);
+  const animeVideoTitle = document.title.replace('Miruro | ', '');
 
   useEffect(() => {
-    // Load saved playback info for all episodes from local storage
+    const savedAutoPlay = localStorage.getItem('autoPlay') === 'true';
+    const savedAutoNext = localStorage.getItem('autoNext') === 'true';
+    const savedAutoSkip = localStorage.getItem('autoSkip') === 'true';
+
+    setAutoPlay(savedAutoPlay);
+    setAutoNext(savedAutoNext);
+    setAutoSkip(savedAutoSkip);
+
     const allPlaybackInfo = JSON.parse(
       localStorage.getItem('all_episode_times') || '{}',
     );
 
-    // Extract playback info for the current episode
     if (allPlaybackInfo[episodeId]) {
-      const { currentTime, playbackPercentage } = allPlaybackInfo[episodeId];
+      const { currentTime } = allPlaybackInfo[episodeId];
       setCurrentTime(parseFloat(currentTime));
-      // Optionally, you can use playbackPercentage here if you have a use case for it
     }
 
-    // Fetch and set the source for the anime video
     async function fetchAndSetAnimeSource() {
       try {
         const response = await fetchAnimeStreamingLinks(episodeId);
@@ -73,8 +128,7 @@ export function Player({
         );
         if (backupSource) {
           setSrc(backupSource.url);
-          // Assuming `response.download` exists and contains the URL
-          updateDownloadLink(response.download); // Update parent component's state
+          updateDownloadLink(response.download);
         } else {
           console.error('Backup source not found');
         }
@@ -83,20 +137,36 @@ export function Player({
       }
     }
 
-    // Fetch and process skip times for the current episode
+    interface SkipTime {
+      interval: {
+        startTime: number;
+        endTime: number;
+      };
+      skipType: 'op' | 'ed' | string;
+    }
+
+    interface FetchSkipTimesResponse {
+      results: SkipTime[];
+    }
     async function fetchAndProcessSkipTimes() {
       if (malId && episodeId) {
         const episodeNumber = getEpisodeNumber(episodeId);
         try {
-          const skipTimes = await fetchSkipTimes({
-            malId: malId.toString(), // Convert malId to a string if it's not already
-            episodeNumber, // Use the episode number extracted from episodeId
+          const response: FetchSkipTimesResponse = await fetchSkipTimes({
+            malId: malId.toString(),
+            episodeNumber,
           });
-          // console.log('Skip times:', skipTimes);
-          const vttContent = generateWebVTTFromSkipTimes(skipTimes);
+          // Filter out skip times that are not 'op' or 'ed'
+          const filteredSkipTimes = response.results.filter(
+            ({ skipType }: SkipTime) => skipType === 'op' || skipType === 'ed',
+          );
+          const vttContent = generateWebVTTFromSkipTimes({
+            results: filteredSkipTimes,
+          }); // Adjusted to pass an object with results key
           const blob = new Blob([vttContent], { type: 'text/vtt' });
           const vttBlobUrl = URL.createObjectURL(blob);
           setVttUrl(vttBlobUrl);
+          setSkipTimes(filteredSkipTimes);
         } catch (error) {
           console.error('Failed to fetch skip times', error);
         }
@@ -107,15 +177,23 @@ export function Player({
     fetchAndProcessSkipTimes();
 
     return () => {
-      // Cleanup logic for the component
       if (vttUrl) {
-        URL.revokeObjectURL(vttUrl); // Clean up the Blob URL when the component unmounts
+        URL.revokeObjectURL(vttUrl);
       }
     };
   }, [episodeId, malId, updateDownloadLink]);
 
   useEffect(() => {
-    // Set the current time of the player when it's ready
+    if (autoPlay && player.current) {
+      player.current
+        .play()
+        .catch((e) =>
+          console.log('Playback failed to start automatically:', e),
+        );
+    }
+  }, [autoPlay, src]);
+
+  useEffect(() => {
     if (player.current && currentTime) {
       player.current.currentTime = currentTime;
     }
@@ -124,7 +202,6 @@ export function Player({
   function generateWebVTTFromSkipTimes(skipTimes: any) {
     let vttString = 'WEBVTT\n\n';
 
-    // Sort skip times based on the `startTime`
     const sortedSkipTimes = skipTimes.results.sort((a: any, b: any) => {
       const startTimeA = a.interval.startTime;
       const startTimeB = b.interval.startTime;
@@ -134,15 +211,15 @@ export function Player({
     sortedSkipTimes.forEach((result: any) => {
       const { startTime, endTime } = result.interval;
       let skipType = result.skipType;
-      // Convert 'op' to 'Opening' and 'ed' to 'Ending'
+
       if (skipType === 'op') {
         skipType = 'Opening';
       } else if (skipType === 'ed') {
         skipType = 'Outro';
       }
 
-      // Exclude 'mixed-ed' and 'mixed-op' types from being added to VTT
-      if (skipType !== 'mixed-ed' && skipType !== 'mixed-op') {
+      // Only add entries for 'op' and 'ed' to the VTT string
+      if (skipType === 'Opening' || skipType === 'Outro') {
         const startTimeFormatted = formatTime(startTime);
         const endTimeFormatted = formatTime(endTime);
         vttString += `${startTimeFormatted} --> ${endTimeFormatted}\n`;
@@ -164,67 +241,124 @@ export function Player({
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
-    _nativeEvent: MediaProviderChangeEvent, // Prefixed unused parameter with an underscore
+    _nativeEvent: MediaProviderChangeEvent,
   ) {
     if (isHLSProvider(provider)) {
       provider.config = {};
     }
   }
 
-  // Simplified unused parameters with underscores
-  function onCanPlay(
-    _detail: MediaCanPlayDetail,
-    _nativeEvent: MediaCanPlayEvent,
-  ) {
-    // Implementation here...
-  }
-
   function onTimeUpdate() {
     if (player.current) {
       const currentTime = player.current.currentTime;
-      const duration = player.current.duration || 1; // Prevent division by zero to avoid NaN
-      const playbackPercentage = (currentTime / duration) * 100;
+      const duration = player.current.duration || 1;
 
+      const playbackPercentage = (currentTime / duration) * 100;
       const playbackInfo = {
         currentTime,
         playbackPercentage,
       };
 
-      // Retrieve the existing playback info from local storage or initialize it if not present
       const allPlaybackInfo = JSON.parse(
         localStorage.getItem('all_episode_times') || '{}',
       );
 
-      // Update the playback info for the current episode
       allPlaybackInfo[episodeId] = playbackInfo;
-
-      // Save the updated info back to local storage
       localStorage.setItem(
         'all_episode_times',
         JSON.stringify(allPlaybackInfo),
       );
+
+      if (autoSkip && skipTimes.length) {
+        const skipInterval = skipTimes.find(
+          ({ interval }) =>
+            currentTime >= interval.startTime && currentTime < interval.endTime,
+        );
+
+        if (skipInterval) {
+          player.current.currentTime = skipInterval.interval.endTime;
+        }
+      }
     }
   }
 
-  // console.log(vttUrl);
+  const toggleAutoPlay = () => {
+    setAutoPlay(!autoPlay);
+    localStorage.setItem('autoPlay', (!autoPlay).toString());
+  };
+
+  const toggleAutoNext = () => {
+    setAutoNext(!autoNext);
+    localStorage.setItem('autoNext', (!autoNext).toString());
+  };
+
+  const toggleAutoSkip = () => {
+    setAutoSkip(!autoSkip);
+    localStorage.setItem('autoSkip', (!autoSkip).toString());
+  };
+
+  const handlePlaybackEnded = async () => {
+    if (!autoNext) return;
+
+    try {
+      await onEpisodeEnd();
+    } catch (error) {
+      console.error('Error moving to the next episode:', error);
+    }
+  };
 
   return (
     <>
       <MediaPlayer
         className='player'
-        title=''
+        title={`${animeVideoTitle} - Episode ${episodeNumber}`}
         src={src}
+        autoplay={autoPlay}
         crossorigin
         playsinline
         onProviderChange={onProviderChange}
-        onCanPlay={onCanPlay}
-        onTimeUpdate={onTimeUpdate} // Call onTimeUpdate when time changes
+        onTimeUpdate={onTimeUpdate}
         ref={player}
         aspectRatio='16/9'
         load='eager'
         posterLoad='eager'
         streamType='on-demand'
         storage='storage-key'
+        keyTarget='player'
+        onEnded={handlePlaybackEnded}
+        keyShortcuts={{
+          togglePaused: 'k K Space',
+          toggleMuted: 'm M',
+          toggleFullscreen: 'f F',
+          togglePictureInPicture: 'i I',
+          toggleCaptions: 'c C',
+          volumeUp: 'ArrowUp',
+          volumeDown: 'ArrowDown',
+          speedUp: '> <',
+          slowDown: '< >',
+          // Custom seek behavior
+          seekBackward: {
+            keys: ['ArrowLeft', 'j', 'J'],
+            onKeyDown: ({ event, player }) => {
+              event.preventDefault(); // Prevent the default behavior
+              // Subtract 5 seconds for ArrowLeft, 10 seconds for 'j' and 'J'
+              const seekTime = event.key === 'ArrowLeft' ? -5 : -10;
+              player.currentTime = Math.max(0, player.currentTime + seekTime);
+            },
+          },
+          seekForward: {
+            keys: ['ArrowRight', 'l', 'L'],
+            onKeyDown: ({ event, player }) => {
+              event.preventDefault(); // Prevent the default behavior
+              // Add 5 seconds for ArrowRight, 10 seconds for 'l' and 'L'
+              const seekTime = event.key === 'ArrowRight' ? 5 : 10;
+              player.currentTime = Math.min(
+                player.duration,
+                player.currentTime + seekTime,
+              );
+            },
+          },
+        }}
       >
         <MediaProvider>
           <Poster className='vds-poster' src={banner} alt='' />
@@ -232,13 +366,35 @@ export function Player({
             <Track kind='chapters' src={vttUrl} default label='Skip Times' />
           )}
         </MediaProvider>
-
         <DefaultAudioLayout icons={defaultLayoutIcons} />
         <DefaultVideoLayout
           icons={defaultLayoutIcons}
-          // thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt"
+          // thumbnails='https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt'
         />
       </MediaPlayer>
+      <div
+        className='player-menu'
+        style={{
+          backgroundColor: 'var(--global-div-tr)',
+          borderRadius: 'var(--global-border-radius)', // Corrected syntax
+        }}
+      >
+        <Button onClick={toggleAutoPlay}>
+          {autoPlay ? <FaCheck /> : <RiCheckboxBlankFill />} Autoplay
+        </Button>
+        <Button $autoskip onClick={toggleAutoSkip}>
+          {autoSkip ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Skip
+        </Button>
+        <Button onClick={() => onPrevEpisode()}>
+          <TbPlayerTrackPrevFilled /> Prev
+        </Button>
+        <Button onClick={() => onNextEpisode()}>
+          <TbPlayerTrackNextFilled /> Next
+        </Button>
+        <Button onClick={toggleAutoNext}>
+          {autoNext ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Next
+        </Button>
+      </div>
     </>
   );
 }

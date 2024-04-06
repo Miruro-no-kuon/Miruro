@@ -14,14 +14,7 @@ import {
   faSearch,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
-
-// Define TypeScript interfaces for episode and props
-interface Episode {
-  id: string;
-  number: number;
-  title: string;
-  image: string;
-}
+import { Episode } from '../../hooks/interface';
 
 interface Props {
   animeId: string | undefined;
@@ -64,8 +57,8 @@ const EpisodeGrid = styled.div<{ $isRowLayout: boolean }>`
   display: grid;
   grid-template-columns: ${({ $isRowLayout }) =>
     $isRowLayout ? '1fr' : 'repeat(auto-fill, minmax(4rem, 1fr))'};
-  gap: 0.4rem;
-  padding: 0.6rem;
+  gap: 0.29rem;
+  padding: 0.4rem;
   overflow-y: auto;
   flex-grow: 1;
 `;
@@ -119,7 +112,9 @@ const ListItem = styled.button<{
     $isRowLayout ? 'space-between' : 'center'};
   align-items: center;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     ${({ $isSelected, $isWatched }) =>
       $isSelected
         ? $isWatched
@@ -141,7 +136,7 @@ const ControlsContainer = styled.div`
 `;
 
 const SelectInterval = styled.select`
-  padding: 0.75rem;
+  padding: 0.5rem;
   background-color: var(--global-secondary-bg);
   color: var(--global-text);
   border: none;
@@ -160,7 +155,9 @@ const LayoutToggle = styled.button`
     background-color 0.15s,
     color 0.15s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--global-button-hover-bg);
   }
 `;
@@ -171,13 +168,16 @@ const SearchContainer = styled.div`
   background-color: var(--global-secondary-bg);
   border: 1px solid var(--global-shadow);
   padding: 0.5rem;
+  gap: 0.25rem;
   margin: 0 0.5rem;
   border-radius: var(--global-border-radius);
   transition:
     background-color 0.15s,
     color 0.15s;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--global-button-hover-bg);
   }
 `;
@@ -186,7 +186,6 @@ const SearchInput = styled.input`
   border: none;
   background-color: transparent;
   color: var(--global-text);
-  margin-left: 0.5rem;
   outline: none;
   width: 100%;
 

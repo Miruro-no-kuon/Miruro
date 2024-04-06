@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import CardGrid from '../Cards/CardGrid';
-import AniList_logo from '../../assets/logos/anilsmall.png';
-import MAL_logo from '../../assets/logos/malsmall.png';
-import anil_big from '../../assets/logos/anilbig.png';
-import mal_big from '../../assets/logos/malbig.jpg';
-// Styled components
+import Seasons from './Seasons';
+import { Anime } from '../../hooks/interface';
+import { SiMyanimelist, SiAnilist } from 'react-icons/si';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(20px); }
@@ -27,7 +24,7 @@ const AnimeDataContainer = styled.div`
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  padding-top: 0.8rem;
+  padding-top: 1rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -36,7 +33,7 @@ const AnimeDataContainerTop = styled.div`
 `;
 const AnimeDataContainerMiddle = styled.div`
   border-radius: var(--global-border-radius);
-  padding-top: 0.8rem;
+  padding-top: 0.6rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -48,8 +45,8 @@ const AnimeDataContainerMiddle = styled.div`
 `;
 
 const AnimeDataContainerBottom = styled.div`
-  margin-top: 0.8rem;
-  @media (max-width: 500px) {
+  margin-top: 0.6rem;
+  @media (max-width: 750px) {
     margin-top: 0rem;
   }
 `;
@@ -67,9 +64,9 @@ const ParentContainer = styled.div`
 
 const AnimeDataText = styled.div`
   text-align: left;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   @media (max-width: 500px) {
-    font-size: 0.83rem;
+    font-size: 0.75rem;
   }
   .anime-title {
     line-height: 1.6rem;
@@ -83,11 +80,13 @@ const AnimeDataText = styled.div`
     }
   }
   .anime-title-romaji {
+    font-style: italic;
     margin-top: 0rem;
     line-height: 0.6rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     @media (max-width: 500px) {
       line-height: 1rem;
+      margin-bottom: 0.25rem;
     }
   }
   p {
@@ -100,22 +99,16 @@ const AnimeDataText = styled.div`
     }
   }
   .Description {
-    margin-top: 1rem;
-    line-height: 1.25rem;
+    line-height: 1rem;
+    max-width: 50rem;
   }
   strong {
     color: var(--global-text);
   }
   .Card-Sections-Titles {
-    line-height: 1.6rem;
     color: var(--global-text);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
-    @media (max-width: 500px) {
-      font-size: 1.25rem;
-      margin-bottom: 0.2rem;
-    }
   }
 `;
 
@@ -141,7 +134,9 @@ const Button = styled.button`
   transition: background-color 0.3s ease;
   outline: none;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent-bg);
   }
 
@@ -161,11 +156,12 @@ const ShowTrailerButton = styled(Button)`
     background-color 0.3s ease,
     transform 0.2s ease-in-out;
   color: var(--global-text);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   margin-bottom: 0.5rem;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: var(--primary-accent);
-    transform: scale(1.05);
     z-index: 2;
   }
   @media (max-width: 500px) {
@@ -177,19 +173,29 @@ const MalAniContainer = styled.div`
   display: flex; /* or grid */
   gap: 0.5rem;
   margin-right: 1rem;
-  @media (max-width: 500px) {
-  }
 `;
 
-const MalAnilistimg = styled.img`
-  border-radius: var(--global-border-radius);
+const MalAnilistSvg = styled.div`
   height: 2.5rem;
-  transition: transform 0.2s ease-in-out;
   width: 5rem;
-  object-fit: cover;
-  &:hover {
+  border-radius: var(--global-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition: 0.1s ease-in-out;
+
+  &:hover,
+  &:active,
+  &:focus {
     transform: scale(1.05);
   }
+
+  &:active {
+    transform: scale(0.975);
+  }
+
   @media (max-width: 500px) {
     width: 4rem;
     height: 2rem;
@@ -197,47 +203,11 @@ const MalAnilistimg = styled.img`
 `;
 
 const ShowMoreButton = styled.div`
-  margin-top: 0.5rem;
-  display: block;
+  display: flex;
   text-align: left;
-`;
-
-const Relations = styled.div`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 20px;
-  margin-top: 2rem;
-`;
-
-const AnimeCharacterContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 20px;
-  padding: 0.6rem;
-`;
-
-const CharacterCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-`;
-
-const CharacterImages = styled.img`
-  max-height: 9rem;
-  height: auto;
-  border-radius: var(--global-border-radius);
-  @media (max-width: 1000px) {
-    max-height: 7rem;
-  }
-`;
-
-const CharacterName = styled.div`
-  text-align: center;
-  word-wrap: break-word;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease-in-out;
 `;
 
 const IframeTrailer = styled.iframe`
@@ -266,7 +236,7 @@ const TrailerOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 1000;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   animation: ${fadeInAnimation} 0.3s ease forwards;
@@ -280,41 +250,37 @@ const TrailerOverlayContent = styled.div`
   background: white;
   border-radius: var(--global-border-radius);
   overflow: hidden;
-  z-index: 11;
   background-color: var(--global-div);
   @media (max-width: 500px) {
     width: 95%;
   }
 `;
 
-interface AnimeDataProps {
-  animeData: any;
-}
-
-// Main component
-const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
-  // State
-  const [showCharacters, setShowCharacters] = useState(false);
+const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
-  // Toggle description expansion
-  const toggleDescription = () => {
-    setDescriptionExpanded(!isDescriptionExpanded);
-    setShowCharacters(!isDescriptionExpanded);
+  const getAnimeIdFromUrl = () => {
+    const pathParts = window.location.pathname.split('/');
+    return pathParts[2];
   };
 
-  // Remove HTML tags from description
+  const toggleDescription = () => {
+    setDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  useEffect(() => {
+    setDescriptionExpanded(false);
+  }, [getAnimeIdFromUrl()]);
+
   const removeHTMLTags = (description: string): string => {
     return description.replace(/<[^>]+>/g, '').replace(/\([^)]*\)/g, '');
   };
 
-  // Toggle trailer display
   const toggleTrailer = () => {
     setShowTrailer(!showTrailer);
   };
 
-  // Effect for Escape key event listener
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && showTrailer) {
@@ -322,39 +288,20 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
       }
     };
 
-    // Add event listener
     document.addEventListener('keydown', handleKeyDown);
 
-    // Clean up function to remove event listener
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [showTrailer]);
 
-  // Format date string
-  function getDateString(date: any) {
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return `${monthNames[date.month - 1]} ${date.day}, ${date.year}`;
-  }
-  //ANime season text formatting
-  function capitalizeFirstLetter(str: any) {
-    if (!str) return str; // Return the original string if it's falsy
+  function capitalizeFirstLetter(str: string) {
+    if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
+
   const isScreenUnder500px = () => window.innerWidth < 500;
+
   return (
     <>
       {animeData && (
@@ -371,7 +318,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               {animeData.trailer && animeData.status !== 'Not yet aired' && (
                 <ShowTrailerButton onClick={toggleTrailer}>
                   <p>
-                    <strong>Show Trailer</strong>
+                    <strong>TRAILER</strong>
                   </p>
                 </ShowTrailerButton>
               )}
@@ -388,26 +335,24 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               <MalAniContainer>
                 {animeData.id && (
                   <a
-                    href={`https://anilist.co/anime/${animeData.id}`}
+                    href={`https://anilist.co/${!animeData.type ? 'anime' : animeData.type.toLowerCase() === 'manga' || animeData.type.toLowerCase() === 'novel' ? 'manga' : 'anime'}/${animeData.id}`}
                     target='_blank'
+                    rel='noopener noreferrer'
                   >
-                    {isScreenUnder500px() ? (
-                      <MalAnilistimg src={AniList_logo} alt='AniList Logo' />
-                    ) : (
-                      <MalAnilistimg src={anil_big} alt='AniList Logo' />
-                    )}
+                    <MalAnilistSvg>
+                      <SiAnilist size={'1.5rem'} />
+                    </MalAnilistSvg>
                   </a>
                 )}
                 {animeData.malId && (
                   <a
-                    href={`https://myanimelist.net/anime/${animeData.malId}`}
+                    href={`https://myanimelist.net/${!animeData.type ? 'anime' : animeData.type.toLowerCase() === 'manga' || animeData.type.toLowerCase() === 'novel' ? 'manga' : 'anime'}/${animeData.malId}`}
                     target='_blank'
+                    rel='noopener noreferrer'
                   >
-                    {isScreenUnder500px() ? (
-                      <MalAnilistimg src={MAL_logo} alt='MyAnimeList Logo' />
-                    ) : (
-                      <MalAnilistimg src={mal_big} alt='MyAnimeList Logo' />
-                    )}
+                    <MalAnilistSvg>
+                      <SiMyanimelist size={'2.75rem'} />
+                    </MalAnilistSvg>
                   </a>
                 )}
               </MalAniContainer>
@@ -428,6 +373,18 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                     : animeData.title.native}
                 </p>
               </>
+              {!isScreenUnder500px() && animeData.description && (
+                <AnimeDataText>
+                  <p className='Description'>
+                    <ShowMoreButton onClick={toggleDescription}>
+                      {isDescriptionExpanded
+                        ? removeHTMLTags(animeData.description)
+                        : `${removeHTMLTags(animeData.description).substring(0, 100)}...`}
+                      {isDescriptionExpanded ? '[Show Less]' : '[Show More]'}
+                    </ShowMoreButton>
+                  </p>
+                </AnimeDataText>
+              )}
               <ParentContainer>
                 <AnimeDataContainerMiddle>
                   <AnimeDataText>
@@ -436,51 +393,77 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                         Type: <strong>{animeData.type}</strong>
                       </p>
                     )}
-                    {animeData.releaseDate && (
+                    {animeData.releaseDate ? (
                       <p>
-                        Year:{' '}
-                        <strong>
-                          {animeData.releaseDate
-                            ? animeData.releaseDate
-                            : 'Unknown'}
-                        </strong>
+                        Year: <strong>{animeData.releaseDate}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Year: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.status && (
                       <p>
-                        Status: <strong>{animeData.status}</strong>
+                        Status:{' '}
+                        <strong>
+                          {animeData.status === 'Completed'
+                            ? 'Finished'
+                            : animeData.status === 'Ongoing'
+                              ? 'Airing'
+                              : animeData.status}
+                        </strong>
                       </p>
                     )}
-                    {animeData.rating && (
+                    {animeData.rating ? (
                       <p>
                         Rating: <strong>{animeData.rating}</strong>
                       </p>
+                    ) : (
+                      <p>
+                        Rating: <strong>Unknown</strong>
+                      </p>
                     )}
-                    {animeData.studios && (
+                    {animeData.studios && animeData.studios.length > 0 ? (
                       <p>
                         Studios: <strong>{animeData.studios}</strong>
                       </p>
-                    )}
-                    {animeData.totalEpisodes && (
+                    ) : (
                       <p>
-                        Episodes: <strong>{animeData.totalEpisodes}</strong>
+                        Studios: <strong>Unknown</strong>
                       </p>
                     )}
                   </AnimeDataText>
                 </AnimeDataContainerMiddle>
                 <AnimeDataContainerBottom>
                   <AnimeDataText>
-                    {animeData.duration && (
+                    {animeData.totalEpisodes !== null ? (
+                      <p>
+                        Episodes: <strong>{animeData.totalEpisodes}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Episodes: <strong>Unknown</strong>
+                      </p>
+                    )}
+                    {animeData.duration ? (
                       <p>
                         Duration: <strong>{animeData.duration} min</strong>
                       </p>
+                    ) : (
+                      <p>
+                        Duration: <strong>Unknown</strong>
+                      </p>
                     )}
-                    {animeData.season && (
+                    {animeData.season ? (
                       <p>
                         Season:{' '}
                         <strong>
                           {capitalizeFirstLetter(animeData.season)}
                         </strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Season: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.countryOfOrigin && (
@@ -497,7 +480,7 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                         </strong>
                       </p>
                     )} */}
-                    {animeData.startDate && (
+                    {/* {animeData.startDate && (
                       <p>
                         Date aired:
                         <strong>
@@ -515,10 +498,14 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
                               : ' to ?'}
                         </strong>
                       </p>
-                    )}
-                    {animeData.genres && (
+                    )} */}
+                    {animeData.genres && animeData.genres.length > 0 ? (
                       <p>
                         Genres: <strong>{animeData.genres.join(', ')}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Genres: <strong>Unknown</strong>
                       </p>
                     )}
                   </AnimeDataText>
@@ -526,147 +513,39 @@ const WatchAnimeData: React.FC<AnimeDataProps> = ({ animeData }) => {
               </ParentContainer>
             </AnimeDataText>
           </AnimeDataContainerTop>
-          {animeData.description && (
+          {isScreenUnder500px() && animeData.description && (
             <AnimeDataText>
+              <br></br>
               <p className='Description'>
                 <strong>Description: </strong>
                 <ShowMoreButton onClick={toggleDescription}>
                   {isDescriptionExpanded
-                    ? removeHTMLTags(animeData.description || '')
-                    : `${removeHTMLTags(animeData.description || '').substring(
-                        0,
-                        300,
-                      )}...`}
-                  <span
-                    style={{ textAlign: 'center', fontWeight: 'bold' }}
-                  ></span>
+                    ? removeHTMLTags(animeData.description)
+                    : `${removeHTMLTags(animeData.description).substring(0, 150)}...`}
+                  {isDescriptionExpanded ? '[Show Less]' : '[Show More]'}
                 </ShowMoreButton>
               </p>
             </AnimeDataText>
           )}
-          {animeData.characters &&
-            animeData.characters.length > 0 &&
-            showCharacters && (
-              <>
-                <p>
-                  <strong>Characters: </strong>
-                  <AnimeCharacterContainer>
-                    {animeData.characters
-                      .filter(
-                        (character: any) =>
-                          character.role === 'MAIN' ||
-                          character.role === 'SUPPORTING',
-                      )
-                      .map((character: any) => (
-                        <CharacterCard
-                          key={character.id}
-                          style={{ textAlign: 'center' }}
-                        >
-                          <CharacterImages
-                            src={character.image}
-                            alt={character.name.full}
-                          />
-                          <CharacterName>{character.name.full}</CharacterName>
-                        </CharacterCard>
-                      ))}
-                  </AnimeCharacterContainer>
-                </p>
-              </>
-            )}
         </AnimeDataContainer>
       )}
       <AnimeDataText>
         <br />
-
-        {animeData &&
-          animeData.relations.filter(
+        {animeData.relations &&
+          animeData.relations.some(
             (relation: any) =>
               relation.relationType.toUpperCase() === 'PREQUEL' ||
               relation.relationType.toUpperCase() === 'SEQUEL',
-          ).length > 0 && (
+          ) && (
             <>
-              <p className='Card-Sections-Titles'>Seasons</p>
-              <Relations>
-                <CardGrid
-                  animeData={animeData.relations
-                    .filter(
-                      (relation: any) =>
-                        relation.relationType.toUpperCase() === 'PREQUEL' ||
-                        relation.relationType.toUpperCase() === 'SEQUEL',
-                    )
-                    .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
-                  hasNextPage={false}
-                  onLoadMore={() => {}}
-                />
-              </Relations>
-              <br></br>
-            </>
-          )}
-        {animeData &&
-          animeData.relations.filter(
-            (relation: any) =>
-              ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-                relation.type,
-              ) &&
-              relation.relationType.toUpperCase() !== 'PREQUEL' &&
-              relation.relationType.toUpperCase() !== 'SEQUEL',
-          ).length > 0 && (
-            <>
-              <p className='Card-Sections-Titles'>Related</p>
-              <Relations>
-                <CardGrid
-                  animeData={animeData.relations
-                    .filter(
-                      (relation: any) =>
-                        [
-                          'OVA',
-                          'SPECIAL',
-                          'TV',
-                          'MOVIE',
-                          'ONA',
-                          'NOVEL',
-                        ].includes(relation.type) &&
-                        relation.relationType.toUpperCase() !== 'PREQUEL' &&
-                        relation.relationType.toUpperCase() !== 'SEQUEL',
-                    )
-                    .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
-                  hasNextPage={false}
-                  onLoadMore={() => {}}
-                />
-              </Relations>
-              <br></br>
-            </>
-          )}
-        {/* Recommendations */}
-        {animeData &&
-          animeData.recommendations.filter((recommendation: any) =>
-            ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(
-              recommendation.type,
-            ),
-          ).length > 0 && (
-            <>
-              <p className='Card-Sections-Titles'>Recommendations</p>
-              <Relations>
-                <CardGrid
-                  animeData={animeData.recommendations
-                    .filter((recommendation: any) =>
-                      [
-                        'OVA',
-                        'SPECIAL',
-                        'TV',
-                        'MOVIE',
-                        'ONA',
-                        'NOVEL',
-                      ].includes(recommendation.type),
-                    )
-                    .slice(0, window.innerWidth > 500 ? 5 : 6)} // Adjust slice based on screen width
-                  totalPages={0}
-                  hasNextPage={false}
-                  onLoadMore={() => {}}
-                />
-              </Relations>
+              <p className='Card-Sections-Titles'>SEASONS</p>
+              <Seasons
+                relations={animeData.relations.filter(
+                  (relation: any) =>
+                    relation.relationType.toUpperCase() === 'PREQUEL' ||
+                    relation.relationType.toUpperCase() === 'SEQUEL',
+                )}
+              />
             </>
           )}
       </AnimeDataText>
