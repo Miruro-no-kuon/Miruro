@@ -119,7 +119,9 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
   );
 
   const filteredRelations = animeData.relations.filter((rel) =>
-    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rel.type || ''),
+    ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL', 'MANGA'].includes(
+      rel.type || '',
+    ),
   );
 
   return (
@@ -128,7 +130,7 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
         <>
           <p className='Section-Title'>RELATED</p>
           {filteredRelations
-            .slice(0, window.innerWidth > 500 ? 4 : 3)
+            .slice(0, window.innerWidth > 500 ? 5 : 3)
             .map((relation, index) => (
               <Link
                 to={`/watch/${relation.id}`}
@@ -185,7 +187,7 @@ const RecommendedList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
         <>
           <p className='Section-Title'>RECOMMENDED</p>
           {filteredRecommendations
-            .slice(0, window.innerWidth > 500 ? 5 : 4)
+            .slice(0, window.innerWidth > 500 ? 5 : 3)
             .map((recommendation, index) => (
               <Link
                 to={`/watch/${recommendation.id}`}

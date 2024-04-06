@@ -131,19 +131,36 @@ export function Player({
       }
     }
 
+    interface SkipTime {
+      interval: {
+        startTime: number;
+        endTime: number;
+      };
+      skipType: 'op' | 'ed' | string;
+    }
+
+    interface FetchSkipTimesResponse {
+      results: SkipTime[];
+    }
     async function fetchAndProcessSkipTimes() {
       if (malId && episodeId) {
         const episodeNumber = getEpisodeNumber(episodeId);
         try {
-          const response = await fetchSkipTimes({
+          const response: FetchSkipTimesResponse = await fetchSkipTimes({
             malId: malId.toString(),
             episodeNumber,
           });
-          const vttContent = generateWebVTTFromSkipTimes(response);
+          // Filter out skip times that are not 'op' or 'ed'
+          const filteredSkipTimes = response.results.filter(
+            ({ skipType }: SkipTime) => skipType === 'op' || skipType === 'ed',
+          );
+          const vttContent = generateWebVTTFromSkipTimes({
+            results: filteredSkipTimes,
+          }); // Adjusted to pass an object with results key
           const blob = new Blob([vttContent], { type: 'text/vtt' });
           const vttBlobUrl = URL.createObjectURL(blob);
           setVttUrl(vttBlobUrl);
-          setSkipTimes(response.results);
+          setSkipTimes(filteredSkipTimes);
         } catch (error) {
           console.error('Failed to fetch skip times', error);
         }
@@ -195,7 +212,8 @@ export function Player({
         skipType = 'Outro';
       }
 
-      if (skipType !== 'mixed-ed' && skipType !== 'mixed-op') {
+      // Only add entries for 'op' and 'ed' to the VTT string
+      if (skipType === 'Opening' || skipType === 'Outro') {
         const startTimeFormatted = formatTime(startTime);
         const endTimeFormatted = formatTime(endTime);
         vttString += `${startTimeFormatted} --> ${endTimeFormatted}\n`;
@@ -290,6 +308,40 @@ export function Player({
         posterLoad='eager'
         streamType='on-demand'
         storage='storage-key'
+        keyTarget='player'
+        keyShortcuts={{
+          togglePaused: 'k K Space',
+          toggleMuted: 'm M',
+          toggleFullscreen: 'f F',
+          togglePictureInPicture: 'i I',
+          toggleCaptions: 'c C',
+          volumeUp: 'ArrowUp',
+          volumeDown: 'ArrowDown',
+          speedUp: '> <',
+          slowDown: '< >',
+          // Custom seek behavior
+          seekBackward: {
+            keys: ['ArrowLeft', 'j', 'J'],
+            onKeyDown: ({ event, player }) => {
+              event.preventDefault(); // Prevent the default behavior
+              // Subtract 5 seconds for ArrowLeft, 10 seconds for 'j' and 'J'
+              const seekTime = event.key === 'ArrowLeft' ? -5 : -10;
+              player.currentTime = Math.max(0, player.currentTime + seekTime);
+            },
+          },
+          seekForward: {
+            keys: ['ArrowRight', 'l', 'L'],
+            onKeyDown: ({ event, player }) => {
+              event.preventDefault(); // Prevent the default behavior
+              // Add 5 seconds for ArrowRight, 10 seconds for 'l' and 'L'
+              const seekTime = event.key === 'ArrowRight' ? 5 : 10;
+              player.currentTime = Math.min(
+                player.duration,
+                player.currentTime + seekTime,
+              );
+            },
+          },
+        }}
       >
         <MediaProvider>
           <Poster className='vds-poster' src={banner} alt='' />
