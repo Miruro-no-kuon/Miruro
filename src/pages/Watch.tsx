@@ -53,6 +53,9 @@ const SourceAndData = styled.div<{ $videoPlayerWidth: string }>`
 const RalationsTable = styled.div`
   paddding: 0;
   margin-top: 1rem;
+  @media (max-width: 500px) {
+    margin-top: 0rem;
+  }
 `;
 const VideoPlayerContainer = styled.div`
   position: relative;

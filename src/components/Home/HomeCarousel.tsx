@@ -103,7 +103,7 @@ const SlideContent = styled.div`
 
 const SlideTitle = styled.h2`
   color: var(--white, #fff);
-  font-size: clamp(1.2rem, 3vw, 3rem);
+  font-size: clamp(1.2rem, 3vw, 2.5rem);
   margin: auto;
   max-width: 100%;
   overflow: hidden;

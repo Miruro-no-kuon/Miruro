@@ -530,7 +530,6 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
         </AnimeDataContainer>
       )}
       <AnimeDataText>
-        <br />
         {animeData.relations &&
           animeData.relations.some(
             (relation: any) =>
@@ -538,6 +537,7 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
               relation.relationType.toUpperCase() === 'SEQUEL',
           ) && (
             <>
+              <br />
               <p className='Card-Sections-Titles'>SEASONS</p>
               <Seasons
                 relations={animeData.relations.filter(
