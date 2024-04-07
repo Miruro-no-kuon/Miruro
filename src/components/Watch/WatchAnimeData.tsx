@@ -388,9 +388,13 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
               <ParentContainer>
                 <AnimeDataContainerMiddle>
                   <AnimeDataText>
-                    {animeData.type && (
+                    {animeData.type ? (
                       <p>
                         Type: <strong>{animeData.type}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Type: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.releaseDate ? (

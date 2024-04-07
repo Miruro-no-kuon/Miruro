@@ -149,7 +149,7 @@ const Home = () => {
   useEffect(() => {
     const desiredItemCount = itemsCount;
     // Increase initial fetch count by 40% to account for filtering
-    const fetchCount = Math.ceil(itemsCount * 1.4);
+    const fetchCount = Math.ceil(itemsCount * 1.8);
 
     const fetchData = async () => {
       try {
@@ -162,7 +162,7 @@ const Home = () => {
           fetchTopAnime(1, fetchCount),
           fetchRecentEpisodes(1, fetchCount),
         ]);
-        const recentEpisodesTrimmed = recent.results.slice(0, 14); // Always trim to 14
+        const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
         setRecentEpisodes(recentEpisodesTrimmed);
 
         // Filter out anime without totalEpisodes, duration, or releaseDate
@@ -216,7 +216,7 @@ const Home = () => {
     <Section>
       {isLoading || hasError ? (
         <StyledCardGrid>
-          {Array.from({ length: 14 }, (_, index) => (
+          {Array.from({ length: itemsCount }, (_, index) => (
             <SkeletonCard key={index} />
           ))}
         </StyledCardGrid>

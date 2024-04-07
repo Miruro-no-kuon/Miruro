@@ -53,7 +53,7 @@ const SourceAndData = styled.div<{ $videoPlayerWidth: string }>`
 const RalationsTable = styled.div`
   paddding: 0;
   margin-top: 1rem;
-  @media (max-width: 500px) {
+  @media (max-width: 1000px) {
     margin-top: 0rem;
   }
 `;

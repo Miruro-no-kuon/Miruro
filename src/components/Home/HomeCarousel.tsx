@@ -50,7 +50,7 @@ const DarkOverlay = styled.div`
   bottom: 0;
   border-radius: var(--global-border-radius);
   z-index: 1;
-  background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 55%);
+  background: linear-gradient(45deg, rgba(8, 8, 8, 1) 0%, transparent 60%);
 `;
 
 const SlideImageWrapper = styled.div`
