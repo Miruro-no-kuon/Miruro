@@ -184,6 +184,20 @@ const SearchSort = () => {
           onLoadMore={handleLoadMore}
         />
       )}
+      {!isLoading && animeData.length === 0 && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '10vh',
+            fontWeight: 'bold',
+            fontSize: '1.5rem',
+          }}
+        >
+          No Results
+        </div>
+      )}
     </Container>
   );
 };
