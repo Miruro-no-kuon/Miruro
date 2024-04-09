@@ -5,7 +5,7 @@ import {
   Footer,
   Home,
   Watch,
-  SearchSort,
+  Search,
   Page404,
   About,
   PolicyTerms,
@@ -26,7 +26,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />
-          <Route path='/search' element={<SearchSort />} />
+          <Route path='/search' element={<Search />} />
           <Route path='/watch/:animeId' element={<Watch />} />
           <Route
             path='/watch/:animeId/:animeTitle/:episodeNumber'
