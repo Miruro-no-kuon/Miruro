@@ -157,11 +157,11 @@ const SearchInputWrapper = styled.div`
   align-items: center;
   background-color: var(--global-secondary-bg);
   border-radius: var(--global-border-radius);
-  padding: 0.3rem;
-  position: relative; // Keep for positioning the clear icon
-  width: 12rem; // Or any fixed width you prefer
+  height: 38px;
+  position: relative;
+  width: 12rem;
   @media (max-width: 500px) {
-    width: 9.5rem; // Or any fixed width you prefer
+    width: 10rem;
   }
   overflow: hidden;
 `;
@@ -169,6 +169,8 @@ const SearchInputWrapper = styled.div`
 const SearchInput = styled.input`
   flex-grow: 1; // Allow the input to fill the space
   border: none;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
   padding: 0.3rem 0.3rem 0.3rem 0.6rem; // Adjust padding as needed
   background-color: transparent;
   color: var(--global-text);
