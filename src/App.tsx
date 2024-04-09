@@ -40,7 +40,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
-      <Analytics mode={'production'} />;
+      <Analytics />
     </Router>
   );
 }
