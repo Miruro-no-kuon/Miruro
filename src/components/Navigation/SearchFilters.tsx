@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { LuSlidersHorizontal } from 'react-icons/lu';
+import { LuSlidersHorizontal, LuFilterX } from 'react-icons/lu';
+import { FiX } from 'react-icons/fi';
 
 interface Option {
   value: string;
@@ -82,7 +83,6 @@ const selectStyles = {
 const genreOptions = [
   { value: 'Action', label: 'Action' },
   { value: 'Adventure', label: 'Adventure' },
-  { value: 'Cars', label: 'Cars' },
   { value: 'Comedy', label: 'Comedy' },
   { value: 'Drama', label: 'Drama' },
   { value: 'Fantasy', label: 'Fantasy' },
@@ -152,21 +152,28 @@ const sortOptions = [
   { value: 'ID', label: 'ID' },
 ];
 
-const SearchInput = styled.input`
+const SearchInputWrapper = styled.div`
   display: flex;
-  flex: 1;
-  border: none;
-  width: 9rem;
-  height: 1.2rem;
   align-items: center;
-  color: var(--global-text);
-  padding: 0.6rem;
-  border-radius: var(--global-border-radius);
   background-color: var(--global-secondary-bg);
+  border-radius: var(--global-border-radius);
+  padding: 0.3rem;
+  position: relative; // Keep for positioning the clear icon
+  width: 12rem; // Or any fixed width you prefer
+  @media (max-width: 500px) {
+    width: 9.5rem; // Or any fixed width you prefer
+  }
+  overflow: hidden;
+`;
+
+const SearchInput = styled.input`
+  flex-grow: 1; // Allow the input to fill the space
+  border: none;
+  padding: 0.3rem 0.3rem 0.3rem 0.6rem; // Adjust padding as needed
+  background-color: transparent;
+  color: var(--global-text);
   &:focus {
     outline: none;
-    border: none;
-    color: var(--global-text);
   }
 `;
 
@@ -233,11 +240,20 @@ const Button = styled(ButtonBase)`
 
 const ClearButton = styled(ButtonBase)`
   margin-top: 1.75rem;
-  max-width: 7rem;
-
+  max-width: 6rem;
   @media (max-width: 1000px) {
     margin-top: 0.5rem;
   }
+`;
+
+const ClearIcon = styled(FiX)`
+  cursor: pointer;
+  position: absolute;
+  right: 10px; // Adjust based on padding
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--global-text-muted);
+  size: 20px; // Ensure the icon has a fixed size
 `;
 
 const animatedComponents = makeAnimated();
@@ -253,15 +269,23 @@ const FilterSelect: React.FC<FilterProps> = ({
   const [inputValue, setInputValue] = useState(value);
 
   useEffect(() => {
-    // Set up a delay for executing the onChange handler
-    const handler = setTimeout(() => {
-      onChange && onChange(inputValue);
-    }, 300); // 300ms delay
+    // Update local state when external value prop changes
+    setInputValue(value);
+  }, [value]);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [inputValue, onChange]);
+  useEffect(() => {
+    if (label === 'Search') {
+      // Set up a delay for executing the onChange handler only for the Search input
+      const handler = setTimeout(() => {
+        onChange && onChange(inputValue);
+      }, 300); // 300ms delay for debounce
+
+      // Cleanup function to clear the timeout
+      return () => {
+        clearTimeout(handler);
+      };
+    }
+  }, [inputValue, onChange, label]);
 
   return (
     <FilterSection>
@@ -270,12 +294,23 @@ const FilterSelect: React.FC<FilterProps> = ({
         {label}
       </FilterLabel>
       {label === 'Search' ? (
-        <SearchInput
-          type='text'
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder=''
-        />
+        <SearchInputWrapper>
+          <SearchInput
+            type='text'
+            value={inputValue} // Use the local state value here
+            onChange={(e) => setInputValue(e.target.value)} // Update local state instead of calling onChange directly
+            placeholder='Search'
+          />
+          {value && (
+            <ClearIcon
+              size={20}
+              onClick={() => {
+                setInputValue(''); // Reset the local state
+                onChange?.(''); // Propagate the change upwards
+              }}
+            />
+          )}
+        </SearchInputWrapper>
       ) : (
         <Select
           components={{ ...animatedComponents, IndicatorSeparator: () => null }}
@@ -328,53 +363,90 @@ export const SearchFilters: React.FC<{
   sortDirection,
   setSortDirection,
   resetFilters,
-}) => (
-  <FiltersContainer>
-    <FilterSelect label='Search' value={query} onChange={setQuery} />
-    <FilterSelect
-      label='Genres'
-      options={genreOptions}
-      isMulti
-      onChange={setSelectedGenres}
-      value={selectedGenres}
-    />
-    <FilterSelect
-      label='Year'
-      options={yearOptions}
-      onChange={setSelectedYear}
-      value={selectedYear}
-    />
-    <FilterSelect
-      label='Season'
-      options={seasonOptions}
-      onChange={setSelectedSeason}
-      value={selectedSeason}
-    />
-    <FilterSelect
-      label='Type'
-      options={formatOptions}
-      onChange={setSelectedFormat}
-      value={selectedFormat}
-    />
-    <FilterSelect
-      label='Status'
-      options={statusOptions}
-      onChange={setSelectedStatus}
-      value={selectedStatus}
-    />
-    {/* <FilterSelect
+}) => {
+  // State to track if any filter is changed from its default value
+  const [filtersChanged, setFiltersChanged] = useState(false);
+
+  const handleResetFilters = () => {
+    setSelectedGenres([]); // Reset to default "Any" state
+    setSelectedYear(anyOption); // Assuming `anyOption` is your default
+    setSelectedSeason(anyOption);
+    setSelectedFormat(anyOption);
+    setSelectedStatus(anyOption);
+    // Add any other filters you need to reset
+    setQuery('');
+  };
+  useEffect(() => {
+    const hasFiltersChanged =
+      query !== '' || // Check if query is not default
+      selectedGenres.length > 0 || // Check if any genres are selected
+      selectedYear.value !== anyOption.value || // Check if year is not "Any"
+      selectedSeason.value !== anyOption.value || // Same for season, type, status...
+      selectedFormat.value !== anyOption.value ||
+      selectedStatus.value !== anyOption.value;
+
+    setFiltersChanged(hasFiltersChanged);
+  }, [
+    query,
+    selectedGenres,
+    selectedYear,
+    selectedSeason,
+    selectedFormat,
+    selectedStatus,
+  ]);
+
+  return (
+    <FiltersContainer>
+      <FilterSelect label='Search' value={query} onChange={setQuery} />
+      <FilterSelect
+        label='Genres'
+        options={genreOptions}
+        isMulti
+        onChange={setSelectedGenres}
+        value={selectedGenres}
+      />
+      <FilterSelect
+        label='Year'
+        options={yearOptions}
+        onChange={setSelectedYear}
+        value={selectedYear}
+      />
+      <FilterSelect
+        label='Season'
+        options={seasonOptions}
+        onChange={setSelectedSeason}
+        value={selectedSeason}
+      />
+      <FilterSelect
+        label='Type'
+        options={formatOptions}
+        onChange={setSelectedFormat}
+        value={selectedFormat}
+      />
+      <FilterSelect
+        label='Status'
+        options={statusOptions}
+        onChange={setSelectedStatus}
+        value={selectedStatus}
+      />
+      {/* <FilterSelect
       label='Sort By'
       options={sortOptions}
       onChange={setSelectedSort}
       value={selectedSort}
     /> */}
-    {/* <Button
+      {/* <Button
       onClick={() =>
         setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
       }
     >
       {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
     </Button> */}
-    <ClearButton onClick={resetFilters}>Clear Filters</ClearButton>
-  </FiltersContainer>
-);
+      {filtersChanged && (
+        <ClearButton onClick={handleResetFilters}>
+          <LuFilterX /> Clear
+        </ClearButton>
+      )}
+    </FiltersContainer>
+  );
+};
