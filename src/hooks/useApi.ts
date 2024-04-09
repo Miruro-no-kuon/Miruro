@@ -208,12 +208,12 @@ export async function fetchAdvancedSearch(
     ...(options.year && { year: options.year }),
     ...(options.status && { status: options.status }),
     ...(options.sort && { sort: JSON.stringify(options.sort) }),
-    ...(options.genres &&
-      options.genres.length > 0 && {
-        genres: options.genres.filter((g: string) => g).join(','),
-      }),
   });
 
+  if (options.genres && options.genres.length > 0) {
+    // Correctly encode genres as a JSON array
+    queryParams.set('genres', JSON.stringify(options.genres));
+  }
   const url = `${BASE_URL}meta/anilist/advanced-search?${queryParams.toString()}`;
   const cacheKey = generateCacheKey('advancedSearch', queryParams.toString());
 

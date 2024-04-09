@@ -111,6 +111,7 @@ const yearOptions = [
 ];
 
 const seasonOptions = [
+  anyOption,
   { value: 'WINTER', label: 'Winter' },
   { value: 'SPRING', label: 'Spring' },
   { value: 'SUMMER', label: 'Summer' },
@@ -298,8 +299,8 @@ export const SearchFilters: React.FC<{
   setSelectedGenres: React.Dispatch<React.SetStateAction<Option[]>>;
   selectedYear: Option;
   setSelectedYear: React.Dispatch<React.SetStateAction<Option>>;
-  selectedSeason: Option[];
-  setSelectedSeason: React.Dispatch<React.SetStateAction<Option[]>>;
+  selectedSeason: Option;
+  setSelectedSeason: React.Dispatch<React.SetStateAction<Option>>;
   selectedFormat: Option;
   setSelectedFormat: React.Dispatch<React.SetStateAction<Option>>;
   selectedStatus: Option;
@@ -346,7 +347,6 @@ export const SearchFilters: React.FC<{
     <FilterSelect
       label='Season'
       options={seasonOptions}
-      isMulti
       onChange={setSelectedSeason}
       value={selectedSeason}
     />

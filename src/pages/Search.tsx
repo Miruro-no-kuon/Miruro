@@ -40,7 +40,7 @@ const SearchSort = () => {
   const delayTimeout = useRef<number | null>(null);
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
   const [selectedYear, setSelectedYear] = useState<Year>(anyOption);
-  const [selectedSeason, setSelectedSeason] = useState<Season[]>([]);
+  const [selectedSeason, setSelectedSeason] = useState<Season>(anyOption);
   const [selectedFormat, setSelectedFormat] = useState<Format>(anyOption);
   const [selectedStatus, setSelectedStatus] = useState<Status>(anyOption);
   const [selectedSort, setSelectedSort] = useState<Option>({
@@ -77,11 +77,12 @@ const SearchSort = () => {
       const yearFilter = selectedYear.value || undefined;
       const formatFilter = selectedFormat.value || undefined;
       const statusFilter = selectedStatus.value || undefined;
+      const seasonFilter = selectedSeason.value || undefined;
 
       const fetchedData = await fetchAdvancedSearch(query, page, 17, {
         genres: selectedGenres.map((g) => g.value),
         year: yearFilter,
-        season: selectedSeason.map((s) => s.value).join(','),
+        season: seasonFilter,
         format: formatFilter,
         status: statusFilter,
         sort: [sortParam], // Wrap sortParam in an array
@@ -141,7 +142,7 @@ const SearchSort = () => {
   const resetFilters = () => {
     setSelectedGenres([]);
     setSelectedYear(anyOption);
-    setSelectedSeason([]);
+    setSelectedSeason(anyOption);
     setSelectedFormat(anyOption);
     setSelectedStatus(anyOption);
     setSelectedSort({ value: 'POPULARITY', label: 'Popularity' }); // Assuming 'Popularity' is the default
@@ -170,7 +171,6 @@ const SearchSort = () => {
         setSortDirection={setSortDirection} // New
         resetFilters={resetFilters}
       />
-
       {isLoading && page === 1 ? (
         <StyledCardGrid>
           {Array.from({ length: 17 }).map((_, index) => (
