@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
+import { FaSearch } from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
 import { LuSlidersHorizontal, LuFilterX } from 'react-icons/lu';
 import { FiX } from 'react-icons/fi';
+import { FaCheckCircle } from 'react-icons/fa';
 
 interface Option {
   value: string;
@@ -23,9 +25,12 @@ const selectStyles = {
     ...provided,
     color: 'var(--global-text-muted)', // Use the CSS variable for the muted text color
   }),
-  singleValue: (provided: any) => ({
+  singleValue: (provided: any, state: any) => ({
     ...provided,
-    color: 'var(--global-text-muted)', // Ensures the selected value matches the global text color
+    color:
+      state.data.label === 'Any'
+        ? 'var(--global-text-muted)'
+        : 'var(--primary-accent)',
   }),
   control: (provided: any) => ({
     ...provided,
@@ -44,24 +49,27 @@ const selectStyles = {
   menu: (provided: any) => ({
     ...provided,
     zIndex: 5,
+    padding: '0.25rem',
     backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown menu background
     borderColor: 'var(--global-border)', // Customizing the border color of the menu
     color: 'var(--global-text)', // Customizing the text color of the menu
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: state.isSelected
-      ? 'var(--primary-accent-bg)' // Background color for selected option
-      : state.isFocused
-        ? 'var(--global-div)' // Background color for option under the cursor
-        : 'var(--global-secondary-bg)', // Default background color
-    color: state.isSelected
-      ? 'var(--global-secondary-bg)'
-      : 'var(--global-text)',
+    backgroundColor:
+      state.isSelected || state.isFocused
+        ? 'var(--global-tertiary-bg)' // Setting the background color for selected or hovered options
+        : 'var(--global-secondary-bg)', // Default background color for unselected options
+    color:
+      state.isSelected || state.isFocused
+        ? 'var(--primary-accent)' // Keeping the text color for selected or hovered options as per your requirement
+        : 'var(--global-text)',
+    borderRadius: 'var(--global-border-radius)', // Default text color for unselected options
     '&:hover': {
-      backgroundColor: 'var(--primary-accent-bg)',
-      color: 'var(--global-secondary-bg)',
+      backgroundColor: 'var(--global-tertiary-bg)', // Ensuring the hover background color matches the selected/focused color
+      color: 'var(--primary-accent)', // Ensuring the hover text color remains consistent
     },
+    marginBottom: '0.25rem',
   }),
   multiValue: (provided: any) => ({
     ...provided,
@@ -131,7 +139,7 @@ const formatOptions = [
 
 const statusOptions = [
   anyOption,
-  { value: 'RELEASING', label: 'Releasing' },
+  { value: 'RELEASING', label: 'Airing' },
   { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
   { value: 'FINISHED', label: 'Finished' },
   { value: 'CANCELLED', label: 'Cancelled' },
@@ -170,7 +178,6 @@ const SearchInput = styled.input`
   flex-grow: 1; // Allow the input to fill the space
   border: none;
   margin-left: 0.5rem;
-  font-size: 0.9rem;
   padding: 0.3rem 0.3rem 0.3rem 0.6rem; // Adjust padding as needed
   background-color: transparent;
   color: var(--global-text);
@@ -182,6 +189,8 @@ const SearchInput = styled.input`
 const FiltersContainer = styled.div`
   justify-content: left;
   align-items: center;
+  font-size: 0.8rem;
+  font-weight: bold;
   display: flex;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -200,6 +209,7 @@ const FilterSection = styled.div`
 
 const FilterLabel = styled.label`
   font-weight: bold;
+  font-size: 0.9rem;
   margin-bottom: 0.5rem;
   margin-left: 0.25rem;
   svg {
@@ -289,19 +299,44 @@ const FilterSelect: React.FC<FilterProps> = ({
     }
   }, [inputValue, onChange, label]);
 
+  //Add Check Circle to clicked option
+  const CustomOption = (props: any) => {
+    return (
+      <components.Option {...props}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <span>{props.data.label}</span>
+          {props.isSelected && <FaCheckCircle style={{ marginLeft: '10px' }} />}
+        </div>
+      </components.Option>
+    );
+  };
   return (
     <FilterSection>
       <FilterLabel>
-        {label === 'Search' && <LuSlidersHorizontal />}
+        {label === 'Search'}
         {label}
       </FilterLabel>
       {label === 'Search' ? (
         <SearchInputWrapper>
+          <FaSearch
+            style={{
+              marginLeft: '0.5rem',
+              position: 'absolute',
+              color: 'var(--global-text-muted)',
+            }}
+          />
           <SearchInput
             type='text'
             value={inputValue} // Use the local state value here
             onChange={(e) => setInputValue(e.target.value)} // Update local state instead of calling onChange directly
-            placeholder='Search'
+            placeholder=''
+            style={{ paddingLeft: '1.5rem' }} // Ensure padding is consistent to make room for the icon
           />
           {value && (
             <ClearIcon
@@ -315,7 +350,11 @@ const FilterSelect: React.FC<FilterProps> = ({
         </SearchInputWrapper>
       ) : (
         <Select
-          components={{ ...animatedComponents, IndicatorSeparator: () => null }}
+          components={{
+            ...animatedComponents,
+            Option: CustomOption,
+            IndicatorSeparator: () => null,
+          }}
           isMulti={isMulti}
           options={options}
           onChange={onChange}

@@ -11,11 +11,11 @@ import {
 
 // Define types for genre, year, season, format, and status
 type Option = { value: string; label: string };
-type Genre = Option;
-type Year = Option;
-type Season = Option;
-type Format = Option;
-type Status = Option;
+// type Genre = Option;
+// type Year = Option;
+// type Season = Option;
+// type Format = Option;
+// type Status = Option;
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -30,24 +30,56 @@ const Container = styled.div`
 const anyOption: Option = { value: '', label: 'Any' };
 
 const SearchSort = () => {
-  const [searchParams /* setSearchParams */] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Directly initialize state from URL parameters
   const initialQuery = searchParams.get('query') || '';
-  const [query, setQuery] = useState<string>(initialQuery);
+  // Adjusting initialization to ensure non-null values
+  const genresParam = searchParams.get('genres');
+  const initialGenres = genresParam
+    ? genresParam.split(',').map((value) => ({ value, label: value }))
+    : [];
+
+  const initialYear = {
+    value: searchParams.get('year') || '', // Fallback to empty string if null
+    label: searchParams.get('year') || 'Any', // Fallback to 'Any'
+  };
+
+  const initialSeason = {
+    value: searchParams.get('season') || '', // Fallback to empty string if null
+    label: searchParams.get('season') || 'Any', // Fallback to 'Any'
+  };
+
+  const initialFormat = {
+    value: searchParams.get('format') || '', // Fallback to empty string if null
+    label: searchParams.get('format') || 'Any', // Fallback to 'Any'
+  };
+
+  const initialStatus = {
+    value: searchParams.get('status') || '', // Fallback to empty string if null
+    label: searchParams.get('status') || 'Any', // Fallback to 'Any'
+  };
+
+  // State hooks
+  const [query, setQuery] = useState(initialQuery);
+  const [selectedGenres, setSelectedGenres] = useState(initialGenres);
+  const [selectedYear, setSelectedYear] = useState(initialYear);
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
+  const [selectedFormat, setSelectedFormat] = useState(initialFormat);
+  const [selectedStatus, setSelectedStatus] = useState(initialStatus);
+  //Sorting
+  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>('DESC');
+  const [selectedSort, setSelectedSort] = useState<Option>({
+    value: 'POPULARITY',
+    label: 'Popularity ',
+  });
+
+  //Other logic
   const [animeData, setAnimeData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const delayTimeout = useRef<number | null>(null);
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
-  const [selectedYear, setSelectedYear] = useState<Year>(anyOption);
-  const [selectedSeason, setSelectedSeason] = useState<Season>(anyOption);
-  const [selectedFormat, setSelectedFormat] = useState<Format>(anyOption);
-  const [selectedStatus, setSelectedStatus] = useState<Status>(anyOption);
-  const [selectedSort, setSelectedSort] = useState<Option>({
-    value: 'POPULARITY',
-    label: 'Popularity ',
-  });
-  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>('DESC');
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -56,6 +88,29 @@ const SearchSort = () => {
       document.title = previousTitle;
     };
   }, [query]);
+
+  // useEffect hook for updating URL based on filter changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    params.set('query', query);
+    if (selectedGenres.length > 0)
+      params.set('genres', selectedGenres.map((g) => g.value).join(','));
+    if (selectedYear.value) params.set('year', selectedYear.value);
+    if (selectedSeason.value) params.set('season', selectedSeason.value);
+    if (selectedFormat.value) params.set('format', selectedFormat.value);
+    if (selectedStatus.value) params.set('status', selectedStatus.value);
+
+    setSearchParams(params, { replace: true });
+  }, [
+    query,
+    selectedGenres,
+    selectedYear,
+    selectedSeason,
+    selectedFormat,
+    selectedStatus,
+    setSearchParams,
+  ]);
 
   useEffect(() => {
     setPage(1);
