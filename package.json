@@ -24,6 +24,7 @@
     "@mui/material": "^5.15.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.8",
     "@vidstack/player-react": "^1.6.0",
     "@vidstack/react": "next",
