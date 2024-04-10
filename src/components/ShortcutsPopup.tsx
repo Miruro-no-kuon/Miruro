@@ -13,13 +13,14 @@ const fadeInAnimation = keyframes`
 `;
 
 const Overlay = styled.table`
+  font-size: 0.85rem;
   animation: ${fadeInAnimation} 0.3s ease forwards;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
@@ -117,8 +118,20 @@ const KeyboardShortcutsPopup = ({ onClose }: { onClose: () => void }) => {
           <Column2>M</Column2>
         </tr>
         <tr>
+          <Column1>Previous Episode</Column1>
+          <Column2>(SHIFT+P)</Column2>
+        </tr>
+        <tr>
+          <Column1>Next Episode</Column1>
+          <Column2>(SHIFT+N)</Column2>
+        </tr>
+        <tr>
           <Column1>Increase Volume</Column1>
           <Column2>Arrow Up</Column2>
+        </tr>
+        <tr>
+          <Column1>Decrease Volume</Column1>
+          <Column2>Arrow Down</Column2>
         </tr>
         <tr>
           <Column1>Seek Forward 5 Seconds</Column1>
@@ -128,25 +141,21 @@ const KeyboardShortcutsPopup = ({ onClose }: { onClose: () => void }) => {
           <Column1>Seek Backward 5 Seconds</Column1>
           <Column2>Arrow Left</Column2>
         </tr>
-        <tr>
-          <Column1>Decrease Volume</Column1>
-          <Column2>Arrow Down</Column2>
-        </tr>
-        <tr>
+        {/* <tr>
           <Column1>Toggle Subtitles</Column1>
           <Column2>C</Column2>
-        </tr>
-        <tr>
+        </tr> */}
+        {/* <tr>
           <Column1>Cycle Subtitle Tracks</Column1>
           <Column2>T</Column2>
-        </tr>
+        </tr> */}
         <tr>
           <Column1>Increase Playback Speed</Column1>
-          <Column2>&gt;</Column2>
+          <Column2>&gt; (SHIFT+,)</Column2>
         </tr>
         <tr>
           <Column1>Decrease Playback Speed</Column1>
-          <Column2>&lt;</Column2>
+          <Column2>&lt; (SHIFT+.)</Column2>
         </tr>
         <tr>
           <Column1>Jump to Percentage (0-90%)</Column1>
@@ -162,6 +171,7 @@ export const ShortcutsPopup = () => {
 
   useEffect(() => {
     const togglePopupWithShortcut = (e: KeyboardEvent) => {
+      console.log('Toggling Popup');
       if (
         e.target &&
         ['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as Element).tagName)
