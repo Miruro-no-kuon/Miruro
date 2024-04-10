@@ -22,7 +22,7 @@ function App() {
       <Navbar />
       <ShortcutsPopup />
       <ScrollToTop />
-      <div style={{ minHeight: '85rem' }}>
+      <div style={{ minHeight: '35rem' }}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />

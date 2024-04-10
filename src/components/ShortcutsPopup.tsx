@@ -171,7 +171,6 @@ export const ShortcutsPopup = () => {
 
   useEffect(() => {
     const togglePopupWithShortcut = (e: KeyboardEvent) => {
-      console.log('Toggling Popup');
       if (
         e.target &&
         ['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as Element).tagName)
