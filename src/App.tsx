@@ -6,7 +6,7 @@ import {
   Footer,
   Home,
   Watch,
-  SearchSort,
+  Search,
   Page404,
   About,
   PolicyTerms,
@@ -24,11 +24,11 @@ function App() {
         <Navbar />
         <ShortcutsPopup />
         <ScrollToTop />
-        <div style={{ minHeight: '85rem' }}>
+        <div style={{ minHeight: '35rem' }}>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/home' element={<Home />} />
-            <Route path='/search' element={<SearchSort />} />
+            <Route path='/search' element={<Search />} />
             <Route path='/watch/:animeId' element={<Watch />} />
             <Route
               path='/watch/:animeId/:animeTitle/:episodeNumber'

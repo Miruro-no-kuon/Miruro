@@ -10,17 +10,29 @@ import {
   fetchPopularAnime,
   fetchTopAnime,
   fetchRecentEpisodes,
+  HomeSideBar,
   EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
 } from '../index'; // Adjust the import path to point correctly to your index.ts location
 import { Episode } from '../index';
 
 const SimpleLayout = styled.div`
-  display: flex;
-  flex-direction: column;
   gap: 1rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
+  display: flex;
+  flex-direction: column;
+`;
+const ContentSidebarLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+
+  @media (min-width: 1000px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const TabContainer = styled.div`
@@ -83,7 +95,7 @@ const ErrorMessage = styled.div`
 const Home = () => {
   const [, /* watchedEpisodes */ setWatchedEpisodes] = useState<Episode[]>([]);
   const [itemsCount, setItemsCount] = useState(
-    window.innerWidth > 500 ? 14 : 12,
+    window.innerWidth > 500 ? 18 : 12,
   );
   const [trendingAnime, setTrendingAnime] = useState([]);
   const [popularAnime, setPopularAnime] = useState([]);
@@ -113,7 +125,7 @@ const Home = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsCount(window.innerWidth > 500 ? 14 : 12);
+      setItemsCount(window.innerWidth > 500 ? 18 : 12);
     };
 
     window.addEventListener('resize', handleResize);
@@ -148,7 +160,7 @@ const Home = () => {
 
   useEffect(() => {
     const desiredItemCount = itemsCount;
-    // Increase initial fetch count by 40% to account for filtering
+    // Increase initial fetch count by 80% to account for filtering
     const fetchCount = Math.ceil(itemsCount * 1.8);
 
     const fetchData = async () => {
@@ -249,44 +261,52 @@ const Home = () => {
           error={error}
         />
       )}
-      <TabContainer>
-        <Tab
-          title='Trending Tab'
-          $isActive={activeTab === 'trending'}
-          onClick={() => handleTabClick('trending')}
-        >
-          TRENDING
-        </Tab>
-        <Tab
-          title='Popular Tab'
-          $isActive={activeTab === 'popular'}
-          onClick={() => handleTabClick('popular')}
-        >
-          POPULAR
-        </Tab>
-        <Tab
-          title='Top Anime Tab'
-          $isActive={activeTab === 'top'}
-          onClick={() => handleTabClick('top')}
-        >
-          TOP ANIME
-        </Tab>
-        <Tab
-          title='Recent Episodes Tab'
-          $isActive={activeTab === 'recent'}
-          onClick={() => handleTabClick('recent')}
-        >
-          RECENTLY UPDATED
-        </Tab>
-      </TabContainer>
-      {/* Render other sections based on activeTab */}
-      {activeTab === 'trending' &&
-        renderCardGrid(trendingAnime, loading.trending, !!error)}
-      {activeTab === 'popular' &&
-        renderCardGrid(popularAnime, loading.popular, !!error)}
-      {activeTab === 'top' && renderCardGrid(topAnime, loading.top, !!error)}
-      {activeTab === 'recent' &&
-        renderCardGrid(recentEpisodes, loading.recent, !!error)}
+      <ContentSidebarLayout>
+        <div style={{ flexGrow: 1 }}>
+          <TabContainer>
+            <Tab
+              title='Trending Tab'
+              $isActive={activeTab === 'trending'}
+              onClick={() => handleTabClick('trending')}
+            >
+              TRENDING
+            </Tab>
+            <Tab
+              title='Popular Tab'
+              $isActive={activeTab === 'popular'}
+              onClick={() => handleTabClick('popular')}
+            >
+              POPULAR
+            </Tab>
+            <Tab
+              title='Top Anime Tab'
+              $isActive={activeTab === 'top'}
+              onClick={() => handleTabClick('top')}
+            >
+              TOP RATED
+            </Tab>
+            {/* <Tab
+              title='Recent Episodes Tab'
+              $isActive={activeTab === 'recent'}
+              onClick={() => handleTabClick('recent')}
+            >
+              RECENTLY UPDATED
+            </Tab> */}
+          </TabContainer>
+          <br></br>
+
+          {/* Render sections based on activeTab */}
+          {activeTab === 'trending' &&
+            renderCardGrid(trendingAnime, loading.trending, !!error)}
+          {activeTab === 'popular' &&
+            renderCardGrid(popularAnime, loading.popular, !!error)}
+          {activeTab === 'top' &&
+            renderCardGrid(topAnime, loading.top, !!error)}
+          {activeTab === 'recent' &&
+            renderCardGrid(recentEpisodes, loading.recent, !!error)}
+        </div>
+        <HomeSideBar />
+      </ContentSidebarLayout>
       <AnimeEpisodeCardComponent />
     </SimpleLayout>
   );

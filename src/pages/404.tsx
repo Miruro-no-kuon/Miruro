@@ -11,25 +11,12 @@ const FadeIn = keyframes`
 const CenteredContent = styled.div`
   display: flex;
   padding-top: 5rem;
-  padding-bottom: 5rem;
+  margin-bottom: 5rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
   text-align: center;
-  font-size: large;
-
-  h2 {
-    font-weight: 300; /* Thin font */
-    font-size: 1.5rem; /* Adjust font size */
-    margin-bottom: 1rem; /* Add margin */
-  }
-
-  h3 {
-    font-weight: 300; /* Thin font */
-    font-size: 1.2rem; /* Adjust font size */
-    margin-top: 1rem; /* Add margin */
-  }
+  font-size: 1.5rem;
 
   img {
     max-width: 100%;

@@ -132,6 +132,7 @@ const IframeTrailer = styled.iframe`
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: 'last-watched-',
   WATCHED_EPISODES: 'watched-episodes-',
+  LAST_ANIME_VISITED: 'last-anime-visited',
 };
 
 const useCountdown = (targetDate: number | null) => {
@@ -405,6 +406,29 @@ const Watch: React.FC = () => {
         if (isMounted) setLoading(false);
       }
     };
+
+    // Last visited cache to order continue watching
+    const updateLastVisited = () => {
+      if (!animeInfo) return; // Ensure animeInfo is available
+
+      const lastVisited = localStorage.getItem(
+        LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
+      );
+      const lastVisitedData = lastVisited ? JSON.parse(lastVisited) : {};
+      lastVisitedData[animeId] = {
+        timestamp: Date.now(),
+        titleEnglish: animeInfo.title.english, // Assuming animeInfo contains the title in English
+        titleRomaji: animeInfo.title.romaji, // Assuming animeInfo contains the title in Romaji
+      };
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
+        JSON.stringify(lastVisitedData),
+      );
+    };
+
+    if (animeId) {
+      updateLastVisited();
+    }
 
     fetchData();
 

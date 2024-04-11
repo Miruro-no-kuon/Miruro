@@ -47,8 +47,8 @@ const Card = styled.div`
 `;
 
 const AnimeImage = styled.img`
-  width: 4rem;
-  height: 6rem;S
+  width: 4.25rem;
+  height: 6rem;
   object-fit: cover;
   border-radius: var(--global-border-radius);
 `;
@@ -109,9 +109,14 @@ const Details = styled.p`
   font-size: 0.75rem;
   margin: 0;
   color: rgba(102, 102, 102, 0.75);
+  svg {
+    margin-left: 0.3rem;
+  }
 `;
 
-export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => {
+export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
+  animeData,
+}) => {
   const filteredRecommendations = animeData.recommendations.filter((rec) =>
     ['OVA', 'SPECIAL', 'TV', 'MOVIE', 'ONA', 'NOVEL'].includes(rec.type || ''),
   );
@@ -134,18 +139,17 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => 
                 to={`/watch/${relation.id}`}
                 key={relation.id}
                 style={{ textDecoration: 'none', color: 'inherit' }}
-                title={`Watch ${relation.title.userPreferred}`} // Adding meaningful title
-                aria-label={`Watch ${relation.title.userPreferred}`} // Improving accessibility
+                title={`${relation.title.userPreferred}`}
+                aria-label={`Watch ${relation.title.userPreferred}`}
               >
                 <Card style={{ animationDelay: `${index * 0.1}s` }}>
                   <AnimeImage
                     src={relation.image}
                     alt={relation.title.userPreferred}
-                    loading='lazy' // Improve loading times and efficiency
+                    loading='lazy'
                   />
                   <Info>
                     <TitleWithDot>
-                      {/* Logic to determine which IndicatorDot to use based on status */}
                       {(() => {
                         switch (relation.status) {
                           case 'Completed':
@@ -169,10 +173,19 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => 
                     <Details
                       aria-label={`Details about ${relation.title.userPreferred}`}
                     >
-                      {`${relation.type || ''} `}
-                      <TbCardsFilled aria-hidden='true' />{' '}
-                      {`${relation.episodes}  `}
-                      <FaStar aria-hidden='true' /> {`${relation.rating}  `}
+                      {/* Conditionally render each piece of detail only if it's not null or empty */}
+                      {relation.type && `${relation.type} `}
+                      {relation.episodes && (
+                        <>
+                          <TbCardsFilled aria-hidden='true' />{' '}
+                          {`${relation.episodes} `}
+                        </>
+                      )}
+                      {relation.rating && (
+                        <>
+                          <FaStar aria-hidden='true' /> {`${relation.rating} `}
+                        </>
+                      )}
                     </Details>
                   </Info>
                 </Card>
@@ -191,7 +204,7 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => 
                 to={`/watch/${recommendation.id}`}
                 key={recommendation.id}
                 style={{ textDecoration: 'none', color: 'inherit' }}
-                title={`Watch ${recommendation.title.userPreferred}`} // Adding meaningful title
+                title={`Watch ${recommendation.title.userPreferred}`}
               >
                 <Card style={{ animationDelay: `${index * 0.1}s` }}>
                   <AnimeImage
@@ -201,7 +214,6 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => 
                   />
                   <Info>
                     <TitleWithDot>
-                      {/* Logic to determine which IndicatorDot to use based on status */}
                       {(() => {
                         switch (recommendation.status) {
                           case 'Completed':
@@ -225,11 +237,20 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({ animeData }) => 
                     <Details
                       aria-label={`Details about ${recommendation.title.userPreferred}`}
                     >
-                      {`${recommendation.type} `}
-                      <TbCardsFilled aria-hidden='true' />{' '}
-                      {`${recommendation.episodes}  `}
-                      <FaStar aria-hidden='true' />{' '}
-                      {`${recommendation.rating}  `}
+                      {/* Similar conditional rendering for recommendation details */}
+                      {recommendation.type && `${recommendation.type} `}
+                      {recommendation.episodes && (
+                        <>
+                          <TbCardsFilled aria-hidden='true' />{' '}
+                          {`${recommendation.episodes} `}
+                        </>
+                      )}
+                      {recommendation.rating && (
+                        <>
+                          <FaStar aria-hidden='true' />{' '}
+                          {`${recommendation.rating} `}
+                        </>
+                      )}
                     </Details>
                   </Info>
                 </Card>

@@ -30,6 +30,11 @@ const axiosInstance = axios.create({
 function handleError(error: any, context: string) {
   let errorMessage = 'An error occurred';
 
+  // Handling CORS errors (Note: This is a simplification. Real CORS errors are hard to catch in JS)
+  if (error.message && error.message.includes('Access-Control-Allow-Origin')) {
+    errorMessage = 'A CORS error occurred';
+  }
+
   switch (context) {
     case 'data':
       errorMessage = 'Error fetching data';
@@ -37,16 +42,19 @@ function handleError(error: any, context: string) {
     case 'anime episodes':
       errorMessage = 'Error fetching anime episodes';
       break;
-    case 'episode video URLs':
-      errorMessage = 'Error fetching episode video URLs';
-      break;
-    default:
-      errorMessage = 'Unknown error occurred';
-      break;
+    // Extend with other cases as needed
   }
 
-  if (error.response && error.response.data && error.response.data.message) {
-    errorMessage += `: ${error.response.data.message}`;
+  if (error.response) {
+    // Extend with more nuanced handling based on HTTP status codes
+    const status = error.response.status;
+    if (status >= 500) {
+      errorMessage += ': Server error';
+    } else if (status >= 400) {
+      errorMessage += ': Client error';
+    }
+    // Include server-provided error message if available
+    errorMessage += `: ${error.response.data.message || 'Unknown error'}`;
   } else if (error.message) {
     errorMessage += `: ${error.message}`;
   }

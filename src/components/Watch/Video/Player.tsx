@@ -301,6 +301,8 @@ export function Player({
     if (!autoNext) return;
 
     try {
+      // Add a 200ms delay before proceeding to the next episode
+      await new Promise((resolve) => setTimeout(resolve, 200));
       await onEpisodeEnd();
     } catch (error) {
       console.error('Error moving to the next episode:', error);
