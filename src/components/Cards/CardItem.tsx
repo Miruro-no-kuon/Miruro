@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { SkeletonCard, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { FaPlay } from 'react-icons/fa'; // For the play icon
 import { TbCardsFilled } from 'react-icons/tb';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaCalendarAlt } from 'react-icons/fa';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -189,6 +189,7 @@ const CardDetails = styled.div`
   overflow: hidden; // Ensures that overflow text is hidden
   text-overflow: ellipsis; // Adds an ellipsis to indicate that text has been cut off
   svg {
+    margin-bottom: 0.12rem;
     margin-right: -0.4rem;
   }
 `;
@@ -302,7 +303,12 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
                 {truncateTitle(anime.title.romaji || '', 24)}
               </CardDetails>
               <CardDetails title='Card Details'>
-                {anime.releaseDate}
+                {anime.releaseDate && (
+                  <>
+                    <FaCalendarAlt />
+                    {anime.releaseDate}
+                  </>
+                )}
                 {(anime.totalEpisodes || anime.episodes) && (
                   <>
                     <TbCardsFilled />

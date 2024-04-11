@@ -13,6 +13,7 @@ export { default as CardItem } from './components/Cards/CardItem';
 // TODO Home Page Specific
 export { EpisodeCard } from './components/Home/EpisodeCard';
 export { HomeCarousel } from './components/Home/HomeCarousel';
+export { HomeSideBar } from './components/Home/HomeSideBar';
 
 // TODO Skeletons for Loading States
 export {

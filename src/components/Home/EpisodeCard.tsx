@@ -10,6 +10,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { Episode } from '../../hooks/interface';
 
+const LOCAL_STORAGE_KEYS = {
+  WATCHED_EPISODES: 'watched-episodes',
+  LAST_ANIME_VISITED: 'last-anime-visited',
+};
+
 const popInAnimation = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0%); }
@@ -143,6 +148,11 @@ export const EpisodeCard: React.FC = () => {
   );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const lastVisitedData = useMemo(() => {
+    const data = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED);
+    return data ? JSON.parse(data) : {};
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -160,51 +170,59 @@ export const EpisodeCard: React.FC = () => {
     try {
       const allEpisodes: Record<string, Episode[]> =
         JSON.parse(watchedEpisodesData);
-      return Object.entries(allEpisodes).map(([animeId, animeEpisodes]) => {
-        const lastEpisode = animeEpisodes[animeEpisodes.length - 1];
+
+      const lastEpisodes = Object.entries(allEpisodes).reduce(
+        (acc, [animeId, episodes]) => {
+          const lastEpisode = episodes[episodes.length - 1]; // Assuming the episodes are in order
+          if (lastEpisode) {
+            acc[animeId] = lastEpisode;
+          }
+          return acc;
+        },
+        {},
+      );
+
+      const orderedAnimeIds = Object.keys(lastEpisodes).sort((a, b) => {
+        const lastVisitedA = lastVisitedData[a]?.timestamp || 0;
+        const lastVisitedB = lastVisitedData[b]?.timestamp || 0;
+        return lastVisitedB - lastVisitedA;
+      });
+
+      return orderedAnimeIds.map((animeId) => {
+        const episode = lastEpisodes[animeId];
         const playbackInfo = JSON.parse(
           localStorage.getItem('all_episode_times') || '{}',
         );
         const playbackPercentage =
-          playbackInfo[lastEpisode.id]?.playbackPercentage || 0;
+          playbackInfo[episode.id]?.playbackPercentage || 0;
+
+        // Determine anime title, preferring English, falling back to Romaji, then to "Episode Title"
+        const animeTitle =
+          lastVisitedData[animeId]?.titleEnglish ||
+          lastVisitedData[animeId]?.titleRomaji ||
+          'Episode Title';
+
+        // Conditional title display
+        const displayTitle = `${animeTitle}${episode.title ? ` - ${episode.title}` : ''}`;
+
         return (
-          <StyledSwiperSlide key={lastEpisode.id}>
+          <StyledSwiperSlide key={episode.id}>
             <AnimeEpisodeCard
               to={`/watch/${animeId}`}
               style={{ textDecoration: 'none' }}
-              title={
-                'Continue Watching ' +
-                `Episode ${lastEpisode.number}${lastEpisode.title ? `: ${lastEpisode.title}` : ''}`
-              }
+              title={`Continue Watching ${displayTitle}`}
             >
-              <img
-                src={lastEpisode.image}
-                alt={`Cover for ${lastEpisode.id}`}
-              />
+              <img src={episode.image} alt={`Cover for ${animeTitle}`} />
               <PlayIcon aria-label='Play Episode'>
                 <FaPlay />
               </PlayIcon>
               <div className='episode-info'>
-                <p className='episode-title'>
-                  {lastEpisode.id
-                    ? lastEpisode.id
-                        .split('-')
-                        .slice(0, -2)
-                        .map(
-                          (part) =>
-                            part.charAt(0).toUpperCase() + part.slice(1),
-                        )
-                        .join(' ')
-                        .slice(0, 30)
-                    : ''}
-                </p>
-                <p className='episode-number'>
-                  {windowWidth > 500
-                    ? `Episode ${lastEpisode.number}${lastEpisode.title ? `: ${lastEpisode.title}` : ''}`
-                    : `Episode ${lastEpisode.number}`}
-                </p>
+                <p className='episode-title'>{displayTitle}</p>
+                <p className='episode-number'>{`Episode ${episode.number}`}</p>
               </div>
-              <ProgressBar style={{ width: `${playbackPercentage}%` }} />
+              <ProgressBar
+                style={{ width: `${Math.max(playbackPercentage, 5)}%` }}
+              />
             </AnimeEpisodeCard>
           </StyledSwiperSlide>
         );
@@ -213,7 +231,7 @@ export const EpisodeCard: React.FC = () => {
       console.error('Failed to parse watched episodes data:', error);
       return [];
     }
-  }, [watchedEpisodesData, windowWidth]);
+  }, [watchedEpisodesData, windowWidth, lastVisitedData]);
 
   const swiperSettings = useMemo(
     () => ({

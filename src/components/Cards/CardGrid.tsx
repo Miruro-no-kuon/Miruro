@@ -57,13 +57,12 @@ export const StyledCardGrid = styled.div`
   margin: 0 auto;
   display: grid;
   position: relative;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
   grid-template-rows: auto;
-  gap: 2.75rem;
+  gap: 2.5rem;
   transition: 0s;
 
   @media (max-width: 1200px) {
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     gap: 2rem;
   }
 
@@ -72,7 +71,6 @@ export const StyledCardGrid = styled.div`
   }
 
   @media (max-width: 800px) {
-    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     gap: 1.25rem;
   }
 
