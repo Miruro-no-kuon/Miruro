@@ -100,6 +100,11 @@ const Search = () => {
     if (selectedSeason.value) params.set('season', selectedSeason.value);
     if (selectedFormat.value) params.set('format', selectedFormat.value);
     if (selectedStatus.value) params.set('status', selectedStatus.value);
+    const sortBase = selectedSort.value.endsWith('_DESC')
+      ? selectedSort.value.replace('_DESC', '')
+      : selectedSort.value;
+    const sortParam = sortDirection === 'DESC' ? `${sortBase}_DESC` : sortBase;
+    params.set('sort', `[${sortParam}]`);
 
     setSearchParams(params, { replace: true });
   }, [
@@ -109,6 +114,8 @@ const Search = () => {
     selectedSeason,
     selectedFormat,
     selectedStatus,
+    selectedSort,
+    sortDirection,
     setSearchParams,
   ]);
 
@@ -126,28 +133,22 @@ const Search = () => {
 
   const initiateFetchAdvancedSearch = useCallback(async () => {
     setIsLoading(true);
-    const sortParam = `${selectedSort.value}_${sortDirection}`;
-
+    const sortBase = selectedSort.value.replace('_DESC', '');
+    const sortParam = sortDirection === 'DESC' ? `${sortBase}_DESC` : sortBase;
     try {
-      const yearFilter = selectedYear.value || undefined;
-      const formatFilter = selectedFormat.value || undefined;
-      const statusFilter = selectedStatus.value || undefined;
-      const seasonFilter = selectedSeason.value || undefined;
-
       const fetchedData = await fetchAdvancedSearch(query, page, 17, {
         genres: selectedGenres.map((g) => g.value),
-        year: yearFilter,
-        season: seasonFilter,
-        format: formatFilter,
-        status: statusFilter,
-        sort: [sortParam], // Wrap sortParam in an array
+        year: selectedYear.value,
+        season: selectedSeason.value,
+        format: selectedFormat.value,
+        status: selectedStatus.value,
+        sort: [sortParam], // Ensure this is correctly formatted
       });
-
-      if (page === 1) {
-        setAnimeData(fetchedData.results);
-      } else {
-        setAnimeData((prevData) => [...prevData, ...fetchedData.results]);
-      }
+      setAnimeData(
+        page === 1
+          ? fetchedData.results
+          : [...animeData, ...fetchedData.results],
+      );
       setHasNextPage(fetchedData.hasNextPage);
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -162,6 +163,7 @@ const Search = () => {
     selectedSeason,
     selectedFormat,
     selectedStatus,
+    selectedSort,
     sortDirection,
   ]);
 
@@ -220,10 +222,10 @@ const Search = () => {
         setSelectedFormat={setSelectedFormat}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
-        selectedSort={selectedSort} // New
-        setSelectedSort={setSelectedSort} // New
-        sortDirection={sortDirection} // New
-        setSortDirection={setSortDirection} // New
+        selectedSort={selectedSort}
+        setSelectedSort={setSelectedSort}
+        sortDirection={sortDirection}
+        setSortDirection={setSortDirection}
         resetFilters={resetFilters}
       />
       {isLoading && page === 1 ? (
