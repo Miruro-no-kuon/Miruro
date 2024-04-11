@@ -110,11 +110,13 @@ const genreOptions = [
 
 const anyOption = { value: '', label: 'Any' };
 
+const currentYear = new Date().getFullYear();
 const yearOptions = [
   anyOption,
-  ...Array.from({ length: new Date().getFullYear() - 1939 }, (_, i) => ({
-    value: String(new Date().getFullYear() - i),
-    label: String(new Date().getFullYear() - i),
+  { value: String(currentYear + 1), label: String(currentYear + 1) }, // Current year +1
+  ...Array.from({ length: currentYear - 1939 }, (_, i) => ({
+    value: String(currentYear - i),
+    label: String(currentYear - i),
   })),
 ];
 

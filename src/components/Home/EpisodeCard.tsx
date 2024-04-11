@@ -200,7 +200,7 @@ export const EpisodeCard: React.FC = () => {
         const animeTitle =
           lastVisitedData[animeId]?.titleEnglish ||
           lastVisitedData[animeId]?.titleRomaji ||
-          'Episode Title';
+          '';
 
         // Conditional title display
         const displayTitle = `${animeTitle}${episode.title ? ` - ${episode.title}` : ''}`;

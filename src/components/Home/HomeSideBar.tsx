@@ -9,6 +9,7 @@ import {
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
+import { Anime } from '../../index';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -69,7 +70,7 @@ const AnimeCard = styled.div`
   border-radius: var(--global-border-radius);
   align-items: center;
   overflow: hidden;
-  max-width: 22.5rem;
+  max-width: 24rem;
   @media (max-width: 1000px) {
     max-width: unset;
   }
@@ -122,7 +123,7 @@ const DetailsStyled = styled.p`
   margin: 0;
   color: rgba(102, 102, 102, 0.75);
   svg {
-    margin-left: 0.3rem;
+    margin-left: 0.4rem;
   }
 `;
 
@@ -174,7 +175,7 @@ export const HomeSideBar = () => {
   return (
     <SidebarStyled>
       <h2>TOP AIRING</h2>
-      {displayedAnime.map((anime, index) => (
+      {displayedAnime.map((anime: Anime, index) => (
         <Link
           to={`/watch/${anime.id}`}
           key={anime.id}
@@ -217,11 +218,13 @@ export const HomeSideBar = () => {
                     <FaCalendarAlt /> {anime.releaseDate}
                   </>
                 )}
-                {anime.totalEpisodes && (
+                {anime.currentEpisode && (
                   <>
-                    <TbCardsFilled /> {anime.totalEpisodes}
+                    <TbCardsFilled /> {anime.currentEpisode}
+                    {' / '}
                   </>
                 )}
+                {anime.totalEpisodes && <>{anime.totalEpisodes}</>}
                 {anime.rating && (
                   <>
                     <FaStar /> {anime.rating}
