@@ -5,6 +5,7 @@ export { Footer } from './components/Navigation/Footer';
 export { DropDownSearch } from './components/Navigation/DropSearch';
 export { SearchFilters } from './components/Navigation/SearchFilters';
 export { ShortcutsPopup } from './components/ShortcutsPopup';
+export { ThemeProvider, useTheme } from './components/ThemeContext';
 
 // TODO Cards
 export * from './components/Cards/CardGrid';
