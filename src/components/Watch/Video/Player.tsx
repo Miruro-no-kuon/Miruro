@@ -308,7 +308,11 @@ export function Player({
   };
 
   return (
-    <>
+    <div
+      style={{
+        animation: `popInAnimation 0.25s ease-in-out`,
+      }}
+    >
       <MediaPlayer
         className='player'
         title={`${animeVideoTitle} - Episode ${episodeNumber}`}
@@ -326,39 +330,6 @@ export function Player({
         storage='storage-key'
         keyTarget='player'
         onEnded={handlePlaybackEnded}
-        keyShortcuts={{
-          togglePaused: 'k K Space',
-          toggleMuted: 'm M',
-          toggleFullscreen: 'f F',
-          togglePictureInPicture: 'i I',
-          toggleCaptions: 'c C',
-          volumeUp: 'ArrowUp',
-          volumeDown: 'ArrowDown',
-          speedUp: '> <',
-          slowDown: '< >',
-          // Custom seek behavior
-          seekBackward: {
-            keys: ['ArrowLeft', 'j', 'J'],
-            onKeyDown: ({ event, player }) => {
-              event.preventDefault(); // Prevent the default behavior
-              // Subtract 5 seconds for ArrowLeft, 10 seconds for 'j' and 'J'
-              const seekTime = event.key === 'ArrowLeft' ? -5 : -10;
-              player.currentTime = Math.max(0, player.currentTime + seekTime);
-            },
-          },
-          seekForward: {
-            keys: ['ArrowRight', 'l', 'L'],
-            onKeyDown: ({ event, player }) => {
-              event.preventDefault(); // Prevent the default behavior
-              // Add 5 seconds for ArrowRight, 10 seconds for 'l' and 'L'
-              const seekTime = event.key === 'ArrowRight' ? 5 : 10;
-              player.currentTime = Math.min(
-                player.duration,
-                player.currentTime + seekTime,
-              );
-            },
-          },
-        }}
       >
         <MediaProvider>
           <Poster className='vds-poster' src={banner} alt='' />
@@ -395,6 +366,6 @@ export function Player({
           {autoNext ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Next
         </Button>
       </div>
-    </>
+    </div>
   );
 }
