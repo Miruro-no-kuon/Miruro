@@ -25,16 +25,16 @@ const selectStyles = {
     ...provided,
     color: 'var(--global-text-muted)', // Use the CSS variable for the muted text color
   }),
-  singleValue: (provided: any, state: any) => ({
+  singleValue: (provided, state) => ({
     ...provided,
     color:
-      state.data.label === 'Any'
+      state.data.label === 'Popularity' || state.data.label === 'Any'
         ? 'var(--global-text-muted)'
         : 'var(--primary-accent)',
   }),
   control: (provided: any) => ({
     ...provided,
-    width: '12rem', // Set a minimum width for the dropdown container
+    width: '10rem', // Set a minimum width for the dropdown container
     backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown control background
     borderColor: 'transparent', // Customizing the border color
     color: 'var(--global-text)', // Customizing the text color
@@ -148,18 +148,18 @@ const statusOptions = [
 ];
 
 const sortOptions = [
-  { value: 'POPULARITY', label: 'Popularity' },
-  { value: 'TRENDING', label: 'Trending' },
-  { value: 'UPDATED_AT', label: 'Last Updated' },
-  { value: 'START_DATE', label: 'Start Date' },
-  { value: 'END_DATE', label: 'End Date' },
-  { value: 'FAVOURITES', label: 'Favorites' },
-  { value: 'SCORE', label: 'Score' },
-  { value: 'TITLE_ROMAJI', label: 'Title (Romaji)' },
-  { value: 'TITLE_ENGLISH', label: 'Title (English)' },
-  { value: 'TITLE_NATIVE', label: 'Title (Native)' },
-  { value: 'EPISODES', label: 'Episodes' },
-  { value: 'ID', label: 'ID' },
+  { value: 'POPULARITY_DESC', label: 'Popularity' },
+  { value: 'TRENDING_DESC', label: 'Trending' },
+  { value: 'UPDATED_AT_DESC', label: 'Last Updated' },
+  { value: 'START_DATE_DESC', label: 'Start Date' },
+  { value: 'END_DATE_DESC', label: 'End Date' },
+  { value: 'FAVOURITES_DESC', label: 'Favorites' },
+  { value: 'SCORE_DESC', label: 'Score' },
+  { value: 'TITLE_ROMAJI_DESC', label: 'Title (Romaji)' },
+  { value: 'TITLE_ENGLISH_DESC', label: 'Title (English)' },
+  { value: 'TITLE_NATIVE_DESC', label: 'Title (Native)' },
+  { value: 'EPISODES_DESC', label: 'Episodes' },
+  { value: 'ID_DESC', label: 'ID' },
 ];
 
 const SearchInputWrapper = styled.div`
@@ -171,7 +171,7 @@ const SearchInputWrapper = styled.div`
   position: relative;
   width: 12rem;
   @media (max-width: 500px) {
-    width: 10rem;
+    width: auto;
   }
   overflow: hidden;
 `;
@@ -196,7 +196,7 @@ const FiltersContainer = styled.div`
   display: flex;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
   @media (max-width: 501px) {
     gap: 0.5rem;
     justify-content: center;
@@ -220,9 +220,13 @@ const FilterLabel = styled.label`
 `;
 
 const ButtonBase = styled.button`
-  flex: 1; // Make the button expand to fill the wrapper
+  margin-top: 1.5rem;
+  flex: 1;
+  align-items: right;
+  justify-content: right;
   padding: 0.6rem;
-  max-width: 10rem;
+  min-width: 4.5rem;
+  max-width: 3rem;
   border: none;
   font-weight: bold;
   border-radius: var(--global-border-radius);
@@ -249,14 +253,6 @@ const ButtonBase = styled.button`
 const Button = styled(ButtonBase)`
   &.active {
     background-color: var(--primary-accent);
-  }
-`;
-
-const ClearButton = styled(ButtonBase)`
-  margin-top: 1.75rem;
-  max-width: 6rem;
-  @media (max-width: 1000px) {
-    margin-top: 0.5rem;
   }
 `;
 
@@ -412,12 +408,13 @@ export const SearchFilters: React.FC<{
 
   const handleResetFilters = () => {
     setSelectedGenres([]); // Reset to default "Any" state
-    setSelectedYear(anyOption); // Assuming `anyOption` is your default
-    setSelectedSeason(anyOption);
-    setSelectedFormat(anyOption);
-    setSelectedStatus(anyOption);
-    // Add any other filters you need to reset
-    setQuery('');
+    setSelectedYear(anyOption); // Reset Year
+    setSelectedSeason(anyOption); // Reset Season
+    setSelectedFormat(anyOption); // Reset Format
+    setSelectedStatus(anyOption); // Reset Status
+    setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' }); // Reset Sort to POPULARITY_DESC
+    setSortDirection('DESC'); // Assuming you always want to reset sort direction to DESC
+    setQuery(''); // Clear the search query
   };
   useEffect(() => {
     const hasFiltersChanged =
@@ -427,7 +424,7 @@ export const SearchFilters: React.FC<{
       selectedSeason.value !== anyOption.value || // Same for season, type, status...
       selectedFormat.value !== anyOption.value ||
       selectedStatus.value !== anyOption.value;
-
+    selectedSort.value !== 'POPULARITY_DESC';
     setFiltersChanged(hasFiltersChanged);
   }, [
     query,
@@ -436,6 +433,7 @@ export const SearchFilters: React.FC<{
     selectedSeason,
     selectedFormat,
     selectedStatus,
+    selectedSort,
   ]);
 
   return (
@@ -472,23 +470,25 @@ export const SearchFilters: React.FC<{
         onChange={setSelectedStatus}
         value={selectedStatus}
       />
-      {/* <FilterSelect
-      label='Sort By'
-      options={sortOptions}
-      onChange={setSelectedSort}
-      value={selectedSort}
-    /> */}
-      {/* <Button
-      onClick={() =>
-        setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
-      }
-    >
-      {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
-    </Button> */}
+      <FilterSelect
+        label='Sort By'
+        options={sortOptions}
+        onChange={(option) => {
+          setSelectedSort(option);
+        }}
+        value={selectedSort}
+      />
+      <Button
+        onClick={() =>
+          setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
+        }
+      >
+        {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
+      </Button>
       {filtersChanged && (
-        <ClearButton onClick={handleResetFilters}>
+        <Button onClick={handleResetFilters}>
           <LuFilterX /> Clear
-        </ClearButton>
+        </Button>
       )}
     </FiltersContainer>
   );
