@@ -791,6 +791,7 @@ const Watch: React.FC = () => {
                     onEpisodeEnd={handleEpisodeEnd}
                     onPrevEpisode={onPrevEpisode}
                     onNextEpisode={onNextEpisode}
+                    animeTitle={animeInfo?.title?.english || animeInfo?.title?.romaji}
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />

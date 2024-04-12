@@ -62,6 +62,7 @@ type PlayerProps = {
   onEpisodeEnd: () => Promise<void>;
   onPrevEpisode: () => void;
   onNextEpisode: () => void;
+  animeTitle?: string; 
 };
 
 type StreamingSource = {
@@ -89,6 +90,7 @@ export function Player({
   onEpisodeEnd,
   onPrevEpisode,
   onNextEpisode,
+  animeTitle,
 }: PlayerProps) {
   const player = useRef<MediaPlayerInstance>(null);
   const [src, setSrc] = useState<string>('');
@@ -102,7 +104,7 @@ export function Player({
   const [vttGenerated, setVttGenerated] = useState<boolean>(false);
 
   const episodeNumber = getEpisodeNumber(episodeId);
-  const animeVideoTitle = document.title.replace('Miruro | ', '');
+  const animeVideoTitle = animeTitle;
 
   useEffect(() => {
     const savedAutoPlay = localStorage.getItem('autoPlay') === 'true';
