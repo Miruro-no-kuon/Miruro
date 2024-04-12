@@ -31,10 +31,17 @@ const anyOption: Option = { value: '', label: 'Any' };
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const sortParam = searchParams.get('sort');
   // Directly initialize state from URL parameters
   const initialQuery = searchParams.get('query') || '';
   // Adjusting initialization to ensure non-null values
+  const initialSortDirection = sortParam?.endsWith('_DESC') ? 'DESC' : 'DESC';
+  const initialSortValue = sortParam ? sortParam.replace('_DESC', '').replace('_ASC', '') : 'POPULARITY_DESC';
+
+  const initialSort = {
+    value: initialSortValue,
+    label: initialSortValue.replace('_DESC', '').charAt(0) + initialSortValue.replace('_DESC', '').slice(1).toLowerCase()
+  };
   const genresParam = searchParams.get('genres');
   const initialGenres = genresParam
     ? genresParam.split(',').map((value) => ({ value, label: value }))
@@ -67,12 +74,8 @@ const Search = () => {
   const [selectedSeason, setSelectedSeason] = useState(initialSeason);
   const [selectedFormat, setSelectedFormat] = useState(initialFormat);
   const [selectedStatus, setSelectedStatus] = useState(initialStatus);
-  //Sorting
-  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>('DESC');
-  const [selectedSort, setSelectedSort] = useState<Option>({
-    value: 'POPULARITY',
-    label: 'Popularity ',
-  });
+  const [selectedSort, setSelectedSort] = useState(initialSort);
+  const [sortDirection, setSortDirection] = useState(initialSortDirection);
 
   //Other logic
   const [animeData, setAnimeData] = useState<any[]>([]);
@@ -100,11 +103,9 @@ const Search = () => {
     if (selectedSeason.value) params.set('season', selectedSeason.value);
     if (selectedFormat.value) params.set('format', selectedFormat.value);
     if (selectedStatus.value) params.set('status', selectedStatus.value);
-    const sortBase = selectedSort.value.endsWith('_DESC')
-      ? selectedSort.value.replace('_DESC', '')
-      : selectedSort.value;
+    const sortBase = selectedSort.value.endsWith('_DESC') ? selectedSort.value.replace('_DESC', '') : selectedSort.value;
     const sortParam = sortDirection === 'DESC' ? `${sortBase}_DESC` : sortBase;
-    params.set('sort', `[${sortParam}]`);
+    params.set('sort', sortParam);
 
     setSearchParams(params, { replace: true });
   }, [
