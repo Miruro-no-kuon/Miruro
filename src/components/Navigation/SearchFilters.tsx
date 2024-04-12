@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { FaSearch } from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
-import { LuSlidersHorizontal, LuFilterX } from 'react-icons/lu';
+import { LuFilterX } from 'react-icons/lu';
+import { FaSortAmountDown, FaSortAmountDownAlt } from "react-icons/fa";
 import { FiX } from 'react-icons/fi';
 import { FaCheckCircle } from 'react-icons/fa';
 
@@ -25,7 +26,7 @@ const selectStyles = {
     ...provided,
     color: 'var(--global-text-muted)', // Use the CSS variable for the muted text color
   }),
-  singleValue: (provided, state) => ({
+  singleValue: (provided: any, state: any) => ({
     ...provided,
     color:
       state.data.label === 'Popularity' || state.data.label === 'Any'
@@ -197,8 +198,7 @@ const FiltersContainer = styled.div`
   margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1rem;
-  @media (max-width: 501px) {
-    gap: 0.5rem;
+  @media (max-width: 500px) {
     justify-content: center;
   }
 `;
@@ -214,13 +214,14 @@ const FilterLabel = styled.label`
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   margin-left: 0.25rem;
-  svg {
-    margin-right: 0.5rem;
-  }
 `;
 
 const ButtonBase = styled.button`
   margin-top: 1.5rem;
+  @media (max-width: 450px) {
+    margin-top: 0.25rem;
+
+  }
   flex: 1;
   align-items: right;
   justify-content: right;
@@ -237,10 +238,6 @@ const ButtonBase = styled.button`
     background-color 0.2s ease,
     transform 0.2s ease-in-out;
   text-align: center;
-
-  &:hover {
-    background-color: var(--primary-accent);
-  }
   &:active,
   &:focus {
     transform: scale(1.025);
@@ -248,11 +245,24 @@ const ButtonBase = styled.button`
   &:active {
     transform: scale(0.975);
   }
+  svg {
+    margin-bottom: -0.1rem;
+    margin-right: 0.2rem;
+  }
 `;
 
 const Button = styled(ButtonBase)`
   &.active {
     background-color: var(--primary-accent);
+  }
+`;
+
+const ClearFilters = styled(ButtonBase)`
+  &.active {
+    background-color: none;
+  }
+  svg {
+    color: red;
   }
 `;
 
@@ -383,7 +393,6 @@ export const SearchFilters: React.FC<{
   setSelectedSort: React.Dispatch<React.SetStateAction<Option>>;
   sortDirection: 'DESC' | 'ASC';
   setSortDirection: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
-  resetFilters: () => void;
 }> = ({
   query,
   setQuery,
@@ -401,31 +410,33 @@ export const SearchFilters: React.FC<{
   setSelectedSort,
   sortDirection,
   setSortDirection,
-  resetFilters,
 }) => {
   // State to track if any filter is changed from its default value
   const [filtersChanged, setFiltersChanged] = useState(false);
 
   const handleResetFilters = () => {
-    setSelectedGenres([]); // Reset to default "Any" state
-    setSelectedYear(anyOption); // Reset Year
-    setSelectedSeason(anyOption); // Reset Season
-    setSelectedFormat(anyOption); // Reset Format
-    setSelectedStatus(anyOption); // Reset Status
-    setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' }); // Reset Sort to POPULARITY_DESC
-    setSortDirection('DESC'); // Assuming you always want to reset sort direction to DESC
-    setQuery(''); // Clear the search query
+    setSelectedGenres([]);
+    setSelectedYear(anyOption);
+    setSelectedSeason(anyOption); 
+    setSelectedFormat(anyOption); 
+    setSelectedStatus(anyOption); 
+    setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' });
+    setSortDirection('DESC');
+    setQuery(''); 
   };
+
   useEffect(() => {
     const hasFiltersChanged =
-      query !== '' || // Check if query is not default
-      selectedGenres.length > 0 || // Check if any genres are selected
-      selectedYear.value !== anyOption.value || // Check if year is not "Any"
-      selectedSeason.value !== anyOption.value || // Same for season, type, status...
-      selectedFormat.value !== anyOption.value ||
-      selectedStatus.value !== anyOption.value;
-    selectedSort.value !== 'POPULARITY_DESC';
-    setFiltersChanged(hasFiltersChanged);
+    query !== '' || // Check if query is not default
+    selectedGenres.length > 0 || // Check if any genres are selected
+    selectedYear.value !== anyOption.value || // Check if year is not "Any"
+    selectedSeason.value !== anyOption.value || // Same for season, type, status...
+    selectedFormat.value !== anyOption.value ||
+    selectedStatus.value !== anyOption.value ||
+    selectedSort.value !== 'POPULARITY_DESC' || // Check if sort criteria is not "Popularity"
+    sortDirection !== 'DESC'; // Check if sort direction is not descending
+
+  setFiltersChanged(hasFiltersChanged);
   }, [
     query,
     selectedGenres,
@@ -434,6 +445,7 @@ export const SearchFilters: React.FC<{
     selectedFormat,
     selectedStatus,
     selectedSort,
+    sortDirection,
   ]);
 
   return (
@@ -478,17 +490,16 @@ export const SearchFilters: React.FC<{
         }}
         value={selectedSort}
       />
-      <Button
-        onClick={() =>
-          setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')
-        }
-      >
-        {sortDirection === 'DESC' ? 'Desc' : 'Asc'}
-      </Button>
+<Button
+      onClick={() => setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')}
+    >
+      {sortDirection === 'DESC' ? <FaSortAmountDown /> :  <FaSortAmountDownAlt />}
+      {sortDirection === 'DESC' ? 'Sort' : 'Sort'}
+    </Button>
       {filtersChanged && (
-        <Button onClick={handleResetFilters}>
-          <LuFilterX /> Clear
-        </Button>
+        <ClearFilters onClick={handleResetFilters}>
+          <LuFilterX />Clear
+        </ClearFilters>
       )}
     </FiltersContainer>
   );

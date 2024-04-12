@@ -27,16 +27,17 @@ const Container = styled.div`
   }
 `;
 
-const anyOption: Option = { value: '', label: 'Any' };
-
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const sortParam = searchParams.get('sort');
   // Directly initialize state from URL parameters
   const initialQuery = searchParams.get('query') || '';
   // Adjusting initialization to ensure non-null values
-  const initialSortDirection = sortParam?.endsWith('_DESC') ? 'DESC' : 'DESC';
-  const initialSortValue = sortParam ? sortParam.replace('_DESC', '').replace('_ASC', '') : 'POPULARITY_DESC';
+  let initialSortDirection: 'DESC' | 'ASC' = 'DESC'; // Default to 'DESC'
+  if (sortParam) {
+    initialSortDirection = sortParam.endsWith('_DESC') ? 'DESC' : 'ASC';
+  }
+  const initialSortValue = sortParam ? sortParam.replace(/(_DESC|_ASC)$/, '') : 'POPULARITY_DESC';
 
   const initialSort = {
     value: initialSortValue,
@@ -48,23 +49,23 @@ const Search = () => {
     : [];
 
   const initialYear = {
-    value: searchParams.get('year') || '', // Fallback to empty string if null
-    label: searchParams.get('year') || 'Any', // Fallback to 'Any'
+    value: searchParams.get('year') || '', 
+    label: searchParams.get('year') || 'Any', 
   };
 
   const initialSeason = {
-    value: searchParams.get('season') || '', // Fallback to empty string if null
-    label: searchParams.get('season') || 'Any', // Fallback to 'Any'
+    value: searchParams.get('season') || '', 
+    label: searchParams.get('season') || 'Any', 
   };
 
   const initialFormat = {
-    value: searchParams.get('format') || '', // Fallback to empty string if null
-    label: searchParams.get('format') || 'Any', // Fallback to 'Any'
+    value: searchParams.get('format') || '', 
+    label: searchParams.get('format') || 'Any', 
   };
 
   const initialStatus = {
-    value: searchParams.get('status') || '', // Fallback to empty string if null
-    label: searchParams.get('status') || 'Any', // Fallback to 'Any'
+    value: searchParams.get('status') || '', 
+    label: searchParams.get('status') || 'Any', 
   };
 
   // State hooks
@@ -75,7 +76,7 @@ const Search = () => {
   const [selectedFormat, setSelectedFormat] = useState(initialFormat);
   const [selectedStatus, setSelectedStatus] = useState(initialStatus);
   const [selectedSort, setSelectedSort] = useState(initialSort);
-  const [sortDirection, setSortDirection] = useState(initialSortDirection);
+  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>(initialSortDirection);
 
   //Other logic
   const [animeData, setAnimeData] = useState<any[]>([]);
@@ -197,17 +198,6 @@ const Search = () => {
     };
   }, [initiateFetchAdvancedSearch]); // Include all dependencies here
 
-  const resetFilters = () => {
-    setSelectedGenres([]);
-    setSelectedYear(anyOption);
-    setSelectedSeason(anyOption);
-    setSelectedFormat(anyOption);
-    setSelectedStatus(anyOption);
-    setSelectedSort({ value: 'POPULARITY', label: 'Popularity' }); // Assuming 'Popularity' is the default
-    setSortDirection('DESC'); // Assuming 'DESC' is the default
-    // Add any other states that need to be reset
-  };
-
   return (
     <Container>
       <SearchFilters
@@ -227,7 +217,6 @@ const Search = () => {
         setSelectedSort={setSelectedSort}
         sortDirection={sortDirection}
         setSortDirection={setSortDirection}
-        resetFilters={resetFilters}
       />
       {isLoading && page === 1 ? (
         <StyledCardGrid>
