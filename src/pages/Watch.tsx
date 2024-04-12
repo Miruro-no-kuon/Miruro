@@ -51,7 +51,7 @@ const SourceAndData = styled.div<{ $videoPlayerWidth: string }>`
 `;
 
 const RalationsTable = styled.div`
-  paddding: 0;
+  padding: 0;
   margin-top: 1rem;
   @media (max-width: 1000px) {
     margin-top: 0rem;
@@ -749,21 +749,17 @@ const Watch: React.FC = () => {
         // Display the trailer if the anime has not yet aired and has a trailer
         <div style={{ textAlign: 'center' }}>
           <strong>
-            <h2>Time until next episode:</h2>
+            <h2>Time Remaining:</h2>
           </strong>
-          <p>
-            <h4>
               {animeInfo &&
               animeInfo.nextAiringEpisode &&
               countdown !== 'Airing now or aired' ? (
-                <>
+                <p>
                   <FaBell /> {countdown}
-                </>
+                </p>
               ) : (
                 'Unknown'
               )}
-            </h4>
-          </p>
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}

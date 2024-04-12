@@ -37,7 +37,7 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   animation: ${fadeInAnimation('var(--global-primary-bg-tr)')} 0.5s ease-out;
   transition: 0.1s ease-in-out;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
     padding: 1rem 0.5rem;
   }
 `;

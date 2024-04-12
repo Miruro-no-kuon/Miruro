@@ -180,8 +180,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     ) {
       const errorMessage = response.data.message || 'Unknown server error';
       throw new Error(
-        `Server error: ${
-          response.data.statusCode || response.status
+        `Server error: ${response.data.statusCode || response.status
         } ${errorMessage}`,
       );
     }
@@ -252,7 +251,7 @@ export async function fetchAnimeInfo(
   return fetchFromProxy(url, animeInfoCache, cacheKey);
 }
 
-// Function to fetch list of anime based on type (Top, Trending, Popular)
+// Function to fetch list of anime based on type (TopRated, Trending, Popular)
 async function fetchList(
   type: string,
   page: number = 1,
@@ -266,7 +265,21 @@ async function fetchList(
     perPage: perPage.toString(),
   });
 
-  if (['Top', 'Trending', 'Popular'].includes(type)) {
+  const getSeason = () => {
+    const month = new Date().getMonth();
+
+    if (month >= 2 && month <= 4) {
+      return 'SPRING';
+    } else if (month >= 5 && month <= 7) {
+      return 'SUMMER';
+    } else if (month >= 8 && month <= 10) {
+      return 'FALL';
+    } else {
+      return 'WINTER';
+    }
+  };
+
+  if (['TopRated', 'Trending', 'Popular', 'TopAiring'].includes(type)) {
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -274,15 +287,34 @@ async function fetchList(
     );
     url = `${BASE_URL}meta/anilist/${type.toLowerCase()}`;
 
-    if (type === 'Top') {
+    if (type === 'TopRated') {
       options = {
         type: 'ANIME',
         sort: ['["SCORE_DESC"]'],
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
     }
+    if (type === 'Popular') {
+      options = {
+        type: 'ANIME',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
+    }
+    else if (type === 'TopAiring') {
+      const season = getSeason(); // This will set the season based on the current month
+      const year = new Date().getFullYear();
+      options = {
+        type: 'ANIME',
+        season: season,
+        year: year.toString(),
+        status: 'RELEASING',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
+    }
   } else {
-    // Default values for cacheKey and url if not "Top", "Trending", or "Popular"
+    // Default values for cacheKey and url if not "TopRated", "Trending", or "Popular"
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -298,11 +330,13 @@ async function fetchList(
 
 // Functions to fetch top, trending, and popular anime
 export const fetchTopAnime = (page: number, perPage: number) =>
-  fetchList('Top', page, perPage);
+  fetchList('TopRated', page, perPage);
 export const fetchTrendingAnime = (page: number, perPage: number) =>
   fetchList('Trending', page, perPage);
 export const fetchPopularAnime = (page: number, perPage: number) =>
   fetchList('Popular', page, perPage);
+export const fetchTopAiringAnime = (page: number, perPage: number) =>
+  fetchList('TopAiring', page, perPage);
 
 // Fetch Anime Episodes Function
 export async function fetchAnimeEpisodes(
