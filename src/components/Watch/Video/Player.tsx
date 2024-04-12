@@ -326,7 +326,7 @@ export function Player({
         onTimeUpdate={onTimeUpdate}
         ref={player}
         aspectRatio='16/9'
-        load='eager'
+        load='play'
         posterLoad='eager'
         streamType='on-demand'
         storage='storage-key'

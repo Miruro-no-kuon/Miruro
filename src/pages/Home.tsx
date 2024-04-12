@@ -17,7 +17,7 @@ import {
 import { Anime, Episode } from '../hooks/interface';
 
 const SimpleLayout = styled.div`
-  gap: 1rem;
+  gap: 0.5rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
@@ -44,7 +44,6 @@ const TabContainer = styled.div`
   border-radius: var(--global-border-radius);
   width: 100%;
   gap: 0.5rem; /* Adds some space between your tabs if they wrap */
-  margin: 1rem 0;
 `;
 
 const Tab = styled.div<{ $isActive: boolean }>`
@@ -57,7 +56,7 @@ const Tab = styled.div<{ $isActive: boolean }>`
   color: var(--global-text);
   position: relative;
   overflow: hidden;
-  margin: 0 0 1rem 0;
+  margin: 0;
   font-size: 0.8rem;
   padding: 1rem;
 
@@ -267,7 +266,14 @@ const Home = () => {
         />
       )}
       <ContentSidebarLayout>
-        <div style={{ flexGrow: 1 }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            gap: '1rem',
+          }}
+        >
           <TabContainer>
             <Tab
               title='Trending Tab'
@@ -305,26 +311,32 @@ const Home = () => {
               RECENTLY UPDATED
             </Tab> */}
           </TabContainer>
-
-          {/* Render sections based on activeTab */}
-          {activeTab === 'trending' &&
-            renderCardGrid(trendingAnime, loading.trending, !!error)}
-          {activeTab === 'popular' &&
-            renderCardGrid(popularAnime, loading.popular, !!error)}
-          {activeTab === 'topRated' &&
-            renderCardGrid(topAnime, loading.topRated, !!error)}
-          {activeTab === 'topAiring' &&
-            renderCardGrid(topAiring, loading.topRated, !!error)}
-          {activeTab === 'recent' &&
-            renderCardGrid(recentEpisodes, loading.recent, !!error)}
+          <div>
+            {/* Render sections based on activeTab */}
+            {activeTab === 'trending' &&
+              renderCardGrid(trendingAnime, loading.trending, !!error)}
+            {activeTab === 'popular' &&
+              renderCardGrid(popularAnime, loading.popular, !!error)}
+            {activeTab === 'topRated' &&
+              renderCardGrid(topAnime, loading.topRated, !!error)}
+            {activeTab === 'topAiring' &&
+              renderCardGrid(topAiring, loading.topRated, !!error)}
+            {activeTab === 'recent' &&
+              renderCardGrid(recentEpisodes, loading.recent, !!error)}
+          </div>
         </div>
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
           <div
             style={{
               fontSize: '1.25rem',
               fontWeight: 'bold',
-              margin: '0 0 0.5rem 0',
-              padding: '1rem 0',
+              padding: '0.75rem 0',
             }}
           >
             TOP AIRING

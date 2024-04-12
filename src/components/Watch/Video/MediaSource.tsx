@@ -196,7 +196,7 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
         <Table>
           <tbody>
             <TableRow>
-              <TableCell>Sub</TableCell>
+              <TableCell>SUB</TableCell>
               <TableCell>
                 <ButtonWrapper>
                   <Button
@@ -250,7 +250,7 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Dub</TableCell>
+              <TableCell>DUB</TableCell>
               <TableCell>
                 <ButtonWrapper>
                   <Button
