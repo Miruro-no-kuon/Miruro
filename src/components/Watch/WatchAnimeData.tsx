@@ -24,7 +24,9 @@ const AnimeDataContainer = styled.div`
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  padding-top: 1rem;
+  background-color: var(--global-div-tr);
+  margin: 1rem 0;
+  padding: 0.75rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -202,9 +204,20 @@ const MalAnilistSvg = styled.div`
   }
 `;
 
-const ShowMoreButton = styled.div`
+const ShowMoreButton = styled.button`
+  background-color: var(--global-div);
+  color: #828181;
   display: flex;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--global-border-radius);
+  margin: 0.5rem 0;
   text-align: left;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: var(--global-div);
+  }
   transition:
     color 0.3s ease,
     transform 0.2s ease-in-out;

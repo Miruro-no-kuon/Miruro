@@ -15,6 +15,18 @@ const LOCAL_STORAGE_KEYS = {
   LAST_ANIME_VISITED: 'last-anime-visited',
 };
 
+interface LastEpisodes {
+  [key: string]: Episode;
+}
+
+interface LastVisitedData {
+  [key: string]: {
+    timestamp?: number;
+    titleEnglish?: string;
+    titleRomaji?: string;
+  };
+}
+
 const popInAnimation = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0%); }
@@ -129,8 +141,8 @@ const ProgressBar = styled.div`
 
 const ContinueWatchingTitle = styled.h2`
   color: var(--global-text);
-  font-size: 1.5rem;
-  margin-bottom: 0; // Adjust the margin as needed
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem; // Adjust the margin as needed
 `;
 
 const calculateSlidesPerView = (windowWidth: number): number => {
@@ -148,7 +160,7 @@ export const EpisodeCard: React.FC = () => {
   );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const lastVisitedData = useMemo(() => {
+  const lastVisitedData = useMemo<LastVisitedData>(() => {
     const data = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED);
     return data ? JSON.parse(data) : {};
   }, []);
@@ -171,7 +183,7 @@ export const EpisodeCard: React.FC = () => {
       const allEpisodes: Record<string, Episode[]> =
         JSON.parse(watchedEpisodesData);
 
-      const lastEpisodes = Object.entries(allEpisodes).reduce(
+      const lastEpisodes = Object.entries(allEpisodes).reduce<LastEpisodes>(
         (acc, [animeId, episodes]) => {
           const lastEpisode = episodes[episodes.length - 1]; // Assuming the episodes are in order
           if (lastEpisode) {
@@ -192,7 +204,8 @@ export const EpisodeCard: React.FC = () => {
         const episode = lastEpisodes[animeId];
         const playbackInfo = JSON.parse(
           localStorage.getItem('all_episode_times') || '{}',
-        );
+        ) as { [key: string]: { playbackPercentage: number } };
+
         const playbackPercentage =
           playbackInfo[episode.id]?.playbackPercentage || 0;
 

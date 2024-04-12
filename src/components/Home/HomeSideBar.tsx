@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import {
-  fetchTopAnime,
-  fetchPopularAnime,
-  fetchRecentEpisodes,
-  fetchAdvancedSearch,
-} from '../../index'; // Adjust this import path as needed
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
@@ -18,10 +12,11 @@ const slideUpAnimation = keyframes`
 
 const SidebarStyled = styled.div`
   transition: 0.2s ease-in-out;
-  margin-top: 1rem;
-  margin-left: 1rem;
+  margin: 0;
+  padding: 0;
+  max-width: 24rem;
   @media (max-width: 1000px) {
-    margin: 0rem;
+    max-width: unset;
   }
 `;
 
@@ -70,25 +65,22 @@ const AnimeCard = styled.div`
   border-radius: var(--global-border-radius);
   align-items: center;
   overflow: hidden;
-  max-width: 24rem;
-  @media (max-width: 1000px) {
-    max-width: unset;
-  }
   gap: 0.5rem;
   cursor: pointer;
   margin-bottom: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   animation: ${slideUpAnimation} 0.5s ease-in-out;
   animation-fill-mode: backwards;
   transition:
     background-color 0s ease-in-out,
     margin-left 0.2s ease-in-out 0.1s;
+    box-shadow 0.2s ease-in-out;
 
   &:hover,
   &:active,
   &:focus {
     background-color: var(--global-div-tr);
-    // margin-left: 0.35rem;
+    margin-left: 0.35rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 500px) {
@@ -109,16 +101,18 @@ const AnimeImageStyled = styled.img`
 
 const InfoStyled = styled.div``;
 
-const TitleStyled = styled.p`
-  font-size: 0.9rem;
-  margin: 0;
-  -webkit-line-clamp: 2;
+const Title = styled.p`
+  top: 0;
+  margin-bottom: 0.5rem;
   display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-size: 0.9rem;
+  margin: 0;
 `;
 
-const DetailsStyled = styled.p`
+const Details = styled.p`
   font-size: 0.75rem;
   margin: 0;
   color: rgba(102, 102, 102, 0.75);
@@ -127,39 +121,10 @@ const DetailsStyled = styled.p`
   }
 `;
 
-export const HomeSideBar = () => {
-  const [topAnime, setTopAnime] = useState([]);
+export const HomeSideBar: React.FC<{ animeData: Anime[] }> = ({
+  animeData,
+}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  // Calculates the current season based on the month
-  const getCurrentSeason = () => {
-    const now = new Date();
-    const month = now.getMonth() + 1; // getMonth() is zero-based
-    if (month >= 1 && month <= 3) return 'WINTER';
-    if (month >= 4 && month <= 6) return 'SPRING';
-    if (month >= 7 && month <= 9) return 'SUMMER';
-    return 'FALL';
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const season = getCurrentSeason();
-      const year = new Date().getFullYear();
-      const options = {
-        type: 'ANIME',
-        season: season,
-        year: year.toString(),
-        status: 'RELEASING',
-        sort: ['POPULARITY_DESC'], // Assuming the API expects the sort parameter to be a JSON string
-      };
-
-      // Adjust searchQuery, page, and perPage as needed
-      const data = await fetchAdvancedSearch('', 1, 10, options);
-      setTopAnime(data.results);
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -170,11 +135,11 @@ export const HomeSideBar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const displayedAnime = windowWidth <= 1000 ? topAnime.slice(0, 5) : topAnime;
+  const displayedAnime =
+    windowWidth <= 1000 ? animeData.slice(0, 5) : animeData;
 
   return (
     <SidebarStyled>
-      <h2>TOP AIRING</h2>
       {displayedAnime.map((anime: Anime, index) => (
         <Link
           to={`/watch/${anime.id}`}
@@ -207,30 +172,34 @@ export const HomeSideBar = () => {
                       return <DefaultIndicator />;
                   }
                 })()}
-                <TitleStyled>
-                  {anime.title.english || anime.title.romaji}
-                </TitleStyled>
+                <Title>{anime.title.english || anime.title.romaji}</Title>
               </TitleWithDot>
-              <DetailsStyled>
+              <Details>
                 {anime.type && <>{anime.type}</>}
                 {anime.releaseDate && (
                   <>
                     <FaCalendarAlt /> {anime.releaseDate}
                   </>
                 )}
-                {anime.currentEpisode && (
-                  <>
-                    <TbCardsFilled /> {anime.currentEpisode}
-                    {' / '}
-                  </>
-                )}
-                {anime.totalEpisodes && <>{anime.totalEpisodes}</>}
+                {anime.currentEpisode !== null &&
+                  anime.currentEpisode !== undefined &&
+                  anime.totalEpisodes !== null &&
+                  anime.totalEpisodes !== undefined &&
+                  anime.totalEpisodes !== 0 &&
+                  anime.totalEpisodes !== 0 && (
+                    <>
+                      <TbCardsFilled /> {anime.currentEpisode}
+                      {' / '}
+                      {anime.totalEpisodes}
+                    </>
+                  )}
+
                 {anime.rating && (
                   <>
                     <FaStar /> {anime.rating}
                   </>
                 )}
-              </DetailsStyled>
+              </Details>
             </InfoStyled>
           </AnimeCard>
         </Link>

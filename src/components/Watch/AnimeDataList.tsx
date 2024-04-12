@@ -11,6 +11,9 @@ const slideUpAnimation = keyframes`
 `;
 
 const Sidebar = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   transition: 0.2s ease-in-out;
   .Section-Title {
     margin: 0;
@@ -19,6 +22,12 @@ const Sidebar = styled.div`
     font-size: 1.25rem;
     font-weight: bold;
   }
+`;
+
+const SidebarContainer = styled.div`
+  padding: 0.75rem;
+  background-color: var(--global-div-tr);
+  border-radius: var(--global-border-radius);
 `;
 
 const Card = styled.div`
@@ -110,7 +119,7 @@ const Details = styled.p`
   margin: 0;
   color: rgba(102, 102, 102, 0.75);
   svg {
-    margin-left: 0.3rem;
+    margin-left: 0.4rem;
   }
 `;
 
@@ -129,135 +138,139 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
 
   return (
     <Sidebar>
-      {filteredRelations.length > 0 && (
-        <>
-          <p className='Section-Title'>RELATED</p>
-          {filteredRelations
-            .slice(0, window.innerWidth > 500 ? 5 : 3)
-            .map((relation, index) => (
-              <Link
-                to={`/watch/${relation.id}`}
-                key={relation.id}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-                title={`${relation.title.userPreferred}`}
-                aria-label={`Watch ${relation.title.userPreferred}`}
-              >
-                <Card style={{ animationDelay: `${index * 0.1}s` }}>
-                  <AnimeImage
-                    src={relation.image}
-                    alt={relation.title.userPreferred}
-                    loading='lazy'
-                  />
-                  <Info>
-                    <TitleWithDot>
-                      {(() => {
-                        switch (relation.status) {
-                          case 'Completed':
-                            return <CompletedIndicator />;
-                          case 'Cancelled':
-                            return <CancelledIndicator />;
-                          case 'Not yet aired':
-                            return <NotYetAiredIndicator />;
-                          case 'Ongoing':
-                            return <OngoingIndicator />;
-                          default:
-                            return <DefaultIndicator />;
-                        }
-                      })()}
-                      <Title>
-                        {relation.title.english ??
-                          relation.title.romaji ??
-                          relation.title.userPreferred}
-                      </Title>
-                    </TitleWithDot>
-                    <Details
-                      aria-label={`Details about ${relation.title.userPreferred}`}
-                    >
-                      {/* Conditionally render each piece of detail only if it's not null or empty */}
-                      {relation.type && `${relation.type} `}
-                      {relation.episodes && (
-                        <>
-                          <TbCardsFilled aria-hidden='true' />{' '}
-                          {`${relation.episodes} `}
-                        </>
-                      )}
-                      {relation.rating && (
-                        <>
-                          <FaStar aria-hidden='true' /> {`${relation.rating} `}
-                        </>
-                      )}
-                    </Details>
-                  </Info>
-                </Card>
-              </Link>
-            ))}
-          <br></br>
-        </>
-      )}
-      {filteredRecommendations.length > 0 && (
-        <>
-          <p className='Section-Title'>RECOMMENDED</p>
-          {filteredRecommendations
-            .slice(0, window.innerWidth > 500 ? 5 : 3)
-            .map((recommendation, index) => (
-              <Link
-                to={`/watch/${recommendation.id}`}
-                key={recommendation.id}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-                title={`Watch ${recommendation.title.userPreferred}`}
-              >
-                <Card style={{ animationDelay: `${index * 0.1}s` }}>
-                  <AnimeImage
-                    src={recommendation.image}
-                    alt={recommendation.title.userPreferred}
-                    loading='lazy'
-                  />
-                  <Info>
-                    <TitleWithDot>
-                      {(() => {
-                        switch (recommendation.status) {
-                          case 'Completed':
-                            return <CompletedIndicator />;
-                          case 'Cancelled':
-                            return <CancelledIndicator />;
-                          case 'Not yet aired':
-                            return <NotYetAiredIndicator />;
-                          case 'Ongoing':
-                            return <OngoingIndicator />;
-                          default:
-                            return <DefaultIndicator />;
-                        }
-                      })()}
-                      <Title>
-                        {recommendation.title.english ??
-                          recommendation.title.romaji ??
-                          recommendation.title.userPreferred}
-                      </Title>
-                    </TitleWithDot>
-                    <Details
-                      aria-label={`Details about ${recommendation.title.userPreferred}`}
-                    >
-                      {/* Similar conditional rendering for recommendation details */}
-                      {recommendation.type && `${recommendation.type} `}
-                      {recommendation.episodes && (
-                        <>
-                          <TbCardsFilled aria-hidden='true' />{' '}
-                          {`${recommendation.episodes} `}
-                        </>
-                      )}
-                      {recommendation.rating && (
-                        <>
-                          <FaStar aria-hidden='true' />{' '}
-                          {`${recommendation.rating} `}
-                        </>
-                      )}
-                    </Details>
-                  </Info>
-                </Card>
-              </Link>
-            ))}
-        </>
-      )}
+      <SidebarContainer>
+        {filteredRelations.length > 0 && (
+          <>
+            <p className='Section-Title'>RELATED</p>
+            {filteredRelations
+              .slice(0, window.innerWidth > 500 ? 5 : 3)
+              .map((relation, index) => (
+                <Link
+                  to={`/watch/${relation.id}`}
+                  key={relation.id}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  title={`${relation.title.userPreferred}`}
+                  aria-label={`Watch ${relation.title.userPreferred}`}
+                >
+                  <Card style={{ animationDelay: `${index * 0.1}s` }}>
+                    <AnimeImage
+                      src={relation.image}
+                      alt={relation.title.userPreferred}
+                      loading='lazy'
+                    />
+                    <Info>
+                      <TitleWithDot>
+                        {(() => {
+                          switch (relation.status) {
+                            case 'Completed':
+                              return <CompletedIndicator />;
+                            case 'Cancelled':
+                              return <CancelledIndicator />;
+                            case 'Not yet aired':
+                              return <NotYetAiredIndicator />;
+                            case 'Ongoing':
+                              return <OngoingIndicator />;
+                            default:
+                              return <DefaultIndicator />;
+                          }
+                        })()}
+                        <Title>
+                          {relation.title.english ??
+                            relation.title.romaji ??
+                            relation.title.userPreferred}
+                        </Title>
+                      </TitleWithDot>
+                      <Details
+                        aria-label={`Details about ${relation.title.userPreferred}`}
+                      >
+                        {/* Conditionally render each piece of detail only if it's not null or empty */}
+                        {relation.type && `${relation.type} `}
+                        {relation.episodes && (
+                          <>
+                            <TbCardsFilled aria-hidden='true' />{' '}
+                            {`${relation.episodes} `}
+                          </>
+                        )}
+                        {relation.rating && (
+                          <>
+                            <FaStar aria-hidden='true' />{' '}
+                            {`${relation.rating} `}
+                          </>
+                        )}
+                      </Details>
+                    </Info>
+                  </Card>
+                </Link>
+              ))}
+          </>
+        )}
+      </SidebarContainer>
+      <SidebarContainer>
+        {filteredRecommendations.length > 0 && (
+          <>
+            <p className='Section-Title'>RECOMMENDED</p>
+            {filteredRecommendations
+              .slice(0, window.innerWidth > 500 ? 5 : 3)
+              .map((recommendation, index) => (
+                <Link
+                  to={`/watch/${recommendation.id}`}
+                  key={recommendation.id}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  title={`Watch ${recommendation.title.userPreferred}`}
+                >
+                  <Card style={{ animationDelay: `${index * 0.1}s` }}>
+                    <AnimeImage
+                      src={recommendation.image}
+                      alt={recommendation.title.userPreferred}
+                      loading='lazy'
+                    />
+                    <Info>
+                      <TitleWithDot>
+                        {(() => {
+                          switch (recommendation.status) {
+                            case 'Completed':
+                              return <CompletedIndicator />;
+                            case 'Cancelled':
+                              return <CancelledIndicator />;
+                            case 'Not yet aired':
+                              return <NotYetAiredIndicator />;
+                            case 'Ongoing':
+                              return <OngoingIndicator />;
+                            default:
+                              return <DefaultIndicator />;
+                          }
+                        })()}
+                        <Title>
+                          {recommendation.title.english ??
+                            recommendation.title.romaji ??
+                            recommendation.title.userPreferred}
+                        </Title>
+                      </TitleWithDot>
+                      <Details
+                        aria-label={`Details about ${recommendation.title.userPreferred}`}
+                      >
+                        {/* Similar conditional rendering for recommendation details */}
+                        {recommendation.type && `${recommendation.type} `}
+                        {recommendation.episodes && (
+                          <>
+                            <TbCardsFilled aria-hidden='true' />{' '}
+                            {`${recommendation.episodes} `}
+                          </>
+                        )}
+                        {recommendation.rating && (
+                          <>
+                            <FaStar aria-hidden='true' />{' '}
+                            {`${recommendation.rating} `}
+                          </>
+                        )}
+                      </Details>
+                    </Info>
+                  </Card>
+                </Link>
+              ))}
+          </>
+        )}
+      </SidebarContainer>
     </Sidebar>
   );
 };

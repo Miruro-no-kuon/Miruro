@@ -272,10 +272,10 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             spaceBetween={30}
             slidesPerView={1}
             loop={true}
-            // autoplay={{
-            //   delay: 3000,
-            //   disableOnInteraction: false,
-            // }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
             navigation={{
               nextEl: '.swiper-button-next',
               prevEl: '.swiper-button-prev',
@@ -290,7 +290,7 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             virtual={true}
             grabCursor={true}
             keyboard={true}
-            touchRatio={1}
+            touchRatio={1.2}
             centeredSlides={true}
           >
             {validData.map(

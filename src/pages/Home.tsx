@@ -3,17 +3,18 @@ import styled from 'styled-components';
 import {
   HomeCarousel as CarouselTrending,
   CardGrid,
-  StyledCardGrid, // Assuming StyledCardGrid is a named export you want to use directly
+  StyledCardGrid,
   SkeletonSlide,
   SkeletonCard,
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
+  fetchTopAiringAnime,
   fetchRecentEpisodes,
   HomeSideBar,
-  EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
-} from '../index'; // Adjust the import path to point correctly to your index.ts location
-import { Episode } from '../index';
+  EpisodeCard,
+} from '../index';
+import { Anime, Episode } from '../hooks/interface';
 
 const SimpleLayout = styled.div`
   gap: 1rem;
@@ -26,7 +27,7 @@ const SimpleLayout = styled.div`
 const ContentSidebarLayout = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
   width: 100%;
 
   @media (min-width: 1000px) {
@@ -37,17 +38,18 @@ const ContentSidebarLayout = styled.div`
 
 const TabContainer = styled.div`
   display: flex; /* Make it a flex container */
+  flex-direction: row;
   justify-content: center; /* This centers the children (tabs) horizontally */
   flex-wrap: wrap; /* Allows tabs to wrap if they don't fit */
   border-radius: var(--global-border-radius);
   width: 100%;
-  gap: 1rem; /* Adds some space between your tabs if they wrap */
+  gap: 0.5rem; /* Adds some space between your tabs if they wrap */
+  margin: 1rem 0;
 `;
 
-const Tab = styled.button<{ $isActive: boolean }>`
+const Tab = styled.div<{ $isActive: boolean }>`
   background: ${({ $isActive }) =>
     $isActive ? 'var(--primary-accent)' : 'transparent'};
-  padding: 1rem;
   border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
@@ -55,8 +57,9 @@ const Tab = styled.button<{ $isActive: boolean }>`
   color: var(--global-text);
   position: relative;
   overflow: hidden;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-size: 0.8rem;
+  padding: 1rem;
 
   transition: background-color 0.3s ease;
 
@@ -67,8 +70,7 @@ const Tab = styled.button<{ $isActive: boolean }>`
   }
   @media (max-width: 500px) {
     padding: 0.5rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+    margin: 0;
   }
 `;
 
@@ -77,7 +79,6 @@ const Section = styled.section`
   border-radius: var(--global-border-radius);
 `;
 
-// Styled component for error messages
 const ErrorMessage = styled.div`
   padding: 1rem;
   margin: 1rem 0;
@@ -97,30 +98,32 @@ const Home = () => {
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 18 : 12,
   );
-  const [trendingAnime, setTrendingAnime] = useState([]);
-  const [popularAnime, setPopularAnime] = useState([]);
-  const [topAnime, setTopAnime] = useState([]);
-  const [recentEpisodes, setRecentEpisodes] = useState([]); // State for recent episodes
+  const [trendingAnime, setTrendingAnime] = useState<Anime[]>([]);
+  const [popularAnime, setPopularAnime] = useState<Anime[]>([]);
+  const [topAnime, setTopAnime] = useState<Anime[]>([]);
+  const [topAiring, setTopAiring] = useState<Anime[]>([]);
+  const [recentEpisodes, setRecentEpisodes] = useState<Anime[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState({
     trending: true,
     popular: true,
-    top: true,
-    recent: true, // Flag for recent episodes loading state
+    topRated: true,
+    topAiring: true,
+    recent: true,
   });
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
       const now = new Date().getTime();
-      // Check if the saved tab is older than 24 hours
+
       if (now - timestamp < 24 * 60 * 60 * 1000) {
         return tab;
       } else {
-        localStorage.removeItem('home tab'); // Clear expired data
+        localStorage.removeItem('home tab');
       }
     }
-    return 'trending'; // Default tab if no/invalid saved data
+    return 'trending';
   });
 
   useEffect(() => {
@@ -129,7 +132,7 @@ const Home = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    // Set initial value
+
     handleResize();
 
     return () => {
@@ -142,11 +145,11 @@ const Home = () => {
       const watchedEpisodesData = localStorage.getItem('watched-episodes');
       if (watchedEpisodesData) {
         const allEpisodes = JSON.parse(watchedEpisodesData);
-        const latestEpisodes: Episode[] = []; // Correctly typed
+        const latestEpisodes: Episode[] = [];
 
         Object.keys(allEpisodes).forEach((animeId) => {
           const episodes = allEpisodes[animeId];
-          // Assuming episodes are stored in order, take the last one as the most recent
+
           const latestEpisode = episodes[episodes.length - 1];
           latestEpisodes.push(latestEpisode);
         });
@@ -160,37 +163,38 @@ const Home = () => {
 
   useEffect(() => {
     const desiredItemCount = itemsCount;
-    // Increase initial fetch count by 80% to account for filtering
+
     const fetchCount = Math.ceil(itemsCount * 1.8);
 
     const fetchData = async () => {
       try {
-        // Reset error state on new fetch attempt
         setError(null);
 
-        const [trending, popular, top, recent] = await Promise.all([
-          fetchTrendingAnime(1, fetchCount),
-          fetchPopularAnime(1, fetchCount),
-          fetchTopAnime(1, fetchCount),
-          fetchRecentEpisodes(1, fetchCount),
-        ]);
+        const [trending, popular, topRated, topAiring, recent] =
+          await Promise.all([
+            fetchTrendingAnime(1, fetchCount),
+            fetchPopularAnime(1, fetchCount),
+            fetchTopAnime(1, fetchCount),
+            fetchTopAiringAnime(1, 10),
+            fetchRecentEpisodes(1, fetchCount),
+          ]);
         const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
         setRecentEpisodes(recentEpisodesTrimmed);
 
-        // Filter out anime without totalEpisodes, duration, or releaseDate
         const filterAndTrimAnime = (animeList: any) =>
           animeList.results
             .filter(
-              (anime: any) =>
+              (anime: Anime) =>
                 anime.totalEpisodes !== null &&
                 anime.duration !== null &&
                 anime.releaseDate !== null,
             )
-            .slice(0, desiredItemCount); // Trim the list to the desired item count
+            .slice(0, desiredItemCount);
 
         setTrendingAnime(filterAndTrimAnime(trending));
         setPopularAnime(filterAndTrimAnime(popular));
-        setTopAnime(filterAndTrimAnime(top));
+        setTopAnime(filterAndTrimAnime(topRated));
+        setTopAiring(filterAndTrimAnime(topAiring));
       } catch (fetchError) {
         if (fetchError instanceof Error) {
           setError(fetchError.message);
@@ -201,7 +205,8 @@ const Home = () => {
         setLoading({
           trending: false,
           popular: false,
-          top: false,
+          topRated: false,
+          topAiring: false,
           recent: false,
         });
       }
@@ -221,7 +226,7 @@ const Home = () => {
   }, [activeTab]);
 
   const renderCardGrid = (
-    animeData: any[],
+    animeData: Anime[],
     isLoading: boolean,
     hasError: boolean,
   ) => (
@@ -235,8 +240,8 @@ const Home = () => {
       ) : (
         <CardGrid
           animeData={animeData}
-          hasNextPage={false} // Adjust as necessary
-          onLoadMore={() => {}} // Placeholder for actual logic
+          hasNextPage={false}
+          onLoadMore={() => {}}
         />
       )}
     </Section>
@@ -279,12 +284,19 @@ const Home = () => {
               POPULAR
             </Tab>
             <Tab
-              title='Top Anime Tab'
-              $isActive={activeTab === 'top'}
-              onClick={() => handleTabClick('top')}
+              title='Top Rated Tab'
+              $isActive={activeTab === 'topRated'}
+              onClick={() => handleTabClick('topRated')}
             >
               TOP RATED
             </Tab>
+            {/* <Tab
+              title='Top Airing Tab'
+              $isActive={activeTab === 'topAiring'}
+              onClick={() => handleTabClick('topAiring')}
+            >
+              TOP AIRING
+            </Tab> */}
             {/* <Tab
               title='Recent Episodes Tab'
               $isActive={activeTab === 'recent'}
@@ -293,21 +305,34 @@ const Home = () => {
               RECENTLY UPDATED
             </Tab> */}
           </TabContainer>
-          <br></br>
 
           {/* Render sections based on activeTab */}
           {activeTab === 'trending' &&
             renderCardGrid(trendingAnime, loading.trending, !!error)}
           {activeTab === 'popular' &&
             renderCardGrid(popularAnime, loading.popular, !!error)}
-          {activeTab === 'top' &&
-            renderCardGrid(topAnime, loading.top, !!error)}
+          {activeTab === 'topRated' &&
+            renderCardGrid(topAnime, loading.topRated, !!error)}
+          {activeTab === 'topAiring' &&
+            renderCardGrid(topAiring, loading.topRated, !!error)}
           {activeTab === 'recent' &&
             renderCardGrid(recentEpisodes, loading.recent, !!error)}
         </div>
-        <HomeSideBar />
+        <div>
+          <div
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              margin: '0 0 0.5rem 0',
+              padding: '1rem 0',
+            }}
+          >
+            TOP AIRING
+          </div>
+          <HomeSideBar animeData={topAiring} />
+        </div>
       </ContentSidebarLayout>
-      <AnimeEpisodeCardComponent />
+      <EpisodeCard />
     </SimpleLayout>
   );
 };

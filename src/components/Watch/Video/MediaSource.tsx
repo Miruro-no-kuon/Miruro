@@ -114,7 +114,7 @@ const DownloadLink = styled.a`
 
 const ResponsiveTableContainer = styled.div`
   background-color: var(--global-div-tr);
-  padding: 0.6rem;
+  padding: 0.75rem;
   border-radius: var(--global-border-radius);
   @media (max-width: 500px) {
     display: block;
@@ -126,7 +126,7 @@ const EpisodeInfoColumn = styled.div`
   display: block;
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
-  padding: 0.6rem;
+  padding: 0.75rem;
   @media (max-width: 1000px) {
     display: block;
     margin-right: 0rem;
