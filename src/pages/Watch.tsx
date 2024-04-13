@@ -409,7 +409,7 @@ const Watch: React.FC = () => {
 
     // Last visited cache to order continue watching
     const updateLastVisited = () => {
-      if (!animeInfo) return; // Ensure animeInfo is available
+      if (!animeInfo || !animeId) return; // Ensure both animeInfo and animeId are available
 
       const lastVisited = localStorage.getItem(
         LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
@@ -420,6 +420,7 @@ const Watch: React.FC = () => {
         titleEnglish: animeInfo.title.english, // Assuming animeInfo contains the title in English
         titleRomaji: animeInfo.title.romaji, // Assuming animeInfo contains the title in Romaji
       };
+
       localStorage.setItem(
         LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
         JSON.stringify(lastVisitedData),
@@ -714,30 +715,25 @@ const Watch: React.FC = () => {
   //Auto Next episode logic
   const handleEpisodeEnd = async () => {
     const nextEpisodeIndex = currentEpisodeIndex + 1;
-
     if (nextEpisodeIndex >= episodes.length) {
       console.log('No more episodes.');
       return; // No more episodes to play
     }
-
-    const nextEpisode = episodes[nextEpisodeIndex];
-    handleEpisodeSelect(nextEpisode);
+    handleEpisodeSelect(episodes[nextEpisodeIndex]);
   };
 
   // Next and previous Episode logic through Videplayer Buttons
   const onPrevEpisode = () => {
     const prevIndex = currentEpisodeIndex - 1;
     if (prevIndex >= 0) {
-      const prevEpisode = episodes[prevIndex];
-      handleEpisodeSelect(prevEpisode);
+      handleEpisodeSelect(episodes[prevIndex]);
     }
   };
 
   const onNextEpisode = () => {
     const nextIndex = currentEpisodeIndex + 1;
     if (nextIndex < episodes.length) {
-      const nextEpisode = episodes[nextIndex];
-      handleEpisodeSelect(nextEpisode);
+      handleEpisodeSelect(episodes[nextIndex]);
     }
   };
 
@@ -751,15 +747,15 @@ const Watch: React.FC = () => {
           <strong>
             <h2>Time Remaining:</h2>
           </strong>
-              {animeInfo &&
-              animeInfo.nextAiringEpisode &&
-              countdown !== 'Airing now or aired' ? (
-                <p>
-                  <FaBell /> {countdown}
-                </p>
-              ) : (
-                'Unknown'
-              )}
+          {animeInfo &&
+          animeInfo.nextAiringEpisode &&
+          countdown !== 'Airing now or aired' ? (
+            <p>
+              <FaBell /> {countdown}
+            </p>
+          ) : (
+            <p>Unknown</p>
+          )}
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
@@ -791,7 +787,9 @@ const Watch: React.FC = () => {
                     onEpisodeEnd={handleEpisodeEnd}
                     onPrevEpisode={onPrevEpisode}
                     onNextEpisode={onNextEpisode}
-                    animeTitle={animeInfo?.title?.english || animeInfo?.title?.romaji}
+                    animeTitle={
+                      animeInfo?.title?.english || animeInfo?.title?.romaji
+                    }
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />

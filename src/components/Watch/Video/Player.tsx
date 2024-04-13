@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './PlayerStyles.css';
 import {
   isHLSProvider,
@@ -62,7 +62,7 @@ type PlayerProps = {
   onEpisodeEnd: () => Promise<void>;
   onPrevEpisode: () => void;
   onNextEpisode: () => void;
-  animeTitle?: string; 
+  animeTitle?: string;
 };
 
 type StreamingSource = {
@@ -305,8 +305,11 @@ export function Player({
     if (!autoNext) return;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 200)); // Delay for transition
+      await new Promise((resolve) => setTimeout(resolve, 400)); // Delay for transition
       await onEpisodeEnd();
+      if (autoPlay) {
+        player.current?.play();
+      }
     } catch (error) {
       console.error('Error moving to the next episode:', error);
     }

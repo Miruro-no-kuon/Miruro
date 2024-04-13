@@ -40,7 +40,7 @@ body:
       description: Got more details or a screenshot? Throw them in here.
       placeholder: 'FYI: This only happens in Chrome for me...'
     validations:
-      required: false
+      required: false # This field remains optional as it may not always be applicable.
 
   - type: markdown
     attributes:
@@ -52,6 +52,8 @@ body:
       label: How can we reach you? (Totally Optional)
       description: Drop your email here if you're cool with us reaching out for more info.
       placeholder: 'yourname@example.com'
+    validations:
+      required: false # Contact information remains optional for privacy reasons.
 
   - type: dropdown
     id: app-version
@@ -85,6 +87,8 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
+    validations:
+      required: true
 
   - type: textarea
     id: logs
@@ -92,6 +96,8 @@ body:
       label: Got logs?
       description: If you've got some techy details or logs, we'd love to see them.
       render: shell
+    validations:
+      required: false # While helpful, log data may not always be available or relevant.
 
   - type: checkboxes
     id: code-of-conduct
