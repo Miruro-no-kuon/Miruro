@@ -305,7 +305,9 @@ export function Player({
     if (!autoNext) return;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 400)); // Delay for transition
+      player.current?.pause();
+
+      await new Promise((resolve) => setTimeout(resolve, 200)); // Delay for transition
       await onEpisodeEnd();
       if (autoPlay) {
         player.current?.play();
