@@ -9,6 +9,7 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { Episode } from '../../hooks/interface';
+import { IoIosCloseCircle } from 'react-icons/io';
 
 const LOCAL_STORAGE_KEYS = {
   WATCHED_EPISODES: 'watched-episodes',
@@ -85,7 +86,7 @@ const AnimeEpisodeCard = styled(Link)`
     &:hover,
     &:active,
     &:focus {
-      transform: translateY(-10px);
+      // transform: translateY(-10px);
     }
   }
 
@@ -145,6 +146,24 @@ const ContinueWatchingTitle = styled.h2`
   margin-bottom: 0.5rem; // Adjust the margin as needed
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: 0px; // Adjust based on design requirements
+  right: 0px; // Adjust based on design requirements
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none; // Hidden by default
+  ${AnimeEpisodeCard}:hover & {
+    display: block; // Show only on hover
+  }
+`;
+
+const FaCircle = styled(IoIosCloseCircle)`
+  font-size: 2.25rem;
+`;
+
 const calculateSlidesPerView = (windowWidth: number): number => {
   if (windowWidth >= 1200) return 5;
   if (windowWidth >= 1000) return 4;
@@ -154,9 +173,8 @@ const calculateSlidesPerView = (windowWidth: number): number => {
 };
 
 export const EpisodeCard: React.FC = () => {
-  const watchedEpisodesData = useMemo(
-    () => localStorage.getItem('watched-episodes'),
-    [],
+  const [watchedEpisodesData, setWatchedEpisodesData] = useState(
+    localStorage.getItem('watched-episodes'),
   );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -218,6 +236,15 @@ export const EpisodeCard: React.FC = () => {
         // Conditional title display
         const displayTitle = `${animeTitle}${episode.title ? ` - ${episode.title}` : ''}`;
 
+        const handleRemoveAllEpisodes = (animeId) => {
+          const updatedEpisodes = JSON.parse(watchedEpisodesData || '{}');
+          delete updatedEpisodes[animeId];
+
+          const newWatchedEpisodesData = JSON.stringify(updatedEpisodes);
+          localStorage.setItem('watched-episodes', newWatchedEpisodesData);
+          setWatchedEpisodesData(newWatchedEpisodesData); // Trigger re-render
+        };
+
         return (
           <StyledSwiperSlide key={episode.id}>
             <AnimeEpisodeCard
@@ -236,6 +263,15 @@ export const EpisodeCard: React.FC = () => {
               <ProgressBar
                 style={{ width: `${Math.max(playbackPercentage, 5)}%` }}
               />
+              <CloseButton
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents the default action of the event
+                  e.stopPropagation(); // Prevents the event from bubbling up to any parent elements
+                  handleRemoveAllEpisodes(animeId);
+                }}
+              >
+                <FaCircle aria-label='Close' />
+              </CloseButton>
             </AnimeEpisodeCard>
           </StyledSwiperSlide>
         );
