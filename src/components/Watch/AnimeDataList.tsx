@@ -138,8 +138,8 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
 
   return (
     <Sidebar>
-        {filteredRelations.length > 0 && (
-      <SidebarContainer>
+      {filteredRelations.length > 0 && (
+        <SidebarContainer>
           <>
             <p className='Section-Title'>RELATED</p>
             {filteredRelations
@@ -203,10 +203,10 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                 </Link>
               ))}
           </>
-      </SidebarContainer>
-        )}
-        {filteredRecommendations.length > 0 && (
-                <SidebarContainer>
+        </SidebarContainer>
+      )}
+      {filteredRecommendations.length > 0 && (
+        <SidebarContainer>
           <>
             <p className='Section-Title'>RECOMMENDED</p>
             {filteredRecommendations
@@ -269,8 +269,8 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                 </Link>
               ))}
           </>
-      </SidebarContainer>
-        )}
+        </SidebarContainer>
+      )}
     </Sidebar>
   );
 };

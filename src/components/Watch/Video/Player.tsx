@@ -206,7 +206,7 @@ export function Player({
 
     sortedSkipTimes.forEach((skipTime, index) => {
       const { startTime, endTime } = skipTime.interval;
-      let skipType =
+      const skipType =
         skipTime.skipType.toUpperCase() === 'OP' ? 'Opening' : 'Outro';
 
       // Insert default title chapter before this skip time if there's a gap
@@ -309,9 +309,6 @@ export function Player({
 
       await new Promise((resolve) => setTimeout(resolve, 200)); // Delay for transition
       await onEpisodeEnd();
-      if (autoPlay) {
-        player.current?.play();
-      }
     } catch (error) {
       console.error('Error moving to the next episode:', error);
     }
@@ -331,7 +328,7 @@ export function Player({
         onTimeUpdate={onTimeUpdate}
         ref={player}
         aspectRatio='16/9'
-        load='play'
+        load='eager'
         posterLoad='eager'
         streamType='on-demand'
         storage='storage-key'

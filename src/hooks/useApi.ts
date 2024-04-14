@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getSeason } from './useSeason';
 
 // Utility function to ensure URL ends with a slash
 function ensureUrlEndsWithSlash(url: string): string {
@@ -180,7 +181,8 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     ) {
       const errorMessage = response.data.message || 'Unknown server error';
       throw new Error(
-        `Server error: ${response.data.statusCode || response.status
+        `Server error: ${
+          response.data.statusCode || response.status
         } ${errorMessage}`,
       );
     }
@@ -265,21 +267,9 @@ async function fetchList(
     perPage: perPage.toString(),
   });
 
-  const getSeason = () => {
-    const month = new Date().getMonth();
-
-    if (month >= 2 && month <= 4) {
-      return 'SPRING';
-    } else if (month >= 5 && month <= 7) {
-      return 'SUMMER';
-    } else if (month >= 8 && month <= 10) {
-      return 'FALL';
-    } else {
-      return 'WINTER';
-    }
-  };
-
-  if (['TopRated', 'Trending', 'Popular', 'TopAiring'].includes(type)) {
+  if (
+    ['TopRated', 'Trending', 'Popular', 'TopAiring', 'Upcoming'].includes(type)
+  ) {
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -301,8 +291,19 @@ async function fetchList(
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
     }
-    else if (type === 'TopAiring') {
-      const season = getSeason(); // This will set the season based on the current month
+    if (type === 'Upcoming') {
+      const season = getSeason(true); // This will set the season based on the current month
+      const year = new Date().getFullYear();
+      options = {
+        type: 'ANIME',
+        season: season,
+        year: year.toString(),
+        status: 'NOT_YET_RELEASED',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
+    } else if (type === 'TopAiring') {
+      const season = getSeason(false); // This will set the season based on the current month
       const year = new Date().getFullYear();
       options = {
         type: 'ANIME',
@@ -314,7 +315,6 @@ async function fetchList(
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
     }
   } else {
-    // Default values for cacheKey and url if not "TopRated", "Trending", or "Popular"
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -337,19 +337,23 @@ export const fetchPopularAnime = (page: number, perPage: number) =>
   fetchList('Popular', page, perPage);
 export const fetchTopAiringAnime = (page: number, perPage: number) =>
   fetchList('TopAiring', page, perPage);
+export const fetchUpcomingSeasons = (page: number, perPage: number) =>
+  fetchList('Upcoming', page, perPage);
 
 // Fetch Anime Episodes Function
 export async function fetchAnimeEpisodes(
   animeId: string,
-  provider: string = 'gogoanime',
+  // provider: string = 'gogoanime',
   dub: boolean = false,
 ) {
-  const params = new URLSearchParams({ provider, dub: dub ? 'true' : 'false' });
+  const params = new URLSearchParams({
+    /* provider, */ dub: dub ? 'true' : 'false',
+  });
   const url = `${BASE_URL}meta/anilist/episodes/${animeId}?${params.toString()}`;
   const cacheKey = generateCacheKey(
     'animeEpisodes',
     animeId,
-    provider,
+    // provider,
     dub ? 'dub' : 'sub',
   );
 

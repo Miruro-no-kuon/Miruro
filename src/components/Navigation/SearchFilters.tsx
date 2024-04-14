@@ -4,7 +4,7 @@ import Select, { components } from 'react-select';
 import { FaSearch } from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
 import { LuFilterX } from 'react-icons/lu';
-import { FaSortAmountDown, FaSortAmountDownAlt } from "react-icons/fa";
+import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 import { FaCheckCircle } from 'react-icons/fa';
 
@@ -220,7 +220,6 @@ const ButtonBase = styled.button`
   margin-top: 1.5rem;
   @media (max-width: 450px) {
     margin-top: 0.25rem;
-
   }
   flex: 1;
   align-items: right;
@@ -393,6 +392,7 @@ export const SearchFilters: React.FC<{
   setSelectedSort: React.Dispatch<React.SetStateAction<Option>>;
   sortDirection: 'DESC' | 'ASC';
   setSortDirection: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
+  updateSearchParams: () => void; // Added prop for updating search params
 }> = ({
   query,
   setQuery,
@@ -410,6 +410,7 @@ export const SearchFilters: React.FC<{
   setSelectedSort,
   sortDirection,
   setSortDirection,
+  updateSearchParams,
 }) => {
   // State to track if any filter is changed from its default value
   const [filtersChanged, setFiltersChanged] = useState(false);
@@ -417,26 +418,27 @@ export const SearchFilters: React.FC<{
   const handleResetFilters = () => {
     setSelectedGenres([]);
     setSelectedYear(anyOption);
-    setSelectedSeason(anyOption); 
-    setSelectedFormat(anyOption); 
-    setSelectedStatus(anyOption); 
+    setSelectedSeason(anyOption);
+    setSelectedFormat(anyOption);
+    setSelectedStatus(anyOption);
     setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' });
     setSortDirection('DESC');
-    setQuery(''); 
+    setQuery('');
+    updateSearchParams(); // Also reset URL parameters
   };
 
   useEffect(() => {
     const hasFiltersChanged =
-    query !== '' || // Check if query is not default
-    selectedGenres.length > 0 || // Check if any genres are selected
-    selectedYear.value !== anyOption.value || // Check if year is not "Any"
-    selectedSeason.value !== anyOption.value || // Same for season, type, status...
-    selectedFormat.value !== anyOption.value ||
-    selectedStatus.value !== anyOption.value ||
-    selectedSort.value !== 'POPULARITY_DESC' || // Check if sort criteria is not "Popularity"
-    sortDirection !== 'DESC'; // Check if sort direction is not descending
+      query !== '' || // Check if query is not default
+      selectedGenres.length > 0 || // Check if any genres are selected
+      selectedYear.value !== anyOption.value || // Check if year is not "Any"
+      selectedSeason.value !== anyOption.value || // Same for season, type, status...
+      selectedFormat.value !== anyOption.value ||
+      selectedStatus.value !== anyOption.value ||
+      selectedSort.value !== 'POPULARITY_DESC' || // Check if sort criteria is not "Popularity"
+      sortDirection !== 'DESC'; // Check if sort direction is not descending
 
-  setFiltersChanged(hasFiltersChanged);
+    setFiltersChanged(hasFiltersChanged);
   }, [
     query,
     selectedGenres,
@@ -448,59 +450,83 @@ export const SearchFilters: React.FC<{
     sortDirection,
   ]);
 
+  const handleChange = (setter: any) => (newValue: string) => {
+    setter(newValue);
+    updateSearchParams();
+  };
+
   return (
     <FiltersContainer>
-      <FilterSelect label='Search' value={query} onChange={setQuery} />
+      <FilterSelect
+        label='Search'
+        value={query}
+        onChange={handleChange(setQuery)}
+      />
       <FilterSelect
         label='Genres'
         options={genreOptions}
         isMulti
-        onChange={setSelectedGenres}
+        onChange={handleChange(setSelectedGenres)}
         value={selectedGenres}
       />
       <FilterSelect
         label='Year'
         options={yearOptions}
-        onChange={setSelectedYear}
+        onChange={handleChange(setSelectedYear)}
         value={selectedYear}
       />
       <FilterSelect
         label='Season'
         options={seasonOptions}
-        onChange={setSelectedSeason}
+        onChange={handleChange(setSelectedSeason)}
         value={selectedSeason}
       />
       <FilterSelect
         label='Type'
         options={formatOptions}
-        onChange={setSelectedFormat}
+        onChange={handleChange(setSelectedFormat)}
         value={selectedFormat}
       />
       <FilterSelect
         label='Status'
         options={statusOptions}
-        onChange={setSelectedStatus}
+        onChange={handleChange(setSelectedStatus)}
         value={selectedStatus}
       />
       <FilterSelect
         label='Sort By'
         options={sortOptions}
-        onChange={(option) => {
-          setSelectedSort(option);
-        }}
+        onChange={handleChange(setSelectedSort)}
         value={selectedSort}
       />
-<Button
-      onClick={() => setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC')}
-    >
-      {sortDirection === 'DESC' ? <FaSortAmountDown /> :  <FaSortAmountDownAlt />}
-      {sortDirection === 'DESC' ? 'Sort' : 'Sort'}
-    </Button>
-      {filtersChanged && (
-        <ClearFilters onClick={handleResetFilters}>
-          <LuFilterX />Clear
-        </ClearFilters>
-      )}
+      <Button
+        onClick={() => {
+          setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC');
+          updateSearchParams(); // Ensure sort direction changes also update URL
+        }}
+      >
+        {sortDirection === 'DESC' ? (
+          <FaSortAmountDown />
+        ) : (
+          <FaSortAmountDownAlt />
+        )}
+        Sort
+      </Button>
+      <ClearFilters
+        onClick={() => {
+          setSelectedGenres([]);
+          setSelectedYear({ value: '', label: 'Any' });
+          setSelectedSeason({ value: '', label: 'Any' });
+          setSelectedFormat({ value: '', label: 'Any' });
+          setSelectedStatus({ value: '', label: 'Any' });
+          setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' });
+          setSortDirection('DESC');
+          setQuery('');
+          updateSearchParams(); // Update URL to reflect cleared filters
+        }}
+      >
+        Clear
+      </ClearFilters>
     </FiltersContainer>
   );
 };

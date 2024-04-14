@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  HomeCarousel as CarouselTrending,
+  HomeCarousel,
   CardGrid,
   StyledCardGrid,
   SkeletonSlide,
@@ -10,14 +10,16 @@ import {
   fetchPopularAnime,
   fetchTopAnime,
   fetchTopAiringAnime,
+  fetchUpcomingSeasons,
   fetchRecentEpisodes,
   HomeSideBar,
   EpisodeCard,
+  getSeason,
 } from '../index';
 import { Anime, Episode } from '../hooks/interface';
 
 const SimpleLayout = styled.div`
-  gap: 0.5rem;
+  gap: 1.5rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
@@ -94,7 +96,7 @@ const ErrorMessage = styled.div`
 
 const Home = () => {
   const [itemsCount, setItemsCount] = useState(
-    window.innerWidth > 500 ? 18 : 12,
+    window.innerWidth > 500 ? 24 : 15,
   );
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem('home tab');
@@ -116,6 +118,7 @@ const Home = () => {
     popularAnime: [] as Anime[],
     topAnime: [] as Anime[],
     topAiring: [] as Anime[],
+    Upcoming: [] as Anime[],
     recentEpisodes: [] as Anime[],
     error: null as string | null,
     loading: {
@@ -123,13 +126,14 @@ const Home = () => {
       popular: true,
       topRated: true,
       topAiring: true,
+      Upcoming: true,
       recent: true,
     },
   });
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsCount(window.innerWidth > 500 ? 18 : 12);
+      setItemsCount(window.innerWidth > 500 ? 24 : 15);
     };
 
     window.addEventListener('resize', handleResize);
@@ -162,16 +166,17 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCount = Math.ceil(itemsCount * 1.8);
+    const fetchCount = Math.ceil(itemsCount * 1.4);
     const fetchData = async () => {
       try {
         setState((prevState) => ({ ...prevState, error: null }));
-        const [trending, popular, topRated, topAiring, recent] =
+        const [trending, popular, topRated, topAiring, Upcoming, recent] =
           await Promise.all([
             fetchTrendingAnime(1, fetchCount),
             fetchPopularAnime(1, fetchCount),
             fetchTopAnime(1, fetchCount),
-            fetchTopAiringAnime(1, 10),
+            fetchTopAiringAnime(1, 6),
+            fetchUpcomingSeasons(1, 6),
             fetchRecentEpisodes(1, fetchCount),
           ]);
         const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
@@ -181,6 +186,7 @@ const Home = () => {
           popularAnime: filterAndTrimAnime(popular),
           topAnime: filterAndTrimAnime(topRated),
           topAiring: filterAndTrimAnime(topAiring),
+          Upcoming: filterAndTrimAnime(Upcoming),
           recentEpisodes: recentEpisodesTrimmed,
         }));
       } catch (fetchError) {
@@ -196,6 +202,7 @@ const Home = () => {
             popular: false,
             topRated: false,
             topAiring: false,
+            Upcoming: false,
             recent: false,
           },
         }));
@@ -217,12 +224,12 @@ const Home = () => {
 
   const filterAndTrimAnime = (animeList: any) =>
     animeList.results
-      .filter(
-        (anime: Anime) =>
-          anime.totalEpisodes !== null &&
-          anime.duration !== null &&
-          anime.releaseDate !== null,
-      )
+      /*       .filter(
+              (anime: Anime) =>
+                anime.totalEpisodes !== null &&
+                anime.duration !== null &&
+                anime.releaseDate !== null,
+            ) */
       .slice(0, itemsCount);
 
   const renderCardGrid = (
@@ -251,6 +258,8 @@ const Home = () => {
     setActiveTab(tabName);
   };
 
+  const SEASON = getSeason(true);
+
   return (
     <SimpleLayout>
       {state.error && (
@@ -261,7 +270,7 @@ const Home = () => {
       {state.loading.trending || state.error ? (
         <SkeletonSlide />
       ) : (
-        <CarouselTrending
+        <HomeCarousel
           data={state.trendingAnime}
           loading={state.loading.trending}
           error={state.error}
@@ -331,6 +340,16 @@ const Home = () => {
             TOP AIRING
           </div>
           <HomeSideBar animeData={state.topAiring} />
+          <div
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              padding: '0.75rem 0',
+            }}
+          >
+            UPCOMING {SEASON}
+          </div>
+          <HomeSideBar animeData={state.Upcoming} />
         </div>
       </ContentSidebarLayout>
       <EpisodeCard />

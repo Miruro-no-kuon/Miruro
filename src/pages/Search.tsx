@@ -37,11 +37,15 @@ const Search = () => {
   if (sortParam) {
     initialSortDirection = sortParam.endsWith('_DESC') ? 'DESC' : 'ASC';
   }
-  const initialSortValue = sortParam ? sortParam.replace(/(_DESC|_ASC)$/, '') : 'POPULARITY_DESC';
+  const initialSortValue = sortParam
+    ? sortParam.replace(/(_DESC|_ASC)$/, '')
+    : 'POPULARITY_DESC';
 
   const initialSort = {
     value: initialSortValue,
-    label: initialSortValue.replace('_DESC', '').charAt(0) + initialSortValue.replace('_DESC', '').slice(1).toLowerCase()
+    label:
+      initialSortValue.replace('_DESC', '').charAt(0) +
+      initialSortValue.replace('_DESC', '').slice(1).toLowerCase(),
   };
   const genresParam = searchParams.get('genres');
   const initialGenres = genresParam
@@ -49,23 +53,23 @@ const Search = () => {
     : [];
 
   const initialYear = {
-    value: searchParams.get('year') || '', 
-    label: searchParams.get('year') || 'Any', 
+    value: searchParams.get('year') || '',
+    label: searchParams.get('year') || 'Any',
   };
 
   const initialSeason = {
-    value: searchParams.get('season') || '', 
-    label: searchParams.get('season') || 'Any', 
+    value: searchParams.get('season') || '',
+    label: searchParams.get('season') || 'Any',
   };
 
   const initialFormat = {
-    value: searchParams.get('format') || '', 
-    label: searchParams.get('format') || 'Any', 
+    value: searchParams.get('format') || '',
+    label: searchParams.get('format') || 'Any',
   };
 
   const initialStatus = {
-    value: searchParams.get('status') || '', 
-    label: searchParams.get('status') || 'Any', 
+    value: searchParams.get('status') || '',
+    label: searchParams.get('status') || 'Any',
   };
 
   // State hooks
@@ -76,7 +80,9 @@ const Search = () => {
   const [selectedFormat, setSelectedFormat] = useState(initialFormat);
   const [selectedStatus, setSelectedStatus] = useState(initialStatus);
   const [selectedSort, setSelectedSort] = useState(initialSort);
-  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>(initialSortDirection);
+  const [sortDirection, setSortDirection] = useState<'DESC' | 'ASC'>(
+    initialSortDirection,
+  );
 
   //Other logic
   const [animeData, setAnimeData] = useState<any[]>([]);
@@ -93,33 +99,23 @@ const Search = () => {
     };
   }, [query]);
 
-  // useEffect hook for updating URL based on filter changes
-  useEffect(() => {
+  const updateSearchParams = () => {
     const params = new URLSearchParams();
-
     params.set('query', query);
-    if (selectedGenres.length > 0)
+    if (selectedGenres.length > 0) {
       params.set('genres', selectedGenres.map((g) => g.value).join(','));
+    }
     if (selectedYear.value) params.set('year', selectedYear.value);
     if (selectedSeason.value) params.set('season', selectedSeason.value);
     if (selectedFormat.value) params.set('format', selectedFormat.value);
     if (selectedStatus.value) params.set('status', selectedStatus.value);
-    const sortBase = selectedSort.value.endsWith('_DESC') ? selectedSort.value.replace('_DESC', '') : selectedSort.value;
-    const sortParam = sortDirection === 'DESC' ? `${sortBase}_DESC` : sortBase;
+    const sortBase = selectedSort.value.replace(/(_DESC|_ASC)$/, '');
+    const sortParam =
+      sortDirection === 'DESC' ? `${sortBase}_DESC` : `${sortBase}_ASC`;
     params.set('sort', sortParam);
 
     setSearchParams(params, { replace: true });
-  }, [
-    query,
-    selectedGenres,
-    selectedYear,
-    selectedSeason,
-    selectedFormat,
-    selectedStatus,
-    selectedSort,
-    sortDirection,
-    setSearchParams,
-  ]);
+  };
 
   useEffect(() => {
     setPage(1);
@@ -217,6 +213,7 @@ const Search = () => {
         setSelectedSort={setSelectedSort}
         sortDirection={sortDirection}
         setSortDirection={setSortDirection}
+        updateSearchParams={updateSearchParams}
       />
       {isLoading && page === 1 ? (
         <StyledCardGrid>

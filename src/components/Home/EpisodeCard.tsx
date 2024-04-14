@@ -9,7 +9,7 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { Episode } from '../../hooks/interface';
-import { IoIosCloseCircle } from 'react-icons/io';
+import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 const LOCAL_STORAGE_KEYS = {
   WATCHED_EPISODES: 'watched-episodes',
@@ -30,6 +30,11 @@ interface LastVisitedData {
 
 const popInAnimation = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0%); }
+`;
+
+const slideDownAnimation = keyframes`
+  0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0%); }
 `;
 
@@ -148,19 +153,31 @@ const ContinueWatchingTitle = styled.h2`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0px; // Adjust based on design requirements
-  right: 0px; // Adjust based on design requirements
+  top: 0.25rem; // Adjust based on design requirements
+  right: 0.25rem; // Adjust based on design requirements
   background: transparent;
   border: none;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   display: none; // Hidden by default
+  animation: ${slideDownAnimation} 0.5s ease forwards;
+  transition: 0.2s ease-in-out;
+
+  svg {
+    transition: 0.2s ease-in-out;
+    transform: scale(0.85);
+    &:hover,
+    &:active,
+    &:focus {
+      transform: scale(1);
+    }
+  }
   ${AnimeEpisodeCard}:hover & {
     display: block; // Show only on hover
   }
 `;
 
-const FaCircle = styled(IoIosCloseCircle)`
+const FaCircle = styled(IoIosCloseCircleOutline)`
   font-size: 2.25rem;
 `;
 
@@ -236,7 +253,7 @@ export const EpisodeCard: React.FC = () => {
         // Conditional title display
         const displayTitle = `${animeTitle}${episode.title ? ` - ${episode.title}` : ''}`;
 
-        const handleRemoveAllEpisodes = (animeId) => {
+        const handleRemoveAllEpisodes = (animeId: string) => {
           const updatedEpisodes = JSON.parse(watchedEpisodesData || '{}');
           delete updatedEpisodes[animeId];
 

@@ -122,7 +122,7 @@ const ListItem = styled.button<{
           : 'filter: brightness(1.1)' // Selected but not watched
         : $isWatched
           ? 'filter: brightness(1.1)' // Not selected but watched
-          : 'background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #ffffff'};
+          : 'background-color: var(--global-button-hover-bg); filter: brightness(1.05); color: #FFFFFF'};
     padding-left: ${({ $isRowLayout }) => ($isRowLayout ? '1rem' : '')};
   }
 `;

@@ -135,8 +135,7 @@ export const HomeSideBar: React.FC<{ animeData: Anime[] }> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const displayedAnime =
-    windowWidth <= 1000 ? animeData.slice(0, 5) : animeData;
+  const displayedAnime = windowWidth <= 500 ? animeData.slice(0, 5) : animeData;
 
   return (
     <SidebarStyled>

@@ -60,14 +60,12 @@ const SlideImageWrapper = styled.div`
   border-radius: var(--global-border-radius);
 `;
 
-const SlideImage = styled.img<{ $cover: string; $image: string }>`
+const SlideImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: var(--global-border-radius);
   position: absolute;
-  content: ${(props) =>
-    props.$cover === props.$image ? BannerNotFound : props.$cover};
 `;
 
 const ContentWrapper = styled.div`
@@ -259,7 +257,11 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
   };
 
   const validData = data.filter(
-    (item) => item.title && item.title.english && item.description,
+    (item) =>
+      item.title &&
+      item.title.english &&
+      item.description &&
+      item.cover !== item.image,
   );
   const formatGenres = (genres: string[]): string => genres.join(', ');
   return (
@@ -296,7 +298,6 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             {validData.map(
               ({
                 id,
-                image,
                 cover,
                 title,
                 description,
@@ -313,19 +314,30 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                 >
                   <SlideImageWrapper>
                     <SlideImage
-                      src={cover === image ? BannerNotFound : cover}
+                      src={cover}
                       alt={title.english || title.romaji + ' Banner Image'}
-                      $cover={cover}
-                      $image={image}
                       loading='eager'
                     />
                     <ContentWrapper>
                       <SlideContent>
                         <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
                         <SlideInfo>
-                          {type} <TbCardsFilled /> {totalEpisodes} <FaStar />{' '}
-                          {rating}
-                          <FaClock /> {duration} mins
+                          {type && (
+                            <>
+                              {type} <TbCardsFilled /> {totalEpisodes}
+                            </>
+                          )}
+                          {rating && (
+                            <>
+                              <FaStar />
+                              {rating}
+                            </>
+                          )}
+                          {duration && (
+                            <>
+                              <FaClock /> {duration} mins
+                            </>
+                          )}
                         </SlideInfo>
                         <SlideDescription
                           dangerouslySetInnerHTML={{ __html: description }}

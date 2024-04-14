@@ -239,7 +239,7 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [inputContainerWidth, setInputContainerWidth] = useState(0);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const navbarRef = useRef(null);
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown container
@@ -342,7 +342,14 @@ export const Navbar = () => {
 
   const navigateWithQuery = useCallback(
     (value: string) => {
-      navigate(value ? `/search?query=${value}` : '/search');
+      if (location.pathname == '/search') {
+        const params = new URLSearchParams();
+
+        params.set('query', value);
+        setSearchParams(params, { replace: true });
+      } else {
+        navigate(value ? `/search?query=${value}` : '/search');
+      }
     },
     [navigate],
   );
@@ -359,7 +366,7 @@ export const Navbar = () => {
         ...prevState,
         isDropdownOpen: true,
       }));
-    }, 100);
+    }, 300);
   };
 
   const handleKeyDownOnInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -524,9 +531,10 @@ export const Navbar = () => {
               <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
                 {isDarkMode ? <FiSun /> : <FiMoon />}
               </StyledButton>
-              {/* <StyledButton onClick={navigateToProfile}>
-              <FiMenu />
-            </StyledButton> */}
+              {/* {<StyledButton onClick={navigateToProfile}>
+                <FiMenu />
+              </StyledButton>
+              } */}
             </RightContent>
           </TopContainer>
 

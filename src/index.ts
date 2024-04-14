@@ -37,6 +37,7 @@ export { default as Seasons } from './components/Watch/Seasons';
 export * from './hooks/useApi';
 export * from './hooks/interface';
 export * from './hooks/useScroll';
+export * from './hooks/useSeason';
 
 // * ==== Pages ====
 // TODO Main Pages of the Application
