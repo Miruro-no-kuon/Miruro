@@ -194,6 +194,4 @@ Feel free to contribute to this project! Whether you're an experienced developer
 
 ## Star History 📈
 
-<div align="left">
-    <img src="https://api.star-history.com/svg?repos=Miruro-no-kuon/Miruro&type=Date" alt="Star History Chart" style="max-width: 70%;" />
-</div>
+[![Stargazers over time](https://starchart.cc/Miruro-no-kuon/Miruro.svg?variant=adaptive)](https://starchart.cc/Miruro-no-kuon/Miruro)

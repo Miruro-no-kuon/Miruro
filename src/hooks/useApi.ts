@@ -343,17 +343,15 @@ export const fetchUpcomingSeasons = (page: number, perPage: number) =>
 // Fetch Anime Episodes Function
 export async function fetchAnimeEpisodes(
   animeId: string,
-  // provider: string = 'gogoanime',
+  provider: string = 'gogoanime',
   dub: boolean = false,
 ) {
-  const params = new URLSearchParams({
-    /* provider, */ dub: dub ? 'true' : 'false',
-  });
+  const params = new URLSearchParams({ provider, dub: dub ? 'true' : 'false' });
   const url = `${BASE_URL}meta/anilist/episodes/${animeId}?${params.toString()}`;
   const cacheKey = generateCacheKey(
     'animeEpisodes',
     animeId,
-    // provider,
+    provider,
     dub ? 'dub' : 'sub',
   );
 

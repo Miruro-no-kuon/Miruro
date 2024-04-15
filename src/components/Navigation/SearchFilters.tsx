@@ -172,7 +172,7 @@ const SearchInputWrapper = styled.div`
   position: relative;
   width: 12rem;
   @media (max-width: 500px) {
-    width: auto;
+    width: 18rem;
   }
   overflow: hidden;
 `;
@@ -512,21 +512,12 @@ export const SearchFilters: React.FC<{
         )}
         Sort
       </Button>
-      <ClearFilters
-        onClick={() => {
-          setSelectedGenres([]);
-          setSelectedYear({ value: '', label: 'Any' });
-          setSelectedSeason({ value: '', label: 'Any' });
-          setSelectedFormat({ value: '', label: 'Any' });
-          setSelectedStatus({ value: '', label: 'Any' });
-          setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' });
-          setSortDirection('DESC');
-          setQuery('');
-          updateSearchParams(); // Update URL to reflect cleared filters
-        }}
-      >
-        Clear
-      </ClearFilters>
+      {filtersChanged && (
+        <ClearFilters onClick={handleResetFilters}>
+          <LuFilterX />
+          Clear
+        </ClearFilters>
+      )}
     </FiltersContainer>
   );
 };
