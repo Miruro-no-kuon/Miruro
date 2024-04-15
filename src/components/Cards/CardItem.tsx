@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { SkeletonCard, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
+import { SkeletonCard, StatusIndicator, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { FaPlay } from 'react-icons/fa'; // For the play icon
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
@@ -115,34 +115,6 @@ const TitleContainer = styled.div<{ $isHovered: boolean }>`
   }
 `;
 
-const IndicatorDot = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  margin: 0rem;
-  flex-shrink: 0;
-`;
-
-const CompletedIndicator = styled(IndicatorDot)`
-  background-color: var(--completed-indicator-color);
-`;
-
-const CancelledIndicator = styled(IndicatorDot)`
-  background-color: var(--cancelled-indicator-color);
-`;
-
-const NotYetAiredIndicator = styled(IndicatorDot)`
-  background-color: var(--not-yet-aired-indicator-color);
-`;
-
-const OngoingIndicator = styled(IndicatorDot)`
-  background-color: var(--ongoing-dot-color);
-`;
-
-const DefaultIndicator = styled(IndicatorDot)`
-  background-color: var(--default-indicator-color);
-`;
-
 const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
   margin: 0;
   overflow: hidden;
@@ -227,21 +199,6 @@ export const CardItem: React.FC<{ anime: Anime }> = ({ anime }) => {
     [],
   );
 
-  const handleStatusCheck = useMemo(() => {
-    switch (anime.status) {
-      case 'Ongoing':
-        return <OngoingIndicator />;
-      case 'Completed':
-        return <CompletedIndicator />;
-      case 'Cancelled':
-        return <CancelledIndicator />;
-      case 'Not yet aired':
-        return <NotYetAiredIndicator />;
-      default:
-        return <DefaultIndicator />;
-    }
-  }, [anime.status]);
-
   const handleImageLoad = () => {
     setLoading(false); // Set loading to false when image is loaded
   };
@@ -289,7 +246,7 @@ export const CardItem: React.FC<{ anime: Anime }> = ({ anime }) => {
               </AnimeImage>
             </ImageDisplayWrapper>
             <TitleContainer $isHovered={isHovered}>
-              {handleStatusCheck}
+              <StatusIndicator status={anime.status} />
               <Title
                 $isHovered={isHovered}
                 color={anime.color}

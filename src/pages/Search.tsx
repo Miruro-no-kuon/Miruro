@@ -167,7 +167,7 @@ const Search = () => {
   ]);
 
   const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { Anime } from '../../hooks/animeInterface';
+import { StatusIndicator } from '../shared/StatusIndicator';
 
 const slideUpAnimation = keyframes`
   0% { opacity: 0.4; transform: translateY(10px); }
@@ -63,34 +64,6 @@ const AnimeImage = styled.img`
 `;
 
 const Info = styled.div``;
-
-const IndicatorDot = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  margin: 0rem;
-  flex-shrink: 0;
-`;
-
-const CompletedIndicator = styled(IndicatorDot)`
-  background-color: var(--completed-indicator-color);
-`;
-
-const CancelledIndicator = styled(IndicatorDot)`
-  background-color: var(--cancelled-indicator-color);
-`;
-
-const NotYetAiredIndicator = styled(IndicatorDot)`
-  background-color: var(--not-yet-aired-indicator-color);
-`;
-
-const OngoingIndicator = styled(IndicatorDot)`
-  background-color: var(--ongoing-dot-color);
-`;
-
-const DefaultIndicator = styled(IndicatorDot)`
-  background-color: var(--default-indicator-color);
-`;
 
 const TitleWithDot = styled.div`
   display: flex;
@@ -160,20 +133,7 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                     />
                     <Info>
                       <TitleWithDot>
-                        {(() => {
-                          switch (relation.status) {
-                            case 'Completed':
-                              return <CompletedIndicator />;
-                            case 'Cancelled':
-                              return <CancelledIndicator />;
-                            case 'Not yet aired':
-                              return <NotYetAiredIndicator />;
-                            case 'Ongoing':
-                              return <OngoingIndicator />;
-                            default:
-                              return <DefaultIndicator />;
-                          }
-                        })()}
+                        <StatusIndicator status={relation.status} />
                         <Title>
                           {relation.title.english ??
                             relation.title.romaji ??
@@ -226,20 +186,7 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                     />
                     <Info>
                       <TitleWithDot>
-                        {(() => {
-                          switch (recommendation.status) {
-                            case 'Completed':
-                              return <CompletedIndicator />;
-                            case 'Cancelled':
-                              return <CancelledIndicator />;
-                            case 'Not yet aired':
-                              return <NotYetAiredIndicator />;
-                            case 'Ongoing':
-                              return <OngoingIndicator />;
-                            default:
-                              return <DefaultIndicator />;
-                          }
-                        })()}
+                        <StatusIndicator status={recommendation.status} />
                         <Title>
                           {recommendation.title.english ??
                             recommendation.title.romaji ??
