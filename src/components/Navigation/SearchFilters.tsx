@@ -96,7 +96,7 @@ const SearchInputWrapper = styled.div`
   position: relative;
   width: 12rem;
   @media (max-width: 500px) {
-    width: auto;
+    width: 18rem;
   }
   overflow: hidden;
 `;
