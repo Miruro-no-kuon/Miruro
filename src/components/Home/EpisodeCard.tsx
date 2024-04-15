@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import { Episode } from '../../hooks/interface';
+import { Episode } from '../../hooks/animeInterface';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 const LOCAL_STORAGE_KEYS = {
@@ -160,12 +160,13 @@ const CloseButton = styled.button`
   color: #ffffff;
   cursor: pointer;
   display: none; // Hidden by default
-  animation: ${slideDownAnimation} 0.5s ease forwards;
+  animation: ${slideDownAnimation} 0.25s ease forwards;
   transition: 0.2s ease-in-out;
 
   svg {
     transition: 0.2s ease-in-out;
     transform: scale(0.85);
+    font-size: 1.75rem;
     &:hover,
     &:active,
     &:focus {

@@ -194,7 +194,7 @@ const CardDetails = styled.div`
   }
 `;
 
-const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
+export const CardItem: React.FC<{ anime: Anime }> = ({ anime }) => {
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -329,5 +329,3 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     </>
   );
 };
-
-export default CardItemContent;

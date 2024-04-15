@@ -14,7 +14,7 @@ import {
   faSearch,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
-import { Episode } from '../../hooks/interface';
+import { Episode } from '../../hooks/animeInterface';
 
 interface Props {
   animeId: string | undefined;
@@ -211,7 +211,7 @@ const EpisodeTitle = styled.span`
 `;
 
 // The updated EpisodeList component
-const EpisodeList: React.FC<Props> = ({
+export const EpisodeList: React.FC<Props> = ({
   animeId,
   episodes,
   selectedEpisodeId,
@@ -547,5 +547,3 @@ const EpisodeList: React.FC<Props> = ({
     </ListContainer>
   );
 };
-
-export default EpisodeList;

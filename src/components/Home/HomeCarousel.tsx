@@ -4,12 +4,11 @@ import { FaPlay } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
-import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
 import { SkeletonSlide } from '../../index';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
-import { Anime } from '../../hooks/interface';
+import { Anime } from '../../hooks/animeInterface';
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;

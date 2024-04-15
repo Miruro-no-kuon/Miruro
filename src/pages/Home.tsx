@@ -14,9 +14,10 @@ import {
   fetchRecentEpisodes,
   HomeSideBar,
   EpisodeCard,
-  getSeason,
+  getNextSeason,
+  time,
 } from '../index';
-import { Anime, Episode } from '../hooks/interface';
+import { Anime, Episode } from '../hooks/animeInterface';
 
 const SimpleLayout = styled.div`
   gap: 1.5rem;
@@ -102,8 +103,7 @@ const Home = () => {
     const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
-      const now = new Date().getTime();
-      if (now - timestamp < 24 * 60 * 60 * 1000) {
+      if (time - timestamp < 24 * 60 * 60 * 1000) {
         return tab;
       } else {
         localStorage.removeItem('home tab');
@@ -217,8 +217,7 @@ const Home = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    const now = new Date().getTime();
-    const tabData = JSON.stringify({ tab: activeTab, timestamp: now });
+    const tabData = JSON.stringify({ tab: activeTab, timestamp: time });
     localStorage.setItem('home tab', tabData);
   }, [activeTab]);
 
@@ -258,7 +257,7 @@ const Home = () => {
     setActiveTab(tabName);
   };
 
-  const SEASON = getSeason(true);
+  const SEASON = getNextSeason();
 
   return (
     <SimpleLayout>

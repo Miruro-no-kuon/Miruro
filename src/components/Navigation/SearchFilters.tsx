@@ -7,24 +7,22 @@ import { LuFilterX } from 'react-icons/lu';
 import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 import { FaCheckCircle } from 'react-icons/fa';
-
-interface Option {
-  value: string;
-  label: string;
-}
-
-interface FilterProps {
-  label: string;
-  options?: Option[];
-  onChange?: (value: any) => void;
-  value?: any;
-  isMulti?: boolean;
-}
+import {
+  Option,
+  FilterProps,
+  genreOptions,
+  anyOption,
+  yearOptions,
+  seasonOptions,
+  formatOptions,
+  statusOptions,
+  sortOptions,
+} from '../../index';
 
 const selectStyles = {
   placeholder: (provided: any) => ({
     ...provided,
-    color: 'var(--global-text-muted)', // Use the CSS variable for the muted text color
+    color: 'var(--global-text-muted)',
   }),
   singleValue: (provided: any, state: any) => ({
     ...provided,
@@ -35,50 +33,50 @@ const selectStyles = {
   }),
   control: (provided: any) => ({
     ...provided,
-    width: '10rem', // Set a minimum width for the dropdown container
-    backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown control background
-    borderColor: 'transparent', // Customizing the border color
-    color: 'var(--global-text)', // Customizing the text color
-    boxShadow: 'none', // Removing the box-shadow
+    width: '10rem',
+    backgroundColor: 'var(--global-secondary-bg)',
+    borderColor: 'transparent',
+    color: 'var(--global-text)',
+    boxShadow: 'none',
     '&:hover': {
-      borderColor: 'var(--primary-accent)', // Customizing the border color on hover
+      borderColor: 'var(--primary-accent)',
     },
     '@media (max-width: 500px)': {
-      width: '10rem', // Adjust width under 500px screen width
+      width: '10rem',
     },
   }),
   menu: (provided: any) => ({
     ...provided,
     zIndex: 5,
     padding: '0.25rem',
-    backgroundColor: 'var(--global-secondary-bg)', // Customizing the dropdown menu background
-    borderColor: 'var(--global-border)', // Customizing the border color of the menu
-    color: 'var(--global-text)', // Customizing the text color of the menu
+    backgroundColor: 'var(--global-secondary-bg)',
+    borderColor: 'var(--global-border)',
+    color: 'var(--global-text)',
   }),
   option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor:
       state.isSelected || state.isFocused
-        ? 'var(--global-tertiary-bg)' // Setting the background color for selected or hovered options
-        : 'var(--global-secondary-bg)', // Default background color for unselected options
+        ? 'var(--global-tertiary-bg)'
+        : 'var(--global-secondary-bg)',
     color:
       state.isSelected || state.isFocused
-        ? 'var(--primary-accent)' // Keeping the text color for selected or hovered options as per your requirement
+        ? 'var(--primary-accent)'
         : 'var(--global-text)',
-    borderRadius: 'var(--global-border-radius)', // Default text color for unselected options
+    borderRadius: 'var(--global-border-radius)',
     '&:hover': {
-      backgroundColor: 'var(--global-tertiary-bg)', // Ensuring the hover background color matches the selected/focused color
-      color: 'var(--primary-accent)', // Ensuring the hover text color remains consistent
+      backgroundColor: 'var(--global-tertiary-bg)',
+      color: 'var(--primary-accent)',
     },
     marginBottom: '0.25rem',
   }),
   multiValue: (provided: any) => ({
     ...provided,
-    backgroundColor: 'var(--global-genre-button-bg)', // Customizing the background of the selected item tag
+    backgroundColor: 'var(--global-genre-button-bg)',
   }),
   multiValueLabel: (provided: any) => ({
     ...provided,
-    color: 'var(--global-text)', // Customizing the text color of the selected item tag
+    color: 'var(--global-text)',
   }),
   multiValueRemove: (provided: any) => ({
     ...provided,
@@ -88,80 +86,6 @@ const selectStyles = {
     },
   }),
 };
-
-const genreOptions = [
-  { value: 'Action', label: 'Action' },
-  { value: 'Adventure', label: 'Adventure' },
-  { value: 'Comedy', label: 'Comedy' },
-  { value: 'Drama', label: 'Drama' },
-  { value: 'Fantasy', label: 'Fantasy' },
-  { value: 'Horror', label: 'Horror' },
-  { value: 'Mahou Shoujo', label: 'Mahou Shoujo' },
-  { value: 'Mecha', label: 'Mecha' },
-  { value: 'Music', label: 'Music' },
-  { value: 'Mystery', label: 'Mystery' },
-  { value: 'Psychological', label: 'Psychological' },
-  { value: 'Romance', label: 'Romance' },
-  { value: 'Sci-Fi', label: 'Sci-Fi' },
-  { value: 'Slice of Life', label: 'Slice of Life' },
-  { value: 'Sports', label: 'Sports' },
-  { value: 'Supernatural', label: 'Supernatural' },
-  { value: 'Thriller', label: 'Thriller' },
-];
-
-const anyOption = { value: '', label: 'Any' };
-
-const currentYear = new Date().getFullYear();
-const yearOptions = [
-  anyOption,
-  { value: String(currentYear + 1), label: String(currentYear + 1) }, // Current year +1
-  ...Array.from({ length: currentYear - 1939 }, (_, i) => ({
-    value: String(currentYear - i),
-    label: String(currentYear - i),
-  })),
-];
-
-const seasonOptions = [
-  anyOption,
-  { value: 'WINTER', label: 'Winter' },
-  { value: 'SPRING', label: 'Spring' },
-  { value: 'SUMMER', label: 'Summer' },
-  { value: 'FALL', label: 'Fall' },
-];
-
-const formatOptions = [
-  anyOption,
-  { value: 'TV', label: 'TV' },
-  { value: 'TV_SHORT', label: 'TV Short' },
-  { value: 'OVA', label: 'OVA' },
-  { value: 'ONA', label: 'ONA' },
-  { value: 'MOVIE', label: 'Movie' },
-  { value: 'SPECIAL', label: 'Special' },
-  { value: 'MUSIC', label: 'Music' },
-];
-
-const statusOptions = [
-  anyOption,
-  { value: 'RELEASING', label: 'Airing' },
-  { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
-  { value: 'FINISHED', label: 'Finished' },
-  { value: 'CANCELLED', label: 'Cancelled' },
-];
-
-const sortOptions = [
-  { value: 'POPULARITY_DESC', label: 'Popularity' },
-  { value: 'TRENDING_DESC', label: 'Trending' },
-  { value: 'UPDATED_AT_DESC', label: 'Last Updated' },
-  { value: 'START_DATE_DESC', label: 'Start Date' },
-  { value: 'END_DATE_DESC', label: 'End Date' },
-  { value: 'FAVOURITES_DESC', label: 'Favorites' },
-  { value: 'SCORE_DESC', label: 'Score' },
-  { value: 'TITLE_ROMAJI_DESC', label: 'Title (Romaji)' },
-  { value: 'TITLE_ENGLISH_DESC', label: 'Title (English)' },
-  { value: 'TITLE_NATIVE_DESC', label: 'Title (Native)' },
-  { value: 'EPISODES_DESC', label: 'Episodes' },
-  { value: 'ID_DESC', label: 'ID' },
-];
 
 const SearchInputWrapper = styled.div`
   display: flex;
@@ -512,21 +436,12 @@ export const SearchFilters: React.FC<{
         )}
         Sort
       </Button>
-      <ClearFilters
-        onClick={() => {
-          setSelectedGenres([]);
-          setSelectedYear({ value: '', label: 'Any' });
-          setSelectedSeason({ value: '', label: 'Any' });
-          setSelectedFormat({ value: '', label: 'Any' });
-          setSelectedStatus({ value: '', label: 'Any' });
-          setSelectedSort({ value: 'POPULARITY_DESC', label: 'Popularity' });
-          setSortDirection('DESC');
-          setQuery('');
-          updateSearchParams(); // Update URL to reflect cleared filters
-        }}
-      >
-        Clear
-      </ClearFilters>
+      {filtersChanged && (
+        <ClearFilters onClick={handleResetFilters}>
+          <LuFilterX />
+          Clear
+        </ClearFilters>
+      )}
     </FiltersContainer>
   );
 };

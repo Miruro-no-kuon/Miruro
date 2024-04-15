@@ -531,9 +531,10 @@ export const Navbar = () => {
               <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
                 {isDarkMode ? <FiSun /> : <FiMoon />}
               </StyledButton>
-              {/* {<StyledButton onClick={navigateToProfile}>
-                <FiMenu />
-              </StyledButton>
+              {/* {
+                <StyledButton onClick={navigateToProfile}>
+                  <FiMenu />
+                </StyledButton>
               } */}
             </RightContent>
           </TopContainer>

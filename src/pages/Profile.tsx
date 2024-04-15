@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaUserEdit } from 'react-icons/fa'; // Import FontAwesome user edit icon
 import { LuConstruction } from 'react-icons/lu';
-import { MdSettings } from 'react-icons/md'; // Import Material Design settings icon
 import Image404URL from '/src/assets/404.webp';
 
 // Define the interface for preferences
@@ -125,10 +124,7 @@ const Profile: React.FC = () => {
         />
       </WarningMessage>
 
-      <h3>
-        <MdSettings />
-        SETTINGS
-      </h3>
+      <h3>SETTINGS</h3>
       <PreferencesTable>
         <tbody>
           {Object.entries(preferences).map(([key, value]) => (

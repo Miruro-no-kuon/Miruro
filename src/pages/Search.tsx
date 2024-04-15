@@ -9,14 +9,6 @@ import {
   SkeletonCard,
 } from '../index';
 
-// Define types for genre, year, season, format, and status
-type Option = { value: string; label: string };
-// type Genre = Option;
-// type Year = Option;
-// type Season = Option;
-// type Format = Option;
-// type Status = Option;
-
 const Container = styled.div`
   margin-top: 1rem;
 
@@ -123,11 +115,20 @@ const Search = () => {
     const scrollToTopWithDelay = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 250);
+      }, 500);
     };
 
     scrollToTopWithDelay();
-  }, [query]);
+  }, [
+    query,
+    selectedGenres,
+    selectedYear,
+    selectedSeason,
+    selectedFormat,
+    selectedStatus,
+    selectedSort,
+    sortDirection,
+  ]);
 
   const initiateFetchAdvancedSearch = useCallback(async () => {
     setIsLoading(true);
@@ -166,10 +167,7 @@ const Search = () => {
   ]);
 
   const handleLoadMore = () => {
-    setPage((prevPage) => {
-      return prevPage < 10 ? prevPage + 1 : prevPage;
-      setHasNextPage(false);
-    });
+    setPage(prevPage => prevPage + 1);
   };
 
   useEffect(() => {
@@ -186,7 +184,7 @@ const Search = () => {
     // Debounce to minimize fetches during rapid state changes
     delayTimeout.current = window.setTimeout(() => {
       initiateFetchAdvancedSearch();
-    }, 0);
+    }, 250);
 
     // Cleanup timeout on unmount or before executing a new fetch
     return () => {

@@ -9,7 +9,7 @@ export { ThemeProvider, useTheme } from './components/ThemeContext';
 
 // TODO Cards
 export * from './components/Cards/CardGrid';
-export { default as CardItem } from './components/Cards/CardItem';
+export { CardItem } from './components/Cards/CardItem';
 
 // TODO Home Page Specific
 export { EpisodeCard } from './components/Home/EpisodeCard';
@@ -24,20 +24,21 @@ export {
 } from './components/Skeletons/Skeletons';
 
 // TODO Watching Anime Functionality
-export { default as EpisodeList } from './components/Watch/EpisodeList';
-export { default as EmbedPlayer } from './components/Watch/Video/EmbedPlayer';
+export { EpisodeList } from './components/Watch/EpisodeList';
+export { EmbedPlayer } from './components/Watch/Video/EmbedPlayer';
 export { Player } from './components/Watch/Video/Player'; // Notice: This is not a default export
 export { MediaSource } from './components/Watch/Video/MediaSource';
-export { default as WatchAnimeData } from './components/Watch/WatchAnimeData';
+export { WatchAnimeData } from './components/Watch/WatchAnimeData';
 export { AnimeDataList } from './components/Watch/AnimeDataList';
-export { default as Seasons } from './components/Watch/Seasons';
+export { Seasons } from './components/Watch/Seasons';
 
 // * ==== Hooks ====
 // TODO Utilizing API and Other Functionalities
 export * from './hooks/useApi';
-export * from './hooks/interface';
+export * from './hooks/animeInterface';
 export * from './hooks/useScroll';
-export * from './hooks/useSeason';
+export * from './hooks/useTIme';
+export * from './hooks/useFilters';
 
 // * ==== Pages ====
 // TODO Main Pages of the Application

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { CardItem } from '../../index';
-import { Anime } from '../../hooks/interface';
+import { Anime } from '../../hooks/animeInterface';
 
 interface CardGridProps {
   animeData: Anime[];

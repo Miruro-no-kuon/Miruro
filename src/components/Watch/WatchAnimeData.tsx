@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import Seasons from './Seasons';
-import { Anime } from '../../hooks/interface';
+import { Seasons } from '../../index';
+import { Anime } from '../../hooks/animeInterface';
 import { SiMyanimelist, SiAnilist } from 'react-icons/si';
 
 const slideUpAnimation = keyframes`
@@ -272,7 +272,9 @@ const TrailerOverlayContent = styled.div`
   }
 `;
 
-const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
+export const WatchAnimeData: React.FC<{ animeData: Anime }> = ({
+  animeData,
+}) => {
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
@@ -570,5 +572,3 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
     </>
   );
 };
-
-export default WatchAnimeData;
