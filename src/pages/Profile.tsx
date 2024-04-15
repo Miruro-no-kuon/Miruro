@@ -1,288 +1,232 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FiSun, FiMoon } from 'react-icons/fi';
+import { FaUserEdit } from 'react-icons/fa'; // Import FontAwesome user edit icon
+import { LuConstruction } from 'react-icons/lu';
+import { MdSettings } from 'react-icons/md'; // Import Material Design settings icon
+import Image404URL from '/src/assets/404.webp';
 
-const PreferencesContainer = styled.div`
-  margin: 0 auto;
-  margin-top: 2rem;
-  margin-bottom: 0rem;
-  display: block;
-  background-color: var(--global-div-tr);
-  border-radius: var(--global-border-radius);
-  padding: 1rem;
-  padding-top: 0.25rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 40rem;
-  font-size: 1rem;
-  @media (max-width: 500px) {
-    margin-top: 1rem;
-    margin-bottom: 0rem;
-    font-size: 0.9rem;
-  }
-  h2 {
-    align-items: left;
-    text-align: left;
-  }
-`;
-
-interface StyledButtonProps {
-  isSelected: boolean;
-  isInputToggle?: boolean; // Define isInputToggle as an optional prop
+// Define the interface for preferences
+interface Preferences {
+  defaultLanguage: string;
+  autoskipIntroOutro: string;
+  autoPlay: string;
+  defaultEpisodeLayout: string;
+  rating: string;
+  defaultServers: string;
+  openKeyboardShortcuts: string;
+  restoreDefaultPreferences: string;
+  clearContinueWatching: string;
 }
 
-const StyledButton = styled.button<StyledButtonProps>`
-  background: ${({ isSelected }) =>
-    isSelected ? 'var(--primary-accent)' : 'var(--global-div)'};
-  margin-right: 0.5rem;
-  color: var(--global-text);
-  cursor: pointer;
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--global-border-radius);
-  transition: background-color 0.3s;
-  border: none;
-  font-size: 1rem;
-  &:hover,
-  &:active,
-  &:focus {
-    background-color: ${({ isSelected }) =>
-      isSelected ? 'var(--primary-accent)' : 'var(--primary-accent)'};
-  }
-  &:focus {
-    outline: none;
-  }
-  svg {
-    font-size: 1.5rem;
-    padding-bottom: 0rem;
-  }
-  svg {
-    font-size: 1.5rem;
-    padding-bottom: 0rem;
-  }
-  @media (max-width: 500px) {
-    font-size: 0.9rem;
-
-    svg {
-      font-size: 1rem;
-      padding-bottom: 0rem;
-    }
-    display: flex;
-    margin: ${({ isInputToggle }) => (isInputToggle ? '0' : '0')};
-  }
-  clear {
-  }
+// Styled components for the profile settings
+const PreferencesContainer = styled.div`
+  padding: 0.5rem;
+  max-width: 22rem;
+  margin: auto;
 `;
 
 const PreferencesTable = styled.table`
-  text-align: left;
-  width: 100%;
+  background-color: var(--global-div-tr);
+  border-radius: var(--global-border-radius);
+
   border-collapse: collapse;
 `;
 
 const TableRow = styled.tr``;
 
 const TableCell = styled.td`
-  padding: 1rem;
-  p {
-    font-size: 0.8rem;
-    margin: 0rem;
-  }
-  @media (max-width: 500px) {
-    padding: 0.5rem;
-  }
+  padding: 0.25rem;
 `;
 
-interface StyledDropdownProps {
-  options: string[];
-  selectedOption: string;
-  onSelect: (option: string) => void;
-}
+const StyledButton = styled.button<{ isSelected: boolean }>`
+  background: var(--global-div);
+  color: var(--global-text);
+  margin: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--global-border-radius);
+  transition: background-color 0.2s ease-in-out;
+`;
 
-const StyledDropdown: React.FC<StyledDropdownProps> = ({
-  options,
-  selectedOption,
-  onSelect,
-}) => (
-  <>
-    {options.map((option) => (
-      <StyledButton
-        key={option}
-        isSelected={selectedOption === option}
-        onClick={() => onSelect(option)}
-      >
-        {option}
-      </StyledButton>
-    ))}
-  </>
-);
+const StyledSelect = styled.select`
+  background: var(--global-div);
+  color: var(--global-text);
+  margin: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--global-border-radius);
+  transition: background-color 0.2s ease-in-out;
+`;
 
-const getInitialThemePreference = () => {
-  const storedThemePreference = localStorage.getItem('themePreference');
-  if (storedThemePreference) {
-    return storedThemePreference === 'dark';
-  } else {
-    // Check system theme when no preference is stored in localStorage
-    return (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    );
-  }
-};
+// Warning message styled component
+const WarningMessage = styled.div`
+  background-color: var(--global-div);
+  padding: 0.5rem;
+  border-radius: var(--global-border-radius);
+  text-align: center;
+  font-size: 0.9rem;
+`;
 
-const saveThemePreference = (isDarkMode: any) => {
-  localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
-};
+// Profile component
+const Profile: React.FC = () => {
+  // Initial state for preferences
+  const [preferences, setPreferences] = useState<Preferences>({
+    defaultLanguage: 'Sub',
+    autoskipIntroOutro: 'Disabled',
+    autoPlay: 'Disabled',
+    defaultEpisodeLayout: 'Auto',
+    rating: 'Anilist',
+    defaultServers: 'Default',
+    openKeyboardShortcuts: 'Open',
+    restoreDefaultPreferences: 'Restore',
+    clearContinueWatching: 'Clear',
+  });
 
-const Profile = () => {
-  // Other useState hooks remain unchanged...
-  const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
-
-  useEffect(() => {
-    // Apply the theme based on the isDarkMode state
-    document.documentElement.classList.toggle('dark-mode', isDarkMode);
-    // Save the theme preference to localStorage whenever it changes
-    saveThemePreference(isDarkMode);
-  }, [isDarkMode]);
-
-  // Function to set the theme to dark mode
-  const setDarkTheme = () => {
-    setIsDarkMode(true);
+  // Action handlers for non-toggling buttons
+  const performAction = (actionName: keyof Preferences) => {
+    alert(`Action performed: ${actionName}`);
+    // Here you would handle the action specific to the button
   };
 
-  // Function to set the theme to light mode
-  const setLightTheme = () => {
-    setIsDarkMode(false);
+  // Function to handle preference change
+  const handlePreferenceChange = (
+    preferenceName: keyof Preferences,
+    value: string,
+  ) => {
+    setPreferences({ ...preferences, [preferenceName]: value });
   };
 
-  const [defaultLanguage, setDefaultLanguage] = useState('Sub');
-  const [autoskipIntroOutro, setAutoskipIntroOutro] = useState('Disabled');
-  const [autoPlay, setAutoPlay] = useState('Disabled');
-  const [defaultEpisodeLayout, setDefaultEpisodeLayout] = useState('Auto');
-  const [rating, setRating] = useState('Anilist');
-  const [defaultServers, setDefaultServers] = useState('Default');
+  // Determine if a button should toggle or perform an action
+  const isActionPreference = (key: string): boolean => {
+    return [
+      'openKeyboardShortcuts',
+      'restoreDefaultPreferences',
+      'clearContinueWatching',
+    ].includes(key);
+  };
 
   return (
     <PreferencesContainer>
-      <h2>
-        Profile Settings
-        {/* <StyledButton isSelected={false}>Save</StyledButton> */}
-      </h2>
+      <WarningMessage>
+        <LuConstruction style={{ color: 'orange' }} /> This page is currently{' '}
+        <strong style={{ color: 'orange' }}>under construction</strong>. We
+        appreciate your patience as we work to bring you new features!
+        <br />
+        <br />
+        <img
+          src={Image404URL}
+          alt='404 Error'
+          style={{
+            borderRadius: 'var(--global-border-radius)',
+            maxWidth: '100%',
+          }}
+        />
+      </WarningMessage>
+
+      <h3>
+        <MdSettings />
+        SETTINGS
+      </h3>
       <PreferencesTable>
         <tbody>
-          <TableRow>
-            <TableCell>Theme</TableCell>
-            <TableCell>
-              <StyledButton
-                isSelected={!isDarkMode}
-                onClick={setLightTheme}
-                className='svg'
-              >
-                <FiSun />
-              </StyledButton>
-              <StyledButton
-                isSelected={isDarkMode}
-                onClick={setDarkTheme}
-                className='svg'
-              >
-                <FiMoon />
-              </StyledButton>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Default language</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Sub', 'Dub']}
-                selectedOption={defaultLanguage}
-                onSelect={setDefaultLanguage}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Autoskip Intro/Outro</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Disabled', 'Enabled']}
-                selectedOption={autoskipIntroOutro}
-                onSelect={setAutoskipIntroOutro}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>AutoPlay</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Disabled', 'Enabled']}
-                selectedOption={autoPlay}
-                onSelect={setAutoPlay}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Default episode layout</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Auto', 'Grid', 'List', 'Image']}
-                selectedOption={defaultEpisodeLayout}
-                onSelect={setDefaultEpisodeLayout}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Default servers</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Default', 'Vidstreaming', 'GogoAnime']}
-                selectedOption={defaultServers}
-                onSelect={setDefaultServers}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Rating MAL/Anilist</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Anilist', 'MyAnimeList']}
-                selectedOption={rating}
-                onSelect={setRating}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Open Keyboard Shortcuts</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Open']}
-                selectedOption={'Open'}
-                onSelect={() => {}}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Restore default preferences</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Restore']}
-                selectedOption={'Restore'}
-                onSelect={() => {}}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Clear Continue Watching</TableCell>
-            <TableCell>
-              <StyledDropdown
-                options={['Clear']}
-                selectedOption={'Clear'}
-                onSelect={() => {}}
-              />
-            </TableCell>
-          </TableRow>
+          {Object.entries(preferences).map(([key, value]) => (
+            <TableRow key={key}>
+              <TableCell>{getReadablePreferenceName(key)}</TableCell>
+              <TableCell>
+                {isMultipleChoicePreference(key) ? (
+                  <StyledSelect
+                    value={value}
+                    onChange={(e) =>
+                      handlePreferenceChange(
+                        key as keyof Preferences,
+                        e.target.value,
+                      )
+                    }
+                  >
+                    {getOptionsForPreference(key).map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </StyledSelect>
+                ) : (
+                  <StyledButton
+                    isSelected={value === 'Enabled'}
+                    onClick={() =>
+                      isActionPreference(key)
+                        ? performAction(key as keyof Preferences)
+                        : handlePreferenceChange(
+                            key as keyof Preferences,
+                            value === 'Enabled' ? 'Disabled' : 'Enabled',
+                          )
+                    }
+                  >
+                    <FaUserEdit />
+                    {' ' + value}
+                  </StyledButton>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
         </tbody>
       </PreferencesTable>
     </PreferencesContainer>
   );
+};
+
+// Function to check if preference is multiple choice
+const isMultipleChoicePreference = (key: string): boolean => {
+  const multipleChoicePreferences = [
+    'defaultLanguage',
+    'defaultEpisodeLayout',
+    'rating',
+    'defaultServers',
+  ];
+  return multipleChoicePreferences.includes(key);
+};
+
+// Function to get options for a preference
+const getOptionsForPreference = (key: string): string[] => {
+  switch (key) {
+    case 'defaultLanguage':
+      return ['Sub', 'Dub'];
+    case 'defaultEpisodeLayout':
+      return ['Auto', 'Compact', 'Detailed'];
+    case 'rating':
+      return ['Anilist', 'IMDb', 'MyAnimeList'];
+    case 'defaultServers':
+      return ['Default', 'Vidstreaming', 'Gogo'];
+    default:
+      return [];
+  }
+};
+
+// Function to get readable preference name
+const getReadablePreferenceName = (key: string): string => {
+  switch (key) {
+    case 'defaultLanguage':
+      return 'Default Language';
+    case 'autoskipIntroOutro':
+      return 'Autoskip Intro/Outro';
+    case 'autoPlay':
+      return 'Auto Play';
+    case 'defaultEpisodeLayout':
+      return 'Default Episode Layout';
+    case 'rating':
+      return 'Rating Source';
+    case 'defaultServers':
+      return 'Default Servers';
+    case 'openKeyboardShortcuts':
+      return 'Open Keyboard Shortcuts';
+    case 'restoreDefaultPreferences':
+      return 'Restore Default Preferences';
+    case 'clearContinueWatching':
+      return 'Clear Continue Watching';
+    default:
+      return '';
+  }
 };
 
 export default Profile;

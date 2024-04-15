@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getSeason } from './useSeason';
 
 // Utility function to ensure URL ends with a slash
 function ensureUrlEndsWithSlash(url: string): string {
@@ -30,6 +31,11 @@ const axiosInstance = axios.create({
 function handleError(error: any, context: string) {
   let errorMessage = 'An error occurred';
 
+  // Handling CORS errors (Note: This is a simplification. Real CORS errors are hard to catch in JS)
+  if (error.message && error.message.includes('Access-Control-Allow-Origin')) {
+    errorMessage = 'A CORS error occurred';
+  }
+
   switch (context) {
     case 'data':
       errorMessage = 'Error fetching data';
@@ -37,16 +43,19 @@ function handleError(error: any, context: string) {
     case 'anime episodes':
       errorMessage = 'Error fetching anime episodes';
       break;
-    case 'episode video URLs':
-      errorMessage = 'Error fetching episode video URLs';
-      break;
-    default:
-      errorMessage = 'Unknown error occurred';
-      break;
+    // Extend with other cases as needed
   }
 
-  if (error.response && error.response.data && error.response.data.message) {
-    errorMessage += `: ${error.response.data.message}`;
+  if (error.response) {
+    // Extend with more nuanced handling based on HTTP status codes
+    const status = error.response.status;
+    if (status >= 500) {
+      errorMessage += ': Server error';
+    } else if (status >= 400) {
+      errorMessage += ': Client error';
+    }
+    // Include server-provided error message if available
+    errorMessage += `: ${error.response.data.message || 'Unknown error'}`;
   } else if (error.message) {
     errorMessage += `: ${error.message}`;
   }
@@ -208,12 +217,12 @@ export async function fetchAdvancedSearch(
     ...(options.year && { year: options.year }),
     ...(options.status && { status: options.status }),
     ...(options.sort && { sort: JSON.stringify(options.sort) }),
-    ...(options.genres &&
-      options.genres.length > 0 && {
-        genres: options.genres.filter((g: string) => g).join(','),
-      }),
   });
 
+  if (options.genres && options.genres.length > 0) {
+    // Correctly encode genres as a JSON array
+    queryParams.set('genres', JSON.stringify(options.genres));
+  }
   const url = `${BASE_URL}meta/anilist/advanced-search?${queryParams.toString()}`;
   const cacheKey = generateCacheKey('advancedSearch', queryParams.toString());
 
@@ -244,7 +253,7 @@ export async function fetchAnimeInfo(
   return fetchFromProxy(url, animeInfoCache, cacheKey);
 }
 
-// Function to fetch list of anime based on type (Top, Trending, Popular)
+// Function to fetch list of anime based on type (TopRated, Trending, Popular)
 async function fetchList(
   type: string,
   page: number = 1,
@@ -258,7 +267,9 @@ async function fetchList(
     perPage: perPage.toString(),
   });
 
-  if (['Top', 'Trending', 'Popular'].includes(type)) {
+  if (
+    ['TopRated', 'Trending', 'Popular', 'TopAiring', 'Upcoming'].includes(type)
+  ) {
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -266,15 +277,44 @@ async function fetchList(
     );
     url = `${BASE_URL}meta/anilist/${type.toLowerCase()}`;
 
-    if (type === 'Top') {
+    if (type === 'TopRated') {
       options = {
         type: 'ANIME',
         sort: ['["SCORE_DESC"]'],
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
     }
+    if (type === 'Popular') {
+      options = {
+        type: 'ANIME',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
+    }
+    if (type === 'Upcoming') {
+      const season = getSeason(true); // This will set the season based on the current month
+      const year = new Date().getFullYear();
+      options = {
+        type: 'ANIME',
+        season: season,
+        year: year.toString(),
+        status: 'NOT_YET_RELEASED',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
+    } else if (type === 'TopAiring') {
+      const season = getSeason(false); // This will set the season based on the current month
+      const year = new Date().getFullYear();
+      options = {
+        type: 'ANIME',
+        season: season,
+        year: year.toString(),
+        status: 'RELEASING',
+        sort: ['["POPULARITY_DESC"]'],
+      };
+      url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
+    }
   } else {
-    // Default values for cacheKey and url if not "Top", "Trending", or "Popular"
     cacheKey = generateCacheKey(
       `${type}Anime`,
       page.toString(),
@@ -290,11 +330,15 @@ async function fetchList(
 
 // Functions to fetch top, trending, and popular anime
 export const fetchTopAnime = (page: number, perPage: number) =>
-  fetchList('Top', page, perPage);
+  fetchList('TopRated', page, perPage);
 export const fetchTrendingAnime = (page: number, perPage: number) =>
   fetchList('Trending', page, perPage);
 export const fetchPopularAnime = (page: number, perPage: number) =>
   fetchList('Popular', page, perPage);
+export const fetchTopAiringAnime = (page: number, perPage: number) =>
+  fetchList('TopAiring', page, perPage);
+export const fetchUpcomingSeasons = (page: number, perPage: number) =>
+  fetchList('Upcoming', page, perPage);
 
 // Fetch Anime Episodes Function
 export async function fetchAnimeEpisodes(

@@ -7,7 +7,8 @@ import os from 'os';
 const app = express();
 
 // Configuration settings
-const PORT = process.env.PORT || 5173;
+// TODO const PORT = import.meta.env.VITE_PORT || 5173;
+const PORT = 5173;
 const DIST_DIR = path.join(__dirname, '../dist');
 const INDEX_FILE = path.join(DIST_DIR, 'index.html');
 

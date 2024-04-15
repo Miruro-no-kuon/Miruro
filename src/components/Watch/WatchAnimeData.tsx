@@ -24,7 +24,9 @@ const AnimeDataContainer = styled.div`
 
 const AnimeDataContainerTop = styled.div`
   border-radius: var(--global-border-radius);
-  padding-top: 1rem;
+  background-color: var(--global-div-tr);
+  margin: 1rem 0;
+  padding: 0.75rem;
   color: var(--global-text);
   align-items: center;
   flex-direction: row;
@@ -65,9 +67,6 @@ const ParentContainer = styled.div`
 const AnimeDataText = styled.div`
   text-align: left;
   font-size: 0.8rem;
-  @media (max-width: 500px) {
-    font-size: 0.75rem;
-  }
   .anime-title {
     line-height: 1.6rem;
     font-size: 1.5rem;
@@ -101,12 +100,14 @@ const AnimeDataText = styled.div`
   .Description {
     line-height: 1rem;
     max-width: 50rem;
+    font-size: 0.9rem;
   }
   strong {
     color: var(--global-text);
   }
-  .Card-Sections-Titles {
+  .Seasons-Sections-Titles {
     color: var(--global-text);
+    margin-top: 1rem;
     font-size: 1.25rem;
     font-weight: bold;
   }
@@ -202,12 +203,27 @@ const MalAnilistSvg = styled.div`
   }
 `;
 
-const ShowMoreButton = styled.div`
+const ShowMoreButton = styled.button`
+  background-color: var(--global-div);
+  color: #828181;
   display: flex;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--global-border-radius);
+  margin: 0.5rem 0;
   text-align: left;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: var(--global-div);
+  }
   transition:
     color 0.3s ease,
     transform 0.2s ease-in-out;
+  @media (max-width: 500px) {
+    margin: 0rem;
+    margin-top: 1rem;
+  }
 `;
 
 const IframeTrailer = styled.iframe`
@@ -388,9 +404,13 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
               <ParentContainer>
                 <AnimeDataContainerMiddle>
                   <AnimeDataText>
-                    {animeData.type && (
+                    {animeData.type ? (
                       <p>
                         Type: <strong>{animeData.type}</strong>
+                      </p>
+                    ) : (
+                      <p>
+                        Type: <strong>Unknown</strong>
                       </p>
                     )}
                     {animeData.releaseDate ? (
@@ -515,7 +535,6 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
           </AnimeDataContainerTop>
           {isScreenUnder500px() && animeData.description && (
             <AnimeDataText>
-              <br></br>
               <p className='Description'>
                 <strong>Description: </strong>
                 <ShowMoreButton onClick={toggleDescription}>
@@ -529,16 +548,15 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
           )}
         </AnimeDataContainer>
       )}
-      <AnimeDataText>
-        <br />
-        {animeData.relations &&
-          animeData.relations.some(
-            (relation: any) =>
-              relation.relationType.toUpperCase() === 'PREQUEL' ||
-              relation.relationType.toUpperCase() === 'SEQUEL',
-          ) && (
-            <>
-              <p className='Card-Sections-Titles'>SEASONS</p>
+      {animeData.relations &&
+        animeData.relations.some(
+          (relation: any) =>
+            relation.relationType.toUpperCase() === 'PREQUEL' ||
+            relation.relationType.toUpperCase() === 'SEQUEL',
+        ) && (
+          <>
+            <AnimeDataText>
+              <p className='Seasons-Sections-Titles'>SEASONS</p>
               <Seasons
                 relations={animeData.relations.filter(
                   (relation: any) =>
@@ -546,9 +564,9 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
                     relation.relationType.toUpperCase() === 'SEQUEL',
                 )}
               />
-            </>
-          )}
-      </AnimeDataText>
+            </AnimeDataText>
+          </>
+        )}
     </>
   );
 };

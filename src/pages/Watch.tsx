@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 import styled from 'styled-components';
+import Image404URL from '/src/assets/404.webp';
 import {
   EpisodeList,
   Player,
@@ -16,8 +17,6 @@ import {
   SkeletonPlayer,
 } from '../index';
 import { Episode } from '../index';
-
-// Styled Components
 
 const WatchContainer = styled.div``;
 
@@ -51,8 +50,11 @@ const SourceAndData = styled.div<{ $videoPlayerWidth: string }>`
 `;
 
 const RalationsTable = styled.div`
-  paddding: 0;
+  padding: 0;
   margin-top: 1rem;
+  @media (max-width: 1000px) {
+    margin-top: 0rem;
+  }
 `;
 const VideoPlayerContainer = styled.div`
   position: relative;
@@ -80,25 +82,38 @@ const EpisodeListContainer = styled.div`
 
 const NoEpsFoundDiv = styled.div`
   text-align: center;
-  margin-top: 15rem;
-  margin-bottom: 15rem;
+  margin-top: 10rem;
+  margin-bottom: 10rem;
   @media (max-width: 1000px) {
-    margin-top: 10rem;
-    margin-bottom: 10rem;
+    margin-top: 2.5rem;
+    margin-bottom: 6rem;
   }
 `;
 
-const GoToHomePageButton = styled.a`
-  position: absolute;
+const NoEpsImage = styled.div`
+  margin-bottom: 3rem;
+  max-width: 100%;
+
+  img {
+    border-radius: var(--global-border-radius);
+    max-width: 100%;
+    @media (max-width: 500px) {
+      max-width: 70%;
+    }
+  }
+`;
+
+const StyledHomeButton = styled.button`
   color: white;
   border-radius: var(--global-border-radius);
+  border: none;
   background-color: var(--primary-accent);
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+  font-weight: bold;
   padding: 1rem;
+  position: absolute;
   transform: translate(-50%, -50%);
   transition: transform 0.2s ease-in-out;
-  text-decoration: none;
-
   &:hover,
   &:active,
   &:focus {
@@ -124,11 +139,10 @@ const IframeTrailer = styled.iframe`
   }
 `;
 
-// Constants
-
 const LOCAL_STORAGE_KEYS = {
   LAST_WATCHED_EPISODE: 'last-watched-',
   WATCHED_EPISODES: 'watched-episodes-',
+  LAST_ANIME_VISITED: 'last-anime-visited',
 };
 
 const useCountdown = (targetDate: number | null) => {
@@ -167,46 +181,30 @@ const useCountdown = (targetDate: number | null) => {
 };
 
 // Main Component
-const getSourceTypeKey = (animeId: string | undefined) => `source-[${animeId}]`;
-const getLanguageKey = (animeId: string | undefined) => `subOrDub-[${animeId}]`;
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
-  const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%'); // Default to 100%
-
+  const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%');
+  const getSourceTypeKey = (animeId: string | undefined) =>
+    `source-[${animeId}]`;
+  const getLanguageKey = (animeId: string | undefined) =>
+    `subOrDub-[${animeId}]`;
   const updateVideoPlayerWidth = useCallback(() => {
     if (videoPlayerContainerRef.current) {
       const width = `${videoPlayerContainerRef.current.offsetWidth}px`;
       setVideoPlayerWidth(width);
     }
   }, [setVideoPlayerWidth, videoPlayerContainerRef]);
-
-  useEffect(() => {
-    updateVideoPlayerWidth(); // Update on mount
-
-    // Enhanced to ensure the function itself is correctly triggered
-    const handleResize = () => {
-      updateVideoPlayerWidth();
-    };
-
-    window.addEventListener('resize', handleResize); // Update on resize
-
-    return () => window.removeEventListener('resize', handleResize); // Cleanup on unmount
-  }, [updateVideoPlayerWidth]);
-
   const [maxEpisodeListHeight, setMaxEpisodeListHeight] =
     useState<string>('100%');
-
   const { animeId, animeTitle, episodeNumber } = useParams<{
     animeId?: string;
     animeTitle?: string;
     episodeNumber?: string;
   }>();
-
   const STORAGE_KEYS = {
     SOURCE_TYPE: `source-[${animeId}]`,
     LANGUAGE: `subOrDub-[${animeId}]`,
   };
-
   const navigate = useNavigate();
   const [selectedBackgroundImage, setSelectedBackgroundImage] =
     useState<string>('');
@@ -235,21 +233,155 @@ const Watch: React.FC = () => {
   const [downloadLink, setDownloadLink] = useState('');
   const nextEpisodeAiringTime =
     animeInfo && animeInfo.nextAiringEpisode
-      ? animeInfo.nextAiringEpisode.airingTime * 1000 // Convert seconds to milliseconds
+      ? animeInfo.nextAiringEpisode.airingTime * 1000
       : null;
   const nextEpisodenumber = animeInfo?.nextAiringEpisode?.episode;
   const countdown = useCountdown(nextEpisodeAiringTime);
   const currentEpisodeIndex = episodes.findIndex(
     (ep) => ep.id === currentEpisode.id,
   );
+  const [languageChanged, setLanguageChanged] = useState(false);
 
+  //----------------------------------------------MORE VARIABLES----------------------------------------------
+  const GoToHomePageButton = () => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      navigate('/home');
+    };
+
+    return (
+      <StyledHomeButton onClick={handleClick}>Go back Home</StyledHomeButton>
+    );
+  };
+  //FETCH VIDSTREAMING VIDEO
+  const fetchVidstreamingUrl = async (episodeId: string) => {
+    try {
+      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
+      if (embeddedServers && embeddedServers.length > 0) {
+        const vidstreamingServer = embeddedServers.find(
+          (server: any) => server.name === 'Vidstreaming',
+        );
+        const selectedServer = vidstreamingServer || embeddedServers[0];
+        setEmbeddedVideoUrl(selectedServer.url);
+      }
+    } catch (error) {
+      console.error(
+        'Error fetching Vidstreaming servers for episode ID:',
+        episodeId,
+        error,
+      );
+    }
+  };
+
+  //FETCH GOGO VIDEO
+  const fetchEmbeddedUrl = async (episodeId: string) => {
+    try {
+      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
+      if (embeddedServers && embeddedServers.length > 0) {
+        const gogoServer = embeddedServers.find(
+          (server: any) => server.name === 'Gogo server',
+        );
+        const selectedServer = gogoServer || embeddedServers[0];
+        setEmbeddedVideoUrl(selectedServer.url);
+      }
+    } catch (error) {
+      console.error(
+        'Error fetching gogo servers for episode ID:',
+        episodeId,
+        error,
+      );
+    }
+  };
+
+  //SAVE TO LOCAL STORAGE NAVIGATED/CLICKED EPISODES
+  const updateWatchedEpisodes = (episode: Episode) => {
+    const watchedEpisodesJson = localStorage.getItem(
+      LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
+    );
+    const watchedEpisodes: Episode[] = watchedEpisodesJson
+      ? JSON.parse(watchedEpisodesJson)
+      : [];
+    if (!watchedEpisodes.some((ep) => ep.id === episode.id)) {
+      watchedEpisodes.push(episode);
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
+        JSON.stringify(watchedEpisodes),
+      );
+    }
+  };
+
+  // UPDATES CURRENT EPISODE INFORMATION, UPDATES WATCHED EPISODES AND NAVIGATES TO NEW URL
+  const handleEpisodeSelect = useCallback(
+    async (selectedEpisode: Episode) => {
+      setIsEpisodeChanging(true);
+      const animeTitle = selectedEpisode.id.split('-episode')[0];
+      setCurrentEpisode({
+        id: selectedEpisode.id,
+        number: selectedEpisode.number,
+        image: selectedEpisode.image,
+        title: selectedEpisode.title,
+        description: selectedEpisode.description,
+        imageHash: selectedEpisode.imageHash,
+        airDate: selectedEpisode.airDate,
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
+        JSON.stringify({
+          id: selectedEpisode.id,
+          title: selectedEpisode.title,
+          number: selectedEpisode.number,
+        }),
+      );
+      updateWatchedEpisodes(selectedEpisode);
+
+      navigate(
+        `/watch/${animeId}/${encodeURI(animeTitle)}/${selectedEpisode.number}`,
+        {
+          replace: true,
+        },
+      );
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      setIsEpisodeChanging(false);
+    },
+    [animeId, navigate],
+  );
+
+  //UPDATE DOWNLOAD LINK WHEN EPISODE ID CHANGES
+  const updateDownloadLink = useCallback((link: string) => {
+    setDownloadLink(link);
+  }, []);
+
+  //AUTOPLAY BUTTON TOGGLE PROPS
+  const handleEpisodeEnd = async () => {
+    const nextEpisodeIndex = currentEpisodeIndex + 1;
+    if (nextEpisodeIndex >= episodes.length) {
+      console.log('No more episodes.');
+      return;
+    }
+    handleEpisodeSelect(episodes[nextEpisodeIndex]);
+  };
+
+  //NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
+  const onPrevEpisode = () => {
+    const prevIndex = currentEpisodeIndex - 1;
+    if (prevIndex >= 0) {
+      handleEpisodeSelect(episodes[prevIndex]);
+    }
+  };
+  const onNextEpisode = () => {
+    const nextIndex = currentEpisodeIndex + 1;
+    if (nextIndex < episodes.length) {
+      handleEpisodeSelect(episodes[nextIndex]);
+    }
+  };
+
+  //----------------------------------------------USEFFECTS----------------------------------------------
+  //SETS DEFAULT SOURCE TYPE AND LANGUGAE TO DEFAULT AND SUB
   useEffect(() => {
     const defaultSourceType = 'default';
     const defaultLanguage = 'sub';
-
-    // Optionally, you can implement logic here to decide if you want to reset to defaults
-    // or maintain the setting from the previous anime. This example resets to defaults.
-
     setSourceType(
       localStorage.getItem(getSourceTypeKey(animeId || '')) ||
         defaultSourceType,
@@ -259,32 +391,25 @@ const Watch: React.FC = () => {
     );
   }, [animeId]);
 
-  // Effects to save settings to localStorage
-  useEffect(() => {
-    localStorage.setItem(getSourceTypeKey(animeId), sourceType);
-  }, [sourceType, animeId]);
-
+  // SAVES LANGUAGE PREFERENCE TO LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem(getLanguageKey(animeId), language);
   }, [language, animeId]);
-  const [languageChanged, setLanguageChanged] = useState(false);
+
+  //FETCHES ANIME DATA AND ANIME INFO AS BACKUP
   useEffect(() => {
     let isMounted = true;
-
     const fetchInfo = async () => {
       if (!animeId) {
         console.error('Anime ID is null.');
         setLoading(false);
         return;
       }
-
-      setLoading(true); // Indicate that loading has started
-
+      setLoading(true);
       try {
         const info = await fetchAnimeData(animeId);
         if (isMounted) {
           setAnimeInfo(info);
-          // setLoading(false); // Data fetched successfully, loading complete
         }
       } catch (error) {
         console.error(
@@ -301,9 +426,8 @@ const Watch: React.FC = () => {
             'Also failed to fetch anime info as a fallback:',
             fallbackError,
           );
-          // If this fails too, consider showing an error message to the user
         } finally {
-          if (isMounted) setLoading(false); // Ensure loading is set to false after all attempts
+          if (isMounted) setLoading(false);
         }
       }
     };
@@ -315,13 +439,12 @@ const Watch: React.FC = () => {
     };
   }, [animeId]);
 
+  // FETCHES ANIME EPISODES BASED ON LANGUAGE, ANIME ID AND UPDATES COMPONENTS
   useEffect(() => {
     let isMounted = true;
-
     const fetchData = async () => {
       setLoading(true);
       if (!animeId) return;
-
       try {
         const isDub = language === 'dub';
         const animeData = await fetchAnimeEpisodes(animeId, undefined, isDub);
@@ -340,29 +463,23 @@ const Watch: React.FC = () => {
                 image: ep.image,
               };
             });
-
           setEpisodes(transformedEpisodes);
-
-          // Navigate based on language change, URL parameters, or saved episode
           const navigateToEpisode = (() => {
             if (languageChanged) {
               const currentEpisodeNumber =
                 episodeNumber || currentEpisode.number;
-              // Try to find the current episode in the new language or default to the last available episode
               return (
                 transformedEpisodes.find(
                   (ep: any) => ep.number === currentEpisodeNumber,
                 ) || transformedEpisodes[transformedEpisodes.length - 1]
               );
             } else if (animeTitle && episodeNumber) {
-              // Navigate based on URL parameters
               const episodeId = `${animeTitle}-episode-${episodeNumber}`;
               return (
                 transformedEpisodes.find((ep: any) => ep.id === episodeId) ||
                 navigate(`/watch/${animeId}`, { replace: true })
               );
             } else {
-              // Navigate based on the last watched episode saved in localStorage
               const savedEpisodeData = localStorage.getItem(
                 LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
               );
@@ -403,6 +520,30 @@ const Watch: React.FC = () => {
       }
     };
 
+    // Last visited cache to order continue watching
+    const updateLastVisited = () => {
+      if (!animeInfo || !animeId) return; // Ensure both animeInfo and animeId are available
+
+      const lastVisited = localStorage.getItem(
+        LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
+      );
+      const lastVisitedData = lastVisited ? JSON.parse(lastVisited) : {};
+      lastVisitedData[animeId] = {
+        timestamp: Date.now(),
+        titleEnglish: animeInfo.title.english, // Assuming animeInfo contains the title in English
+        titleRomaji: animeInfo.title.romaji, // Assuming animeInfo contains the title in Romaji
+      };
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
+        JSON.stringify(lastVisitedData),
+      );
+    };
+
+    if (animeId) {
+      updateLastVisited();
+    }
+
     fetchData();
 
     return () => {
@@ -418,19 +559,20 @@ const Watch: React.FC = () => {
     currentEpisode.number,
   ]);
 
+  // FETCH EMBEDDED EPISODES IF VIDSTREAMING OR GOGO HAVE BEEN SELECTED
   useEffect(() => {
-    if (!loading && episodes.length === 0) {
-      setShowNoEpisodesMessage(true);
-    } else {
-      setShowNoEpisodesMessage(false);
+    if (sourceType === 'vidstreaming' && currentEpisode.id) {
+      fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
+    } else if (sourceType === 'gogo' && currentEpisode.id) {
+      fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
     }
-  }, [loading, episodes]);
+  }, [sourceType, currentEpisode.id]);
 
+  // UPDATE BACKGROUND IMAGE TO ANIME BANNER IF WIDTH IS UNDER 500PX / OR USE ANIME COVER IF NO BANNER FOUND
   useEffect(() => {
     const updateBackgroundImage = () => {
       const episodeImage = currentEpisode.image;
       const bannerImage = animeInfo?.cover || animeInfo?.artwork[3].img;
-
       if (episodeImage && episodeImage !== animeInfo.image) {
         const img = new Image();
         img.onload = () => {
@@ -448,68 +590,51 @@ const Watch: React.FC = () => {
         setSelectedBackgroundImage(bannerImage);
       }
     };
-
     if (animeInfo && currentEpisode.id !== '0') {
       updateBackgroundImage();
     }
   }, [animeInfo, currentEpisode]);
 
-  const handleEpisodeSelect = useCallback(
-    async (selectedEpisode: Episode) => {
-      setIsEpisodeChanging(true);
-      const animeTitle = selectedEpisode.id.split('-episode')[0];
+  //UPDATES VIDEOPLAYER WIDTH WHEN WINDOW GETS RESIZED
+  useEffect(() => {
+    updateVideoPlayerWidth();
+    const handleResize = () => {
+      updateVideoPlayerWidth();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [updateVideoPlayerWidth]);
 
-      setCurrentEpisode({
-        id: selectedEpisode.id,
-        number: selectedEpisode.number,
-        image: selectedEpisode.image,
-        title: selectedEpisode.title,
-        description: selectedEpisode.description,
-        imageHash: selectedEpisode.imageHash,
-        airDate: selectedEpisode.airDate,
-      });
+  //UPDATES EPISODE LIST MAX HEIGHT BASED ON VIDEO PLAYER CURRENT HEIGHT
+  useEffect(() => {
+    const updateMaxHeight = () => {
+      if (videoPlayerContainerRef.current) {
+        const height = videoPlayerContainerRef.current.offsetHeight;
+        setMaxEpisodeListHeight(`${height}px`);
+      }
+    };
+    updateMaxHeight();
+    window.addEventListener('resize', updateMaxHeight);
+    return () => window.removeEventListener('resize', updateMaxHeight);
+  }, []);
 
-      localStorage.setItem(
-        LOCAL_STORAGE_KEYS.LAST_WATCHED_EPISODE + animeId,
-        JSON.stringify({
-          id: selectedEpisode.id,
-          title: selectedEpisode.title,
-          number: selectedEpisode.number,
-        }),
-      );
+  // SAVES SOURCE TYPE PREFERENCE TO LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem(getSourceTypeKey(animeId), sourceType);
+  }, [sourceType, animeId]);
 
-      updateWatchedEpisodes(selectedEpisode);
-
-      navigate(
-        `/watch/${animeId}/${encodeURI(animeTitle)}/${selectedEpisode.number}`,
-        {
-          replace: true,
-        },
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      setIsEpisodeChanging(false);
-    },
-    [animeId, navigate],
-  );
-
-  //next episode shortcut with 500ms delay.
+  //NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Check if the event target is an input or textarea element
       const targetTagName = (event.target as HTMLElement).tagName.toLowerCase();
       if (targetTagName === 'input' || targetTagName === 'textarea') {
-        return; // Exit the function if event is from input or textarea
+        return;
       }
-
       if (!event.shiftKey || !['N', 'P'].includes(event.key.toUpperCase()))
         return;
       const now = Date.now();
-      if (now - lastKeypressTime < 200) return; // Debounce check
-
+      if (now - lastKeypressTime < 200) return;
       setLastKeypressTime(now);
-
       const currentIndex = episodes.findIndex(
         (ep) => ep.id === currentEpisode.id,
       );
@@ -517,20 +642,18 @@ const Watch: React.FC = () => {
         event.key.toUpperCase() === 'N' &&
         currentIndex < episodes.length - 1
       ) {
-        // Move to next episode
         const nextEpisode = episodes[currentIndex + 1];
         handleEpisodeSelect(nextEpisode);
       } else if (event.key.toUpperCase() === 'P' && currentIndex > 0) {
-        // Move to previous episode
         const prevEpisode = episodes[currentIndex - 1];
         handleEpisodeSelect(prevEpisode);
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [episodes, currentEpisode, handleEpisodeSelect, lastKeypressTime]);
 
+  //SET PAGE TITLE TO MIRURO + ANIME TITLE
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
@@ -542,201 +665,68 @@ const Watch: React.FC = () => {
     } else {
       document.title = 'Miruro';
     }
-
-    const handleKeyPress = (event: KeyboardEvent) => {
-      const isSearchBox =
-        event.target instanceof HTMLInputElement &&
-        (event.target.type === 'text' || event.target.type === 'search');
-
-      if (event.code === 'Space' && !isSearchBox) {
-        event.preventDefault();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    };
   }, [animeInfo]);
 
+  //No idea
+  useEffect(() => {
+    let isMounted = true;
+    const fetchInfo = async () => {
+      if (!animeId) {
+        console.error('Anime ID is undefined.');
+        return;
+      }
+      try {
+        const info = await fetchAnimeData(animeId);
+        if (isMounted) {
+          setAnimeInfo(info);
+        }
+      } catch (error) {
+        console.error('Failed to fetch anime info:', error);
+      }
+    };
+    fetchInfo();
+    return () => {
+      isMounted = false;
+    };
+  }, [animeId]);
+
+  //SHOW NO EPISODES DIV IF NO RESPONSE AFTER 10 SECONDS
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!episodes || episodes.length === 0) {
         setShowNoEpisodesMessage(true);
       }
     }, 10000);
-
     return () => clearTimeout(timeoutId);
   }, [loading, episodes]);
 
-  const updateWatchedEpisodes = (episode: Episode) => {
-    const watchedEpisodesJson = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
-    );
-    const watchedEpisodes: Episode[] = watchedEpisodesJson
-      ? JSON.parse(watchedEpisodesJson)
-      : [];
-
-    if (!watchedEpisodes.some((ep) => ep.id === episode.id)) {
-      watchedEpisodes.push(episode);
-      localStorage.setItem(
-        LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
-        JSON.stringify(watchedEpisodes),
-      );
-    }
-  };
-
-  // Assuming you need to determine which episode's URL to use
-  const fetchEmbeddedUrl = async (episodeId: string) => {
-    try {
-      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
-      if (embeddedServers && embeddedServers.length > 0) {
-        // Attempt to find the "Gogo server" in the list of servers
-        const gogoServer = embeddedServers.find(
-          (server: any) => server.name === 'Gogo server',
-        );
-        // If "Gogo server" is found, use it; otherwise, use the first server
-        const selectedServer = gogoServer || embeddedServers[0];
-        setEmbeddedVideoUrl(selectedServer.url); // Use the URL of the selected server
-      }
-    } catch (error) {
-      console.error(
-        'Error fetching gogo servers for episode ID:',
-        episodeId,
-        error,
-      );
-    }
-  };
-
-  const fetchVidstreamingUrl = async (episodeId: string) => {
-    try {
-      // Fetch embedded servers for the episode
-      const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
-      if (embeddedServers && embeddedServers.length > 0) {
-        // Attempt to find the "Vidstreaming" server in the list of servers
-        const vidstreamingServer = embeddedServers.find(
-          (server: any) => server.name === 'Vidstreaming',
-        );
-        // If "Vidstreaming" server is found, use it; otherwise, use the first server
-        const selectedServer = vidstreamingServer || embeddedServers[0];
-        setEmbeddedVideoUrl(selectedServer.url); // Use the URL of the selected server
-      }
-    } catch (error) {
-      console.error(
-        'Error fetching Vidstreaming servers for episode ID:',
-        episodeId,
-        error,
-      );
-    }
-  };
-
-  // Call this function with the appropriate episode ID when an episode is selected
+  // SHOW NO EPISODES DIV IF NOT LOADING AND NO EPISODES FOUND
   useEffect(() => {
-    if (sourceType === 'vidstreaming' && currentEpisode.id) {
-      fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
-    } else if (sourceType === 'gogo' && currentEpisode.id) {
-      fetchEmbeddedUrl(currentEpisode.id).catch(console.error);
+    if (!loading && episodes.length === 0) {
+      setShowNoEpisodesMessage(true);
+    } else {
+      setShowNoEpisodesMessage(false);
     }
-  }, [sourceType, currentEpisode.id]);
-
-  useEffect(() => {
-    const updateMaxHeight = () => {
-      if (videoPlayerContainerRef.current) {
-        const height = videoPlayerContainerRef.current.offsetHeight;
-        setMaxEpisodeListHeight(`${height}px`);
-      }
-    };
-
-    updateMaxHeight();
-    window.addEventListener('resize', updateMaxHeight);
-
-    return () => window.removeEventListener('resize', updateMaxHeight);
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchInfo = async () => {
-      if (!animeId) {
-        console.error('Anime ID is undefined.');
-        return; // Exit if animeId is undefined
-      }
-
-      try {
-        const info = await fetchAnimeData(animeId);
-        if (isMounted) {
-          setAnimeInfo(info); // Update animeInfo state
-        }
-      } catch (error) {
-        console.error('Failed to fetch anime info:', error);
-      }
-    };
-
-    fetchInfo();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [animeId]); // Dependency array to re-run the effect when animeId changes
-
-  const updateDownloadLink = useCallback((link: string) => {
-    setDownloadLink(link);
-  }, []);
-
-  //Auto Next episode logic
-  const handleEpisodeEnd = async () => {
-    const nextEpisodeIndex = currentEpisodeIndex + 1;
-
-    if (nextEpisodeIndex >= episodes.length) {
-      console.log('No more episodes.');
-      return; // No more episodes to play
-    }
-
-    const nextEpisode = episodes[nextEpisodeIndex];
-    handleEpisodeSelect(nextEpisode);
-  };
-
-  // Next and previous Episode logic through Videplayer Buttons
-  const onPrevEpisode = () => {
-    const prevIndex = currentEpisodeIndex - 1;
-    if (prevIndex >= 0) {
-      const prevEpisode = episodes[prevIndex];
-      handleEpisodeSelect(prevEpisode);
-    }
-  };
-
-  const onNextEpisode = () => {
-    const nextIndex = currentEpisodeIndex + 1;
-    if (nextIndex < episodes.length) {
-      const nextEpisode = episodes[nextIndex];
-      handleEpisodeSelect(nextEpisode);
-    }
-  };
+  }, [loading, episodes]);
 
   return (
     <WatchContainer>
       {animeInfo &&
       animeInfo.status === 'Not yet aired' &&
       animeInfo.trailer ? (
-        // Display the trailer if the anime has not yet aired and has a trailer
         <div style={{ textAlign: 'center' }}>
           <strong>
-            <h2>Time until next episode:</h2>
+            <h2>Time Remaining:</h2>
           </strong>
-          <p>
-            <h4>
-              {animeInfo &&
-              animeInfo.nextAiringEpisode &&
-              countdown !== 'Airing now or aired' ? (
-                <>
-                  <FaBell /> {countdown}
-                </>
-              ) : (
-                'Unknown'
-              )}
-            </h4>
-          </p>
+          {animeInfo &&
+          animeInfo.nextAiringEpisode &&
+          countdown !== 'Airing now or aired' ? (
+            <p>
+              <FaBell /> {countdown}
+            </p>
+          ) : (
+            <p>Unknown</p>
+          )}
           {animeInfo.trailer && (
             <IframeTrailer
               src={`https://www.youtube.com/embed/${animeInfo.trailer.id}`}
@@ -746,13 +736,14 @@ const Watch: React.FC = () => {
           )}
         </div>
       ) : showNoEpisodesMessage ? (
-        // Condition for displaying the "No episodes found" div
         <NoEpsFoundDiv>
-          <h2>No episodes found :(</h2>
-          <GoToHomePageButton href='/home'>Go back Home</GoToHomePageButton>
+          <h2>No episodes found {':('}</h2>
+          <NoEpsImage>
+            <img src={Image404URL} alt='404 Error'></img>
+          </NoEpsImage>
+          <GoToHomePageButton />
         </NoEpsFoundDiv>
       ) : (
-        // Render content when episodes are found
         <WatchWrapper>
           {!showNoEpisodesMessage && (
             <>
@@ -768,6 +759,9 @@ const Watch: React.FC = () => {
                     onEpisodeEnd={handleEpisodeEnd}
                     onPrevEpisode={onPrevEpisode}
                     onNextEpisode={onNextEpisode}
+                    animeTitle={
+                      animeInfo?.title?.english || animeInfo?.title?.romaji
+                    }
                   />
                 ) : (
                   <EmbedPlayer src={embeddedVideoUrl} />
@@ -797,7 +791,6 @@ const Watch: React.FC = () => {
       )}
       <DataWrapper>
         <SourceAndData $videoPlayerWidth={videoPlayerWidth}>
-          {/* Conditionally render MediaSource based on anime airing status */}
           {animeInfo && animeInfo.status !== 'Not yet aired' && (
             <MediaSource
               sourceType={sourceType}

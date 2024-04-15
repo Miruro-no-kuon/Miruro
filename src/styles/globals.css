@@ -100,11 +100,6 @@ body {
   transition: 0.2s ease;
 }
 /* Responsive styles */
-@media (max-width: 1000px) {
-  body {
-    padding: 4.5rem 0.5rem 0.5rem 0.5rem;
-  }
-}
 @media (max-width: 500px) {
   body {
     padding: 4rem 0.5rem 0.5rem 0.5rem;

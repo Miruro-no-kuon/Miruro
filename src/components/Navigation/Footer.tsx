@@ -3,8 +3,10 @@ import { FaReddit, FaDiscord, FaTwitter, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const PageWrapper = styled.div`
-  padding: 0 1rem;
   margin-top: 2rem;
+  @media (max-width: 1000px) {
+    padding: 0 0.5rem;
+  }
 `;
 
 const FooterBaseContainer = styled.footer<{ $isSub: boolean }>`

@@ -1,41 +1,56 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  HomeCarousel as CarouselTrending,
+  HomeCarousel,
   CardGrid,
-  StyledCardGrid, // Assuming StyledCardGrid is a named export you want to use directly
+  StyledCardGrid,
   SkeletonSlide,
   SkeletonCard,
   fetchTrendingAnime,
   fetchPopularAnime,
   fetchTopAnime,
+  fetchTopAiringAnime,
+  fetchUpcomingSeasons,
   fetchRecentEpisodes,
-  EpisodeCard as AnimeEpisodeCardComponent, // Assuming EpisodeCard is the actual export name
-} from '../index'; // Adjust the import path to point correctly to your index.ts location
-import { Episode } from '../index';
+  HomeSideBar,
+  EpisodeCard,
+  getSeason,
+} from '../index';
+import { Anime, Episode } from '../hooks/interface';
 
 const SimpleLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContentSidebarLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+
+  @media (min-width: 1000px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const TabContainer = styled.div`
-  display: flex; /* Make it a flex container */
-  justify-content: center; /* This centers the children (tabs) horizontally */
-  flex-wrap: wrap; /* Allows tabs to wrap if they don't fit */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
   border-radius: var(--global-border-radius);
   width: 100%;
-  gap: 1rem; /* Adds some space between your tabs if they wrap */
 `;
 
-const Tab = styled.button<{ $isActive: boolean }>`
+const Tab = styled.div<{ $isActive: boolean }>`
   background: ${({ $isActive }) =>
     $isActive ? 'var(--primary-accent)' : 'transparent'};
-  padding: 1rem;
   border-radius: var(--global-border-radius);
   border: none;
   cursor: pointer;
@@ -43,8 +58,9 @@ const Tab = styled.button<{ $isActive: boolean }>`
   color: var(--global-text);
   position: relative;
   overflow: hidden;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0;
+  font-size: 0.8rem;
+  padding: 1rem;
 
   transition: background-color 0.3s ease;
 
@@ -53,10 +69,9 @@ const Tab = styled.button<{ $isActive: boolean }>`
   &:focus {
     background: var(--primary-accent);
   }
+
   @media (max-width: 500px) {
     padding: 0.5rem;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
   }
 `;
 
@@ -65,7 +80,6 @@ const Section = styled.section`
   border-radius: var(--global-border-radius);
 `;
 
-// Styled component for error messages
 const ErrorMessage = styled.div`
   padding: 1rem;
   margin: 1rem 0;
@@ -81,43 +95,48 @@ const ErrorMessage = styled.div`
 `;
 
 const Home = () => {
-  const [, /* watchedEpisodes */ setWatchedEpisodes] = useState<Episode[]>([]);
   const [itemsCount, setItemsCount] = useState(
-    window.innerWidth > 500 ? 14 : 12,
+    window.innerWidth > 500 ? 24 : 15,
   );
-  const [trendingAnime, setTrendingAnime] = useState([]);
-  const [popularAnime, setPopularAnime] = useState([]);
-  const [topAnime, setTopAnime] = useState([]);
-  const [recentEpisodes, setRecentEpisodes] = useState([]); // State for recent episodes
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState({
-    trending: true,
-    popular: true,
-    top: true,
-    recent: true, // Flag for recent episodes loading state
-  });
   const [activeTab, setActiveTab] = useState(() => {
     const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
       const now = new Date().getTime();
-      // Check if the saved tab is older than 24 hours
       if (now - timestamp < 24 * 60 * 60 * 1000) {
         return tab;
       } else {
-        localStorage.removeItem('home tab'); // Clear expired data
+        localStorage.removeItem('home tab');
       }
     }
-    return 'trending'; // Default tab if no/invalid saved data
+    return 'trending';
+  });
+
+  const [state, setState] = useState({
+    watchedEpisodes: [] as Episode[],
+    trendingAnime: [] as Anime[],
+    popularAnime: [] as Anime[],
+    topAnime: [] as Anime[],
+    topAiring: [] as Anime[],
+    Upcoming: [] as Anime[],
+    recentEpisodes: [] as Anime[],
+    error: null as string | null,
+    loading: {
+      trending: true,
+      popular: true,
+      topRated: true,
+      topAiring: true,
+      Upcoming: true,
+      recent: true,
+    },
   });
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsCount(window.innerWidth > 500 ? 14 : 12);
+      setItemsCount(window.innerWidth > 500 ? 24 : 15);
     };
 
     window.addEventListener('resize', handleResize);
-    // Set initial value
     handleResize();
 
     return () => {
@@ -130,16 +149,16 @@ const Home = () => {
       const watchedEpisodesData = localStorage.getItem('watched-episodes');
       if (watchedEpisodesData) {
         const allEpisodes = JSON.parse(watchedEpisodesData);
-        const latestEpisodes: Episode[] = []; // Correctly typed
-
+        const latestEpisodes: Episode[] = [];
         Object.keys(allEpisodes).forEach((animeId) => {
           const episodes = allEpisodes[animeId];
-          // Assuming episodes are stored in order, take the last one as the most recent
           const latestEpisode = episodes[episodes.length - 1];
           latestEpisodes.push(latestEpisode);
         });
-
-        setWatchedEpisodes(latestEpisodes);
+        setState((prevState) => ({
+          ...prevState,
+          watchedEpisodes: latestEpisodes,
+        }));
       }
     };
 
@@ -147,51 +166,46 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const desiredItemCount = itemsCount;
-    // Increase initial fetch count by 40% to account for filtering
     const fetchCount = Math.ceil(itemsCount * 1.4);
-
     const fetchData = async () => {
       try {
-        // Reset error state on new fetch attempt
-        setError(null);
-
-        const [trending, popular, top, recent] = await Promise.all([
-          fetchTrendingAnime(1, fetchCount),
-          fetchPopularAnime(1, fetchCount),
-          fetchTopAnime(1, fetchCount),
-          fetchRecentEpisodes(1, fetchCount),
-        ]);
-        const recentEpisodesTrimmed = recent.results.slice(0, 14); // Always trim to 14
-        setRecentEpisodes(recentEpisodesTrimmed);
-
-        // Filter out anime without totalEpisodes, duration, or releaseDate
-        const filterAndTrimAnime = (animeList: any) =>
-          animeList.results
-            .filter(
-              (anime: any) =>
-                anime.totalEpisodes !== null &&
-                anime.duration !== null &&
-                anime.releaseDate !== null,
-            )
-            .slice(0, desiredItemCount); // Trim the list to the desired item count
-
-        setTrendingAnime(filterAndTrimAnime(trending));
-        setPopularAnime(filterAndTrimAnime(popular));
-        setTopAnime(filterAndTrimAnime(top));
+        setState((prevState) => ({ ...prevState, error: null }));
+        const [trending, popular, topRated, topAiring, Upcoming, recent] =
+          await Promise.all([
+            fetchTrendingAnime(1, fetchCount),
+            fetchPopularAnime(1, fetchCount),
+            fetchTopAnime(1, fetchCount),
+            fetchTopAiringAnime(1, 6),
+            fetchUpcomingSeasons(1, 6),
+            fetchRecentEpisodes(1, fetchCount),
+          ]);
+        const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
+        setState((prevState) => ({
+          ...prevState,
+          trendingAnime: filterAndTrimAnime(trending),
+          popularAnime: filterAndTrimAnime(popular),
+          topAnime: filterAndTrimAnime(topRated),
+          topAiring: filterAndTrimAnime(topAiring),
+          Upcoming: filterAndTrimAnime(Upcoming),
+          recentEpisodes: recentEpisodesTrimmed,
+        }));
       } catch (fetchError) {
-        if (fetchError instanceof Error) {
-          setError(fetchError.message);
-        } else {
-          setError('An unexpected error occurred');
-        }
+        setState((prevState) => ({
+          ...prevState,
+          error: 'An unexpected error occurred',
+        }));
       } finally {
-        setLoading({
-          trending: false,
-          popular: false,
-          top: false,
-          recent: false,
-        });
+        setState((prevState) => ({
+          ...prevState,
+          loading: {
+            trending: false,
+            popular: false,
+            topRated: false,
+            topAiring: false,
+            Upcoming: false,
+            recent: false,
+          },
+        }));
       }
     };
 
@@ -208,86 +222,137 @@ const Home = () => {
     localStorage.setItem('home tab', tabData);
   }, [activeTab]);
 
+  const filterAndTrimAnime = (animeList: any) =>
+    animeList.results
+      /*       .filter(
+              (anime: Anime) =>
+                anime.totalEpisodes !== null &&
+                anime.duration !== null &&
+                anime.releaseDate !== null,
+            ) */
+      .slice(0, itemsCount);
+
   const renderCardGrid = (
-    animeData: any[],
+    animeData: Anime[],
     isLoading: boolean,
     hasError: boolean,
   ) => (
     <Section>
       {isLoading || hasError ? (
         <StyledCardGrid>
-          {Array.from({ length: 14 }, (_, index) => (
+          {Array.from({ length: itemsCount }, (_, index) => (
             <SkeletonCard key={index} />
           ))}
         </StyledCardGrid>
       ) : (
         <CardGrid
           animeData={animeData}
-          hasNextPage={false} // Adjust as necessary
-          onLoadMore={() => {}} // Placeholder for actual logic
+          hasNextPage={false}
+          onLoadMore={() => {}}
         />
       )}
     </Section>
   );
+
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
   };
 
+  const SEASON = getSeason(true);
+
   return (
     <SimpleLayout>
-      {error && (
+      {state.error && (
         <ErrorMessage title='Error Message'>
-          <p>ERROR: {error}</p>
+          <p>ERROR: {state.error}</p>
         </ErrorMessage>
       )}
-      {loading.trending || error ? (
+      {state.loading.trending || state.error ? (
         <SkeletonSlide />
       ) : (
-        <CarouselTrending
-          data={trendingAnime}
-          loading={loading.trending}
-          error={error}
+        <HomeCarousel
+          data={state.trendingAnime}
+          loading={state.loading.trending}
+          error={state.error}
         />
       )}
-      <TabContainer>
-        <Tab
-          title='Trending Tab'
-          $isActive={activeTab === 'trending'}
-          onClick={() => handleTabClick('trending')}
+      <ContentSidebarLayout>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            gap: '1rem',
+          }}
         >
-          TRENDING
-        </Tab>
-        <Tab
-          title='Popular Tab'
-          $isActive={activeTab === 'popular'}
-          onClick={() => handleTabClick('popular')}
-        >
-          POPULAR
-        </Tab>
-        <Tab
-          title='Top Anime Tab'
-          $isActive={activeTab === 'top'}
-          onClick={() => handleTabClick('top')}
-        >
-          TOP ANIME
-        </Tab>
-        <Tab
-          title='Recent Episodes Tab'
-          $isActive={activeTab === 'recent'}
-          onClick={() => handleTabClick('recent')}
-        >
-          RECENTLY UPDATED
-        </Tab>
-      </TabContainer>
-      {/* Render other sections based on activeTab */}
-      {activeTab === 'trending' &&
-        renderCardGrid(trendingAnime, loading.trending, !!error)}
-      {activeTab === 'popular' &&
-        renderCardGrid(popularAnime, loading.popular, !!error)}
-      {activeTab === 'top' && renderCardGrid(topAnime, loading.top, !!error)}
-      {activeTab === 'recent' &&
-        renderCardGrid(recentEpisodes, loading.recent, !!error)}
-      <AnimeEpisodeCardComponent />
+          <TabContainer>
+            <Tab
+              title='Trending Tab'
+              $isActive={activeTab === 'trending'}
+              onClick={() => handleTabClick('trending')}
+            >
+              TRENDING
+            </Tab>
+            <Tab
+              title='Popular Tab'
+              $isActive={activeTab === 'popular'}
+              onClick={() => handleTabClick('popular')}
+            >
+              POPULAR
+            </Tab>
+            <Tab
+              title='Top Rated Tab'
+              $isActive={activeTab === 'topRated'}
+              onClick={() => handleTabClick('topRated')}
+            >
+              TOP RATED
+            </Tab>
+          </TabContainer>
+          <div>
+            {activeTab === 'trending' &&
+              renderCardGrid(
+                state.trendingAnime,
+                state.loading.trending,
+                !!state.error,
+              )}
+            {activeTab === 'popular' &&
+              renderCardGrid(
+                state.popularAnime,
+                state.loading.popular,
+                !!state.error,
+              )}
+            {activeTab === 'topRated' &&
+              renderCardGrid(
+                state.topAnime,
+                state.loading.topRated,
+                !!state.error,
+              )}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              padding: '0.75rem 0',
+            }}
+          >
+            TOP AIRING
+          </div>
+          <HomeSideBar animeData={state.topAiring} />
+          <div
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              padding: '0.75rem 0',
+            }}
+          >
+            UPCOMING {SEASON}
+          </div>
+          <HomeSideBar animeData={state.Upcoming} />
+        </div>
+      </ContentSidebarLayout>
+      <EpisodeCard />
     </SimpleLayout>
   );
 };

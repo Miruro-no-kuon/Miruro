@@ -30,7 +30,7 @@ const animationMixin = css`
 `;
 
 const BaseSkeleton = styled.div`
-  background: var(--global-card-bg);
+  background: var(--global-primary-skeleton);
   border-radius: var(--global-border-radius);
 `;
 
