@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Anime } from '../../hooks/animeInterface';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
 import { TbCardsFilled } from 'react-icons/tb';
+import { BsArrowUpSquare, BsArrowDownSquare } from 'react-icons/bs';
+import { PiKeyReturn } from 'react-icons/pi';
 
 const slideDownAnimation = keyframes`
   0% { transform: translateY(0px); max-height: 0; }
@@ -74,18 +76,27 @@ const Item = styled.div<{ $isSelected: boolean }>`
     }
   }
 `;
-
 const ViewAllItem = styled(Item)<{ $isSelected: boolean }>`
   font-size: 0.9rem;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between; // This spreads out the children to the extremes
   align-items: center;
-  justify-content: center;
   color: ${({ $isSelected }) => ($isSelected ? '' : '#666')};
-
   &:hover,
   &:active,
   &:focus {
     color: var(--global-text);
+  }
+  svg {
+    margin-bottom: -0.1rem;
+  }
+`;
+
+const Shorcuts = styled.div`
+  font-weight: normal;
+  @media (max-width: 600px) {
+    display: none;
   }
 `;
 
@@ -234,18 +245,25 @@ export const DropDownSearch: React.FC<Props> = ({
           </div>
         </Item>
       ))}
-      <ViewAllItem
-        $isSelected={selectedIndex === searchResults.length}
-        onClick={() => {
-          navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-          onClose();
-        }}
-        role='listitem'
-        tabIndex={0}
-      >
-        <>View All</> &nbsp;
-        <FaArrowRight />
-      </ViewAllItem>
+      <div>
+        <ViewAllItem
+          $isSelected={selectedIndex === searchResults.length}
+          onClick={() => {
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+            onClose();
+          }}
+          role='listitem'
+          tabIndex={0}
+        >
+          <Shorcuts>
+            <BsArrowUpSquare /> <BsArrowDownSquare /> to navigate{' '}
+            <PiKeyReturn /> to select | Esc to exit &nbsp;
+          </Shorcuts>
+          <div>
+            <>View All</> &nbsp; <FaArrowRight />
+          </div>
+        </ViewAllItem>
+      </div>
     </Container>
   );
 };
