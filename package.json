@@ -7,7 +7,7 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "vite build && cd server && bun run server.ts",
+    "start": "vite build && bun run ./server/server.ts",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write ."
   },
@@ -17,7 +17,6 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "@types/lodash": "^4.17.0",
     "@vidstack/react": "next",
     "axios": "^1.6.0",
     "express": "^4.19.2",
@@ -32,7 +31,8 @@
     "react-select": "^5.8.0",
     "styled-components": "^6.1.0",
     "swiper": "^11.0.7",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+	"dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/bun": "latest",

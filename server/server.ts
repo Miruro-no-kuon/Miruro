@@ -2,13 +2,14 @@
 import express from 'express';
 import path from 'path';
 import os from 'os';
+import 'dotenv/config'; // Load environment variables from .env
+
 
 // Initialize Express app
 const app = express();
 
 // Configuration settings
-// TODO const PORT = import.meta.env.VITE_PORT || 5173;
-const PORT = 5173;
+const PORT = process.env.VITE_PORT || 5173; // get VITE_PORT value from .env
 const DIST_DIR = path.join(__dirname, '../dist');
 const INDEX_FILE = path.join(DIST_DIR, 'index.html');
 
