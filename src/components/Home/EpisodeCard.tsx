@@ -28,11 +28,6 @@ interface LastVisitedData {
   };
 }
 
-const popInAnimation = keyframes`
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0%); }
-`;
-
 const slideDownAnimation = keyframes`
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0%); }
@@ -96,7 +91,7 @@ const AnimeEpisodeCard = styled(Link)`
   }
 
   img {
-    animation: ${popInAnimation} 0.5s ease forwards;
+    animation: ${slideDownAnimation} 0.5s ease-in-out;
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
@@ -153,8 +148,7 @@ const ContinueWatchingTitle = styled.h2`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0.25rem; // Adjust based on design requirements
-  right: 0.25rem; // Adjust based on design requirements
+  right: 0;
   background: transparent;
   border: none;
   color: #ffffff;
@@ -308,7 +302,7 @@ export const EpisodeCard: React.FC = () => {
       freeMode: true,
       grabCursor: true,
       keyboard: true,
-      touchRatio: 1.2,
+      touchRatio: 2,
       autoplay: {
         delay: 3000,
         disableOnInteraction: false,

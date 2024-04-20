@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { FaSearch } from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
-import { LuFilterX } from 'react-icons/lu';
 import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTrashAlt } from 'react-icons/fa';
 import {
   Option,
   FilterProps,
@@ -33,16 +32,13 @@ const selectStyles = {
   }),
   control: (provided: any) => ({
     ...provided,
-    width: '10rem',
+    width: '11rem',
     backgroundColor: 'var(--global-secondary-bg)',
     borderColor: 'transparent',
     color: 'var(--global-text)',
     boxShadow: 'none',
     '&:hover': {
       borderColor: 'var(--primary-accent)',
-    },
-    '@media (max-width: 500px)': {
-      width: '10rem',
     },
   }),
   menu: (provided: any) => ({
@@ -87,42 +83,72 @@ const selectStyles = {
   }),
 };
 
-const SearchInputWrapper = styled.div`
+const InputContainer = styled.div`
+  display: flex;
+  max-width: 10.4rem;
+  flex: 1;
+  height: 1.2rem;
+  align-items: center;
+  padding: 0 0.3rem;
+  border-radius: var(--global-border-radius);
+  background-color: var(--global-div);
+  // make a @media query for under 500px
+  @media (max-width: 500px) {
+    max-width: 100%;
+  }
+`;
+
+const Icon = styled.div`
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 0 0.25rem;
+  color: 'var(--global-text-muted)',
+  transition: opacity 0.2s;
+  max-height: 100%;
   display: flex;
   align-items: center;
-  background-color: var(--global-secondary-bg);
-  border-radius: var(--global-border-radius);
-  height: 38px;
-  position: relative;
-  width: 12rem;
-  @media (max-width: 500px) {
-    width: 18rem;
-  }
-  overflow: hidden;
 `;
 
 const SearchInput = styled.input`
-  flex-grow: 1; // Allow the input to fill the space
+  background: transparent;
   border: none;
-  margin-left: 0.5rem;
-  padding: 0.3rem 0.3rem 0.3rem 0.6rem; // Adjust padding as needed
-  background-color: transparent;
   color: var(--global-text);
-  &:focus {
-    outline: none;
-  }
+  display: inline-block;
+  font-size: 0.8rem;
+  outline: 0;
+  padding: 0;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 2.375rem;
+
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+`;
+
+const FiltersWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 const FiltersContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  grid-template-rows: auto;
+  margin: 0 auto;
+  position: relative;
+  gap: 1rem;
   justify-content: left;
   align-items: center;
   font-size: 0.8rem;
   font-weight: bold;
-  display: flex;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
+
   @media (max-width: 500px) {
+    display: flex;
     justify-content: center;
   }
 `;
@@ -141,16 +167,12 @@ const FilterLabel = styled.label`
 `;
 
 const ButtonBase = styled.button`
-  margin-top: 1.5rem;
-  @media (max-width: 450px) {
-    margin-top: 0.25rem;
-  }
   flex: 1;
-  align-items: right;
-  justify-content: right;
+  align-items: center;
+  justify-content: center;
   padding: 0.6rem;
+  max-width: 4.5rem;
   min-width: 4.5rem;
-  max-width: 3rem;
   border: none;
   font-weight: bold;
   border-radius: var(--global-border-radius);
@@ -170,7 +192,6 @@ const ButtonBase = styled.button`
   }
   svg {
     margin-bottom: -0.1rem;
-    margin-right: 0.2rem;
   }
 `;
 
@@ -184,19 +205,29 @@ const ClearFilters = styled(ButtonBase)`
   &.active {
     background-color: none;
   }
-  svg {
-    color: red;
-  }
 `;
 
-const ClearIcon = styled(FiX)`
+const ClearButton = styled.button<{ $query: string }>`
+  background: transparent;
+  border: none;
+  color: var(--global-text);
+  font-size: 1.2rem;
   cursor: pointer;
-  position: absolute;
-  right: 10px; // Adjust based on padding
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--global-text-muted);
-  size: 20px; // Ensure the icon has a fixed size
+  opacity: ${({ $query }) => ($query ? 0.5 : 0)};
+  visibility: ${({ $query }) => ($query ? 'visible' : 'hidden')};
+  transition:
+    color 0.2s,
+    opacity 0.2s;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: var(--global-text);
+    opacity: 1;
+  }
 `;
 
 const animatedComponents = makeAnimated();
@@ -254,31 +285,32 @@ const FilterSelect: React.FC<FilterProps> = ({
         {label}
       </FilterLabel>
       {label === 'Search' ? (
-        <SearchInputWrapper>
-          <FaSearch
-            style={{
-              marginLeft: '0.5rem',
-              position: 'absolute',
-              color: 'var(--global-text-muted)',
-            }}
-          />
+        <InputContainer>
+          <Icon>
+            <FaSearch
+              style={{
+                marginRight: '0.25rem',
+                color: 'var(--global-text-muted)',
+              }}
+            />
+          </Icon>
           <SearchInput
             type='text'
             value={inputValue} // Use the local state value here
             onChange={(e) => setInputValue(e.target.value)} // Update local state instead of calling onChange directly
             placeholder=''
-            style={{ paddingLeft: '1.5rem' }} // Ensure padding is consistent to make room for the icon
           />
-          {value && (
-            <ClearIcon
-              size={20}
-              onClick={() => {
-                setInputValue(''); // Reset the local state
-                onChange?.(''); // Propagate the change upwards
-              }}
-            />
-          )}
-        </SearchInputWrapper>
+          <ClearButton
+            $query={inputValue}
+            onClick={() => {
+              setInputValue(''); // Reset the local state
+              onChange?.(''); // Propagate the change upwards
+            }}
+            aria-label='Clear Search'
+          >
+            <FiX />
+          </ClearButton>
+        </InputContainer>
       ) : (
         <Select
           components={{
@@ -423,25 +455,25 @@ export const SearchFilters: React.FC<{
         onChange={handleChange(setSelectedSort)}
         value={selectedSort}
       />
-      <Button
-        onClick={() => {
-          setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC');
-          updateSearchParams(); // Ensure sort direction changes also update URL
-        }}
-      >
-        {sortDirection === 'DESC' ? (
-          <FaSortAmountDown />
-        ) : (
-          <FaSortAmountDownAlt />
+      <FiltersWrapper>
+        <Button
+          onClick={() => {
+            setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC');
+            updateSearchParams(); // Ensure sort direction changes also update URL
+          }}
+        >
+          {sortDirection === 'DESC' ? (
+            <FaSortAmountDown />
+          ) : (
+            <FaSortAmountDownAlt />
+          )}
+        </Button>
+        {filtersChanged && (
+          <ClearFilters onClick={handleResetFilters}>
+            <FaTrashAlt />
+          </ClearFilters>
         )}
-        Sort
-      </Button>
-      {filtersChanged && (
-        <ClearFilters onClick={handleResetFilters}>
-          <LuFilterX />
-          Clear
-        </ClearFilters>
-      )}
+      </FiltersWrapper>
     </FiltersContainer>
   );
 };

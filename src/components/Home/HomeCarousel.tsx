@@ -84,13 +84,13 @@ const SlideContent = styled.div`
   animation: ${keyframes`
   0% {
     opacity: 0.4;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
     transform: translateY(0%);
   }
-`} 0.3s ease-in-out forwards;
+`} 0.5s ease-in-out forwards;
 
   @media (max-width: 1000px) {
     left: 1rem;
@@ -113,22 +113,26 @@ const SlideTitle = styled.h2`
 `;
 
 const SlideInfo = styled.p`
-  color: var(--white, #fff);
-  font-size: 0.9rem;
+  display: flex;
+  gap: 0.75rem;
+  color: #ffffff;
   margin: auto;
+  margin-top: 0;
   max-width: 100%;
   overflow: hidden;
-  margin-top: 0.5rem;
   text-overflow: ellipsis;
-  svg {
-    margin-left: 0.5rem;
-  }
+
   @media (max-width: 1000px) {
     font-size: 0.8rem;
   }
   @media (max-width: 500px) {
     font-size: 0.7rem;
   }
+`;
+
+const SlideInfoItem = styled.p`
+  display: flex;
+  gap: 0.25rem;
 `;
 
 const SlideDescription = styled.p<{
@@ -138,12 +142,11 @@ const SlideDescription = styled.p<{
   background: transparent;
   font-size: clamp(0.9rem, 1.5vw, 0.9rem);
   line-height: 1.2;
-  margin-bottom: 0;
   max-width: 60%;
   max-height: 5rem;
   overflow: hidden;
   -webkit-line-clamp: 3;
-  margin-top: 0.25rem;
+  margin: 0;
 
   @media (max-width: 1000px) {
     line-height: 1.2;
@@ -178,6 +181,8 @@ const PlayButtonWrapper = styled.div`
 `;
 
 const PlayButton = styled.button`
+  display: flex;
+  gap: 0.5rem;
   background-color: var(--global-button-bg);
   color: var(--global-text);
   border: none;
@@ -212,12 +217,8 @@ const PlayButton = styled.button`
   }
 `;
 
-const PlayIcon = styled(FaPlay)`
-  margin-right: 0.5rem;
-  @media (max-width: 500px) {
-    margin: 0 0 0 0.25rem;
-  }
-`;
+const PlayIcon = styled(FaPlay)``;
+
 const PaginationStyle = styled.div`
   .swiper-pagination-bullet {
     background: var(--global-primary-bg, #007bff);
@@ -291,7 +292,7 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             virtual={true}
             grabCursor={true}
             keyboard={true}
-            touchRatio={1.2}
+            touchRatio={2}
             centeredSlides={true}
           >
             {validData.map(
@@ -321,21 +322,24 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                       <SlideContent>
                         <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
                         <SlideInfo>
-                          {type && (
-                            <>
-                              {type} <TbCardsFilled /> {totalEpisodes}
-                            </>
+                          {type && <SlideInfoItem>{type}</SlideInfoItem>}
+                          {totalEpisodes && (
+                            <SlideInfoItem>
+                              <TbCardsFilled /> <br />
+                              {totalEpisodes}
+                            </SlideInfoItem>
                           )}
                           {rating && (
-                            <>
+                            <SlideInfoItem>
                               <FaStar />
                               {rating}
-                            </>
+                            </SlideInfoItem>
                           )}
                           {duration && (
-                            <>
-                              <FaClock /> {duration} mins
-                            </>
+                            <SlideInfoItem>
+                              <FaClock />
+                              {duration}mins
+                            </SlideInfoItem>
                           )}
                         </SlideInfo>
                         <SlideDescription

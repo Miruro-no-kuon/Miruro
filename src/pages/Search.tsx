@@ -78,14 +78,14 @@ const Search = () => {
 
   //Other logic
   const [animeData, setAnimeData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const delayTimeout = useRef<number | null>(null);
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = query ? `${query} - Miruro` : 'Miruro';
+    document.title = `Search ${query}`;
     return () => {
       document.title = previousTitle;
     };
@@ -115,7 +115,7 @@ const Search = () => {
     const scrollToTopWithDelay = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 500);
+      }, 350);
     };
 
     scrollToTopWithDelay();
@@ -184,7 +184,7 @@ const Search = () => {
     // Debounce to minimize fetches during rapid state changes
     delayTimeout.current = window.setTimeout(() => {
       initiateFetchAdvancedSearch();
-    }, 250);
+    }, 0);
 
     // Cleanup timeout on unmount or before executing a new fetch
     return () => {
@@ -213,7 +213,8 @@ const Search = () => {
         setSortDirection={setSortDirection}
         updateSearchParams={updateSearchParams}
       />
-      {isLoading && page === 1 ? (
+      {(isLoading && page === 1) ||
+      (isLoading && page === 1 && animeData.length === 0) ? (
         <StyledCardGrid>
           {Array.from({ length: 17 }).map((_, index) => (
             <SkeletonCard key={index} />
