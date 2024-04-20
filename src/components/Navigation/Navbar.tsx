@@ -11,7 +11,7 @@ import { fetchAdvancedSearch, type Anime } from '../..'; // Adjust the import pa
 import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
-
+import { CgProfile } from 'react-icons/cg';
 const fadeInAnimation = (color: string) => keyframes`
   from { background-color: transparent; }
   to { background-color: ${color}; }
@@ -456,6 +456,14 @@ export const Navbar = () => {
     }
   };
 
+  //navigate to profile
+  const navigateToLogin = () => {
+    // Check if the current location's pathname is not '/profile' before navigating
+    if (location.pathname !== '/login') {
+      navigate('/login');
+    }
+  };
+
   return (
     <>
       <StyledNavbar $isExtended={isPaddingExtended} ref={navbarRef}>
@@ -536,6 +544,11 @@ export const Navbar = () => {
                   <FiMenu />
                 </StyledButton>
               } */}
+              {
+                <StyledButton onClick={navigateToLogin}>
+                  <CgProfile />
+                </StyledButton>
+              }
             </RightContent>
           </TopContainer>
 
