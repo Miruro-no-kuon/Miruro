@@ -37,7 +37,7 @@ const StyledSwiperSlide = styled(SwiperSlide)`
     100% {
       opacity: 1;
     }
-  `} 0.3s ease-in-out forwards;
+  `} 0.4s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
@@ -83,14 +83,14 @@ const SlideContent = styled.div`
 
   animation: ${keyframes`
   0% {
-    opacity: 0.4;
+    opacity: 0;
     transform: translateY(20px);
   }
   100% {
     opacity: 1;
     transform: translateY(0%);
   }
-`} 0.5s ease-in-out forwards;
+`} 0.4s ease-in-out;
 
   @media (max-width: 1000px) {
     left: 1rem;
@@ -292,7 +292,6 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             virtual={true}
             grabCursor={true}
             keyboard={true}
-            touchRatio={2}
             centeredSlides={true}
           >
             {validData.map(

@@ -302,7 +302,6 @@ export const EpisodeCard: React.FC = () => {
       freeMode: true,
       grabCursor: true,
       keyboard: true,
-      touchRatio: 2,
       autoplay: {
         delay: 3000,
         disableOnInteraction: false,
