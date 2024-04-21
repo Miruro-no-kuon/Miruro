@@ -263,7 +263,9 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
       item.description &&
       item.cover !== item.image,
   );
+
   const formatGenres = (genres: string[]): string => genres.join(', ');
+
   return (
     <>
       {loading || error ? (
@@ -324,7 +326,7 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                           {type && <SlideInfoItem>{type}</SlideInfoItem>}
                           {totalEpisodes && (
                             <SlideInfoItem>
-                              <TbCardsFilled /> <br />
+                              <TbCardsFilled />
                               {totalEpisodes}
                             </SlideInfoItem>
                           )}

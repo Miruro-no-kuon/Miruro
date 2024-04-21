@@ -4,7 +4,6 @@ import path from 'path';
 import os from 'os';
 import 'dotenv/config'; // Load environment variables from .env
 
-
 // Initialize Express app
 const app = express();
 

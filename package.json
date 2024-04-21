@@ -32,7 +32,7 @@
     "styled-components": "^6.1.0",
     "swiper": "^11.0.7",
     "typescript": "^5.0.0",
-	"dotenv": "^16.4.5"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/bun": "latest",
