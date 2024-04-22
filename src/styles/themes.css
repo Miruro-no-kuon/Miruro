@@ -1,0 +1,59 @@
+/* Light Mode  */
+:root {
+  --global-primary-bg: #f5f5f5;
+  --global-primary-bg-tr: rgba(245, 245, 245, 0.8);
+  --global-secondary-bg: #e0e0e0;
+  --global-tertiary-bg: #eaeaea;
+  --global-div: #e0e0e0;
+  --global-div-tr: rgba(224, 224, 224, 0.5);
+  --global-border: rgba(8, 8, 8, 0.1);
+  --global-text: #333;
+  --global-text-muted: #888;
+  --global-card-bg: #fff;
+  --global-card-title-bg: #e8e8e8;
+  --global-card-shadow: rgba(0, 0, 0, 0.2);
+  --global-primary-skeleton: rgba(165, 165, 165, 0.1);
+  --global-secondary-skeleton: rgba(165, 165, 165, 0.3);
+  --global-button-bg: #e0e0e0;
+  --global-button-hover-bg: #c8c8c8;
+  --global-button-text: #333;
+  --global-button-shadow: rgba(255, 255, 255, 0.5);
+  --global-genre-button-bg: #d4d4d4;
+  --global-shadow: rgba(0, 0, 0, 0.1);
+  --global-border-radius: 0.3rem;
+  --primary-accent: #8080cf;
+  --primary-accent-bg: #595991;
+  --logo-text-transparent: url('/src/assets/miruro-text-transparent-black.webp');
+  --logo-transparent: url('/src/assets/miruro-transparent-black.webp');
+  --ongoing-dot-color: #aaff00;
+  --completed-indicator-color: #00aaff;
+  --cancelled-indicator-color: #ff0000;
+  --not-yet-aired-indicator-color: #ffa500;
+  --default-indicator-color: #808080;
+}
+
+/* Dark Mode  */
+:root.dark-mode {
+  --global-primary-bg: #080808;
+  --global-primary-bg-tr: rgba(8, 8, 8, 0.9);
+  --global-secondary-bg: #141414;
+  --global-tertiary-bg: #222222;
+  --global-div: #141414;
+  --global-div-tr: rgba(20, 20, 20, 0.5);
+  --global-border: rgba(245, 245, 245, 0.1);
+  --global-text: #e8e8e8;
+  --global-text-muted: #696969;
+  --global-card-bg: #181818;
+  --global-card-title-bg: #151515;
+  --global-card-shadow: rgba(0, 0, 0, 0.6);
+  --global-primary-skeleton: rgba(85, 85, 85, 0.1);
+  --global-secondary-skeleton: rgba(85, 85, 85, 0.3);
+  --global-button-bg: #202020;
+  --global-button-hover-bg: #292929;
+  --global-button-shadow: rgba(0, 0, 0, 0.6);
+  --global-button-text: #ebebeb;
+  --global-genre-button-bg: #222222;
+  --global-shadow: rgba(255, 255, 255, 0.08);
+  --logo-text-transparent: url('/src/assets/miruro-text-transparent-white.webp');
+  --logo-transparent: url('/src/assets/miruro-transparent-white.webp');
+}

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FaPlay } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
@@ -30,14 +30,7 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  animation: ${keyframes`
-    0% {
-      opacity: 0.4;
-    }
-    100% {
-      opacity: 1;
-    }
-  `} 0.4s ease-in-out forwards;
+  animation: fadeIn 0.4s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
@@ -81,16 +74,7 @@ const SlideContent = styled.div`
   z-index: 5;
   max-width: 60%;
 
-  animation: ${keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0%);
-  }
-`} 0.4s ease-in-out;
+  animation: slideUp 0.4s ease-in-out;
 
   @media (max-width: 1000px) {
     left: 1rem;
@@ -124,9 +108,11 @@ const SlideInfo = styled.p`
 
   @media (max-width: 1000px) {
     font-size: 0.8rem;
+    gap: 0.5rem;
   }
   @media (max-width: 500px) {
     font-size: 0.7rem;
+    gap: 0.45rem;
   }
 `;
 
@@ -264,7 +250,7 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
       item.cover !== item.image,
   );
 
-  const formatGenres = (genres: string[]): string => genres.join(', ');
+  // const formatGenres = (genres: string[]): string => genres.join(', ');
 
   return (
     <>
@@ -302,9 +288,9 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                 cover,
                 title,
                 description,
-                status,
+                // status,
                 rating,
-                genres,
+                // genres,
                 totalEpisodes,
                 duration,
                 type,

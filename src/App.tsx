@@ -14,6 +14,9 @@ import {
   ScrollToTop,
   usePreserveScrollOnReload,
 } from './index';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 function App() {
   usePreserveScrollOnReload();

@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlay,
@@ -23,17 +23,6 @@ interface Props {
   onEpisodeSelect: (id: string) => void;
   maxListHeight: string;
 }
-
-const popInAnimation = keyframes`
-  0% {
-    opacity: 0.4;
-    transform: scale(0.98);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
 
 // Styled components for the episode list
 const ListContainer = styled.div<{ $maxHeight: string }>`
@@ -83,7 +72,7 @@ const ListItem = styled.button<{
   transition:
     padding 0.3s ease-in-out,
     transform 0.3s ease-in-out;
-  animation: ${popInAnimation} 0.3s ease forwards;
+  animation: popIn 0.3s ease-in-out;
   background-color: ${({ $isSelected, $isWatched }) =>
     $isSelected
       ? $isWatched

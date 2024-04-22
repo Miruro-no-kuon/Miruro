@@ -1,21 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Anime } from '../../hooks/animeInterface';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
 import { TbCardsFilled } from 'react-icons/tb';
 import { BsArrowUpSquare, BsArrowDownSquare } from 'react-icons/bs';
 import { PiKeyReturn } from 'react-icons/pi';
-
-const slideDownAnimation = keyframes`
-  0% { transform: translateY(0px); max-height: 0; }
-  100% {  transform: translateY(0); max-height: 500px; }
-`;
-
-const slideDownAnimation2 = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); max-height: 0; }
-  100% { opacity: 1; transform: translateY(0); max-height: 500px; }
-`;
 
 const Container = styled.div<{ $isVisible: boolean; width: number }>`
   display: ${({ $isVisible }) => ($isVisible ? 'block' : 'none')};
@@ -29,7 +19,7 @@ const Container = styled.div<{ $isVisible: boolean; width: number }>`
   border-top: none;
   border-radius: var(--global-border-radius);
   padding-top: 2.5rem;
-  animation: ${slideDownAnimation} 0.5s ease forwards;
+  animation: dropDown 0.5s ease-in-out;
 
   @media (max-width: 500px) {
     top: 4rem;
@@ -48,7 +38,7 @@ const Container = styled.div<{ $isVisible: boolean; width: number }>`
 
 const Details = styled.p<{ $isSelected: boolean }>`
   margin: 0.25rem 0;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   color: ${({ $isSelected }) =>
     $isSelected ? 'var(--primary-text)' : 'rgba(102, 102, 102, 0.75)'};
   font-size: 0.65rem;
@@ -59,7 +49,7 @@ const Details = styled.p<{ $isSelected: boolean }>`
 
 const Item = styled.div<{ $isSelected: boolean }>`
   display: flex;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   padding: 0.5rem;
   margin: 0;
   cursor: pointer;
@@ -101,7 +91,7 @@ const Shorcuts = styled.div`
 `;
 
 const Image = styled.img`
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   width: 2.5rem;
   height: 3.5rem;
   border-radius: var(--global-border-radius);
@@ -116,7 +106,7 @@ const Image = styled.img`
 const Title = styled.p`
   margin: 0 0.5rem;
   padding: 0.1rem;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   text-align: left;
   overflow: hidden;
   font-size: 0.9rem;

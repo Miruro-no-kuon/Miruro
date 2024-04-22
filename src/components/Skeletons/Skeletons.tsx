@@ -94,7 +94,7 @@ const PlayerSkeleton = styled(BaseSkeleton)`
   height: 0;
   animation:
     ${SkeletonPulse} 2.5s ease-in-out infinite,
-    ${playerPopInAnimation} 0.5s ease-out;
+    ${playerPopInAnimation} 0.5s ease-in-out;
 `;
 
 const PlayerButtons = styled(BaseSkeleton)`
@@ -103,7 +103,7 @@ const PlayerButtons = styled(BaseSkeleton)`
   width: 100%;
   animation:
     ${SkeletonPulse} 2.5s ease-in-out infinite,
-    ${playerPopInAnimation} 0.5s ease-out;
+    ${playerPopInAnimation} 0.5s ease-in-out;
 `;
 
 export const SkeletonPlayer = React.memo(() => (

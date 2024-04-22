@@ -1,20 +1,10 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
-
-const fadeInAnimation = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
 const Overlay = styled.table`
   font-size: 0.85rem;
-  animation: ${fadeInAnimation} 0.3s ease forwards;
+  animation: fadeIn 0.3s ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
@@ -67,7 +57,7 @@ const CloseButton = styled.button`
 `;
 
 const PopUp = styled.thead`
-  animation: ${slideUpAnimation} 0.3s ease forwards;
+  animation: slideUp 0.3s ease-in-out;
   position: relative;
   border-radius: var(--global-border-radius);
   padding: 1.5rem;

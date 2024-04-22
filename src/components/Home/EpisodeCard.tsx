@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
   FaPlay,
@@ -27,11 +27,6 @@ interface LastVisitedData {
     titleRomaji?: string;
   };
 }
-
-const slideDownAnimation = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0%); }
-`;
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -91,7 +86,7 @@ const AnimeEpisodeCard = styled(Link)`
   }
 
   img {
-    animation: ${slideDownAnimation} 0.5s ease-in-out;
+    animation: slideDown 0.5s ease-in-out;
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
@@ -154,7 +149,7 @@ const CloseButton = styled.button`
   color: #ffffff;
   cursor: pointer;
   display: none; // Hidden by default
-  animation: ${slideDownAnimation} 0.25s ease forwards;
+  animation: slideDown 0.25s ease-in-out;
   transition: 0.2s ease-in-out;
 
   svg {

@@ -1,15 +1,10 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { Anime } from '../../hooks/animeInterface';
 import { StatusIndicator } from '../shared/StatusIndicator';
-
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
 
 const Sidebar = styled.div`
   display: flex;
@@ -41,7 +36,7 @@ const Card = styled.div`
   cursor: pointer;
   margin-bottom: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  animation: ${slideUpAnimation} 0.5s ease-in-out;
+  animation: slideUp 0.5s ease-in-out;
   animation-fill-mode: backwards;
   transition:
     background-color 0s ease-in-out,
