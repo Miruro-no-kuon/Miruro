@@ -24,8 +24,8 @@ const Callback = () => {
     const apiEndpoint =
       PLATFORM === 'VERCEL' ? '/api/exchange-token' : '/exchange-token';
 
-    console.log(apiEndpoint);
-    console.log(PLATFORM);
+    // console.log(apiEndpoint);
+    // console.log(PLATFORM);
     if (code) {
       axios
         .post(apiEndpoint, { code })
