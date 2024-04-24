@@ -42,6 +42,9 @@ export * from './hooks/animeInterface';
 export * from './hooks/useScroll';
 export * from './hooks/useTIme';
 export * from './hooks/useFilters';
+export * from './hooks/userInfo';
+export * from './hooks/authService';
+export * from './hooks/authContext';
 
 // * ==== Pages ====
 // TODO Main Pages of the Application
@@ -52,3 +55,4 @@ export { default as Profile } from './pages/Profile';
 export { default as About } from './pages/About';
 export { default as PolicyTerms } from './pages/PolicyTerms';
 export { default as Page404 } from './pages/404';
+export { default as Callback } from './pages/Callback';

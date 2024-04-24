@@ -12,6 +12,7 @@ import { FiSun, FiMoon, FiX /* FiMenu */ } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
+import { useAuth } from '../../hooks/authContext';
 
 const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   position: fixed;
@@ -225,6 +226,7 @@ const getInitialThemePreference = () => {
 };
 
 export const Navbar = () => {
+  const { isLoggedIn, userData } = useAuth();
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -441,18 +443,10 @@ export const Navbar = () => {
   }, []);
 
   //navigate to profile
-  /* const navigateToProfile = () => {
+  const navigateToProfile = () => {
     // Check if the current location's pathname is not '/profile' before navigating
     if (location.pathname !== '/profile') {
       navigate('/profile');
-    }
-  }; */
-
-  //navigate to profile
-  const navigateToLogin = () => {
-    // Check if the current location's pathname is not '/profile' before navigating
-    if (location.pathname !== '/login') {
-      navigate('/login');
     }
   };
 
@@ -531,16 +525,21 @@ export const Navbar = () => {
               <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
                 {isDarkMode ? <FiSun /> : <FiMoon />}
               </StyledButton>
-              {/* {
-                <StyledButton onClick={navigateToProfile}>
-                  <FiMenu />
-                </StyledButton>
-              } */}
-              {
-                <StyledButton onClick={navigateToLogin}>
+              <StyledButton onClick={navigateToProfile}>
+                {isLoggedIn && userData ? (
+                  <img
+                    src={userData.avatar.large}
+                    alt={`${userData.name}'s avatar`}
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
                   <CgProfile />
-                </StyledButton>
-              }
+                )}
+              </StyledButton>
             </RightContent>
           </TopContainer>
 

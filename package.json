@@ -17,8 +17,10 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/lodash": "^4.17.0",
+    "@types/uuid": "^9.0.8",
     "@vidstack/react": "next",
-    "axios": "^1.6.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "eslint": "8.x",
     "express": "^4.19.2",
@@ -33,7 +35,9 @@
     "react-select": "^5.8.0",
     "styled-components": "^6.1.0",
     "swiper": "^11.0.7",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "uuid": "^9.0.1",
+    "wrangler": "^3.51.2"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -42,7 +46,9 @@
     "@types/react-slick": "^0.23.13",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
+    "@vercel/node": "^3.0.27",
     "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "8",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
