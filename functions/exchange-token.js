@@ -23,11 +23,11 @@ async function handleTokenExchange(context) {
     }
 
     const payload = {
-      client_id: context.env.CLIENT_ID,
-      client_secret: context.env.CLIENT_SECRET,
+      client_id: context.env.VITE_CLIENT_ID,
+      client_secret: context.env.VITE_CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: context.env.REDIRECT_URI,
+      redirect_uri: context.env.VITE_REDIRECT_URI,
     };
 
     const apiResponse = await fetch('https://anilist.co/api/v2/oauth/token', {
