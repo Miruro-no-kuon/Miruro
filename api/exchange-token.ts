@@ -13,11 +13,11 @@ export default async (req: VercelRequest, res: VercelResponse) => {
   }
 
   const payload = {
-    client_id: process.env.VITE_CLIENT_ID,
-    client_secret: process.env.VITE_CLIENT_SECRET,
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
     code,
     grant_type: 'authorization_code',
-    redirect_uri: process.env.VITE_REDIRECT_URI,
+    redirect_uri: process.env.REDIRECT_URI,
   };
 
   const url = 'https://anilist.co/api/v2/oauth/token';
