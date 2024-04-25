@@ -87,12 +87,10 @@ const InputContainer = styled.div`
   display: flex;
   max-width: 10.4rem;
   flex: 1;
-  height: 1.2rem;
   align-items: center;
   padding: 0 0.3rem;
   border-radius: var(--global-border-radius);
   background-color: var(--global-div);
-  // make a @media query for under 500px
   @media (max-width: 500px) {
     max-width: 100%;
   }
@@ -128,11 +126,6 @@ const SearchInput = styled.input`
     box-shadow 0.2s ease-in-out;
 `;
 
-const FiltersWrapper = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
 const FiltersContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
@@ -144,8 +137,8 @@ const FiltersContainer = styled.div`
   align-items: center;
   font-size: 0.8rem;
   font-weight: bold;
-  margin-bottom: 2rem;
   flex-wrap: wrap;
+  margin-bottom: 1.5rem;
 
   @media (max-width: 500px) {
     display: flex;
@@ -205,8 +198,25 @@ const ClearFilters = styled(ButtonBase)`
   &.active {
     background-color: none;
   }
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: red;
+    opacity: 1;
+  }
 `;
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: flex-end;
+  padding-right: 1rem;
 
+  @media (max-width: 500px) {
+    justify-content: center;
+    padding-right: 0rem;
+  }
+`;
 const ClearButton = styled.button<{ $query: string }>`
   background: transparent;
   border: none;
@@ -412,50 +422,52 @@ export const SearchFilters: React.FC<{
   };
 
   return (
-    <FiltersContainer>
-      <FilterSelect
-        label='Search'
-        value={query}
-        onChange={handleChange(setQuery)}
-      />
-      <FilterSelect
-        label='Genres'
-        options={genreOptions}
-        isMulti
-        onChange={handleChange(setSelectedGenres)}
-        value={selectedGenres}
-      />
-      <FilterSelect
-        label='Year'
-        options={yearOptions}
-        onChange={handleChange(setSelectedYear)}
-        value={selectedYear}
-      />
-      <FilterSelect
-        label='Season'
-        options={seasonOptions}
-        onChange={handleChange(setSelectedSeason)}
-        value={selectedSeason}
-      />
-      <FilterSelect
-        label='Type'
-        options={formatOptions}
-        onChange={handleChange(setSelectedFormat)}
-        value={selectedFormat}
-      />
-      <FilterSelect
-        label='Status'
-        options={statusOptions}
-        onChange={handleChange(setSelectedStatus)}
-        value={selectedStatus}
-      />
-      <FilterSelect
-        label='Sort By'
-        options={sortOptions}
-        onChange={handleChange(setSelectedSort)}
-        value={selectedSort}
-      />
-      <FiltersWrapper>
+    <div>
+      <FiltersContainer>
+        <FilterSelect
+          label='Search'
+          value={query}
+          onChange={handleChange(setQuery)}
+        />
+        <FilterSelect
+          label='Genres'
+          options={genreOptions}
+          isMulti
+          onChange={handleChange(setSelectedGenres)}
+          value={selectedGenres}
+        />
+        <FilterSelect
+          label='Year'
+          options={yearOptions}
+          onChange={handleChange(setSelectedYear)}
+          value={selectedYear}
+        />
+        <FilterSelect
+          label='Season'
+          options={seasonOptions}
+          onChange={handleChange(setSelectedSeason)}
+          value={selectedSeason}
+        />
+        <FilterSelect
+          label='Type'
+          options={formatOptions}
+          onChange={handleChange(setSelectedFormat)}
+          value={selectedFormat}
+        />
+        <FilterSelect
+          label='Status'
+          options={statusOptions}
+          onChange={handleChange(setSelectedStatus)}
+          value={selectedStatus}
+        />
+        <FilterSelect
+          label='Sort By'
+          options={sortOptions}
+          onChange={handleChange(setSelectedSort)}
+          value={selectedSort}
+        />
+      </FiltersContainer>
+      <ButtonContainer>
         <Button
           onClick={() => {
             setSortDirection(sortDirection === 'DESC' ? 'ASC' : 'DESC');
@@ -473,7 +485,7 @@ export const SearchFilters: React.FC<{
             <FaTrashAlt />
           </ClearFilters>
         )}
-      </FiltersWrapper>
-    </FiltersContainer>
+      </ButtonContainer>
+    </div>
   );
 };

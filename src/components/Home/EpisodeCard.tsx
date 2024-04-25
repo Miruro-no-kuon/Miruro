@@ -100,7 +100,7 @@ const AnimeEpisodeCard = styled(Link)`
     padding: 0.5rem;
     background: linear-gradient(
       360deg,
-      rgba(8, 8, 8, 1) -25%,
+      rgba(8, 8, 8, 1) -15%,
       transparent 100%
     );
     color: white;
@@ -138,7 +138,7 @@ const ProgressBar = styled.div`
 const ContinueWatchingTitle = styled.h2`
   color: var(--global-text);
   font-size: 1.25rem;
-  margin-bottom: 0.5rem; // Adjust the margin as needed
+  margin-bottom: 0.25rem;
 `;
 
 const CloseButton = styled.button`
@@ -148,14 +148,16 @@ const CloseButton = styled.button`
   border: none;
   color: #ffffff;
   cursor: pointer;
-  display: none; // Hidden by default
+  display: none;
   animation: slideDown 0.25s ease-in-out;
   transition: 0.2s ease-in-out;
+  padding-right: 0.2rem;
+  padding-top: 0.2rem;
 
   svg {
     transition: 0.2s ease-in-out;
-    transform: scale(0.85);
-    font-size: 1.75rem;
+    transform: scale(0.95);
+    font-size: 2.1rem;
     &:hover,
     &:active,
     &:focus {

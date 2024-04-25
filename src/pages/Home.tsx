@@ -275,6 +275,7 @@ const Home = () => {
           error={state.error}
         />
       )}
+      <EpisodeCard />
       <ContentSidebarLayout>
         <div
           style={{
@@ -351,7 +352,6 @@ const Home = () => {
           <HomeSideBar animeData={state.Upcoming} />
         </div>
       </ContentSidebarLayout>
-      <EpisodeCard />
     </SimpleLayout>
   );
 };
