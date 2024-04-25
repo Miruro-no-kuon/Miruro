@@ -48,7 +48,6 @@
     "@typescript-eslint/parser": "^7.4.0",
     "@vercel/node": "^3.0.27",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "8",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",

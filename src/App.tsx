@@ -16,6 +16,9 @@ import {
   Callback,
   AuthProvider,
 } from './index';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 function App() {
   usePreserveScrollOnReload();
