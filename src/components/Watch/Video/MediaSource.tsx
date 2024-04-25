@@ -41,7 +41,17 @@ const Table = styled.table`
 const TableRow = styled.tr``;
 
 const TableCell = styled.td`
-  padding: 0.35rem; // Adjust overall padding as needed
+  padding: 0.35rem;
+  @media (max-width: 500px) {
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  svg {
+    margin-bottom: -0.1rem;
+    @media (max-width: 500px) {
+      margin-bottom: 0rem;
+    }
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -201,7 +211,7 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
           <tbody>
             <TableRow>
               <TableCell>
-                <FaMicrophone /> Sub
+                <FaClosedCaptioning /> Sub
               </TableCell>
               <TableCell>
                 <ButtonWrapper>
@@ -257,7 +267,7 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
             </TableRow>
             <TableRow>
               <TableCell>
-                <FaClosedCaptioning /> Dub
+                <FaMicrophone /> Dub
               </TableCell>
               <TableCell>
                 <ButtonWrapper>

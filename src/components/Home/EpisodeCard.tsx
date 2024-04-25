@@ -168,6 +168,39 @@ const CloseButton = styled.button`
     display: block; // Show only on hover
   }
 `;
+const SwiperButton = styled.button`
+  position: absolute;
+  top: 25%;
+  width: 3rem;
+  height: 4rem;
+  margin: 0rem;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); // Darken the background with semi-transparent black
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: var(--global-border-radius);
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.7
+    ); // Even darker on hover for better visibility
+  }
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+
+// You need to replace the generic button styles with SwiperButton for the prev and next buttons
 
 const FaCircle = styled(IoIosCloseCircleOutline)`
   font-size: 2.25rem;
@@ -300,7 +333,7 @@ export const EpisodeCard: React.FC = () => {
       grabCursor: true,
       keyboard: true,
       autoplay: {
-        delay: 3000,
+        delay: 6000,
         disableOnInteraction: false,
       },
       navigation: {
@@ -320,28 +353,14 @@ export const EpisodeCard: React.FC = () => {
       )}
       <StyledSwiperContainer {...swiperSettings} aria-label='Episodes carousel'>
         {episodesToRender}
-        <button
+        <SwiperButton
           aria-label='Previous episode'
-          className='swiper-button-prev'
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.85)',
-          }}
-        >
-          <FaChevronCircleLeft aria-hidden='true' />
-        </button>
-        <button
+          className='swiper-button-prev' // Important for swiper navigation functionality
+        ></SwiperButton>
+        <SwiperButton
           aria-label='Next episode'
-          className='swiper-button-next'
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.85)',
-          }}
-        >
-          <FaChevronCircleRight aria-hidden='true' />
-        </button>
+          className='swiper-button-next' // Important for swiper navigation functionality
+        ></SwiperButton>
       </StyledSwiperContainer>
     </Section>
   );
