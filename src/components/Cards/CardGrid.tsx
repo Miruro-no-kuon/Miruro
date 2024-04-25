@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { CardItem } from '../../index';
 import { Anime } from '../../hooks/animeInterface';
@@ -14,11 +14,11 @@ export const CardGrid: React.FC<CardGridProps> = ({
   hasNextPage,
   onLoadMore,
 }) => {
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (hasNextPage) {
       onLoadMore();
     }
-  };
+  }, [hasNextPage, onLoadMore]); // Specify all variables and props it depends on
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +42,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasNextPage]);
+  }, [handleLoadMore, hasNextPage]);
 
   return (
     <StyledCardGrid>

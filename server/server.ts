@@ -1,30 +1,30 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import axios from 'axios';
 import path from 'path';
 import os from 'os';
 import bodyParser from 'body-parser';
-import 'dotenv/config'; // Load environment variables from .env
 
 const app = express();
 
-// Configuration settings
+// Environment Configuration
 const PORT = process.env.VITE_PORT || 5173;
-const CLIENT_ID = process.env.VITE_CLIENT_ID;
-const CLIENT_SECRET = process.env.VITE_CLIENT_SECRET;
-const REDIRECT_URI = process.env.VITE_REDIRECT_URI;
-const PLATFORM = import.meta.env.VITE_DEPLOY_PLATFORM; // This will be set as 'VERCEL' or 'CLOUDFLARE'
+const {
+  VITE_CLIENT_ID: CLIENT_ID,
+  VITE_CLIENT_SECRET: CLIENT_SECRET,
+  VITE_REDIRECT_URI: REDIRECT_URI,
+} = process.env;
+
+// Directory paths for static assets
 const DIST_DIR = path.join(__dirname, '../dist');
 const INDEX_FILE = path.join(DIST_DIR, 'index.html');
 
+// Middleware for static assets and JSON parsing
 app.use(express.static(DIST_DIR));
-app.use(bodyParser.json());
 app.use(express.json());
+app.use(bodyParser.json());
 
-// Determine the endpoint based on the platform
-const apiEndpoint =
-  PLATFORM === 'VERCEL' ? '/api/exchange-token' : '/api/exchange-token';
-
+// API Endpoint for exchanging authorization token
+const apiEndpoint = '/api/exchange-token';
 app.post(apiEndpoint, async (req, res) => {
   const { code } = req.body;
   if (!code) {
@@ -39,24 +39,25 @@ app.post(apiEndpoint, async (req, res) => {
     grant_type: 'authorization_code',
     redirect_uri: REDIRECT_URI,
   };
-
   const url = 'https://anilist.co/api/v2/oauth/token';
 
-  //console.log('Sending request to AniList API');
-  //console.log('URL:', url);
-  //console.log('Payload:', payload);
+  // Logging the request details
+  console.log('Sending request to AniList API');
+  console.log('URL:', url);
+  console.log('Payload:', payload);
 
   try {
     const response = await axios.post(url, payload, {
       headers: {
         'Content-Type': 'application/json',
-        'Accept-Encoding': 'identity', // This tells the server to send non-compressed responses
+        'Accept-Encoding': 'identity',
       },
     });
 
-    //console.log('Received response from AniList API');
-    //console.log('Response Status:', response.status);
-    //console.log('Response Data:', response.data);
+    // Logging the response details
+    console.log('Received response from AniList API');
+    console.log('Response Status:', response.status);
+    console.log('Response Data:', response.data);
 
     if (response.data.access_token) {
       res.json({ accessToken: response.data.access_token });
@@ -76,18 +77,17 @@ app.post(apiEndpoint, async (req, res) => {
   }
 });
 
+// Serve the main index.html for any non-API requests
 app.get('*', (req, res) => {
   res.sendFile(INDEX_FILE, (err) => {
     if (err) {
       console.error('Error serving index.html:', err);
-      return res
-        .status(500)
-        .send('An error occurred while serving the application');
+      res.status(500).send('An error occurred while serving the application');
     }
   });
 });
 
-// Function to get the first non-internal IPv4 address
+// Utility to get the first non-internal IPv4 address
 function getLocalIpAddress() {
   const networkInterfaces = os.networkInterfaces();
   for (const networkInterface of Object.values(networkInterfaces)) {
@@ -99,10 +99,8 @@ function getLocalIpAddress() {
   return 'localhost';
 }
 
-// Start the Express server
+// Starting the server
 app.listen(PORT, () => {
   const ipAddress = getLocalIpAddress();
-  console.log(
-    `Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`,
-  );
+  console.log(`Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`);
 });

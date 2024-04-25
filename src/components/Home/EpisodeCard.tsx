@@ -287,7 +287,7 @@ export const EpisodeCard: React.FC = () => {
       console.error('Failed to parse watched episodes data:', error);
       return [];
     }
-  }, [watchedEpisodesData, windowWidth, lastVisitedData]);
+  }, [watchedEpisodesData, lastVisitedData]);
 
   const swiperSettings = useMemo(
     () => ({
