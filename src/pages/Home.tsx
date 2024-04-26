@@ -11,7 +11,6 @@ import {
   fetchTopAnime,
   fetchTopAiringAnime,
   fetchUpcomingSeasons,
-  fetchRecentEpisodes,
   HomeSideBar,
   EpisodeCard,
   getNextSeason,
@@ -99,11 +98,14 @@ const Home = () => {
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 24 : 15,
   );
+
+  // Reduced active time to 5mins
   const [activeTab, setActiveTab] = useState(() => {
+    const time = Date.now();
     const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
-      if (time - timestamp < 24 * 60 * 60 * 1000) {
+      if (time - timestamp < 300000) {
         return tab;
       } else {
         localStorage.removeItem('home tab');
@@ -119,7 +121,6 @@ const Home = () => {
     topAnime: [] as Anime[],
     topAiring: [] as Anime[],
     Upcoming: [] as Anime[],
-    recentEpisodes: [] as Anime[],
     error: null as string | null,
     loading: {
       trending: true,
@@ -127,7 +128,6 @@ const Home = () => {
       topRated: true,
       topAiring: true,
       Upcoming: true,
-      recent: true,
     },
   });
 
@@ -170,16 +170,14 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setState((prevState) => ({ ...prevState, error: null }));
-        const [trending, popular, topRated, topAiring, Upcoming, recent] =
+        const [trending, popular, topRated, topAiring, Upcoming] =
           await Promise.all([
             fetchTrendingAnime(1, fetchCount),
             fetchPopularAnime(1, fetchCount),
             fetchTopAnime(1, fetchCount),
             fetchTopAiringAnime(1, 6),
             fetchUpcomingSeasons(1, 6),
-            fetchRecentEpisodes(1, fetchCount),
           ]);
-        const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
         setState((prevState) => ({
           ...prevState,
           trendingAnime: filterAndTrimAnime(trending),
@@ -187,7 +185,6 @@ const Home = () => {
           topAnime: filterAndTrimAnime(topRated),
           topAiring: filterAndTrimAnime(topAiring),
           Upcoming: filterAndTrimAnime(Upcoming),
-          recentEpisodes: recentEpisodesTrimmed,
         }));
       } catch (fetchError) {
         setState((prevState) => ({
@@ -203,7 +200,6 @@ const Home = () => {
             topRated: false,
             topAiring: false,
             Upcoming: false,
-            recent: false,
           },
         }));
       }

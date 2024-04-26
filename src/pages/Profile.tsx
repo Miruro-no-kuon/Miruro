@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { LuConstruction } from 'react-icons/lu';
 import { IoLogOutOutline } from 'react-icons/io5';
 import Image404URL from '/src/assets/404.webp';
-import { useAuth, EpisodeCard, Settings } from '../index';
+import { useAuth, EpisodeCard, Settings, WatchingAnilist } from '../index';
 import { SiAnilist } from 'react-icons/si';
 import { CgProfile } from 'react-icons/cg';
 
@@ -100,49 +100,48 @@ const Profile: React.FC = () => {
   return (
     <PreferencesContainer>
       <TopContainer>
-        <ProfileContainer>
-          {isLoggedIn && userData ? (
-            <>
-              <img
-                src={userData.avatar.large}
-                alt={`${userData.name}'s avatar`}
-              />
-              <p>
-                Welcome, <b>{userData.name}</b>
-              </p>
-              {userData.statistics && (
-                <>
-                  <p>
-                    Anime watched: <b>{userData.statistics.anime.count}</b>
-                  </p>
-                  <p>
-                    Total episodes watched:{' '}
-                    <b>{userData.statistics.anime.episodesWatched}</b>
-                  </p>
-                  <p>
-                    Total minutes watched:{' '}
-                    <b>{userData.statistics.anime.minutesWatched}</b>
-                  </p>
-                  <p>
-                    Average score:{' '}
-                    <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
-                  </p>
-                </>
-              )}
-              <a onClick={logout}>
-                <Loginbutton>
-                  <b>Log out </b>
-                  <IoLogOutOutline />
-                </Loginbutton>
-              </a>
-            </>
-          ) : (
+        {isLoggedIn && userData ? (
+          <ProfileContainer>
+            <img
+              src={userData.avatar.large}
+              alt={`${userData.name}'s avatar`}
+            />
+            <p>
+              Welcome, <b>{userData.name}</b>
+            </p>
+            {userData.statistics && (
+              <>
+                <p>
+                  Anime watched: <b>{userData.statistics.anime.count}</b>
+                </p>
+                <p>
+                  Total episodes watched:
+                  <b>{userData.statistics.anime.episodesWatched}</b>
+                </p>
+                <p>
+                  Total minutes watched:
+                  <b>{userData.statistics.anime.minutesWatched}</b>
+                </p>
+                <p>
+                  Average score:
+                  <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
+                </p>
+              </>
+            )}
+            <a onClick={logout}>
+              <Loginbutton>
+                <b>Log out </b>
+                <IoLogOutOutline />
+              </Loginbutton>
+            </a>
+            <WatchingAnilist />
+          </ProfileContainer>
+        ) : (
+          <ProfileContainer>
             <UserInfoContainer>
-              <div style={{ paddingBottom: '2rem' }}>
-                <CgProfile size={'5rem'} style={{ marginBottom: '1rem' }} />
-                <br />
-                <b>Guest User</b>
-              </div>
+              <CgProfile size={'5rem'} style={{ marginBottom: '1rem' }} />
+              <p>Guest</p>
+              <p>Please log in to view your profile and anime list.</p>
               <a onClick={login}>
                 <Loginbutton>
                   <b> Log in with </b>
@@ -150,10 +149,11 @@ const Profile: React.FC = () => {
                 </Loginbutton>
               </a>
             </UserInfoContainer>
-          )}
-        </ProfileContainer>
+          </ProfileContainer>
+        )}
         <WarningMessage>
-          <LuConstruction style={{ color: 'orange' }} /> This page is currently{' '}
+          <LuConstruction style={{ color: 'orange' }} />
+          This page is currently{' '}
           <strong style={{ color: 'orange' }}>under construction</strong>. We
           appreciate your patience as we work to bring you new features!
           <br />
