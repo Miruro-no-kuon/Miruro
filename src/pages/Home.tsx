@@ -20,7 +20,7 @@ import {
 import { Anime, Episode } from '../hooks/animeInterface';
 
 const SimpleLayout = styled.div`
-  gap: 1.5rem;
+  gap: 1rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);

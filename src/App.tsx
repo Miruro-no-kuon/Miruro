@@ -17,6 +17,7 @@ import {
   AuthProvider,
 } from './index';
 import { register } from 'swiper/element/bundle';
+import { Analytics } from '@vercel/analytics/react';
 
 register();
 
@@ -50,6 +51,7 @@ function App() {
           <Footer />
         </ThemeProvider>
       </Router>
+      <Analytics />
     </AuthProvider>
   );
 }

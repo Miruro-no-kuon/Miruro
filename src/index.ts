@@ -35,6 +35,9 @@ export { WatchAnimeData } from './components/Watch/WatchAnimeData';
 export { AnimeDataList } from './components/Watch/AnimeDataList';
 export { Seasons } from './components/Watch/Seasons';
 
+// TODO User Components
+export { Settings } from './components/Profile/Settings';
+
 // * ==== Hooks ====
 // TODO Utilizing API and Other Functionalities
 export * from './hooks/useApi';

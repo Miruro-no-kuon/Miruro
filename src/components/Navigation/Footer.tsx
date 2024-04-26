@@ -120,10 +120,21 @@ export function Footer() {
             <FooterLink to='/about' title='About Us'>
               About
             </FooterLink>
+            <FooterLink
+              to='https://www.miruro.com'
+              target='_blank'
+              title='Domains'
+            >
+              Domains
+            </FooterLink>
             <FooterLink to='/pptos' title='Privacy Policy and Terms of Service'>
               Privacy & ToS
             </FooterLink>
-            <FooterLink to='https://ko-fi.com/yourdev' title='Donate to Us'>
+            <FooterLink
+              to='https://ko-fi.com/yourdev'
+              target='_blank'
+              title='Donate to Us'
+            >
               Donate {'<3'}
             </FooterLink>
           </StyledLinkList>
