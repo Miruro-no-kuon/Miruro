@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { CardItem } from '../../index';
-import { Anime } from '../../hooks/animeInterface';
+import { CardItem, Anime } from '../../index';
 
 interface CardGridProps {
   animeData: Anime[];
@@ -18,7 +17,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
     if (hasNextPage) {
       onLoadMore();
     }
-  }, [hasNextPage, onLoadMore]); // Specify all variables and props it depends on
+  }, [hasNextPage, onLoadMore]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +29,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
       let threshold = 0;
 
       if (window.innerWidth <= 450) {
-        threshold = 250;
+        threshold = 1;
       }
 
       if (windowHeight + scrollTop >= documentHeight - threshold) {

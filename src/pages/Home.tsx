@@ -16,8 +16,10 @@ import {
   EpisodeCard,
   getNextSeason,
   time,
+  Paging,
+  Anime,
+  Episode,
 } from '../index';
-import { Anime, Episode } from '../hooks/animeInterface';
 
 const SimpleLayout = styled.div`
   gap: 1.5rem;
@@ -221,7 +223,7 @@ const Home = () => {
     localStorage.setItem('home tab', tabData);
   }, [activeTab]);
 
-  const filterAndTrimAnime = (animeList: any) =>
+  const filterAndTrimAnime = (animeList: Paging) =>
     animeList.results
       /*       .filter(
               (anime: Anime) =>

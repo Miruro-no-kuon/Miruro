@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Seasons } from '../../index';
-import { Anime } from '../../hooks/animeInterface';
+import { Seasons, Anime } from '../../index';
 import { SiMyanimelist, SiAnilist } from 'react-icons/si';
 
 const AnimeDataContainer = styled.div`

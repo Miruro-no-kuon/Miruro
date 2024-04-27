@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
-import { Anime } from '../../hooks/animeInterface';
-import { StatusIndicator } from '../shared/StatusIndicator';
+import { Anime, StatusIndicator } from '../../index';
+
 
 const SidebarStyled = styled.div`
   transition: 0.2s ease-in-out;

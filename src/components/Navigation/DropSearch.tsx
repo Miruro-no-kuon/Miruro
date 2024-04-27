@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Anime } from '../../hooks/animeInterface';
+import { Anime } from '../../index';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
 import { TbCardsFilled } from 'react-icons/tb';
 import { BsArrowUpSquare, BsArrowDownSquare } from 'react-icons/bs';

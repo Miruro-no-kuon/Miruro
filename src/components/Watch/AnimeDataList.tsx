@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
-import { Anime } from '../../hooks/animeInterface';
-import { StatusIndicator } from '../shared/StatusIndicator';
+import { Anime, StatusIndicator } from '../../index';
 
 const Sidebar = styled.div`
   display: flex;

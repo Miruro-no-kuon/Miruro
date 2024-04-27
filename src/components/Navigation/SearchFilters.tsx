@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
-import { FaSearch } from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
-import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
+import {
+  FaSearch,
+  FaSortAmountDown,
+  FaSortAmountDownAlt,
+  FaCheckCircle,
+  FaTrashAlt,
+} from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
-import { FaCheckCircle, FaTrashAlt } from 'react-icons/fa';
 import {
   Option,
   FilterProps,
@@ -18,21 +22,29 @@ import {
   sortOptions,
 } from '../../index';
 
-const selectStyles = {
-  placeholder: (provided: any) => ({
+interface StateProps {
+  data: {
+    label: string;
+  };
+  isSelected: boolean;
+  isFocused: boolean;
+}
+
+const selectStyles: any = {
+  placeholder: (provided: object) => ({
     ...provided,
     color: 'var(--global-text-muted)',
   }),
-  singleValue: (provided: any, state: any) => ({
+  singleValue: (provided: object, state: StateProps) => ({
     ...provided,
     color:
       state.data.label === 'Popularity' || state.data.label === 'Any'
         ? 'var(--global-text-muted)'
         : 'var(--primary-accent)',
   }),
-  control: (provided: any) => ({
+  control: (provided: object) => ({
     ...provided,
-    width: '11rem',
+    width: '11.5rem', // Set the width to 100% to take full width of the parent container
     backgroundColor: 'var(--global-secondary-bg)',
     borderColor: 'transparent',
     color: 'var(--global-text)',
@@ -41,7 +53,7 @@ const selectStyles = {
       borderColor: 'var(--primary-accent)',
     },
   }),
-  menu: (provided: any) => ({
+  menu: (provided: object) => ({
     ...provided,
     zIndex: 5,
     padding: '0.25rem',
@@ -49,7 +61,7 @@ const selectStyles = {
     borderColor: 'var(--global-border)',
     color: 'var(--global-text)',
   }),
-  option: (provided: any, state: any) => ({
+  option: (provided: object, state: StateProps) => ({
     ...provided,
     backgroundColor:
       state.isSelected || state.isFocused
@@ -66,15 +78,15 @@ const selectStyles = {
     },
     marginBottom: '0.25rem',
   }),
-  multiValue: (provided: any) => ({
+  multiValue: (provided: object) => ({
     ...provided,
     backgroundColor: 'var(--global-genre-button-bg)',
   }),
-  multiValueLabel: (provided: any) => ({
+  multiValueLabel: (provided: object) => ({
     ...provided,
     color: 'var(--global-text)',
   }),
-  multiValueRemove: (provided: any) => ({
+  multiValueRemove: (provided: object) => ({
     ...provided,
     '&:hover': {
       backgroundColor: 'var(--primary-accent)',
@@ -126,6 +138,12 @@ const SearchInput = styled.input`
     box-shadow 0.2s ease-in-out;
 `;
 
+const FiltersWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 const FiltersContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
@@ -138,7 +156,6 @@ const FiltersContainer = styled.div`
   font-size: 0.8rem;
   font-weight: bold;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
 
   @media (max-width: 500px) {
     display: flex;
@@ -150,13 +167,13 @@ const FilterSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+
+  gap: 0.5rem;
 `;
 
 const FilterLabel = styled.label`
   font-weight: bold;
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  margin-left: 0.25rem;
 `;
 
 const ButtonBase = styled.button`
@@ -205,18 +222,17 @@ const ClearFilters = styled(ButtonBase)`
     opacity: 1;
   }
 `;
+
 const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
   justify-content: flex-end;
-  padding-right: 1rem;
 
   @media (max-width: 500px) {
     justify-content: center;
-    padding-right: 0rem;
   }
 `;
+
 const ClearButton = styled.button<{ $query: string }>`
   background: transparent;
   border: none;
@@ -416,57 +432,70 @@ export const SearchFilters: React.FC<{
     sortDirection,
   ]);
 
-  const handleChange = (setter: any) => (newValue: string) => {
-    setter(newValue);
-    updateSearchParams();
-  };
+  const handleChange =
+    (
+      setter:
+        | React.Dispatch<React.SetStateAction<Option[]>>
+        | React.Dispatch<React.SetStateAction<Option>>
+        | React.Dispatch<React.SetStateAction<string>>,
+    ) =>
+    (
+      newValue: React.SetStateAction<Option[]> &
+        React.SetStateAction<Option> &
+        React.SetStateAction<string>,
+    ) => {
+      setter(newValue);
+      updateSearchParams();
+    };
 
   return (
-    <div>
-      <FiltersContainer>
-        <FilterSelect
-          label='Search'
-          value={query}
-          onChange={handleChange(setQuery)}
-        />
-        <FilterSelect
-          label='Genres'
-          options={genreOptions}
-          isMulti
-          onChange={handleChange(setSelectedGenres)}
-          value={selectedGenres}
-        />
-        <FilterSelect
-          label='Year'
-          options={yearOptions}
-          onChange={handleChange(setSelectedYear)}
-          value={selectedYear}
-        />
-        <FilterSelect
-          label='Season'
-          options={seasonOptions}
-          onChange={handleChange(setSelectedSeason)}
-          value={selectedSeason}
-        />
-        <FilterSelect
-          label='Type'
-          options={formatOptions}
-          onChange={handleChange(setSelectedFormat)}
-          value={selectedFormat}
-        />
-        <FilterSelect
-          label='Status'
-          options={statusOptions}
-          onChange={handleChange(setSelectedStatus)}
-          value={selectedStatus}
-        />
-        <FilterSelect
-          label='Sort By'
-          options={sortOptions}
-          onChange={handleChange(setSelectedSort)}
-          value={selectedSort}
-        />
-      </FiltersContainer>
+    <FiltersWrapper>
+      <div>
+        <FiltersContainer>
+          <FilterSelect
+            label='Search'
+            value={query}
+            onChange={handleChange(setQuery)}
+          />
+          <FilterSelect
+            label='Genres'
+            options={genreOptions}
+            isMulti
+            onChange={handleChange(setSelectedGenres)}
+            value={selectedGenres}
+          />
+          <FilterSelect
+            label='Year'
+            options={yearOptions}
+            onChange={handleChange(setSelectedYear)}
+            value={selectedYear}
+          />
+          <FilterSelect
+            label='Season'
+            options={seasonOptions}
+            onChange={handleChange(setSelectedSeason)}
+            value={selectedSeason}
+          />
+          <FilterSelect
+            label='Type'
+            options={formatOptions}
+            onChange={handleChange(setSelectedFormat)}
+            value={selectedFormat}
+          />
+          <FilterSelect
+            label='Status'
+            options={statusOptions}
+            onChange={handleChange(setSelectedStatus)}
+            value={selectedStatus}
+          />
+          <FilterSelect
+            label='Sort By'
+            options={sortOptions}
+            onChange={handleChange(setSelectedSort)}
+            value={selectedSort}
+          />
+        </FiltersContainer>
+      </div>
       <ButtonContainer>
         <Button
           onClick={() => {
@@ -486,6 +515,6 @@ export const SearchFilters: React.FC<{
           </ClearFilters>
         )}
       </ButtonContainer>
-    </div>
+    </FiltersWrapper>
   );
 };

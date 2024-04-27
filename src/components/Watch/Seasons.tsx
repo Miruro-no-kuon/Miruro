@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Relation } from '../../hooks/animeInterface';
+import { Relation } from '../../index';
 
 const SeasonCardContainer = styled.div`
   display: flex;

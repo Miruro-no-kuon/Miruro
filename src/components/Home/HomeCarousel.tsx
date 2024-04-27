@@ -4,11 +4,10 @@ import { FaPlay } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
-import { SkeletonSlide } from '../../index';
+import { SkeletonSlide, Anime } from '../../index';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
-import { Anime } from '../../hooks/animeInterface';
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -96,7 +95,7 @@ const SlideTitle = styled.h2`
   }
 `;
 
-const SlideInfo = styled.p`
+const SlideInfo = styled.div`
   display: flex;
   gap: 0.75rem;
   color: #ffffff;

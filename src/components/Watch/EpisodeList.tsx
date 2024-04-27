@@ -14,7 +14,7 @@ import {
   faSearch,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
-import { Episode } from '../../hooks/animeInterface';
+import { Episode } from '../../index';
 
 interface Props {
   animeId: string | undefined;
