@@ -100,3 +100,42 @@ export const fetchUserData = async (accessToken: string): Promise<UserData> => {
     throw new Error('Failed to fetch user data');
   }
 };
+
+// Query to fetch currently watching anime
+export const fetchWatchingAnime = async (accessToken: string) => {
+  try {
+    const response = await axios.post(
+      'https://graphql.anilist.co',
+      {
+        query: `
+          query {
+            Viewer {
+              animeList(status: WATCHING) {
+                media {
+                  id
+                  title {
+                    userPreferred
+                  }
+                  coverImage {
+                    extraLarge
+                  }
+                }
+              }
+            }
+          }
+        `,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      },
+    );
+    return response.data.data.Viewer.animeList.media;
+  } catch (error) {
+    console.error('Error fetching currently watching anime:', error);
+    throw new Error('Failed to fetch currently watching anime');
+  }
+};

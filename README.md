@@ -57,6 +57,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 - Dub Anime support
 - User-friendly interface
 - Mobile responsive
+- Anilist login integration
 - Fast page load
 - Light/Dark theme
 - Continue watching section
@@ -70,9 +71,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 
 ### Coming Soon
 
-- Profile page to see your watch list
 - Comment section
-- Anilist/MAL login integration
 
 </details>
 

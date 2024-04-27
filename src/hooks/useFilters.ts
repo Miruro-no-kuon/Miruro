@@ -74,14 +74,14 @@ export const statusOptions: Option[] = [
 export const sortOptions: Option[] = [
   { value: 'POPULARITY_DESC', label: 'Popularity' },
   { value: 'TRENDING_DESC', label: 'Trending' },
+  { value: 'SCORE_DESC', label: 'Rating' },
+  { value: 'FAVOURITES_DESC', label: 'Favorites' },
+  { value: 'EPISODES_DESC', label: 'Episodes' },
+  { value: 'ID_DESC', label: 'ID' },
   { value: 'UPDATED_AT_DESC', label: 'Last Updated' },
   { value: 'START_DATE_DESC', label: 'Start Date' },
   { value: 'END_DATE_DESC', label: 'End Date' },
-  { value: 'FAVOURITES_DESC', label: 'Favorites' },
-  { value: 'SCORE_DESC', label: 'Score' },
   { value: 'TITLE_ROMAJI_DESC', label: 'Title (Romaji)' },
   { value: 'TITLE_ENGLISH_DESC', label: 'Title (English)' },
   { value: 'TITLE_NATIVE_DESC', label: 'Title (Native)' },
-  { value: 'EPISODES_DESC', label: 'Episodes' },
-  { value: 'ID_DESC', label: 'ID' },
 ];

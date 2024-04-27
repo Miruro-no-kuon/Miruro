@@ -35,6 +35,10 @@ export { WatchAnimeData } from './components/Watch/WatchAnimeData';
 export { AnimeDataList } from './components/Watch/AnimeDataList';
 export { Seasons } from './components/Watch/Seasons';
 
+// TODO User Components
+export { Settings } from './components/Profile/Settings';
+export { WatchingAnilist } from './components/Profile/WatchingAnilist';
+
 // * ==== Hooks ====
 // TODO Utilizing API and Other Functionalities
 export * from './hooks/useApi';
@@ -42,6 +46,7 @@ export * from './hooks/animeInterface';
 export * from './hooks/useScroll';
 export * from './hooks/useTIme';
 export * from './hooks/useFilters';
+export * from './hooks/useCountdown';
 export * from './hooks/userInfo';
 export * from './hooks/authService';
 export * from './hooks/authContext';
