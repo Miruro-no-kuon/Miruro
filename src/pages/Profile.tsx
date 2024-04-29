@@ -53,6 +53,11 @@ const WarningMessage = styled.div`
   text-align: center;
   font-size: 0.9rem;
   flex: 1; // Take up equal space when next to each other
+  @media (max-width: 500px) {
+    img {
+      display: none;
+    }
+  }
 `;
 
 const PreferencesContainer = styled.div`
@@ -88,7 +93,7 @@ const Loginbutton = styled.div`
   }
 `;
 // Profile component
-const Profile: React.FC = () => {
+export const Profile: React.FC = () => {
   const { isLoggedIn, userData, login, logout } = useAuth();
 
   // Profile Page Document Title
@@ -115,15 +120,15 @@ const Profile: React.FC = () => {
                   Anime watched: <b>{userData.statistics.anime.count}</b>
                 </p>
                 <p>
-                  Total episodes watched:
+                  Total episodes watched:{' '}
                   <b>{userData.statistics.anime.episodesWatched}</b>
                 </p>
                 <p>
-                  Total minutes watched:
+                  Total minutes watched:{' '}
                   <b>{userData.statistics.anime.minutesWatched}</b>
                 </p>
                 <p>
-                  Average score:
+                  Average score:{' '}
                   <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
                 </p>
               </>
@@ -134,7 +139,6 @@ const Profile: React.FC = () => {
                 <IoLogOutOutline />
               </Loginbutton>
             </a>
-            <WatchingAnilist />
           </ProfileContainer>
         ) : (
           <ProfileContainer>
@@ -169,6 +173,7 @@ const Profile: React.FC = () => {
         </WarningMessage>
       </TopContainer>
       <EpisodeCard />
+      <WatchingAnilist />
       <Settings />
     </PreferencesContainer>
   );

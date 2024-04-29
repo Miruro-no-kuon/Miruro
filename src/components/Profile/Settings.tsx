@@ -26,7 +26,7 @@ const PreferencesTable = styled.table`
 const TableRow = styled.tr``;
 
 const TableCell = styled.td`
-  padding: 0.75rem;
+  padding: 1rem;
 `;
 
 const Title = styled.h2`
@@ -39,8 +39,7 @@ const Title = styled.h2`
 const SectionTitle = styled.h3`
   color: var(--global-text);
   font-size: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin: 1rem;
 `;
 
 const Divider = styled.hr`
@@ -146,8 +145,8 @@ export const Settings: React.FC = () => {
   return (
     <div>
       <Title>Settings</Title>
-      <SectionTitle>General</SectionTitle>
       <PreferencesTable>
+        <SectionTitle>General</SectionTitle>
         <tbody>
           {[
             'titleLanguage',
@@ -183,10 +182,8 @@ export const Settings: React.FC = () => {
             </TableRow>
           ))}
         </tbody>
-      </PreferencesTable>
-      <Divider />
-      <SectionTitle>Media</SectionTitle>
-      <PreferencesTable>
+        <Divider />
+        <SectionTitle>Media</SectionTitle>
         <tbody>
           {[
             'defaultLanguage',
@@ -217,10 +214,8 @@ export const Settings: React.FC = () => {
             </TableRow>
           ))}
         </tbody>
-      </PreferencesTable>
-      <Divider />
-      <SectionTitle>Other</SectionTitle>
-      <PreferencesTable>
+        <Divider />
+        <SectionTitle>Other</SectionTitle>
         <tbody>
           {[
             { key: 'restoreDefaultPreferences', text: 'Restore' },

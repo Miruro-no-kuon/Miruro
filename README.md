@@ -75,6 +75,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 ### Coming Soon
 
 - Comment section
+- Join the Discord to see the full Roadmap!
 
 </details>
 

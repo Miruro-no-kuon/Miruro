@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@apollo/client": "^3.10.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -25,6 +26,7 @@
     "body-parser": "^1.20.2",
     "eslint": "8.x",
     "express": "^4.19.2",
+    "graphql": "^16.8.1",
     "lodash": "^4.17.21",
     "lru-cache": "latest",
     "prettier": "^3.2.5",
@@ -36,7 +38,7 @@
     "react-select": "^5.8.0",
     "styled-components": "^6.1.0",
     "swiper": "^11.0.7",
-    "typescript": "^5.0.0",
+    "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "wrangler": "^3.52.0"
   },
