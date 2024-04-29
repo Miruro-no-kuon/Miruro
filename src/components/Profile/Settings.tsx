@@ -177,7 +177,7 @@ export const Settings: React.FC = () => {
 
   // Profile Page Document Title
   useEffect(() => {
-    document.title = `Profile | Settings`;
+    document.title = `Settings | Profile`;
   });
 
   return (

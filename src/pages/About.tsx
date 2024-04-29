@@ -119,7 +119,7 @@ const sections = [
 function About() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = 'About'; // Set the title when the component mounts
+    document.title = 'About | Miruro'; // Set the title when the component mounts
     return () => {
       // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;
