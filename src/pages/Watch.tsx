@@ -623,13 +623,12 @@ const Watch: React.FC = () => {
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        'Miruro | ' +
+        'Watch ' +
         (animeInfo.title.english ||
           animeInfo.title.romaji ||
           animeInfo.title.romaji ||
-          '');
-    } else {
-      document.title = 'Miruro';
+          '') +
+        ' | Miruro';
     }
   }, [animeInfo]);
 

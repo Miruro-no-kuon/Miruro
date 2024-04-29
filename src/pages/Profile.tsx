@@ -104,7 +104,7 @@ export const Profile: React.FC = () => {
   // Profile Page Document Title
   useEffect(() => {
     document.title =
-      isLoggedIn && userData ? `Profile |  ${userData.name}` : 'Profile';
+      isLoggedIn && userData ? `${userData.name} | Profile` : 'Profile';
   }, [isLoggedIn, userData]);
 
   const handleSettingsClick = () => {
