@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-import Seasons from './Seasons';
-import { Anime } from '../../hooks/interface';
+import styled from 'styled-components';
+import { Seasons, Anime } from '../../index';
 import { SiMyanimelist, SiAnilist } from 'react-icons/si';
-
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
-
-const fadeInAnimation = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
 
 const AnimeDataContainer = styled.div`
   margin-bottom: 1.5rem;
@@ -255,8 +244,8 @@ const TrailerOverlay = styled.div`
   z-index: 1000;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: ${fadeInAnimation} 0.3s ease forwards;
-  animation: ${slideUpAnimation} 0.3s ease forwards;
+  animation: fadeIn 0.3s ease-in-out;
+  animation: slideUp 0.3s ease-in-out;
   aspect-ratio: 16 / 9; // Maintain a 16:9 aspect ratio
 `;
 
@@ -272,7 +261,9 @@ const TrailerOverlayContent = styled.div`
   }
 `;
 
-const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
+export const WatchAnimeData: React.FC<{ animeData: Anime }> = ({
+  animeData,
+}) => {
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
@@ -570,5 +561,3 @@ const WatchAnimeData: React.FC<{ animeData: Anime }> = ({ animeData }) => {
     </>
   );
 };
-
-export default WatchAnimeData;

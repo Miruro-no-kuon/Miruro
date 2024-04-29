@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Image404URL from '/src/assets/404.webp';
-
-const FadeIn = keyframes`
-  0% { opacity: 0.4; }
-  100% { opacity: 1; }
-`;
 
 // Styled component for Centered Content
 const CenteredContent = styled.div`
@@ -22,7 +17,7 @@ const CenteredContent = styled.div`
     max-width: 100%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow */
     border-radius: var(--global-border-radius);
-    animation: ${FadeIn} 0.5s ease; /* Apply fade-in animation */
+    animation: fadeIn 0.5s ease; /* Apply fade-in animation */
   }
 
   @media (max-width: 550px) {

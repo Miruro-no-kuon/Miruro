@@ -1,232 +1,203 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { FaUserEdit } from 'react-icons/fa'; // Import FontAwesome user edit icon
 import { LuConstruction } from 'react-icons/lu';
-import { MdSettings } from 'react-icons/md'; // Import Material Design settings icon
+import { IoLogOutOutline } from 'react-icons/io5';
 import Image404URL from '/src/assets/404.webp';
+import { useAuth, EpisodeCard, WatchingAnilist } from '../index';
+import { SiAnilist } from 'react-icons/si';
+import { CgProfile } from 'react-icons/cg';
+import { useNavigate } from 'react-router-dom';
+import { FiSettings } from 'react-icons/fi';
 
-// Define the interface for preferences
-interface Preferences {
-  defaultLanguage: string;
-  autoskipIntroOutro: string;
-  autoPlay: string;
-  defaultEpisodeLayout: string;
-  rating: string;
-  defaultServers: string;
-  openKeyboardShortcuts: string;
-  restoreDefaultPreferences: string;
-  clearContinueWatching: string;
-}
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 1rem;
 
-// Styled components for the profile settings
-const PreferencesContainer = styled.div`
-  padding: 0.5rem;
-  max-width: 22rem;
-  margin: auto;
+  @media (min-width: 1000px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
-const PreferencesTable = styled.table`
+const UserInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+
+const ProfileContainer = styled.div`
+  position: relative;
+  padding: 0.5rem;
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
-
-  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.9rem;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  p {
+    margin: 0.75rem;
+  }
+  img {
+    border-radius: var(--global-border-radius);
+    width: 100px;
+  }
 `;
 
-const TableRow = styled.tr``;
-
-const TableCell = styled.td`
-  padding: 0.25rem;
-`;
-
-const StyledButton = styled.button<{ isSelected: boolean }>`
-  background: var(--global-div);
-  color: var(--global-text);
-  margin: 0.25rem;
-  padding: 0.2rem 0.4rem;
-  cursor: pointer;
-  border: none;
-  border-radius: var(--global-border-radius);
-  transition: background-color 0.2s ease-in-out;
-`;
-
-const StyledSelect = styled.select`
-  background: var(--global-div);
-  color: var(--global-text);
-  margin: 0.25rem;
-  padding: 0.2rem 0.4rem;
-  cursor: pointer;
-  border: none;
-  border-radius: var(--global-border-radius);
-  transition: background-color 0.2s ease-in-out;
-`;
-
-// Warning message styled component
 const WarningMessage = styled.div`
-  background-color: var(--global-div);
+  background-color: var(--global-div-tr);
   padding: 0.5rem;
   border-radius: var(--global-border-radius);
   text-align: center;
   font-size: 0.9rem;
+  flex: 1; // Take up equal space when next to each other
+  @media (max-width: 500px) {
+    img {
+      display: none;
+    }
+  }
 `;
 
+const PreferencesContainer = styled.div`
+  max-width: 80rem;
+  margin: auto;
+  padding: 0.25rem;
+`;
+
+const Loginbutton = styled.div`
+  border-radius: var(--global-border-radius);
+  display: flex;
+  cursor: pointer;
+  padding: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  transition: 0.1s ease-in-out;
+  width: 10rem; // Fixed width
+  margin: 0 auto; // Center horizontally
+  &:hover,
+  &:active,
+  &:focus {
+    transform: scale(1.025);
+  }
+  &:active {
+    transform: scale(0.975);
+  }
+
+  .svg-wrapper {
+    margin-bottom: -0.2rem;
+    margin-left: 0.5rem;
+    font-size: 1.25rem;
+  }
+`;
 // Profile component
-const Profile: React.FC = () => {
-  // Initial state for preferences
-  const [preferences, setPreferences] = useState<Preferences>({
-    defaultLanguage: 'Sub',
-    autoskipIntroOutro: 'Disabled',
-    autoPlay: 'Disabled',
-    defaultEpisodeLayout: 'Auto',
-    rating: 'Anilist',
-    defaultServers: 'Default',
-    openKeyboardShortcuts: 'Open',
-    restoreDefaultPreferences: 'Restore',
-    clearContinueWatching: 'Clear',
-  });
+export const Profile: React.FC = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, userData, login, logout } = useAuth();
 
-  // Action handlers for non-toggling buttons
-  const performAction = (actionName: keyof Preferences) => {
-    alert(`Action performed: ${actionName}`);
-    // Here you would handle the action specific to the button
-  };
+  // Profile Page Document Title
+  useEffect(() => {
+    document.title =
+      isLoggedIn && userData ? `Profile |  ${userData.name}` : 'Profile';
+  }, [isLoggedIn, userData]);
 
-  // Function to handle preference change
-  const handlePreferenceChange = (
-    preferenceName: keyof Preferences,
-    value: string,
-  ) => {
-    setPreferences({ ...preferences, [preferenceName]: value });
-  };
-
-  // Determine if a button should toggle or perform an action
-  const isActionPreference = (key: string): boolean => {
-    return [
-      'openKeyboardShortcuts',
-      'restoreDefaultPreferences',
-      'clearContinueWatching',
-    ].includes(key);
+  const handleSettingsClick = () => {
+    navigate('/profile/settings');
   };
 
   return (
     <PreferencesContainer>
-      <WarningMessage>
-        <LuConstruction style={{ color: 'orange' }} /> This page is currently{' '}
-        <strong style={{ color: 'orange' }}>under construction</strong>. We
-        appreciate your patience as we work to bring you new features!
-        <br />
-        <br />
-        <img
-          src={Image404URL}
-          alt='404 Error'
-          style={{
-            borderRadius: 'var(--global-border-radius)',
-            maxWidth: '100%',
-          }}
-        />
-      </WarningMessage>
-
-      <h3>
-        <MdSettings />
-        SETTINGS
-      </h3>
-      <PreferencesTable>
-        <tbody>
-          {Object.entries(preferences).map(([key, value]) => (
-            <TableRow key={key}>
-              <TableCell>{getReadablePreferenceName(key)}</TableCell>
-              <TableCell>
-                {isMultipleChoicePreference(key) ? (
-                  <StyledSelect
-                    value={value}
-                    onChange={(e) =>
-                      handlePreferenceChange(
-                        key as keyof Preferences,
-                        e.target.value,
-                      )
-                    }
-                  >
-                    {getOptionsForPreference(key).map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </StyledSelect>
-                ) : (
-                  <StyledButton
-                    isSelected={value === 'Enabled'}
-                    onClick={() =>
-                      isActionPreference(key)
-                        ? performAction(key as keyof Preferences)
-                        : handlePreferenceChange(
-                            key as keyof Preferences,
-                            value === 'Enabled' ? 'Disabled' : 'Enabled',
-                          )
-                    }
-                  >
-                    <FaUserEdit />
-                    {' ' + value}
-                  </StyledButton>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </tbody>
-      </PreferencesTable>
+      <TopContainer>
+        <ProfileContainer>
+          {/* <Loginbutton
+            onClick={handleSettingsClick}
+            style={{
+              position: 'absolute',
+              top: '0.5rem',
+              right: '0.5rem',
+              maxWidth: '2.5rem',
+            }}
+          >
+            <FiSettings size={24} />
+          </Loginbutton> */}
+          {isLoggedIn && userData ? (
+            <>
+              <img
+                src={userData.avatar.large}
+                alt={`${userData.name}'s avatar`}
+              />
+              <p>
+                Welcome, <b>{userData.name}</b>
+              </p>
+              {userData.statistics && (
+                <>
+                  <p>
+                    Anime watched: <b>{userData.statistics.anime.count}</b>
+                  </p>
+                  <p>
+                    Total episodes watched:{' '}
+                    <b>{userData.statistics.anime.episodesWatched}</b>
+                  </p>
+                  <p>
+                    Total minutes watched:{' '}
+                    <b>{userData.statistics.anime.minutesWatched}</b>
+                  </p>
+                  <p>
+                    Average score:{' '}
+                    <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
+                  </p>
+                </>
+              )}
+              <Loginbutton onClick={logout}>
+                <b>Log out </b>
+                <span className='svg-wrapper'>
+                  <IoLogOutOutline />
+                </span>
+              </Loginbutton>
+            </>
+          ) : (
+            <UserInfoContainer>
+              <CgProfile size={'5rem'} style={{ marginBottom: '1rem' }} />
+              <p>Guest</p>
+              <p>Please log in to view your profile and AniList</p>
+              <a onClick={login}>
+                <Loginbutton>
+                  <b>Log in with </b>
+                  <span className='svg-wrapper'>
+                    <SiAnilist />
+                  </span>
+                </Loginbutton>
+              </a>
+            </UserInfoContainer>
+          )}
+        </ProfileContainer>
+        <WarningMessage>
+          <LuConstruction style={{ color: 'orange' }} />
+          This page is currently{' '}
+          <strong style={{ color: 'orange' }}>under construction</strong>. We
+          appreciate your patience as we work to bring you new features!
+          <br />
+          <br />
+          <img
+            src={Image404URL}
+            alt='404 Error'
+            style={{
+              borderRadius: 'var(--global-border-radius)',
+              maxWidth: '100%',
+            }}
+          />
+        </WarningMessage>
+      </TopContainer>
+      <EpisodeCard />
+      <WatchingAnilist />
     </PreferencesContainer>
   );
-};
-
-// Function to check if preference is multiple choice
-const isMultipleChoicePreference = (key: string): boolean => {
-  const multipleChoicePreferences = [
-    'defaultLanguage',
-    'defaultEpisodeLayout',
-    'rating',
-    'defaultServers',
-  ];
-  return multipleChoicePreferences.includes(key);
-};
-
-// Function to get options for a preference
-const getOptionsForPreference = (key: string): string[] => {
-  switch (key) {
-    case 'defaultLanguage':
-      return ['Sub', 'Dub'];
-    case 'defaultEpisodeLayout':
-      return ['Auto', 'Compact', 'Detailed'];
-    case 'rating':
-      return ['Anilist', 'IMDb', 'MyAnimeList'];
-    case 'defaultServers':
-      return ['Default', 'Vidstreaming', 'Gogo'];
-    default:
-      return [];
-  }
-};
-
-// Function to get readable preference name
-const getReadablePreferenceName = (key: string): string => {
-  switch (key) {
-    case 'defaultLanguage':
-      return 'Default Language';
-    case 'autoskipIntroOutro':
-      return 'Autoskip Intro/Outro';
-    case 'autoPlay':
-      return 'Auto Play';
-    case 'defaultEpisodeLayout':
-      return 'Default Episode Layout';
-    case 'rating':
-      return 'Rating Source';
-    case 'defaultServers':
-      return 'Default Servers';
-    case 'openKeyboardShortcuts':
-      return 'Open Keyboard Shortcuts';
-    case 'restoreDefaultPreferences':
-      return 'Restore Default Preferences';
-    case 'clearContinueWatching':
-      return 'Clear Continue Watching';
-    default:
-      return '';
-  }
 };
 
 export default Profile;

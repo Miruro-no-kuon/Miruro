@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
-import { Anime } from '../../index';
+import { Anime, StatusIndicator } from '../../index';
 
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
 
 const SidebarStyled = styled.div`
   transition: 0.2s ease-in-out;
@@ -18,14 +14,6 @@ const SidebarStyled = styled.div`
   @media (max-width: 1000px) {
     max-width: unset;
   }
-`;
-
-const IndicatorDot = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  margin: 0rem;
-  flex-shrink: 0;
 `;
 
 const TitleWithDot = styled.div`
@@ -39,26 +27,6 @@ const TitleWithDot = styled.div`
   transition: background 0.2s ease;
 `;
 
-const CompletedIndicator = styled(IndicatorDot)`
-  background-color: var(--completed-indicator-color);
-`;
-
-const CancelledIndicator = styled(IndicatorDot)`
-  background-color: var(--cancelled-indicator-color);
-`;
-
-const NotYetAiredIndicator = styled(IndicatorDot)`
-  background-color: var(--not-yet-aired-indicator-color);
-`;
-
-const OngoingIndicator = styled(IndicatorDot)`
-  background-color: var(--ongoing-dot-color);
-`;
-
-const DefaultIndicator = styled(IndicatorDot)`
-  background-color: var(--default-indicator-color);
-`;
-
 const AnimeCard = styled.div`
   display: flex;
   background-color: var(--global-div);
@@ -68,7 +36,7 @@ const AnimeCard = styled.div`
   gap: 0.5rem;
   cursor: pointer;
   margin-bottom: 0.5rem;
-  animation: ${slideUpAnimation} 0.5s ease-in-out;
+  animation: slideUp 0.5s ease-in-out;
   animation-fill-mode: backwards;
   transition:
     background-color 0s ease-in-out,
@@ -157,20 +125,7 @@ export const HomeSideBar: React.FC<{ animeData: Anime[] }> = ({
             />
             <InfoStyled>
               <TitleWithDot>
-                {(() => {
-                  switch (anime.status) {
-                    case 'Completed':
-                      return <CompletedIndicator />;
-                    case 'Cancelled':
-                      return <CancelledIndicator />;
-                    case 'Not yet aired':
-                      return <NotYetAiredIndicator />;
-                    case 'Ongoing':
-                      return <OngoingIndicator />;
-                    default:
-                      return <DefaultIndicator />;
-                  }
-                })()}
+                <StatusIndicator status={anime.status} />
                 <Title>{anime.title.english || anime.title.romaji}</Title>
               </TitleWithDot>
               <Details>

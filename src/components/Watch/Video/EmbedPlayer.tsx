@@ -9,12 +9,10 @@ const Iframe = styled.iframe`
   min-height: 16.24rem;
 `;
 
-const EmbedPlayer: React.FC<{ src: string }> = ({ src }) => {
+export const EmbedPlayer: React.FC<{ src: string }> = ({ src }) => {
   return (
     <Container>
       <Iframe src={src} allowFullScreen />
     </Container>
   );
 };
-
-export default EmbedPlayer;

@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import {
-  FaPlay,
-  FaChevronCircleLeft,
-  FaChevronCircleRight,
-} from 'react-icons/fa';
+import { FaPlay } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import { Episode } from '../../hooks/interface';
+import { Episode } from '../../index';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 const LOCAL_STORAGE_KEYS = {
@@ -27,16 +23,6 @@ interface LastVisitedData {
     titleRomaji?: string;
   };
 }
-
-const popInAnimation = keyframes`
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0%); }
-`;
-
-const slideDownAnimation = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0%); }
-`;
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -96,7 +82,7 @@ const AnimeEpisodeCard = styled(Link)`
   }
 
   img {
-    animation: ${popInAnimation} 0.5s ease forwards;
+    animation: slideDown 0.5s ease-in-out;
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
@@ -110,7 +96,7 @@ const AnimeEpisodeCard = styled(Link)`
     padding: 0.5rem;
     background: linear-gradient(
       360deg,
-      rgba(8, 8, 8, 1) -25%,
+      rgba(8, 8, 8, 1) -15%,
       transparent 100%
     );
     color: white;
@@ -148,24 +134,26 @@ const ProgressBar = styled.div`
 const ContinueWatchingTitle = styled.h2`
   color: var(--global-text);
   font-size: 1.25rem;
-  margin-bottom: 0.5rem; // Adjust the margin as needed
+  margin-bottom: 0.25rem;
 `;
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0.25rem; // Adjust based on design requirements
-  right: 0.25rem; // Adjust based on design requirements
+  right: 0;
   background: transparent;
   border: none;
   color: #ffffff;
   cursor: pointer;
-  display: none; // Hidden by default
-  animation: ${slideDownAnimation} 0.5s ease forwards;
+  display: none;
+  animation: slideDown 0.25s ease-in-out;
   transition: 0.2s ease-in-out;
+  padding-right: 0.2rem;
+  padding-top: 0.2rem;
 
   svg {
     transition: 0.2s ease-in-out;
-    transform: scale(0.85);
+    transform: scale(0.95);
+    font-size: 1.75rem;
     &:hover,
     &:active,
     &:focus {
@@ -297,7 +285,7 @@ export const EpisodeCard: React.FC = () => {
       console.error('Failed to parse watched episodes data:', error);
       return [];
     }
-  }, [watchedEpisodesData, windowWidth, lastVisitedData]);
+  }, [watchedEpisodesData, lastVisitedData]);
 
   const swiperSettings = useMemo(
     () => ({
@@ -307,14 +295,9 @@ export const EpisodeCard: React.FC = () => {
       freeMode: true,
       grabCursor: true,
       keyboard: true,
-      touchRatio: 1.2,
       autoplay: {
-        delay: 3000,
+        delay: 6000,
         disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
       },
     }),
     [windowWidth],
@@ -329,28 +312,6 @@ export const EpisodeCard: React.FC = () => {
       )}
       <StyledSwiperContainer {...swiperSettings} aria-label='Episodes carousel'>
         {episodesToRender}
-        <button
-          aria-label='Previous episode'
-          className='swiper-button-prev'
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.85)',
-          }}
-        >
-          <FaChevronCircleLeft aria-hidden='true' />
-        </button>
-        <button
-          aria-label='Next episode'
-          className='swiper-button-next'
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.85)',
-          }}
-        >
-          <FaChevronCircleRight aria-hidden='true' />
-        </button>
       </StyledSwiperContainer>
     </Section>
   );

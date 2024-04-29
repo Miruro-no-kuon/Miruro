@@ -1,15 +1,13 @@
 import { FC } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FaPlay } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
-import BannerNotFound from '/src/assets/miruro-banner-dark-bg.webp';
-import { SkeletonSlide } from '../../index';
+import { SkeletonSlide, Anime } from '../../index';
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
-import { Anime } from '../../hooks/interface';
 
 const StyledSwiperContainer = styled(Swiper)`
   position: relative;
@@ -31,14 +29,7 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  animation: ${keyframes`
-    0% {
-      opacity: 0.4;
-    }
-    100% {
-      opacity: 1;
-    }
-  `} 0.3s ease-in-out forwards;
+  animation: fadeIn 0.4s ease-in-out forwards;
 `;
 
 const DarkOverlay = styled.div`
@@ -82,16 +73,7 @@ const SlideContent = styled.div`
   z-index: 5;
   max-width: 60%;
 
-  animation: ${keyframes`
-  0% {
-    opacity: 0.4;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0%);
-  }
-`} 0.3s ease-in-out forwards;
+  animation: slideUp 0.4s ease-in-out;
 
   @media (max-width: 1000px) {
     left: 1rem;
@@ -113,23 +95,29 @@ const SlideTitle = styled.h2`
   }
 `;
 
-const SlideInfo = styled.p`
-  color: var(--white, #fff);
-  font-size: 0.9rem;
+const SlideInfo = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  color: #ffffff;
   margin: auto;
+  margin-top: 0;
   max-width: 100%;
   overflow: hidden;
-  margin-top: 0.5rem;
   text-overflow: ellipsis;
-  svg {
-    margin-left: 0.5rem;
-  }
+
   @media (max-width: 1000px) {
     font-size: 0.8rem;
+    gap: 0.5rem;
   }
   @media (max-width: 500px) {
     font-size: 0.7rem;
+    gap: 0.45rem;
   }
+`;
+
+const SlideInfoItem = styled.p`
+  display: flex;
+  gap: 0.25rem;
 `;
 
 const SlideDescription = styled.p<{
@@ -139,12 +127,11 @@ const SlideDescription = styled.p<{
   background: transparent;
   font-size: clamp(0.9rem, 1.5vw, 0.9rem);
   line-height: 1.2;
-  margin-bottom: 0;
   max-width: 60%;
   max-height: 5rem;
   overflow: hidden;
   -webkit-line-clamp: 3;
-  margin-top: 0.25rem;
+  margin: 0;
 
   @media (max-width: 1000px) {
     line-height: 1.2;
@@ -179,6 +166,8 @@ const PlayButtonWrapper = styled.div`
 `;
 
 const PlayButton = styled.button`
+  display: flex;
+  gap: 0.5rem;
   background-color: var(--global-button-bg);
   color: var(--global-text);
   border: none;
@@ -213,12 +202,8 @@ const PlayButton = styled.button`
   }
 `;
 
-const PlayIcon = styled(FaPlay)`
-  margin-right: 0.5rem;
-  @media (max-width: 500px) {
-    margin: 0 0 0 0.25rem;
-  }
-`;
+const PlayIcon = styled(FaPlay)``;
+
 const PaginationStyle = styled.div`
   .swiper-pagination-bullet {
     background: var(--global-primary-bg, #007bff);
@@ -263,7 +248,9 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
       item.description &&
       item.cover !== item.image,
   );
-  const formatGenres = (genres: string[]): string => genres.join(', ');
+
+  // const formatGenres = (genres: string[]): string => genres.join(', ');
+
   return (
     <>
       {loading || error ? (
@@ -292,7 +279,6 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
             virtual={true}
             grabCursor={true}
             keyboard={true}
-            touchRatio={1.2}
             centeredSlides={true}
           >
             {validData.map(
@@ -301,9 +287,9 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                 cover,
                 title,
                 description,
-                status,
+                // status,
                 rating,
-                genres,
+                // genres,
                 totalEpisodes,
                 duration,
                 type,
@@ -322,21 +308,24 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                       <SlideContent>
                         <SlideTitle>{truncateTitle(title.english)}</SlideTitle>
                         <SlideInfo>
-                          {type && (
-                            <>
-                              {type} <TbCardsFilled /> {totalEpisodes}
-                            </>
+                          {type && <SlideInfoItem>{type}</SlideInfoItem>}
+                          {totalEpisodes && (
+                            <SlideInfoItem>
+                              <TbCardsFilled />
+                              {totalEpisodes}
+                            </SlideInfoItem>
                           )}
                           {rating && (
-                            <>
+                            <SlideInfoItem>
                               <FaStar />
                               {rating}
-                            </>
+                            </SlideInfoItem>
                           )}
                           {duration && (
-                            <>
-                              <FaClock /> {duration} mins
-                            </>
+                            <SlideInfoItem>
+                              <FaClock />
+                              {duration}mins
+                            </SlideInfoItem>
                           )}
                         </SlideInfo>
                         <SlideDescription

@@ -3,26 +3,44 @@ MIRURO
 </h1>
 
 <p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/typescript-%23007acc.svg?style=for-the-badge&logo=typescript&logoColor=%23ffffff"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/vite-%239269fe.svg?style=for-the-badge&logo=vite&logoColor=yellow&border"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/styled--components-742b66.svg?style=for-the-badge&logo=styled-components&logoColor=#e682d5"/></a>
+</p>
+
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Node.js-339933.svg?style=for-the-badge&logo=node.js&logoColor=white"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Bun.js-febbd0.svg?style=for-the-badge&logo=bun&logoColor=f9f1e1"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/cloudflare-white.svg?style=for-the-badge&logo=cloudflare&logoColor=orange"/></a>
+</p>
+
+<p align="center">
   <a href="https://www.miruro.com" target="_blank">
     <img src="https://raw.githubusercontent.com/Miruro-no-kuon/Miruro/main/src/assets/miruro-transparent-white.png" alt="Logo" width="200"/>
   </a>
 </p>
 
-<h1 align="center">
-    <a href="https://www.miruro.com">miruro.com</a> |
-    <a href="https://www.miruro.tv">miruro.tv</a>
-  <p align="center">
-    <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
-  </p>
-</h1>
-
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/typescript-%23007acc.svg?style=for-the-badge&logo=typescript&logoColor=%23ffffff"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/vite-%239269fe.svg?style=for-the-badge&logo=vite&logoColor=yellow&border"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/cloudflare-white.svg?style=for-the-badge&logo=cloudflare&logoColor=orange"/></a>
+  <a href="https://github.com/Miruro-no-Kuon/Miruro/fork">
+    <img src="https://img.shields.io/github/forks/Miruro-no-Kuon/Miruro?style=social" alt="fork"/>
+  </a>
+  <img src="https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=shield" alt="Discord Shield"/>
+  <a href="https://github.com/Miruro-no-Kuon/Miruro">
+    <img src="https://img.shields.io/github/stars/Miruro-no-Kuon/Miruro?style=social" alt="stars"/>
+  </a>
 </p>
+
+<div align="center" >
+
+| Official Domains | Links                                      |
+| ---------------- | ------------------------------------------ |
+| Hub              | [miruro.com](https://www.miruro.com)       |
+| TV               | [miruro.tv](https://www.miruro.tv)         |
+| Online           | [miruro.online](https://www.miruro.online) |
+
+</div>
 
 ## What is Miruro?
 
@@ -42,6 +60,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 - Dub Anime support
 - User-friendly interface
 - Mobile responsive
+- Anilist login integration
 - Fast page load
 - Light/Dark theme
 - Continue watching section
@@ -55,9 +74,8 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 
 ### Coming Soon
 
-- Profile page to see your watch list
 - Comment section
-- Anilist/MAL login integration
+- Join the Discord to see the full Roadmap!
 
 </details>
 
@@ -90,7 +108,8 @@ cd Miruro
 
 ### Basic Pre-Requisites
 
-This platform is built on [Node.js](https://nodejs.org/) and utilizes [Bun](https://bun.sh/) to ensure the quickest response times achievable. While `npm` can also be used, the commands for npm would mirror those of Bun, simply substituting the specific commands accordingly.
+> [!TIP]
+> This platform is built on [Node.js](https://nodejs.org/) and utilizes [Bun](https://bun.sh/) to ensure the quickest response times achievable. While `npm` can also be used, the commands for npm would mirror those of Bun, simply substituting the specific commands accordingly.
 
 > Bun is now available on **Windows**, **Linux**, and **macOS**. Below are the installation commands for each operating system.
 
@@ -128,8 +147,8 @@ bun install
 ### Copy `.env.example` into `.env.local` in the root folder
 
 - `.env.local` & `.env` are both viable options, you can also set
-  `.env.test.local`
-  `.env.development.local`
+  `.env.test.local`,
+  `.env.development.local` or
   `.env.production.local`
 
 ```bash
@@ -154,9 +173,10 @@ bun start
 
 **⚠️ RESTRICTED USE**
 
-**Please be aware:** Self-hosting this application is **strictly limited to personal use only**. Commercial utilization is **prohibited**, and the inclusion of advertisements on your self-hosted website may lead to serious consequences, including **potential site takedown measures**. Ensure compliance to avoid any legal or operational issues.
+> [!CAUTION]
+> Self-hosting this application is **strictly limited to personal use only**. Commercial utilization is **prohibited**, and the inclusion of advertisements on your self-hosted website may lead to serious consequences, including **potential site takedown measures**. Ensure compliance to avoid any legal or operational issues.
 
-> Deploy **your own Miruro** Instance
+> Deploy **Your Own Miruro** Instance
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_SKIP_TIMES,VITE_PROXY_URL,PORT&project-name=miruro&repository-name=miruro)
 
@@ -164,11 +184,11 @@ bun start
 
 ## License 📝
 
-Hey there! Just so you know, this project follows a Custom BY-NC License. What does that mean? Well, you're welcome to use, share, and tinker with the code as long as it's for non-commercial purposes. Oh, and **don't forget to give credit** to our platform, [miruro.com](https://www.miruro.com). If you're thinking of using it for commercial stuff, sorry, that's a no-go. For all the details, check out the [LICENSE](LICENSE) file. Got questions or need special permissions? Feel free to shoot us a message!
+Hey there! Just so you know, this project follows a Custom BY-NC License. What does that mean? Well, you're welcome to use, share, and tinker with the code as long as it's for non-commercial purposes. Oh, and **don't forget to give credit** to our platform, [**miruro.com**](https://www.miruro.com). If you're thinking of using it for commercial stuff, sorry, that's a no-go. For all the details, check out the [**LICENSE**](LICENSE) file. Got questions or need special permissions? Feel free to shoot us a message!
 
 ## Found a Bug? 🐞
 
-Uh-oh, looks like you stumbled upon a bug? No worries, we're here to squash it! Just head over to our [issues](https://github.com/Miruro-no-kuon/Miruro-no-Kuon/issues) section on GitHub and let us know what's up.
+Uh-oh, looks like you stumbled upon a bug? No worries, we're here to squash it! Just head over to our [**issues**](https://github.com/Miruro-no-kuon/Miruro-no-Kuon/issues) section on GitHub and let us know what's up.
 
 ## Get in Touch! 📧
 

@@ -1,26 +1,17 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import {
   useNavigate,
   useSearchParams,
   Link,
   useLocation,
 } from 'react-router-dom';
-import { DropDownSearch } from '../../index'; // Assuming this is a local component not exported through index.ts
-import { fetchAdvancedSearch, type Anime } from '../..'; // Adjust the import path to point to your index.ts correctly
-import { FiSun, FiMoon, FiX, FiMenu } from 'react-icons/fi';
+import { DropDownSearch, useAuth } from '../../index';
+import { fetchAdvancedSearch, type Anime } from '../..';
+import { FiSun, FiMoon, FiX /* FiMenu */ } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
-
-const fadeInAnimation = (color: string) => keyframes`
-  from { background-color: transparent; }
-  to { background-color: ${color}; }
-`;
-
-const slideDownAnimation2 = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); max-height: 0; }
-  100% { opacity: 1; transform: translateY(0); max-height: 500px; } /* Example max-height */
-`;
+import { CgProfile } from 'react-icons/cg';
 
 const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   position: fixed;
@@ -34,7 +25,7 @@ const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 100;
-  animation: ${fadeInAnimation('var(--global-primary-bg-tr)')} 0.5s ease-out;
+  animation: fadeIn('var(--global-primary-bg-tr)') 0.5s ease-in-out;
   transition: 0.1s ease-in-out;
 
   @media (max-width: 500px) {
@@ -91,8 +82,8 @@ const InputContainer = styled.div<{ $isVisible: boolean }>`
   padding: 0.6rem;
   border-radius: var(--global-border-radius);
   background-color: var(--global-div);
-  animation: ${fadeInAnimation('var(--global-div)')} 0.1s ease-out;
-  animation: ${slideDownAnimation2} 0.5s ease;
+  animation: fadeIn 0.1s ease-in-out;
+  animation: slideDropDown 0.5s ease;
 
   @media (max-width: 1000px) {
     max-width: 30rem;
@@ -234,6 +225,7 @@ const getInitialThemePreference = () => {
 };
 
 export const Navbar = () => {
+  const { isLoggedIn, userData } = useAuth();
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -294,13 +286,19 @@ export const Navbar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  });
 
   const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark-mode', isDarkMode);
   }, [isDarkMode]);
+
+  const toggleTheme = useCallback(() => {
+    const newIsDarkMode = !isDarkMode;
+    setIsDarkMode(newIsDarkMode);
+    saveThemePreference(newIsDarkMode);
+  }, [isDarkMode, setIsDarkMode]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -325,7 +323,7 @@ export const Navbar = () => {
         }
       }
     },
-    [search, isDarkMode],
+    [toggleTheme],
   );
 
   useEffect(() => {
@@ -351,7 +349,7 @@ export const Navbar = () => {
         navigate(value ? `/search?query=${value}` : '/search');
       }
     },
-    [navigate],
+    [navigate, location.pathname, setSearchParams],
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -434,11 +432,6 @@ export const Navbar = () => {
     }
   };
 
-  const toggleTheme = () => {
-    const newIsDarkMode = !isDarkMode;
-    setIsDarkMode(newIsDarkMode);
-    saveThemePreference(newIsDarkMode);
-  };
   useEffect(() => {
     function handleResize() {
       setIsMobileView(window.innerWidth < 500);
@@ -531,10 +524,21 @@ export const Navbar = () => {
               <StyledButton onClick={toggleTheme} aria-label='Toggle Dark Mode'>
                 {isDarkMode ? <FiSun /> : <FiMoon />}
               </StyledButton>
-              {/* {<StyledButton onClick={navigateToProfile}>
-                <FiMenu />
+              <StyledButton onClick={navigateToProfile}>
+                {isLoggedIn && userData ? (
+                  <img
+                    src={userData.avatar.large}
+                    alt={`${userData.name}'s avatar`}
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
+                  <CgProfile />
+                )}
               </StyledButton>
-              } */}
             </RightContent>
           </TopContainer>
 

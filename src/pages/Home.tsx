@@ -11,15 +11,17 @@ import {
   fetchTopAnime,
   fetchTopAiringAnime,
   fetchUpcomingSeasons,
-  fetchRecentEpisodes,
   HomeSideBar,
   EpisodeCard,
-  getSeason,
+  getNextSeason,
+  time,
+  Paging,
+  Anime,
+  Episode,
 } from '../index';
-import { Anime, Episode } from '../hooks/interface';
 
 const SimpleLayout = styled.div`
-  gap: 1.5rem;
+  gap: 1rem;
   margin: 0 auto;
   max-width: 125rem;
   border-radius: var(--global-border-radius);
@@ -98,12 +100,14 @@ const Home = () => {
   const [itemsCount, setItemsCount] = useState(
     window.innerWidth > 500 ? 24 : 15,
   );
+
+  // Reduced active time to 5mins
   const [activeTab, setActiveTab] = useState(() => {
+    const time = Date.now();
     const savedData = localStorage.getItem('home tab');
     if (savedData) {
       const { tab, timestamp } = JSON.parse(savedData);
-      const now = new Date().getTime();
-      if (now - timestamp < 24 * 60 * 60 * 1000) {
+      if (time - timestamp < 300000) {
         return tab;
       } else {
         localStorage.removeItem('home tab');
@@ -119,7 +123,6 @@ const Home = () => {
     topAnime: [] as Anime[],
     topAiring: [] as Anime[],
     Upcoming: [] as Anime[],
-    recentEpisodes: [] as Anime[],
     error: null as string | null,
     loading: {
       trending: true,
@@ -127,7 +130,6 @@ const Home = () => {
       topRated: true,
       topAiring: true,
       Upcoming: true,
-      recent: true,
     },
   });
 
@@ -170,16 +172,14 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setState((prevState) => ({ ...prevState, error: null }));
-        const [trending, popular, topRated, topAiring, Upcoming, recent] =
+        const [trending, popular, topRated, topAiring, Upcoming] =
           await Promise.all([
             fetchTrendingAnime(1, fetchCount),
             fetchPopularAnime(1, fetchCount),
             fetchTopAnime(1, fetchCount),
             fetchTopAiringAnime(1, 6),
             fetchUpcomingSeasons(1, 6),
-            fetchRecentEpisodes(1, fetchCount),
           ]);
-        const recentEpisodesTrimmed = recent.results.slice(0, itemsCount);
         setState((prevState) => ({
           ...prevState,
           trendingAnime: filterAndTrimAnime(trending),
@@ -187,7 +187,6 @@ const Home = () => {
           topAnime: filterAndTrimAnime(topRated),
           topAiring: filterAndTrimAnime(topAiring),
           Upcoming: filterAndTrimAnime(Upcoming),
-          recentEpisodes: recentEpisodesTrimmed,
         }));
       } catch (fetchError) {
         setState((prevState) => ({
@@ -203,7 +202,6 @@ const Home = () => {
             topRated: false,
             topAiring: false,
             Upcoming: false,
-            recent: false,
           },
         }));
       }
@@ -217,12 +215,11 @@ const Home = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    const now = new Date().getTime();
-    const tabData = JSON.stringify({ tab: activeTab, timestamp: now });
+    const tabData = JSON.stringify({ tab: activeTab, timestamp: time });
     localStorage.setItem('home tab', tabData);
   }, [activeTab]);
 
-  const filterAndTrimAnime = (animeList: any) =>
+  const filterAndTrimAnime = (animeList: Paging) =>
     animeList.results
       /*       .filter(
               (anime: Anime) =>
@@ -258,7 +255,7 @@ const Home = () => {
     setActiveTab(tabName);
   };
 
-  const SEASON = getSeason(true);
+  const SEASON = getNextSeason();
 
   return (
     <SimpleLayout>
@@ -276,6 +273,7 @@ const Home = () => {
           error={state.error}
         />
       )}
+      <EpisodeCard />
       <ContentSidebarLayout>
         <div
           style={{
@@ -352,7 +350,6 @@ const Home = () => {
           <HomeSideBar animeData={state.Upcoming} />
         </div>
       </ContentSidebarLayout>
-      <EpisodeCard />
     </SimpleLayout>
   );
 };

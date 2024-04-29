@@ -8,17 +8,12 @@ import {
   fetchAdvancedSearch,
   SkeletonCard,
 } from '../index';
-
-// Define types for genre, year, season, format, and status
-type Option = { value: string; label: string };
-// type Genre = Option;
-// type Year = Option;
-// type Season = Option;
-// type Format = Option;
-// type Status = Option;
+import { Paging } from '../index';
 
 const Container = styled.div`
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
   @media (min-width: 1500px) {
     margin-left: 8rem;
@@ -85,15 +80,15 @@ const Search = () => {
   );
 
   //Other logic
-  const [animeData, setAnimeData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [animeData, setAnimeData] = useState<Paging[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const delayTimeout = useRef<number | null>(null);
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = query ? `${query} - Miruro` : 'Miruro';
+    document.title = `Search ${query}`;
     return () => {
       document.title = previousTitle;
     };
@@ -123,11 +118,20 @@ const Search = () => {
     const scrollToTopWithDelay = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 250);
+      }, 350);
     };
 
     scrollToTopWithDelay();
-  }, [query]);
+  }, [
+    query,
+    selectedGenres,
+    selectedYear,
+    selectedSeason,
+    selectedFormat,
+    selectedStatus,
+    selectedSort,
+    sortDirection,
+  ]);
 
   const initiateFetchAdvancedSearch = useCallback(async () => {
     setIsLoading(true);
@@ -166,10 +170,7 @@ const Search = () => {
   ]);
 
   const handleLoadMore = () => {
-    setPage((prevPage) => {
-      return prevPage < 10 ? prevPage + 1 : prevPage;
-      setHasNextPage(false);
-    });
+    setPage((prevPage) => prevPage + 1);
   };
 
   useEffect(() => {
@@ -215,33 +216,37 @@ const Search = () => {
         setSortDirection={setSortDirection}
         updateSearchParams={updateSearchParams}
       />
-      {isLoading && page === 1 ? (
-        <StyledCardGrid>
-          {Array.from({ length: 17 }).map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </StyledCardGrid>
-      ) : (
-        <CardGrid
-          animeData={animeData}
-          hasNextPage={hasNextPage}
-          onLoadMore={handleLoadMore}
-        />
-      )}
-      {!isLoading && animeData.length === 0 && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '10vh',
-            fontWeight: 'bold',
-            fontSize: '1.5rem',
-          }}
-        >
-          No Results
-        </div>
-      )}
+
+      <div>
+        {(isLoading && page === 1) ||
+        (isLoading && page === 1 && animeData.length === 0) ? (
+          <StyledCardGrid>
+            {Array.from({ length: 17 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </StyledCardGrid>
+        ) : (
+          <CardGrid
+            animeData={animeData}
+            hasNextPage={hasNextPage}
+            onLoadMore={handleLoadMore}
+          />
+        )}
+        {!isLoading && animeData.length === 0 && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '10vh',
+              fontWeight: 'bold',
+              fontSize: '1.5rem',
+            }}
+          >
+            No Results
+          </div>
+        )}
+      </div>
     </Container>
   );
 };

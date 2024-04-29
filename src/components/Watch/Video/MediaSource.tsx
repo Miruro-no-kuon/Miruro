@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaBell, FaDownload } from 'react-icons/fa';
+import {
+  FaMicrophone,
+  FaClosedCaptioning,
+  FaBell,
+  FaDownload,
+} from 'react-icons/fa';
 
 // Props interface
 interface MediaSourceProps {
@@ -36,8 +41,17 @@ const Table = styled.table`
 const TableRow = styled.tr``;
 
 const TableCell = styled.td`
-  text-align: center;
-  padding: 0.35rem; // Adjust overall padding as needed
+  padding: 0.35rem;
+  @media (max-width: 500px) {
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  svg {
+    margin-bottom: -0.1rem;
+    @media (max-width: 500px) {
+      margin-bottom: 0rem;
+    }
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -196,7 +210,9 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
         <Table>
           <tbody>
             <TableRow>
-              <TableCell>SUB</TableCell>
+              <TableCell>
+                <FaClosedCaptioning /> Sub
+              </TableCell>
               <TableCell>
                 <ButtonWrapper>
                   <Button
@@ -250,7 +266,9 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>DUB</TableCell>
+              <TableCell>
+                <FaMicrophone /> Dub
+              </TableCell>
               <TableCell>
                 <ButtonWrapper>
                   <Button

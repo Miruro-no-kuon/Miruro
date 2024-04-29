@@ -1,24 +1,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { SkeletonCard, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
+import { SkeletonCard, StatusIndicator, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { FaPlay } from 'react-icons/fa'; // For the play icon
 import { TbCardsFilled } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
 
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
-
-const slideRightAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateX(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
-
 const StyledCardWrapper = styled(Link)`
   color: var(--global-text);
-  animation: ${slideUpAnimation} 0.4s ease;
+  animation: slideUp 0.4s ease;
   text-decoration: none;
   &:hover,
   &:active,
@@ -46,7 +36,7 @@ const ImageDisplayWrapper = styled.div`
   }
 `;
 
-const AnimeImage = styled.div<{}>`
+const AnimeImage = styled.div`
   position: relative;
   text-align: left;
   overflow: hidden;
@@ -55,7 +45,7 @@ const AnimeImage = styled.div<{}>`
   background: var(--global-card-bg);
   box-shadow: 2px 2px 10px var(--global-card-shadow);
   transition: background-color 0.2s ease-in-out;
-  animation: ${slideUpAnimation} 0.5s ease forwards;
+  animation: slideUp 0.5s ease-in-out;
 `;
 
 const PlayIcon = styled(FaPlay)`
@@ -115,34 +105,6 @@ const TitleContainer = styled.div<{ $isHovered: boolean }>`
   }
 `;
 
-const IndicatorDot = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  margin: 0rem;
-  flex-shrink: 0;
-`;
-
-const CompletedIndicator = styled(IndicatorDot)`
-  background-color: var(--completed-indicator-color);
-`;
-
-const CancelledIndicator = styled(IndicatorDot)`
-  background-color: var(--cancelled-indicator-color);
-`;
-
-const NotYetAiredIndicator = styled(IndicatorDot)`
-  background-color: var(--not-yet-aired-indicator-color);
-`;
-
-const OngoingIndicator = styled(IndicatorDot)`
-  background-color: var(--ongoing-dot-color);
-`;
-
-const DefaultIndicator = styled(IndicatorDot)`
-  background-color: var(--default-indicator-color);
-`;
-
 const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
   margin: 0;
   overflow: hidden;
@@ -157,7 +119,7 @@ const Title = styled.h5<{ $isHovered: boolean; color?: string }>`
 `;
 
 const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
-  animation: ${slideRightAnimation} 0.2s ease forwards;
+  animation: slideRight 0.2s ease-in-out;
   position: absolute;
   bottom: 0;
   margin: 0.25rem;
@@ -173,13 +135,12 @@ const ImgDetail = React.memo(styled.p<{ $isHovered: boolean; color?: string }>`
 `);
 
 const CardDetails = styled.div`
-  animation: ${slideRightAnimation} 0.4s ease forwards;
+  animation: slideRight 0.4s ease-in-out;
   width: 100%;
   font-family: Arial;
   font-weight: bold;
   font-size: 0.75rem;
-  color: rgba(102, 102, 102, 0.75);
-  opacity: 0.65;
+  color: rgba(102, 102, 102, 0.65);
   margin: 0;
   display: flex;
   align-items: center;
@@ -194,7 +155,7 @@ const CardDetails = styled.div`
   }
 `;
 
-const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
+export const CardItem: React.FC<{ anime: Anime }> = ({ anime }) => {
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -226,21 +187,6 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
       title.length > maxLength ? `${title.slice(0, maxLength)}...` : title,
     [],
   );
-
-  const handleStatusCheck = useMemo(() => {
-    switch (anime.status) {
-      case 'Ongoing':
-        return <OngoingIndicator />;
-      case 'Completed':
-        return <CompletedIndicator />;
-      case 'Cancelled':
-        return <CancelledIndicator />;
-      case 'Not yet aired':
-        return <NotYetAiredIndicator />;
-      default:
-        return <DefaultIndicator />;
-    }
-  }, [anime.status]);
 
   const handleImageLoad = () => {
     setLoading(false); // Set loading to false when image is loaded
@@ -289,7 +235,7 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
               </AnimeImage>
             </ImageDisplayWrapper>
             <TitleContainer $isHovered={isHovered}>
-              {handleStatusCheck}
+              <StatusIndicator status={anime.status} />
               <Title
                 $isHovered={isHovered}
                 color={anime.color}
@@ -329,5 +275,3 @@ const CardItemContent: React.FC<{ anime: Anime }> = ({ anime }) => {
     </>
   );
 };
-
-export default CardItemContent;

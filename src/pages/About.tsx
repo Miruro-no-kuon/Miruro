@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
-
+import { FaCheckCircle } from 'react-icons/fa';
 const SplashContainer = styled.div`
   margin-top: -2rem;
 `;
@@ -65,35 +65,51 @@ const sections = [
     content: (
       <>
         <Paragraph>
-          <strong>Content Library:</strong> We have a vast collection of both
-          old and new anime, making us one of the largest anime libraries on the
-          web.
+          <strong>
+            <FaCheckCircle /> Content Library:
+          </strong>{' '}
+          We have a vast collection of both old and new anime, making us one of
+          the largest anime libraries on the web.
         </Paragraph>
         <Paragraph>
-          <strong>Streaming Experience:</strong> Enjoy{' '}
-          <Keyword>fast and reliable</Keyword> streaming with our{' '}
+          <strong>
+            <FaCheckCircle /> Streaming Experience:
+          </strong>{' '}
+          Enjoy <Keyword>fast and reliable</Keyword> streaming with our{' '}
           <Keyword>top-of-the-line servers</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>Quality/Resolution:</strong> Our videos are available in{' '}
-          <Keyword>high resolution</Keyword>, and we offer quality settings to
-          suit your internet speed.
+          <strong>
+            <FaCheckCircle /> Quality/Resolution:
+          </strong>{' '}
+          Our videos are available in <Keyword>high resolution</Keyword>, and we
+          offer quality settings to suit your internet speed.
         </Paragraph>
         <Paragraph>
-          <strong>Frequent Updates:</strong> Our content is updated hourly to
-          provide you with the <Keyword>latest releases</Keyword>.
+          <strong>
+            <FaCheckCircle /> Frequent Updates:
+          </strong>{' '}
+          Our content is updated hourly to provide you with the{' '}
+          <Keyword>latest releases</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>User-Friendly Interface:</strong> We focus on{' '}
-          <Keyword>simplicity and ease of use</Keyword>.
+          <strong>
+            <FaCheckCircle /> User-Friendly Interface:
+          </strong>{' '}
+          We focus on <Keyword>simplicity and ease of use</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>Device Compatibility:</strong> Miruro works seamlessly on both{' '}
+          <strong>
+            <FaCheckCircle /> Device Compatibility:
+          </strong>{' '}
+          Miruro works seamlessly on both{' '}
           <Keyword>desktop and mobile devices</Keyword>.
         </Paragraph>
         <Paragraph>
-          <strong>Community:</strong> Join our active{' '}
-          <Keyword>community of anime lovers</Keyword>.
+          <strong>
+            <FaCheckCircle /> Community:
+          </strong>{' '}
+          Join our active <Keyword>community of anime lovers</Keyword>.
         </Paragraph>
       </>
     ),

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FaReddit, FaDiscord, FaTwitter, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { year } from '../../hooks/useTIme';
 
 const PageWrapper = styled.div`
   margin-top: 2rem;
@@ -119,18 +120,44 @@ export function Footer() {
             <FooterLink to='/about' title='About Us'>
               About
             </FooterLink>
+            <FooterLink
+              to='https://www.miruro.com'
+              target='_blank'
+              title='Domains'
+            >
+              Domains
+            </FooterLink>
             <FooterLink to='/pptos' title='Privacy Policy and Terms of Service'>
               Privacy & ToS
             </FooterLink>
-            <FooterLink to='https://ko-fi.com/yourdev' title='Donate to Us'>
+            <FooterLink
+              to='https://ko-fi.com/yourdev'
+              target='_blank'
+              title='Donate to Us'
+            >
               Donate {'<3'}
             </FooterLink>
           </StyledLinkList>
         </FooterBaseContainer>
         <FooterBaseContainer aria-label='Sub Footer' $isSub={true}>
           <Text as='p' $isSub={true}>
-            &copy; {new Date().getFullYear()} miruro.tv | Website Made by{' '}
-            <strong>Miruro no Kuon</strong>
+            &copy; {year}{' '}
+            <a
+              href='https://www.miruro.tv'
+              rel='noopener noreferrer'
+              style={{ color: 'grey' }}
+            >
+              miruro.tv
+            </a>{' '}
+            | Website Made by{' '}
+            <a
+              href='https://github.com/Miruro-no-kuon'
+              target='_blank'
+              rel='noopener noreferrer'
+              style={{ textDecoration: 'none' }}
+            >
+              <strong>Miruro no Kuon</strong>
+            </a>
           </Text>
           <nav aria-label='Social Links'>
             <SocialIconsWrapper>

@@ -125,3 +125,11 @@ export interface Anime {
   episodes: Episode[];
   color: string;
 }
+
+export interface Paging {
+  currentPage: number;
+  hasNextPage: boolean;
+  totalPages: number;
+  totalResults: number;
+  results: Anime[];
+}

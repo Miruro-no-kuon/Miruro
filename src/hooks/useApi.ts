@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getSeason } from './useSeason';
+import { year, getCurrentSeason, getNextSeason } from '../index';
 
 // Utility function to ensure URL ends with a slash
 function ensureUrlEndsWithSlash(url: string): string {
@@ -283,17 +283,14 @@ async function fetchList(
         sort: ['["SCORE_DESC"]'],
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
-    }
-    if (type === 'Popular') {
+    } else if (type === 'Popular') {
       options = {
         type: 'ANIME',
         sort: ['["POPULARITY_DESC"]'],
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&sort=${options.sort}&`;
-    }
-    if (type === 'Upcoming') {
-      const season = getSeason(true); // This will set the season based on the current month
-      const year = new Date().getFullYear();
+    } else if (type === 'Upcoming') {
+      const season = getNextSeason(); // This will set the season based on the current month
       options = {
         type: 'ANIME',
         season: season,
@@ -303,8 +300,7 @@ async function fetchList(
       };
       url = `${BASE_URL}meta/anilist/advanced-search?type=${options.type}&status=${options.status}&sort=${options.sort}&season=${options.season}&year=${options.year}&`;
     } else if (type === 'TopAiring') {
-      const season = getSeason(false); // This will set the season based on the current month
-      const year = new Date().getFullYear();
+      const season = getCurrentSeason(); // This will set the season based on the current month
       options = {
         type: 'ANIME',
         season: season,

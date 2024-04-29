@@ -1,19 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Anime } from '../../hooks/interface';
+import { Anime } from '../../index';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
 import { TbCardsFilled } from 'react-icons/tb';
-
-const slideDownAnimation = keyframes`
-  0% { transform: translateY(0px); max-height: 0; }
-  100% {  transform: translateY(0); max-height: 500px; }
-`;
-
-const slideDownAnimation2 = keyframes`
-  0% { opacity: 0; transform: translateY(-20px); max-height: 0; }
-  100% { opacity: 1; transform: translateY(0); max-height: 500px; }
-`;
+import { BsArrowUpSquare, BsArrowDownSquare } from 'react-icons/bs';
+import { PiKeyReturn } from 'react-icons/pi';
 
 const Container = styled.div<{ $isVisible: boolean; width: number }>`
   display: ${({ $isVisible }) => ($isVisible ? 'block' : 'none')};
@@ -27,7 +19,7 @@ const Container = styled.div<{ $isVisible: boolean; width: number }>`
   border-top: none;
   border-radius: var(--global-border-radius);
   padding-top: 2.5rem;
-  animation: ${slideDownAnimation} 0.5s ease forwards;
+  animation: dropDown 0.5s ease-in-out;
 
   @media (max-width: 500px) {
     top: 4rem;
@@ -46,7 +38,7 @@ const Container = styled.div<{ $isVisible: boolean; width: number }>`
 
 const Details = styled.p<{ $isSelected: boolean }>`
   margin: 0.25rem 0;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   color: ${({ $isSelected }) =>
     $isSelected ? 'var(--primary-text)' : 'rgba(102, 102, 102, 0.75)'};
   font-size: 0.65rem;
@@ -57,7 +49,7 @@ const Details = styled.p<{ $isSelected: boolean }>`
 
 const Item = styled.div<{ $isSelected: boolean }>`
   display: flex;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   padding: 0.5rem;
   margin: 0;
   cursor: pointer;
@@ -74,23 +66,32 @@ const Item = styled.div<{ $isSelected: boolean }>`
     }
   }
 `;
-
 const ViewAllItem = styled(Item)<{ $isSelected: boolean }>`
   font-size: 0.9rem;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between; // This spreads out the children to the extremes
   align-items: center;
-  justify-content: center;
   color: ${({ $isSelected }) => ($isSelected ? '' : '#666')};
-
   &:hover,
   &:active,
   &:focus {
     color: var(--global-text);
   }
+  svg {
+    margin-bottom: -0.1rem;
+  }
+`;
+
+const Shorcuts = styled.div`
+  font-weight: normal;
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const Image = styled.img`
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   width: 2.5rem;
   height: 3.5rem;
   border-radius: var(--global-border-radius);
@@ -105,7 +106,7 @@ const Image = styled.img`
 const Title = styled.p`
   margin: 0 0.5rem;
   padding: 0.1rem;
-  animation: ${slideDownAnimation2} 0.5s ease forwards;
+  animation: slideDropDown 0.5s ease-in-out;
   text-align: left;
   overflow: hidden;
   font-size: 0.9rem;
@@ -234,18 +235,25 @@ export const DropDownSearch: React.FC<Props> = ({
           </div>
         </Item>
       ))}
-      <ViewAllItem
-        $isSelected={selectedIndex === searchResults.length}
-        onClick={() => {
-          navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-          onClose();
-        }}
-        role='listitem'
-        tabIndex={0}
-      >
-        <>View All</> &nbsp;
-        <FaArrowRight />
-      </ViewAllItem>
+      <div>
+        <ViewAllItem
+          $isSelected={selectedIndex === searchResults.length}
+          onClick={() => {
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+            onClose();
+          }}
+          role='listitem'
+          tabIndex={0}
+        >
+          <Shorcuts>
+            <BsArrowUpSquare /> <BsArrowDownSquare /> to navigate{' '}
+            <PiKeyReturn /> to select | Esc to exit &nbsp;
+          </Shorcuts>
+          <div>
+            <>View All</> &nbsp; <FaArrowRight />
+          </div>
+        </ViewAllItem>
+      </div>
     </Container>
   );
 };

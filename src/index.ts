@@ -1,4 +1,7 @@
 // * ==== Components ====
+// TODO Shared components
+export { StatusIndicator } from './components/shared/StatusIndicator';
+
 // TODO Basic UI Components
 export { Navbar } from './components/Navigation/Navbar';
 export { Footer } from './components/Navigation/Footer';
@@ -9,7 +12,7 @@ export { ThemeProvider, useTheme } from './components/ThemeContext';
 
 // TODO Cards
 export * from './components/Cards/CardGrid';
-export { default as CardItem } from './components/Cards/CardItem';
+export { CardItem } from './components/Cards/CardItem';
 
 // TODO Home Page Specific
 export { EpisodeCard } from './components/Home/EpisodeCard';
@@ -24,20 +27,32 @@ export {
 } from './components/Skeletons/Skeletons';
 
 // TODO Watching Anime Functionality
-export { default as EpisodeList } from './components/Watch/EpisodeList';
-export { default as EmbedPlayer } from './components/Watch/Video/EmbedPlayer';
+export { EpisodeList } from './components/Watch/EpisodeList';
+export { EmbedPlayer } from './components/Watch/Video/EmbedPlayer';
 export { Player } from './components/Watch/Video/Player'; // Notice: This is not a default export
 export { MediaSource } from './components/Watch/Video/MediaSource';
-export { default as WatchAnimeData } from './components/Watch/WatchAnimeData';
+export { WatchAnimeData } from './components/Watch/WatchAnimeData';
 export { AnimeDataList } from './components/Watch/AnimeDataList';
-export { default as Seasons } from './components/Watch/Seasons';
+export { Seasons } from './components/Watch/Seasons';
+
+// TODO User Components
+export { Settings } from './components/Profile/Settings';
+export { WatchingAnilist } from './components/Profile/WatchingAnilist';
 
 // * ==== Hooks ====
 // TODO Utilizing API and Other Functionalities
 export * from './hooks/useApi';
-export * from './hooks/interface';
+export * from './hooks/animeInterface';
 export * from './hooks/useScroll';
-export * from './hooks/useSeason';
+export * from './hooks/useTIme';
+export * from './hooks/useFilters';
+export * from './hooks/useCountdown';
+
+// * ==== Client ====
+export { ApolloClientProvider } from './client/ApolloClient';
+export * from './client/userInfoTypes';
+export * from './client/authService';
+export * from './client/useAuth';
 
 // * ==== Pages ====
 // TODO Main Pages of the Application
@@ -48,3 +63,4 @@ export { default as Profile } from './pages/Profile';
 export { default as About } from './pages/About';
 export { default as PolicyTerms } from './pages/PolicyTerms';
 export { default as Page404 } from './pages/404';
+export { default as Callback } from './pages/Callback';

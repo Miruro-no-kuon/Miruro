@@ -1,20 +1,10 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
-const slideUpAnimation = keyframes`
-  0% { opacity: 0.4; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-`;
-
-const fadeInAnimation = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
 const Overlay = styled.table`
   font-size: 0.85rem;
-  animation: ${fadeInAnimation} 0.3s ease forwards;
+  animation: fadeIn 0.3s ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
@@ -44,34 +34,42 @@ const Column2 = styled(TableCell)`
 
 const CloseButton = styled.button`
   position: absolute;
-  right: 10px;
-  margin-top: 1rem;
-  margin-right: 1rem;
-  max-height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0.6rem;
-  background-color: var(--global-secondary-bg);
+  top: 1.25rem;
+  right: 1.25rem;
+  padding: 0.5rem;
+  padding-left: 0.6rem;
+  background-color: var(--global-primary-bg-tr);
   color: var(--global-text);
   border: none;
   border-radius: var(--global-border-radius);
   cursor: pointer;
-  transition: background-color 0.3s ease;
   outline: none;
-  transition: 0.2s ease;
+  transition: 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  &:active {
-    background-color: var(--global-secondary-bg);
-    transform: scale(0.9);
+  &:hover {
+    transform: scale(1.06);
+    svg {
+      padding-bottom: 0.1rem;
+    }
+  }
+
+  &:active,
+  &:focus {
+    transform: scale(0.94);
   }
 `;
 
 const PopUp = styled.thead`
-  animation: ${slideUpAnimation} 0.3s ease forwards;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideUp 0.3s ease-in-out;
   position: relative;
   border-radius: var(--global-border-radius);
-  padding: 1.5rem;
-  padding-top: 0.5rem;
+  padding: 1rem;
   line-height: 1.8rem;
   background: var(--global-primary-bg);
   z-index: 1100;
@@ -84,83 +82,90 @@ const KeyboardShortcutsPopup = ({ onClose }: { onClose: () => void }) => {
   return (
     <Overlay onClick={onClose}>
       <PopUp className='popup-content' onClick={(e) => e.stopPropagation()}>
-        <tr>
-          <td>
-            <CloseButton onClick={onClose}>
-              <FaTimes size={'1rem'} />
-            </CloseButton>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h2>Keyboard Shortcuts (shift+/)</h2>
-          </td>
-        </tr>
-
-        <tr>
-          <Column1>Play/Pause Toggle</Column1>
-          <Column2>K / Space</Column2>
-        </tr>
-        <tr>
-          <Column1>Seek Backward 10 Seconds</Column1>
-          <Column2>J</Column2>
-        </tr>
-        <tr>
-          <Column1>Seek Forward 10 Seconds</Column1>
-          <Column2>L</Column2>
-        </tr>
-        <tr>
-          <Column1>Toggle Fullscreen</Column1>
-          <Column2>F</Column2>
-        </tr>
-        <tr>
-          <Column1>Toggle Mute</Column1>
-          <Column2>M</Column2>
-        </tr>
-        <tr>
-          <Column1>Previous Episode</Column1>
-          <Column2>(SHIFT+P)</Column2>
-        </tr>
-        <tr>
-          <Column1>Next Episode</Column1>
-          <Column2>(SHIFT+N)</Column2>
-        </tr>
-        <tr>
-          <Column1>Increase Volume</Column1>
-          <Column2>Arrow Up</Column2>
-        </tr>
-        <tr>
-          <Column1>Decrease Volume</Column1>
-          <Column2>Arrow Down</Column2>
-        </tr>
-        <tr>
-          <Column1>Seek Forward 5 Seconds</Column1>
-          <Column2>Arrow Right</Column2>
-        </tr>
-        <tr>
-          <Column1>Seek Backward 5 Seconds</Column1>
-          <Column2>Arrow Left</Column2>
-        </tr>
-        {/* <tr>
-          <Column1>Toggle Subtitles</Column1>
-          <Column2>C</Column2>
-        </tr> */}
-        {/* <tr>
-          <Column1>Cycle Subtitle Tracks</Column1>
-          <Column2>T</Column2>
-        </tr> */}
-        <tr>
-          <Column1>Increase Playback Speed</Column1>
-          <Column2>&gt; (SHIFT+,)</Column2>
-        </tr>
-        <tr>
-          <Column1>Decrease Playback Speed</Column1>
-          <Column2>&lt; (SHIFT+.)</Column2>
-        </tr>
-        <tr>
-          <Column1>Jump to Percentage (0-90%)</Column1>
-          <Column2>0-9</Column2>
-        </tr>
+        <div
+          style={{
+            background: 'var(--global-div)',
+            borderRadius: 'var(--global-border-radius)',
+            padding: '0.5rem',
+          }}
+        >
+          <tr>
+            <td>
+              <CloseButton onClick={onClose}>
+                <FaTimes size={'1rem'} />
+              </CloseButton>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Keyboard Shortcuts</strong>(shift+/)
+            </td>
+          </tr>
+        </div>
+        <div
+          style={{
+            background: 'var(--global-div)',
+            borderRadius: 'var(--global-border-radius)',
+            padding: '0.5rem',
+          }}
+        >
+          <tr>
+            <Column1>Play/Pause Toggle</Column1>
+            <Column2>K / Space</Column2>
+          </tr>
+          <tr>
+            <Column1>Seek Backward 10 Seconds</Column1>
+            <Column2>J</Column2>
+          </tr>
+          <tr>
+            <Column1>Seek Forward 10 Seconds</Column1>
+            <Column2>L</Column2>
+          </tr>
+          <tr>
+            <Column1>Toggle Fullscreen</Column1>
+            <Column2>F</Column2>
+          </tr>
+          <tr>
+            <Column1>Toggle Mute</Column1>
+            <Column2>M</Column2>
+          </tr>
+          <tr>
+            <Column1>Previous Episode</Column1>
+            <Column2>(SHIFT+P)</Column2>
+          </tr>
+          <tr>
+            <Column1>Next Episode</Column1>
+            <Column2>(SHIFT+N)</Column2>
+          </tr>
+          <tr>
+            <Column1>Increase Volume</Column1>
+            <Column2>Arrow Up</Column2>
+          </tr>
+          <tr>
+            <Column1>Decrease Volume</Column1>
+            <Column2>Arrow Down</Column2>
+          </tr>
+          <tr>
+            <Column1>Seek Forward 5 Seconds</Column1>
+            <Column2>Arrow Right</Column2>
+          </tr>
+          <tr>
+            <Column1>Seek Backward 5 Seconds</Column1>
+            <Column2>Arrow Left</Column2>
+          </tr>
+          <tr>
+            <Column1>Increase Playback Speed</Column1>
+            <Column2>&gt; (SHIFT+,)</Column2>
+          </tr>
+          <tr>
+            <Column1>Decrease Playback Speed</Column1>
+            <Column2>&lt; (SHIFT+.)</Column2>
+          </tr>
+          <tr>
+            <Column1>Jump to Percentage (0-90%)</Column1>
+            <Column2>0-9</Column2>
+          </tr>
+        </div>
       </PopUp>
     </Overlay>
   );

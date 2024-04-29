@@ -315,7 +315,7 @@ export function Player({
   };
 
   return (
-    <div style={{ animation: 'popInAnimation 0.25s ease-in-out' }}>
+    <div style={{ animation: 'popIn 0.25s ease-in-out' }}>
       <MediaPlayer
         className='player'
         title={`${animeVideoTitle} - Episode ${episodeNumber}`}

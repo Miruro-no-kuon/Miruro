@@ -15,6 +15,7 @@ import {
   fetchAnimeData,
   fetchAnimeInfo,
   SkeletonPlayer,
+  useCountdown,
 } from '../index';
 import { Episode } from '../index';
 
@@ -38,8 +39,8 @@ const WatchWrapper = styled.div`
 const DataWrapper = styled.div`
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr 1fr; // Aim for a 3:1 ratio
-  width: 100%; // Make sure this container can expand enough
+  grid-template-columns: 1fr 1fr; // TODO Aim for a 3:1 ratio
+  width: 100%; // TODO Make sure this container can expand enough
   @media (max-width: 1000px) {
     grid-template-columns: auto;
   }
@@ -82,7 +83,7 @@ const EpisodeListContainer = styled.div`
 
 const NoEpsFoundDiv = styled.div`
   text-align: center;
-  margin-top: 10rem;
+  margin-top: 7.5rem;
   margin-bottom: 10rem;
   @media (max-width: 1000px) {
     margin-top: 2.5rem;
@@ -145,42 +146,7 @@ const LOCAL_STORAGE_KEYS = {
   LAST_ANIME_VISITED: 'last-anime-visited',
 };
 
-const useCountdown = (targetDate: number | null) => {
-  const [timeLeft, setTimeLeft] = useState('');
-
-  useEffect(() => {
-    if (!targetDate) {
-      return; // Exit early if targetDate is null or undefined
-    }
-
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const distance = targetDate - now;
-      if (distance < 0) {
-        clearInterval(timer);
-        setTimeLeft('Airing now or aired');
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-      );
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setTimeLeft(
-        `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`,
-      );
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [targetDate]);
-
-  return timeLeft;
-};
-
-// Main Component
+// TODO Main Component
 const Watch: React.FC = () => {
   const videoPlayerContainerRef = useRef<HTMLDivElement>(null);
   const [videoPlayerWidth, setVideoPlayerWidth] = useState('100%');
@@ -254,7 +220,7 @@ const Watch: React.FC = () => {
       <StyledHomeButton onClick={handleClick}>Go back Home</StyledHomeButton>
     );
   };
-  //FETCH VIDSTREAMING VIDEO
+  // TODO FETCH VIDSTREAMING VIDEO
   const fetchVidstreamingUrl = async (episodeId: string) => {
     try {
       const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
@@ -274,7 +240,7 @@ const Watch: React.FC = () => {
     }
   };
 
-  //FETCH GOGO VIDEO
+  // TODO FETCH GOGO VIDEO
   const fetchEmbeddedUrl = async (episodeId: string) => {
     try {
       const embeddedServers = await fetchAnimeEmbeddedEpisodes(episodeId);
@@ -294,7 +260,7 @@ const Watch: React.FC = () => {
     }
   };
 
-  //SAVE TO LOCAL STORAGE NAVIGATED/CLICKED EPISODES
+  // TODO SAVE TO LOCAL STORAGE NAVIGATED/CLICKED EPISODES
   const updateWatchedEpisodes = (episode: Episode) => {
     const watchedEpisodesJson = localStorage.getItem(
       LOCAL_STORAGE_KEYS.WATCHED_EPISODES + animeId,
@@ -311,7 +277,7 @@ const Watch: React.FC = () => {
     }
   };
 
-  // UPDATES CURRENT EPISODE INFORMATION, UPDATES WATCHED EPISODES AND NAVIGATES TO NEW URL
+  // TODO UPDATES CURRENT EPISODE INFORMATION, UPDATES WATCHED EPISODES AND NAVIGATES TO NEW URL
   const handleEpisodeSelect = useCallback(
     async (selectedEpisode: Episode) => {
       setIsEpisodeChanging(true);
@@ -348,12 +314,12 @@ const Watch: React.FC = () => {
     [animeId, navigate],
   );
 
-  //UPDATE DOWNLOAD LINK WHEN EPISODE ID CHANGES
+  // TODO UPDATE DOWNLOAD LINK WHEN EPISODE ID CHANGES
   const updateDownloadLink = useCallback((link: string) => {
     setDownloadLink(link);
   }, []);
 
-  //AUTOPLAY BUTTON TOGGLE PROPS
+  // TODO AUTOPLAY BUTTON TOGGLE PROPS
   const handleEpisodeEnd = async () => {
     const nextEpisodeIndex = currentEpisodeIndex + 1;
     if (nextEpisodeIndex >= episodes.length) {
@@ -363,7 +329,7 @@ const Watch: React.FC = () => {
     handleEpisodeSelect(episodes[nextEpisodeIndex]);
   };
 
-  //NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
+  // TODO NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
   const onPrevEpisode = () => {
     const prevIndex = currentEpisodeIndex - 1;
     if (prevIndex >= 0) {
@@ -378,7 +344,7 @@ const Watch: React.FC = () => {
   };
 
   //----------------------------------------------USEFFECTS----------------------------------------------
-  //SETS DEFAULT SOURCE TYPE AND LANGUGAE TO DEFAULT AND SUB
+  // TODO SETS DEFAULT SOURCE TYPE AND LANGUGAE TO DEFAULT AND SUB
   useEffect(() => {
     const defaultSourceType = 'default';
     const defaultLanguage = 'sub';
@@ -391,7 +357,7 @@ const Watch: React.FC = () => {
     );
   }, [animeId]);
 
-  // SAVES LANGUAGE PREFERENCE TO LOCAL STORAGE
+  // TODO SAVES LANGUAGE PREFERENCE TO LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem(getLanguageKey(animeId), language);
   }, [language, animeId]);
@@ -439,7 +405,7 @@ const Watch: React.FC = () => {
     };
   }, [animeId]);
 
-  // FETCHES ANIME EPISODES BASED ON LANGUAGE, ANIME ID AND UPDATES COMPONENTS
+  // TODO FETCHES ANIME EPISODES BASED ON LANGUAGE, ANIME ID AND UPDATES COMPONENTS
   useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
@@ -450,10 +416,10 @@ const Watch: React.FC = () => {
         const animeData = await fetchAnimeEpisodes(animeId, undefined, isDub);
         if (isMounted && animeData) {
           const transformedEpisodes = animeData
-            .filter((ep: any) => ep.id.includes('-episode-')) // Continue excluding entries without '-episode-'
+            .filter((ep: any) => ep.id.includes('-episode-')) // TODO Continue excluding entries without '-episode-'
             .map((ep: any) => {
               const episodePart = ep.id.split('-episode-')[1];
-              // New regex to capture the episode number including cases like "7-5"
+              // TODO New regex to capture the episode number including cases like "7-5"
               const episodeNumberMatch = episodePart.match(/^(\d+(?:-\d+)?)/);
               return {
                 ...ep,
@@ -510,7 +476,7 @@ const Watch: React.FC = () => {
               `/watch/${animeId}/${newAnimeTitle}/${navigateToEpisode.number}`,
               { replace: true },
             );
-            setLanguageChanged(false); // Reset the languageChanged flag after handling the navigation
+            setLanguageChanged(false); // TODO Reset the languageChanged flag after handling the navigation
           }
         }
       } catch (error) {
@@ -520,9 +486,9 @@ const Watch: React.FC = () => {
       }
     };
 
-    // Last visited cache to order continue watching
+    // TODO Last visited cache to order continue watching
     const updateLastVisited = () => {
-      if (!animeInfo || !animeId) return; // Ensure both animeInfo and animeId are available
+      if (!animeInfo || !animeId) return; // TODO Ensure both animeInfo and animeId are available
 
       const lastVisited = localStorage.getItem(
         LOCAL_STORAGE_KEYS.LAST_ANIME_VISITED,
@@ -530,8 +496,8 @@ const Watch: React.FC = () => {
       const lastVisitedData = lastVisited ? JSON.parse(lastVisited) : {};
       lastVisitedData[animeId] = {
         timestamp: Date.now(),
-        titleEnglish: animeInfo.title.english, // Assuming animeInfo contains the title in English
-        titleRomaji: animeInfo.title.romaji, // Assuming animeInfo contains the title in Romaji
+        titleEnglish: animeInfo.title.english, // TODO Assuming animeInfo contains the title in English
+        titleRomaji: animeInfo.title.romaji, // TODO Assuming animeInfo contains the title in Romaji
       };
 
       localStorage.setItem(
@@ -559,7 +525,7 @@ const Watch: React.FC = () => {
     currentEpisode.number,
   ]);
 
-  // FETCH EMBEDDED EPISODES IF VIDSTREAMING OR GOGO HAVE BEEN SELECTED
+  // TODO FETCH EMBEDDED EPISODES IF VIDSTREAMING OR GOGO HAVE BEEN SELECTED
   useEffect(() => {
     if (sourceType === 'vidstreaming' && currentEpisode.id) {
       fetchVidstreamingUrl(currentEpisode.id).catch(console.error);
@@ -568,7 +534,7 @@ const Watch: React.FC = () => {
     }
   }, [sourceType, currentEpisode.id]);
 
-  // UPDATE BACKGROUND IMAGE TO ANIME BANNER IF WIDTH IS UNDER 500PX / OR USE ANIME COVER IF NO BANNER FOUND
+  // TODO UPDATE BACKGROUND IMAGE TO ANIME BANNER IF WIDTH IS UNDER 500PX / OR USE ANIME COVER IF NO BANNER FOUND
   useEffect(() => {
     const updateBackgroundImage = () => {
       const episodeImage = currentEpisode.image;
@@ -595,7 +561,7 @@ const Watch: React.FC = () => {
     }
   }, [animeInfo, currentEpisode]);
 
-  //UPDATES VIDEOPLAYER WIDTH WHEN WINDOW GETS RESIZED
+  // TODO UPDATES VIDEOPLAYER WIDTH WHEN WINDOW GETS RESIZED
   useEffect(() => {
     updateVideoPlayerWidth();
     const handleResize = () => {
@@ -605,7 +571,7 @@ const Watch: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [updateVideoPlayerWidth]);
 
-  //UPDATES EPISODE LIST MAX HEIGHT BASED ON VIDEO PLAYER CURRENT HEIGHT
+  // TODO UPDATES EPISODE LIST MAX HEIGHT BASED ON VIDEO PLAYER CURRENT HEIGHT
   useEffect(() => {
     const updateMaxHeight = () => {
       if (videoPlayerContainerRef.current) {
@@ -618,12 +584,12 @@ const Watch: React.FC = () => {
     return () => window.removeEventListener('resize', updateMaxHeight);
   }, []);
 
-  // SAVES SOURCE TYPE PREFERENCE TO LOCAL STORAGE
+  // TODO SAVES SOURCE TYPE PREFERENCE TO LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem(getSourceTypeKey(animeId), sourceType);
   }, [sourceType, animeId]);
 
-  //NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
+  // TODO NAVIGATE TO NEXT AND PREVIOUS EPISODES WITH SHIFT+N/P KEYBOARD COMBINATIONS (500MS DELAY)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const targetTagName = (event.target as HTMLElement).tagName.toLowerCase();
@@ -653,7 +619,7 @@ const Watch: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [episodes, currentEpisode, handleEpisodeSelect, lastKeypressTime]);
 
-  //SET PAGE TITLE TO MIRURO + ANIME TITLE
+  // TODO SET PAGE TITLE TO MIRURO + ANIME TITLE
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
@@ -667,7 +633,7 @@ const Watch: React.FC = () => {
     }
   }, [animeInfo]);
 
-  //No idea
+  // TODO No idea
   useEffect(() => {
     let isMounted = true;
     const fetchInfo = async () => {
@@ -690,7 +656,7 @@ const Watch: React.FC = () => {
     };
   }, [animeId]);
 
-  //SHOW NO EPISODES DIV IF NO RESPONSE AFTER 10 SECONDS
+  // TODO SHOW NO EPISODES DIV IF NO RESPONSE AFTER 10 SECONDS
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!episodes || episodes.length === 0) {
@@ -700,7 +666,7 @@ const Watch: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, [loading, episodes]);
 
-  // SHOW NO EPISODES DIV IF NOT LOADING AND NO EPISODES FOUND
+  // TODO SHOW NO EPISODES DIV IF NOT LOADING AND NO EPISODES FOUND
   useEffect(() => {
     if (!loading && episodes.length === 0) {
       setShowNoEpisodesMessage(true);
