@@ -17,7 +17,17 @@ const NoEntriesMessage = styled.div`
   font-weight: bold;
 `;
 
+const NotLoggedIn = styled.div`
+  margin: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
 const StatusDropdown = styled.select`
+  margin-left: 1rem;
   margin-bottom: 1.5rem;
   padding: 0.75rem;
   border-radius: var(--global-border-radius);
@@ -63,9 +73,7 @@ export const WatchingAnilist = () => {
   );
 
   if (!isLoggedIn)
-    return (
-      <NoEntriesMessage>Please Log in to view your AniList.</NoEntriesMessage>
-    );
+    return <NotLoggedIn>Please Log in to view your AniList.</NotLoggedIn>;
   if (loading) return <NoEntriesMessage>Loading...</NoEntriesMessage>;
   if (error)
     return (
@@ -98,14 +106,16 @@ export const WatchingAnilist = () => {
 
   return (
     <Container>
-      <h3>AniList</h3>
-      <StatusDropdown value={selectedStatus} onChange={handleStatusChange}>
-        {Object.values(MediaListStatus).map((status) => (
-          <option key={status} value={status}>
-            {statusLabels[status] || status}
-          </option>
-        ))}
-      </StatusDropdown>
+      <h3>
+        AniList
+        <StatusDropdown value={selectedStatus} onChange={handleStatusChange}>
+          {Object.values(MediaListStatus).map((status) => (
+            <option key={status} value={status}>
+              {statusLabels[status] || status}
+            </option>
+          ))}
+        </StatusDropdown>
+      </h3>
       {animeData.length > 0 ? (
         <CardGrid
           animeData={animeData}

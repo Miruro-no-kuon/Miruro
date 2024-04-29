@@ -15,6 +15,7 @@ import {
   usePreserveScrollOnReload,
   Callback,
   ApolloClientProvider,
+  Settings,
 } from './index';
 import { register } from 'swiper/element/bundle';
 import { Analytics } from '@vercel/analytics/react';
@@ -43,6 +44,7 @@ function App() {
                   element={<Watch />}
                 />
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/profile/settings' element={<Settings />} />
                 <Route path='/about' element={<About />} />
                 <Route path='/pptos' element={<PolicyTerms />} />
                 <Route path='/callback' element={<Callback />} />

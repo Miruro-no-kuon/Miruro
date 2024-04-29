@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+import { useNavigate } from 'react-router-dom';
+import { IoArrowBack } from 'react-icons/io5';
 interface Preferences {
   defaultLanguage: string;
   titleLanguage: string;
@@ -16,6 +17,31 @@ interface Preferences {
   openButton: string;
 }
 
+const Goback = styled.div`
+  border-radius: var(--global-border-radius);
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  width: 3rem;
+  margin-right: 0.75rem;
+  &:active {
+    transform: scale(0.975);
+  }
+`;
+
+const SettingsDiv = styled.div`
+  gap: 1rem;
+  max-width: 45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto; /* This centers the div horizontally */
+`;
+
 const PreferencesTable = styled.table`
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
@@ -30,10 +56,11 @@ const TableCell = styled.td`
 `;
 
 const Title = styled.h2`
+  display: flex;
   color: var(--global-text);
   font-size: 1.5rem;
+  margin: 0rem;
   margin-top: 1rem;
-  margin-bottom: 1rem;
 `;
 
 const SectionTitle = styled.h3`
@@ -71,6 +98,8 @@ const StyledSelect = styled.select`
 `;
 
 export const Settings: React.FC = () => {
+  const navigate = useNavigate();
+
   const [preferences, setPreferences] = useState<Preferences>({
     defaultLanguage: 'Sub',
     titleLanguage: 'Romaji',
@@ -142,9 +171,23 @@ export const Settings: React.FC = () => {
       .replace(/^\w/, (c) => c.toUpperCase());
   };
 
+  const handleGoback = () => {
+    navigate('/profile');
+  };
+
+  // Profile Page Document Title
+  useEffect(() => {
+    document.title = `Profile | Settings`;
+  });
+
   return (
-    <div>
-      <Title>Settings</Title>
+    <SettingsDiv>
+      <Title>
+        <Goback onClick={handleGoback}>
+          <IoArrowBack />
+        </Goback>
+        Settings
+      </Title>
       <PreferencesTable>
         <SectionTitle>General</SectionTitle>
         <tbody>
@@ -237,6 +280,6 @@ export const Settings: React.FC = () => {
           ))}
         </tbody>
       </PreferencesTable>
-    </div>
+    </SettingsDiv>
   );
 };
