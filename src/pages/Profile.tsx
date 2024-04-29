@@ -115,7 +115,7 @@ export const Profile: React.FC = () => {
     <PreferencesContainer>
       <TopContainer>
         <ProfileContainer>
-          <Loginbutton
+          {/* <Loginbutton
             onClick={handleSettingsClick}
             style={{
               position: 'absolute',
@@ -125,7 +125,7 @@ export const Profile: React.FC = () => {
             }}
           >
             <FiSettings size={24} />
-          </Loginbutton>
+          </Loginbutton> */}
           {isLoggedIn && userData ? (
             <>
               <img
@@ -165,7 +165,7 @@ export const Profile: React.FC = () => {
             <UserInfoContainer>
               <CgProfile size={'5rem'} style={{ marginBottom: '1rem' }} />
               <p>Guest</p>
-              <p>Please log in to view your profile and anime list.</p>
+              <p>Please log in to view your profile and AniList</p>
               <a onClick={login}>
                 <Loginbutton>
                   <b>Log in with </b>
