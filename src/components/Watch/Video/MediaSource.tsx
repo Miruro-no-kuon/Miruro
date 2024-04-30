@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   FaMicrophone,
   FaClosedCaptioning,
   FaBell,
   FaDownload,
+  FaShare,
 } from 'react-icons/fa';
 
 // Props interface
@@ -75,9 +76,7 @@ const ButtonBase = styled.button`
     transform 0.2s ease-in-out;
   text-align: center;
 
-  &:hover,
-  &:active,
-  &:focus {
+  &:hover {
     background-color: var(--primary-accent);
     transform: scale(1.025);
   }
@@ -112,17 +111,33 @@ const DownloadLink = styled.a`
     transform 0.2s ease-in-out;
 
   svg {
-    font-size: 0.8rem; // Adjust icon size
+    font-size: 0.85rem; // Adjust icon size
   }
 
-  &:hover,
-  &:active,
-  &:focus {
+  &:hover {
     background-color: var(--primary-accent);
     transform: scale(1.025);
   }
   &:active {
     transform: scale(0.975);
+  }
+`;
+
+const ShareButton = styled(ButtonBase)`
+  display: inline-flex; // Align items in a row
+  align-items: center; // Center items vertically
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--global-border-radius);
+  cursor: pointer;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  text-decoration: none;
+  svg {
+    font-size: 0.85rem; // Adjust icon size
   }
 `;
 
@@ -176,6 +191,16 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
   airingTime,
   nextEpisodenumber,
 }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleShareClick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+  };
+
   return (
     <UpdatedContainer>
       <EpisodeInfoColumn>
@@ -189,6 +214,10 @@ export const MediaSource: React.FC<MediaSourceProps> = ({
             >
               <FaDownload />
             </DownloadLink>
+            <ShareButton onClick={handleShareClick}>
+              <FaShare />
+            </ShareButton>
+            {isCopied && <p>Copied to clipboard!</p>}
             <br />
             <br />
             <p>If current servers don't work, please try other servers.</p>

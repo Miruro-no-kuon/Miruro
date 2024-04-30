@@ -37,6 +37,7 @@ export { Seasons } from './components/Watch/Seasons';
 
 // TODO User Components
 export { Settings } from './components/Profile/Settings';
+export { SettingsProvider , useSettings} from './components/Profile/SettingsProvider';
 export { WatchingAnilist } from './components/Profile/WatchingAnilist';
 
 // * ==== Hooks ====

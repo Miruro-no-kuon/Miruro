@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
+import { useSettings } from '../../index'; 
 interface Preferences {
   defaultLanguage: string;
   titleLanguage: string;
@@ -10,7 +11,7 @@ interface Preferences {
   openKeyboardShortcuts: string;
   autoskipIntroOutro: string;
   autoPlay: string;
-  autoNext: string; // Added new setting
+  autoNext: string;
   defaultServers: string;
   restoreDefaultPreferences: string;
   clearContinueWatching: string;
@@ -99,21 +100,32 @@ const StyledSelect = styled.select`
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
-
+  const { settings, setSettings } = useSettings();
+  
   const [preferences, setPreferences] = useState<Preferences>({
-    defaultLanguage: 'Sub',
+    defaultLanguage: settings.defaultLanguage,
     titleLanguage: 'Romaji',
     characterNameLanguage: 'Romaji',
     ratingSource: 'Anilist',
     openKeyboardShortcuts: 'Open',
-    autoskipIntroOutro: 'Disabled',
-    autoPlay: 'Disabled',
-    autoNext: 'Disabled',
+    autoskipIntroOutro: settings.autoSkip ? 'Enabled' : 'Disabled',
+    autoPlay: settings.autoPlay ? 'Enabled' : 'Disabled',
+    autoNext: settings.autoNext ? 'Enabled' : 'Disabled',
     defaultServers: 'Default',
     restoreDefaultPreferences: 'Restore',
     clearContinueWatching: 'Clear',
     openButton: 'Open',
   });
+
+  useEffect(() => {
+    setPreferences((prev) => ({
+      ...prev,
+      defaultLanguage: settings.defaultLanguage,
+      autoskipIntroOutro: settings.autoSkip ? 'Enabled' : 'Disabled',
+      autoPlay: settings.autoPlay ? 'Enabled' : 'Disabled',
+      autoNext: settings.autoNext ? 'Enabled' : 'Disabled'
+    }));
+  }, [settings]);
 
   const getOptionsForPreference = (key: string): string[] => {
     switch (key) {
@@ -142,27 +154,31 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const handlePreferenceChange = (
-    preferenceName: keyof Preferences,
-    value: string,
-  ) => {
-    if (
-      preferenceName === 'restoreDefaultPreferences' ||
-      preferenceName === 'clearContinueWatching'
-    ) {
-      if (confirm(`Are you sure you want to ${value.toLowerCase()}?`)) {
-        console.log(`${value} confirmed`);
-      }
-    } else {
-      setPreferences({ ...preferences, [preferenceName]: value });
-      if (
-        ['autoskipIntroOutro', 'autoPlay', 'autoNext'].includes(preferenceName)
-      ) {
-        localStorage.setItem(preferenceName, value);
-      }
+  const handlePreferenceChange = (preferenceName: keyof Preferences, value: string) => {
+    setPreferences(prev => ({
+      ...prev,
+      [preferenceName]: value
+    }));
+
+    switch (preferenceName) {
+      case 'autoskipIntroOutro':
+        setSettings({ autoSkip: value === 'Enabled' });
+        break;
+      case 'autoPlay':
+        setSettings({ autoPlay: value === 'Enabled' });
+        break;
+      case 'autoNext':
+        setSettings({ autoNext: value === 'Enabled' });
+        break;
+      case 'defaultLanguage':
+        setSettings({ defaultLanguage: value });
+        break;
+      case 'defaultServers':
+        setSettings({ defaultServers: value });
+        break;
     }
   };
-
+  
   const formatPreferenceName = (key: string) => {
     return key
       .replace(/([A-Z])/g, ' $1')
@@ -200,20 +216,15 @@ export const Settings: React.FC = () => {
             <TableRow key={key}>
               <TableCell>{formatPreferenceName(key)}</TableCell>
               <TableCell>
-                {key === 'openKeyboardShortcuts' ? ( // Render disabled button for 'openButton'
+                {key === 'openKeyboardShortcuts' ? (
                   <StyledButton isSelected={true} disabled={true}>
                     {preferences[key as keyof Preferences]}
                   </StyledButton>
                 ) : (
                   <StyledSelect
-                    value={preferences[key as keyof Preferences]}
-                    onChange={(e) =>
-                      handlePreferenceChange(
-                        key as keyof Preferences,
-                        e.target.value,
-                      )
-                    }
-                  >
+                  value={preferences[key as keyof Preferences]}
+                  onChange={(e) => handlePreferenceChange(key as keyof Preferences, e.target.value)}
+                >
                     {getOptionsForPreference(key).map((option) => (
                       <option key={option} value={option}>
                         {option}
