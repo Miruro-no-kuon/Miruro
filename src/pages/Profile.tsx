@@ -121,10 +121,10 @@ export const Profile: React.FC = () => {
               position: 'absolute',
               top: '0.5rem',
               right: '0.5rem',
-              maxWidth: '2.5rem',
+              maxWidth: '2.25rem',
             }}
           >
-            <FiSettings size={24} />
+            <FiSettings size={22} />
           </Loginbutton> */}
           {isLoggedIn && userData ? (
             <>
