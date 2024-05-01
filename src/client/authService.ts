@@ -114,12 +114,14 @@ const GET_USER_ANIME_LIST = gql`
         entries {
           media {
             id
+            format
             title {
               romaji
               english
             }
             coverImage {
               large
+              color
             }
             status
             episodes

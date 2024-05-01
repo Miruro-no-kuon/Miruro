@@ -90,11 +90,12 @@ export const WatchingAnilist = () => {
         romaji: entry.media.title.romaji,
         english: entry.media.title.english || entry.media.title.romaji,
       },
-      color: '#fff', // Assuming a default color; adjust as needed
       status: apiStatusToUserFriendly[entry.media.status] || 'Unknown',
       rating: entry.media.averageScore,
       releaseDate: entry.media.startDate.year,
       totalEpisodes: entry.media.episodes,
+      color: entry.media.coverImage.color,
+      type: entry.media.format,
     })),
   );
 
