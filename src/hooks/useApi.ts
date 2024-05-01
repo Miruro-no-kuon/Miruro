@@ -183,7 +183,8 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     ) {
       const errorMessage = response.data.message || 'Unknown server error';
       throw new Error(
-        `Server error: ${response.data.statusCode || response.status
+        `Server error: ${
+          response.data.statusCode || response.status
         } ${errorMessage}`,
       );
     }

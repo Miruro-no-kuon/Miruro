@@ -5,7 +5,6 @@ import { TbCards } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
 import { Anime, StatusIndicator } from '../../index';
 
-
 const SidebarStyled = styled.div`
   transition: 0.2s ease-in-out;
   margin: 0;

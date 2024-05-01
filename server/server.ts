@@ -102,5 +102,7 @@ function getLocalIpAddress() {
 // Starting the server
 app.listen(PORT, () => {
   const ipAddress = getLocalIpAddress();
-  console.log(`Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`);
+  console.log(
+    `Server is running at:\n- Localhost: http://localhost:${PORT}\n- Local IP: http://${ipAddress}:${PORT}`,
+  );
 });

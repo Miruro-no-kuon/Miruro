@@ -11,16 +11,17 @@ import {
   type MediaPlayerInstance,
 } from '@vidstack/react';
 import styled from 'styled-components';
-import { fetchSkipTimes, fetchAnimeStreamingLinks, useSettings } from '../../../index';
+import {
+  fetchSkipTimes,
+  fetchAnimeStreamingLinks,
+  useSettings,
+} from '../../../index';
 import {
   DefaultAudioLayout,
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from '@vidstack/react/player/layouts/default';
-import {
-  TbPlayerTrackPrev,
-  TbPlayerTrackNext,
-} from 'react-icons/tb';
+import { TbPlayerTrackPrev, TbPlayerTrackNext } from 'react-icons/tb';
 import { FaCheck } from 'react-icons/fa6';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 
@@ -269,9 +270,12 @@ export function Player({
     return parts[parts.length - 1];
   }
 
-  const toggleAutoPlay = () => setSettings({ ...settings, autoPlay: !autoPlay });
-  const toggleAutoNext = () => setSettings({ ...settings, autoNext: !autoNext });
-  const toggleAutoSkip = () => setSettings({ ...settings, autoSkip: !autoSkip });
+  const toggleAutoPlay = () =>
+    setSettings({ ...settings, autoPlay: !autoPlay });
+  const toggleAutoNext = () =>
+    setSettings({ ...settings, autoNext: !autoNext });
+  const toggleAutoSkip = () =>
+    setSettings({ ...settings, autoSkip: !autoSkip });
 
   const handlePlaybackEnded = async () => {
     if (!autoNext) return;
