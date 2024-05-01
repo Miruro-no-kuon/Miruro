@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { SkeletonCard, StatusIndicator, type Anime } from '../../index'; // Adjust the import path to correctly point to your index.ts location
 import { FaPlay } from 'react-icons/fa'; // For the play icon
-import { TbCardsFilled } from 'react-icons/tb';
+import { TbCards } from 'react-icons/tb';
 import { FaStar, FaCalendarAlt } from 'react-icons/fa';
 
 const StyledCardWrapper = styled(Link)`
@@ -257,7 +257,7 @@ export const CardItem: React.FC<{ anime: Anime }> = ({ anime }) => {
                 )}
                 {(anime.totalEpisodes || anime.episodes) && (
                   <>
-                    <TbCardsFilled />
+                    <TbCards />
                     {anime.totalEpisodes || anime.episodes}
                   </>
                 )}

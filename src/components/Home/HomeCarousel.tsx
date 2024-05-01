@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { useNavigate } from 'react-router-dom';
 import { SkeletonSlide, Anime } from '../../index';
-import { TbCardsFilled } from 'react-icons/tb';
+import { TbCards } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa6';
 
@@ -311,7 +311,7 @@ export const HomeCarousel: FC<HomeCarouselProps> = ({
                           {type && <SlideInfoItem>{type}</SlideInfoItem>}
                           {totalEpisodes && (
                             <SlideInfoItem>
-                              <TbCardsFilled />
+                              <TbCards />
                               {totalEpisodes}
                             </SlideInfoItem>
                           )}

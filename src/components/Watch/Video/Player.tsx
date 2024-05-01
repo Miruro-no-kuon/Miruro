@@ -18,8 +18,8 @@ import {
   DefaultVideoLayout,
 } from '@vidstack/react/player/layouts/default';
 import {
-  TbPlayerTrackPrevFilled,
-  TbPlayerTrackNextFilled,
+  TbPlayerTrackPrev,
+  TbPlayerTrackNext,
 } from 'react-icons/tb';
 import { FaCheck } from 'react-icons/fa6';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
@@ -330,10 +330,10 @@ export function Player({
           {autoSkip ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Skip
         </Button>
         <Button onClick={onPrevEpisode}>
-          <TbPlayerTrackPrevFilled /> Prev
+          <TbPlayerTrackPrev /> Prev
         </Button>
         <Button onClick={onNextEpisode}>
-          <TbPlayerTrackNextFilled /> Next
+          <TbPlayerTrackNext /> Next
         </Button>
         <Button onClick={toggleAutoNext}>
           {autoNext ? <FaCheck /> : <RiCheckboxBlankFill />} Auto Next
