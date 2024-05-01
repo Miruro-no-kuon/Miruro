@@ -12,6 +12,15 @@ export interface UserData {
   statistics: UserStatistics;
 }
 
+export enum MediaListStatus {
+  CURRENT = 'CURRENT',
+  PLANNING = 'PLANNING',
+  COMPLETED = 'COMPLETED',
+  REPEATING = 'REPEATING',
+  PAUSED = 'PAUSED',
+  DROPPED = 'DROPPED',
+}
+
 export interface UserStatistics {
   anime: AnimeMangaStatistics;
   manga: AnimeMangaStatistics;

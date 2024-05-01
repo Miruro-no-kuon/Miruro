@@ -1,7 +1,8 @@
 // src/services/authService.ts
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid'; // Ensure uuid is installed via npm or yarn
-import { UserData } from './userInfo'; // Assuming this is the correct path
+import { UserData, MediaListStatus } from '../index'; // Assuming this is the correct path
+import { useQuery, gql } from '@apollo/client';
 
 // Constants for AniList OAuth, ideally should be loaded from environment variables
 const clientId = import.meta.env.VITE_CLIENT_ID || 'default_client_id';
@@ -101,41 +102,52 @@ export const fetchUserData = async (accessToken: string): Promise<UserData> => {
   }
 };
 
-// Query to fetch currently watching anime
-export const fetchWatchingAnime = async (accessToken: string) => {
-  try {
-    const response = await axios.post(
-      'https://graphql.anilist.co',
-      {
-        query: `
-          query {
-            Viewer {
-              animeList(status: WATCHING) {
-                media {
-                  id
-                  title {
-                    userPreferred
-                  }
-                  coverImage {
-                    extraLarge
-                  }
-                }
-              }
+const GET_USER_ANIME_LIST = gql`
+  query GetUserAnimeList($username: String!, $status: MediaListStatus!) {
+    MediaListCollection(
+      userName: $username
+      type: ANIME
+      status: $status
+      sort: UPDATED_TIME_DESC
+    ) {
+      lists {
+        entries {
+          media {
+            id
+            format
+            title {
+              romaji
+              english
             }
+            coverImage {
+              large
+              color
+            }
+            status
+            episodes
+            startDate {
+              year
+              month
+              day
+            }
+            averageScore
+            genres
           }
-        `,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      },
-    );
-    return response.data.data.Viewer.animeList.media;
-  } catch (error) {
-    console.error('Error fetching currently watching anime:', error);
-    throw new Error('Failed to fetch currently watching anime');
+        }
+      }
+    }
   }
+`;
+
+export const useUserAnimeList = (username: string, status: MediaListStatus) => {
+  const { data, loading, error } = useQuery(GET_USER_ANIME_LIST, {
+    variables: { username, status },
+    skip: !username || !status, // Ensuring not to proceed without necessary variables
+  });
+
+  return {
+    animeList: data?.MediaListCollection,
+    loading,
+    error,
+  };
 };

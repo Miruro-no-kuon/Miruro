@@ -143,29 +143,21 @@ export function Footer() {
           <Text as='p' $isSub={true}>
             &copy; {year}{' '}
             <a
-              href='https://www.miruro.tv'
+              href='https://www.miruro.com'
               rel='noopener noreferrer'
               style={{ color: 'grey' }}
             >
-              miruro.tv
+              miruro.com
             </a>{' '}
-            | Website Made by{' '}
-            <a
-              href='https://github.com/Miruro-no-kuon'
-              target='_blank'
-              rel='noopener noreferrer'
-              style={{ textDecoration: 'none' }}
-            >
-              <strong>Miruro no Kuon</strong>
-            </a>
+            | Website Made by <strong>Miruro no Kuon</strong>
           </Text>
           <nav aria-label='Social Links'>
             <SocialIconsWrapper>
               {[
                 {
-                  href: 'https://twitter.com/miruro_official',
-                  Icon: FaTwitter,
-                  label: 'Twitter',
+                  href: 'https://www.reddit.com/r/miruro',
+                  Icon: FaReddit,
+                  label: 'Reddit',
                 },
                 {
                   href: 'https://discord.gg/4kfypZ96K4',
@@ -173,14 +165,9 @@ export function Footer() {
                   label: 'Discord',
                 },
                 {
-                  href: 'https://github.com/Miruro-no-kuon/Miruro',
-                  Icon: FaGithub,
-                  label: 'GitHub',
-                },
-                {
-                  href: 'https://www.reddit.com/r/miruro',
-                  Icon: FaReddit,
-                  label: 'Reddit',
+                  href: 'https://twitter.com/miruro_official',
+                  Icon: FaTwitter,
+                  label: 'Twitter',
                 },
               ].map(({ href, Icon, label }) => (
                 <ShareButton

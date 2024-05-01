@@ -37,6 +37,7 @@ export { Seasons } from './components/Watch/Seasons';
 
 // TODO User Components
 export { Settings } from './components/Profile/Settings';
+export { SettingsProvider , useSettings} from './components/Profile/SettingsProvider';
 export { WatchingAnilist } from './components/Profile/WatchingAnilist';
 
 // * ==== Hooks ====
@@ -47,9 +48,12 @@ export * from './hooks/useScroll';
 export * from './hooks/useTIme';
 export * from './hooks/useFilters';
 export * from './hooks/useCountdown';
-export * from './hooks/userInfo';
-export * from './hooks/authService';
-export * from './hooks/authContext';
+
+// * ==== Client ====
+export { ApolloClientProvider } from './client/ApolloClient';
+export * from './client/userInfoTypes';
+export * from './client/authService';
+export * from './client/useAuth';
 
 // * ==== Pages ====
 // TODO Main Pages of the Application

@@ -128,7 +128,7 @@ const sections = [
 function PolicyTerms() {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = 'Policy & Terms'; // Set the title when the component mounts
+    document.title = 'Policy & Terms | Miruro'; // Set the title when the component mounts
     return () => {
       // Reset the title to the previous one when the component unmounts
       document.title = previousTitle;

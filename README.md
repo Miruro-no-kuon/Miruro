@@ -75,6 +75,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
 ### Coming Soon
 
 - Comment section
+- Join the Discord to see the full Roadmap!
 
 </details>
 
@@ -91,7 +92,7 @@ Enjoy your favorite shows with English subs or dubs, and here's the kicker - you
   </details>
 </div>
 
-## Installation 🛠️
+## Installation and Local Development 💻
 
 ### 1. Clone this repository using
 
@@ -168,22 +169,16 @@ bun run dev
 bun start
 ```
 
-## For Local Development 💻
+## Self-Hosting Notice
 
 **⚠️ RESTRICTED USE**
 
 > [!CAUTION]
 > Self-hosting this application is **strictly limited to personal use only**. Commercial utilization is **prohibited**, and the inclusion of advertisements on your self-hosted website may lead to serious consequences, including **potential site takedown measures**. Ensure compliance to avoid any legal or operational issues.
 
-> Deploy **Your Own Miruro** Instance
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMiruro-no-kuon%2FMiruro&env=VITE_BACKEND_URL,VITE_SKIP_TIMES,VITE_PROXY_URL,PORT&project-name=miruro&repository-name=miruro)
-
-[![Vercel Deploy Guide](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)](https://github.com/Miruro-no-kuon/Miruro/assets/77152696/98b95343-a15b-4302-92ee-e4910860887e)
-
 ## License 📝
 
-Hey there! Just so you know, this project follows a Custom BY-NC License. What does that mean? Well, you're welcome to use, share, and tinker with the code as long as it's for non-commercial purposes. Oh, and **don't forget to give credit** to our platform, [**miruro.com**](https://www.miruro.com). If you're thinking of using it for commercial stuff, sorry, that's a no-go. For all the details, check out the [**LICENSE**](LICENSE) file. Got questions or need special permissions? Feel free to shoot us a message!
+This project is governed by a Custom BY-NC License. What does this entail? Simply put, you are permitted to utilize, distribute, and modify the code for non-commercial purposes. However, it is imperative that due credit is accorded to our platform, [miruro.com](https://www.miruro.com). Any commercial utilization of this code is strictly prohibited. For comprehensive details, please refer to the [LICENSE](LICENSE) file. Should you have inquiries or require special permissions, do not hesitate to contact us.
 
 ## Found a Bug? 🐞
 

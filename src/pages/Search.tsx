@@ -88,7 +88,7 @@ const Search = () => {
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = `Search ${query}`;
+    document.title = `${query} | Search Results`;
     return () => {
       document.title = previousTitle;
     };

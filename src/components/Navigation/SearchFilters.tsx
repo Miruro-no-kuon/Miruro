@@ -44,13 +44,16 @@ const selectStyles: any = {
   }),
   control: (provided: object) => ({
     ...provided,
-    width: '11.5rem', // Set the width to 100% to take full width of the parent container
+    width: '11.5rem',
     backgroundColor: 'var(--global-secondary-bg)',
     borderColor: 'transparent',
     color: 'var(--global-text)',
     boxShadow: 'none',
     '&:hover': {
       borderColor: 'var(--primary-accent)',
+    },
+    '@media (max-width: 500px)': {
+      width: '10rem',
     },
   }),
   menu: (provided: object) => ({

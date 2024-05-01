@@ -83,7 +83,7 @@ const EpisodeListContainer = styled.div`
 
 const NoEpsFoundDiv = styled.div`
   text-align: center;
-  margin-top: 10rem;
+  margin-top: 7.5rem;
   margin-bottom: 10rem;
   @media (max-width: 1000px) {
     margin-top: 2.5rem;
@@ -623,13 +623,12 @@ const Watch: React.FC = () => {
   useEffect(() => {
     if (animeInfo && animeInfo.title) {
       document.title =
-        'Miruro | ' +
+        'Watch ' +
         (animeInfo.title.english ||
           animeInfo.title.romaji ||
           animeInfo.title.romaji ||
-          '');
-    } else {
-      document.title = 'Miruro';
+          '') +
+        ' | Miruro';
     }
   }, [animeInfo]);
 

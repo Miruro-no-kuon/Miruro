@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import { LuConstruction } from 'react-icons/lu';
 import { IoLogOutOutline } from 'react-icons/io5';
 import Image404URL from '/src/assets/404.webp';
-import { useAuth, EpisodeCard, Settings, WatchingAnilist } from '../index';
+import { useAuth, EpisodeCard, WatchingAnilist } from '../index';
 import { SiAnilist } from 'react-icons/si';
 import { CgProfile } from 'react-icons/cg';
+import { useNavigate } from 'react-router-dom';
+import { FiSettings } from 'react-icons/fi';
 
 const TopContainer = styled.div`
   display: flex;
@@ -29,6 +31,7 @@ const UserInfoContainer = styled.div`
 `;
 
 const ProfileContainer = styled.div`
+  position: relative;
   padding: 0.5rem;
   background-color: var(--global-div-tr);
   border-radius: var(--global-border-radius);
@@ -53,6 +56,11 @@ const WarningMessage = styled.div`
   text-align: center;
   font-size: 0.9rem;
   flex: 1; // Take up equal space when next to each other
+  @media (max-width: 500px) {
+    img {
+      display: none;
+    }
+  }
 `;
 
 const PreferencesContainer = styled.div`
@@ -82,75 +90,93 @@ const Loginbutton = styled.div`
     transform: scale(0.975);
   }
 
-  svg {
+  .svg-wrapper {
+    margin-bottom: -0.2rem;
     margin-left: 0.5rem;
     font-size: 1.25rem;
   }
 `;
 // Profile component
-const Profile: React.FC = () => {
+export const Profile: React.FC = () => {
+  const navigate = useNavigate();
   const { isLoggedIn, userData, login, logout } = useAuth();
 
   // Profile Page Document Title
   useEffect(() => {
     document.title =
-      isLoggedIn && userData ? `Profile - ${userData.name}` : 'Profile';
+      isLoggedIn && userData ? `${userData.name} | Profile` : 'Profile';
   }, [isLoggedIn, userData]);
+
+  const handleSettingsClick = () => {
+    navigate('/profile/settings');
+  };
 
   return (
     <PreferencesContainer>
       <TopContainer>
-        {isLoggedIn && userData ? (
-          <ProfileContainer>
-            <img
-              src={userData.avatar.large}
-              alt={`${userData.name}'s avatar`}
-            />
-            <p>
-              Welcome, <b>{userData.name}</b>
-            </p>
-            {userData.statistics && (
-              <>
-                <p>
-                  Anime watched: <b>{userData.statistics.anime.count}</b>
-                </p>
-                <p>
-                  Total episodes watched:
-                  <b>{userData.statistics.anime.episodesWatched}</b>
-                </p>
-                <p>
-                  Total minutes watched:
-                  <b>{userData.statistics.anime.minutesWatched}</b>
-                </p>
-                <p>
-                  Average score:
-                  <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
-                </p>
-              </>
-            )}
-            <a onClick={logout}>
-              <Loginbutton>
+        <ProfileContainer>
+          {/* <Loginbutton
+            onClick={handleSettingsClick}
+            style={{
+              position: 'absolute',
+              top: '0.5rem',
+              right: '0.5rem',
+              maxWidth: '2.25rem',
+            }}
+          >
+            <FiSettings size={22} />
+          </Loginbutton> */}
+          {isLoggedIn && userData ? (
+            <>
+              <img
+                src={userData.avatar.large}
+                alt={`${userData.name}'s avatar`}
+              />
+              <p>
+                Welcome, <b>{userData.name}</b>
+              </p>
+              {userData.statistics && (
+                <>
+                  <p>
+                    Anime watched: <b>{userData.statistics.anime.count}</b>
+                  </p>
+                  <p>
+                    Total episodes watched:{' '}
+                    <b>{userData.statistics.anime.episodesWatched}</b>
+                  </p>
+                  <p>
+                    Total minutes watched:{' '}
+                    <b>{userData.statistics.anime.minutesWatched}</b>
+                  </p>
+                  <p>
+                    Average score:{' '}
+                    <b>{userData.statistics.anime.meanScore.toFixed(2)}</b>
+                  </p>
+                </>
+              )}
+              <Loginbutton onClick={logout}>
                 <b>Log out </b>
-                <IoLogOutOutline />
+                <span className='svg-wrapper'>
+                  <IoLogOutOutline />
+                </span>
               </Loginbutton>
-            </a>
-            <WatchingAnilist />
-          </ProfileContainer>
-        ) : (
-          <ProfileContainer>
+            </>
+          ) : (
             <UserInfoContainer>
               <CgProfile size={'5rem'} style={{ marginBottom: '1rem' }} />
               <p>Guest</p>
-              <p>Please log in to view your profile and anime list.</p>
+              <p>Please log in to view your profile and AniList</p>
               <a onClick={login}>
                 <Loginbutton>
-                  <b> Log in with </b>
-                  <SiAnilist />
+                  <b>Log in with </b>
+                  <span className='svg-wrapper'>
+                    <SiAnilist />
+                  </span>
                 </Loginbutton>
               </a>
             </UserInfoContainer>
-          </ProfileContainer>
-        )}
+          )}
+        </ProfileContainer>
         <WarningMessage>
           <LuConstruction style={{ color: 'orange' }} />
           This page is currently{' '}
@@ -169,7 +195,7 @@ const Profile: React.FC = () => {
         </WarningMessage>
       </TopContainer>
       <EpisodeCard />
-      <Settings />
+      <WatchingAnilist />
     </PreferencesContainer>
   );
 };

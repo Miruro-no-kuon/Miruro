@@ -1,58 +1,131 @@
-// WatchingAnimeList.tsx
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { fetchWatchingAnime } from './../../hooks/authService';
-import { useAuth } from '../../hooks/authContext';
+import { useAuth, useUserAnimeList, MediaListStatus } from '../../index';
+import { CardGrid } from '../../index';
 
-const AnimeListContainer = styled.div`
+const Container = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const NoEntriesMessage = styled.div`
+  margin: 1.5rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
   justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
 `;
 
-const AnimeCard = styled.div`
-  width: 200px;
-  border: 1px solid #ccc;
+const NotLoggedIn = styled.div`
+  margin: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const StatusDropdown = styled.select`
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
   border-radius: var(--global-border-radius);
-  overflow: hidden;
+  background-color: var(--global-secondary-bg);
+  color: var(--global-text);
+  border: none;
 `;
 
-const AnimeCover = styled.img`
-  width: 100%;
-  height: auto;
-`;
+const statusLabels = {
+  CURRENT: 'Watching',
+  PLANNING: 'Plan to Watch',
+  COMPLETED: 'Completed',
+  REPEATING: 'Re-watching',
+  PAUSED: 'Paused',
+  DROPPED: 'Dropped',
+};
 
-const AnimeTitle = styled.div`
-  padding: 0.5rem;
-  text-align: center;
-  font-size: 0.9rem;
-`;
+const apiStatusToUserFriendly = {
+  FINISHED: 'Completed',
+  RELEASING: 'Ongoing',
+  NOT_YET_RELEASED: 'Not yet aired',
+  CANCELLED: 'Cancelled',
+  HIATUS: 'Paused',
+};
 
-export const WatchingAnilist: React.FC = () => {
-  const [animeList, setAnimeList] = useState([]);
-  const { isLoggedIn } = useAuth();
-  const accessToken = localStorage.getItem('accessToken');
+export const WatchingAnilist = () => {
+  const { isLoggedIn, userData } = useAuth();
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    localStorage.getItem('selectedStatus') || 'CURRENT',
+  );
 
   useEffect(() => {
-    if (isLoggedIn && accessToken) {
-      fetchWatchingAnime(accessToken)
-        .then(setAnimeList)
-        .catch((error) => console.error('Error loading anime list:', error));
+    if (isLoggedIn && userData) {
+      console.log('User is logged in, username:', userData.name);
+    } else {
+      console.log('User is not logged in or userData is not available');
     }
-  }, [isLoggedIn, accessToken]);
+  }, [isLoggedIn, userData]);
+
+  const { animeList, loading, error } = useUserAnimeList(
+    userData?.name,
+    selectedStatus as MediaListStatus,
+  );
+
+  if (!isLoggedIn)
+    return <NotLoggedIn>Please Log in to view your AniList.</NotLoggedIn>;
+  if (loading) return <NoEntriesMessage>Loading...</NoEntriesMessage>;
+  if (error)
+    return (
+      <NoEntriesMessage>
+        Error loading anime list: {error.message}
+      </NoEntriesMessage>
+    );
+
+  const animeData = animeList.lists.flatMap((list) =>
+    list.entries.map((entry) => ({
+      id: entry.media.id,
+      image: entry.media.coverImage.large,
+      title: {
+        romaji: entry.media.title.romaji,
+        english: entry.media.title.english || entry.media.title.romaji,
+      },
+      status: apiStatusToUserFriendly[entry.media.status] || 'Unknown',
+      rating: entry.media.averageScore,
+      releaseDate: entry.media.startDate.year,
+      totalEpisodes: entry.media.episodes,
+      color: entry.media.coverImage.color,
+      type: entry.media.format,
+    })),
+  );
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    setSelectedStatus(newStatus);
+    localStorage.setItem('selectedStatus', newStatus);
+  };
 
   return (
-    <AnimeListContainer>
-      {animeList.map((anime: any) => (
-        <AnimeCard key={anime.id}>
-          <AnimeCover
-            src={anime.coverImage.extraLarge}
-            alt={anime.title.userPreferred}
-          />
-          <AnimeTitle>{anime.title.userPreferred}</AnimeTitle>
-        </AnimeCard>
-      ))}
-    </AnimeListContainer>
+    <Container>
+      <h3>
+        AniList
+        <StatusDropdown value={selectedStatus} onChange={handleStatusChange}>
+          {Object.values(MediaListStatus).map((status) => (
+            <option key={status} value={status}>
+              {statusLabels[status] || status}
+            </option>
+          ))}
+        </StatusDropdown>
+      </h3>
+      {animeData.length > 0 ? (
+        <CardGrid
+          animeData={animeData}
+          hasNextPage={false}
+          onLoadMore={() => {}}
+        />
+      ) : (
+        <NoEntriesMessage>No Results</NoEntriesMessage>
+      )}
+    </Container>
   );
 };

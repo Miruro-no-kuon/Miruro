@@ -6,13 +6,12 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import { DropDownSearch } from '../../index'; // Assuming this is a local component not exported through index.ts
-import { fetchAdvancedSearch, type Anime } from '../..'; // Adjust the import path to point to your index.ts correctly
+import { DropDownSearch, useAuth } from '../../index';
+import { fetchAdvancedSearch, type Anime } from '../..';
 import { FiSun, FiMoon, FiX /* FiMenu */ } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
 import { IoIosSearch } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
-import { useAuth } from '../../hooks/authContext';
 
 const StyledNavbar = styled.div<{ $isExtended?: boolean }>`
   position: fixed;

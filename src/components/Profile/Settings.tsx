@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+import { useNavigate } from 'react-router-dom';
+import { IoArrowBack } from 'react-icons/io5';
+import { useSettings } from '../../index'; 
 interface Preferences {
   defaultLanguage: string;
   titleLanguage: string;
@@ -9,12 +11,37 @@ interface Preferences {
   openKeyboardShortcuts: string;
   autoskipIntroOutro: string;
   autoPlay: string;
-  autoNext: string; // Added new setting
+  autoNext: string;
   defaultServers: string;
   restoreDefaultPreferences: string;
   clearContinueWatching: string;
   openButton: string;
 }
+
+const Goback = styled.div`
+  border-radius: var(--global-border-radius);
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--global-div);
+  color: var(--global-text);
+  width: 3rem;
+  margin-right: 0.75rem;
+  &:active {
+    transform: scale(0.975);
+  }
+`;
+
+const SettingsDiv = styled.div`
+  gap: 1rem;
+  max-width: 45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto; /* This centers the div horizontally */
+`;
 
 const PreferencesTable = styled.table`
   background-color: var(--global-div-tr);
@@ -26,21 +53,21 @@ const PreferencesTable = styled.table`
 const TableRow = styled.tr``;
 
 const TableCell = styled.td`
-  padding: 0.75rem;
+  padding: 1rem;
 `;
 
 const Title = styled.h2`
+  display: flex;
   color: var(--global-text);
   font-size: 1.5rem;
+  margin: 0rem;
   margin-top: 1rem;
-  margin-bottom: 1rem;
 `;
 
 const SectionTitle = styled.h3`
   color: var(--global-text);
   font-size: 1.25rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin: 1rem;
 `;
 
 const Divider = styled.hr`
@@ -72,20 +99,33 @@ const StyledSelect = styled.select`
 `;
 
 export const Settings: React.FC = () => {
+  const navigate = useNavigate();
+  const { settings, setSettings } = useSettings();
+  
   const [preferences, setPreferences] = useState<Preferences>({
-    defaultLanguage: 'Sub',
+    defaultLanguage: settings.defaultLanguage,
     titleLanguage: 'Romaji',
     characterNameLanguage: 'Romaji',
     ratingSource: 'Anilist',
     openKeyboardShortcuts: 'Open',
-    autoskipIntroOutro: 'Disabled',
-    autoPlay: 'Disabled',
-    autoNext: 'Disabled',
+    autoskipIntroOutro: settings.autoSkip ? 'Enabled' : 'Disabled',
+    autoPlay: settings.autoPlay ? 'Enabled' : 'Disabled',
+    autoNext: settings.autoNext ? 'Enabled' : 'Disabled',
     defaultServers: 'Default',
     restoreDefaultPreferences: 'Restore',
     clearContinueWatching: 'Clear',
     openButton: 'Open',
   });
+
+  useEffect(() => {
+    setPreferences((prev) => ({
+      ...prev,
+      defaultLanguage: settings.defaultLanguage,
+      autoskipIntroOutro: settings.autoSkip ? 'Enabled' : 'Disabled',
+      autoPlay: settings.autoPlay ? 'Enabled' : 'Disabled',
+      autoNext: settings.autoNext ? 'Enabled' : 'Disabled'
+    }));
+  }, [settings]);
 
   const getOptionsForPreference = (key: string): string[] => {
     switch (key) {
@@ -114,27 +154,31 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const handlePreferenceChange = (
-    preferenceName: keyof Preferences,
-    value: string,
-  ) => {
-    if (
-      preferenceName === 'restoreDefaultPreferences' ||
-      preferenceName === 'clearContinueWatching'
-    ) {
-      if (confirm(`Are you sure you want to ${value.toLowerCase()}?`)) {
-        console.log(`${value} confirmed`);
-      }
-    } else {
-      setPreferences({ ...preferences, [preferenceName]: value });
-      if (
-        ['autoskipIntroOutro', 'autoPlay', 'autoNext'].includes(preferenceName)
-      ) {
-        localStorage.setItem(preferenceName, value);
-      }
+  const handlePreferenceChange = (preferenceName: keyof Preferences, value: string) => {
+    setPreferences(prev => ({
+      ...prev,
+      [preferenceName]: value
+    }));
+
+    switch (preferenceName) {
+      case 'autoskipIntroOutro':
+        setSettings({ autoSkip: value === 'Enabled' });
+        break;
+      case 'autoPlay':
+        setSettings({ autoPlay: value === 'Enabled' });
+        break;
+      case 'autoNext':
+        setSettings({ autoNext: value === 'Enabled' });
+        break;
+      case 'defaultLanguage':
+        setSettings({ defaultLanguage: value });
+        break;
+      case 'defaultServers':
+        setSettings({ defaultServers: value });
+        break;
     }
   };
-
+  
   const formatPreferenceName = (key: string) => {
     return key
       .replace(/([A-Z])/g, ' $1')
@@ -143,11 +187,25 @@ export const Settings: React.FC = () => {
       .replace(/^\w/, (c) => c.toUpperCase());
   };
 
+  const handleGoback = () => {
+    navigate('/profile');
+  };
+
+  // Profile Page Document Title
+  useEffect(() => {
+    document.title = `Settings | Profile`;
+  });
+
   return (
-    <div>
-      <Title>Settings</Title>
-      <SectionTitle>General</SectionTitle>
+    <SettingsDiv>
+      <Title>
+        <Goback onClick={handleGoback}>
+          <IoArrowBack />
+        </Goback>
+        Settings
+      </Title>
       <PreferencesTable>
+        <SectionTitle>General</SectionTitle>
         <tbody>
           {[
             'titleLanguage',
@@ -158,20 +216,15 @@ export const Settings: React.FC = () => {
             <TableRow key={key}>
               <TableCell>{formatPreferenceName(key)}</TableCell>
               <TableCell>
-                {key === 'openKeyboardShortcuts' ? ( // Render disabled button for 'openButton'
+                {key === 'openKeyboardShortcuts' ? (
                   <StyledButton isSelected={true} disabled={true}>
                     {preferences[key as keyof Preferences]}
                   </StyledButton>
                 ) : (
                   <StyledSelect
-                    value={preferences[key as keyof Preferences]}
-                    onChange={(e) =>
-                      handlePreferenceChange(
-                        key as keyof Preferences,
-                        e.target.value,
-                      )
-                    }
-                  >
+                  value={preferences[key as keyof Preferences]}
+                  onChange={(e) => handlePreferenceChange(key as keyof Preferences, e.target.value)}
+                >
                     {getOptionsForPreference(key).map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -183,10 +236,8 @@ export const Settings: React.FC = () => {
             </TableRow>
           ))}
         </tbody>
-      </PreferencesTable>
-      <Divider />
-      <SectionTitle>Media</SectionTitle>
-      <PreferencesTable>
+        <Divider />
+        <SectionTitle>Media</SectionTitle>
         <tbody>
           {[
             'defaultLanguage',
@@ -217,10 +268,8 @@ export const Settings: React.FC = () => {
             </TableRow>
           ))}
         </tbody>
-      </PreferencesTable>
-      <Divider />
-      <SectionTitle>Other</SectionTitle>
-      <PreferencesTable>
+        <Divider />
+        <SectionTitle>Other</SectionTitle>
         <tbody>
           {[
             { key: 'restoreDefaultPreferences', text: 'Restore' },
@@ -242,6 +291,6 @@ export const Settings: React.FC = () => {
           ))}
         </tbody>
       </PreferencesTable>
-    </div>
+    </SettingsDiv>
   );
 };
