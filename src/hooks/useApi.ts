@@ -17,13 +17,15 @@ const PROXY_URL = ensureUrlEndsWithSlash(
   import.meta.env.VITE_PROXY_URL as string,
 );
 
-// Creating axios instance with proxy server base URL
-const PROXY_SERVER_BASE_URL = `${PROXY_URL}api/json`;
+const API_KEY = import.meta.env.VITE_API_KEY as string;
 
 // Axios instance
 const axiosInstance = axios.create({
-  baseURL: PROXY_SERVER_BASE_URL,
+  baseURL: PROXY_URL,
   timeout: 10000,
+  headers: {
+    'X-API-Key': API_KEY, // Assuming your API expects the key in this header
+  },
 });
 
 // Error handling function
@@ -181,8 +183,7 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     ) {
       const errorMessage = response.data.message || 'Unknown server error';
       throw new Error(
-        `Server error: ${
-          response.data.statusCode || response.status
+        `Server error: ${response.data.statusCode || response.status
         } ${errorMessage}`,
       );
     }
