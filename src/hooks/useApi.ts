@@ -13,15 +13,17 @@ const BASE_URL = ensureUrlEndsWithSlash(
 const SKIP_TIMES = ensureUrlEndsWithSlash(
   import.meta.env.VITE_SKIP_TIMES as string,
 );
-const PROXY_URL = ensureUrlEndsWithSlash(
-  import.meta.env.VITE_PROXY_URL as string,
-);
+let PROXY_URL = import.meta.env.VITE_PROXY_URL; // Default to an empty string if no proxy URL is provided
+// Check if the proxy URL is provided and ensure it ends with a slash
+if (PROXY_URL) {
+  PROXY_URL = ensureUrlEndsWithSlash(import.meta.env.VITE_PROXY_URL as string);
+}
 
 const API_KEY = import.meta.env.VITE_API_KEY as string;
 
 // Axios instance
 const axiosInstance = axios.create({
-  baseURL: PROXY_URL,
+  baseURL: PROXY_URL || undefined,
   timeout: 10000,
   headers: {
     'X-API-Key': API_KEY, // Assuming your API expects the key in this header
@@ -169,33 +171,34 @@ async function fetchFromProxy(url: string, cache: any, cacheKey: string) {
     // Attempt to retrieve the cached response using the cacheKey
     const cachedResponse = cache.get(cacheKey);
     if (cachedResponse) {
-      // console.log(`Serving from cache for key: ${cacheKey}`); // Debugging: Confirming cache hit
       return cachedResponse; // Return the cached response if available
     }
 
-    // Proceed with the network request if no cached response is found
-    const response = await axiosInstance.get('', { params: { url } }); // Adjust based on how the proxy expects to receive the original URL
+    // Adjust request parameters based on PROXY_URL's availability
+    const requestConfig = PROXY_URL
+      ? { params: { url } } // If PROXY_URL is defined, send the original URL as a parameter
+      : {}; // If PROXY_URL is not defined, make a direct request
 
-    // After obtaining the response, verify it for errors or empty data as before
+    // Proceed with the network request
+    const response = await axiosInstance.get(PROXY_URL ? '' : url, requestConfig);
+
+    // After obtaining the response, verify it for errors or empty data
     if (
       response.status !== 200 ||
       (response.data.statusCode && response.data.statusCode >= 400)
     ) {
       const errorMessage = response.data.message || 'Unknown server error';
       throw new Error(
-        `Server error: ${
-          response.data.statusCode || response.status
+        `Server error: ${response.data.statusCode || response.status
         } ${errorMessage}`,
       );
     }
 
     // Assuming response data is valid, store it in the cache
-    cache.set(cacheKey, response.data); // Cache the new data using the cacheKey
-    // console.log(`Caching new data for key: ${cacheKey}`); // Debugging: Confirming new data is cached
+    cache.set(cacheKey, response.data);
 
     return response.data; // Return the newly fetched data
   } catch (error) {
-    // Handle errors from Axios or due to invalid responses
     handleError(error, 'data');
     throw error; // Rethrow the error for the caller to handle
   }
