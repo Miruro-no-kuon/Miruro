@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async (req: VercelRequest, res: VercelResponse) => {
+async (req: VercelRequest, res: VercelResponse) => {
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
     return;
@@ -35,10 +35,23 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     } else {
       throw new Error('Access token not found in the response');
     }
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to exchange token',
-      details: error.response?.data || error.message,
-    });
+  } catch (error: unknown) {
+    // First, check if it's an instance of Error
+    if (error instanceof Error) {
+      // Now you can safely read the message property
+      const message = error.message;
+      // If it's an axios error, it may have a response object
+      const details = axios.isAxiosError(error) && error.response ? error.response.data : message;
+      res.status(500).json({
+        error: 'Failed to exchange token',
+        details,
+      });
+    } else {
+      // If it's not an Error object, handle it as a generic error
+      res.status(500).json({
+        error: 'Failed to exchange token',
+        details: 'An unknown error occurred',
+      });
+    }
   }
-};
+}

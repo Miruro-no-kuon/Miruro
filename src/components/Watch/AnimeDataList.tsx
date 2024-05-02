@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { TbCardsFilled } from 'react-icons/tb';
+import { TbCards } from 'react-icons/tb';
 import { FaStar } from 'react-icons/fa';
 import { Anime, StatusIndicator } from '../../index';
 
@@ -141,7 +141,7 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                         {relation.type && `${relation.type} `}
                         {relation.episodes && (
                           <>
-                            <TbCardsFilled aria-hidden='true' />{' '}
+                            <TbCards aria-hidden='true' />{' '}
                             {`${relation.episodes} `}
                           </>
                         )}
@@ -194,7 +194,7 @@ export const AnimeDataList: React.FC<{ animeData: Anime }> = ({
                         {recommendation.type && `${recommendation.type} `}
                         {recommendation.episodes && (
                           <>
-                            <TbCardsFilled aria-hidden='true' />{' '}
+                            <TbCards aria-hidden='true' />{' '}
                             {`${recommendation.episodes} `}
                           </>
                         )}

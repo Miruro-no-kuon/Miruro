@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Anime } from '../../index';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
-import { TbCardsFilled } from 'react-icons/tb';
+import { TbCards } from 'react-icons/tb';
 import { BsArrowUpSquare, BsArrowDownSquare } from 'react-icons/bs';
 import { PiKeyReturn } from 'react-icons/pi';
 
@@ -224,7 +224,7 @@ export const DropDownSearch: React.FC<Props> = ({
             <Details $isSelected={index === selectedIndex}>
               <span>&nbsp;{result.type}</span>
               <span>&nbsp;&nbsp;</span>
-              <TbCardsFilled color='#' />
+              <TbCards color='#' />
               <span>&nbsp;</span>
               <span>{result.totalEpisodes || 'N/A'}&nbsp;</span>
               <FaStar color='#' />

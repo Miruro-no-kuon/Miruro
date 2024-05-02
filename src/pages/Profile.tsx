@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { LuConstruction } from 'react-icons/lu';
 import { IoLogOutOutline } from 'react-icons/io5';
-import Image404URL from '/src/assets/404.webp';
 import { useAuth, EpisodeCard, WatchingAnilist } from '../index';
 import { SiAnilist } from 'react-icons/si';
 import { CgProfile } from 'react-icons/cg';
@@ -46,20 +44,6 @@ const ProfileContainer = styled.div`
   img {
     border-radius: var(--global-border-radius);
     width: 100px;
-  }
-`;
-
-const WarningMessage = styled.div`
-  background-color: var(--global-div-tr);
-  padding: 0.5rem;
-  border-radius: var(--global-border-radius);
-  text-align: center;
-  font-size: 0.9rem;
-  flex: 1; // Take up equal space when next to each other
-  @media (max-width: 500px) {
-    img {
-      display: none;
-    }
   }
 `;
 
@@ -177,22 +161,6 @@ export const Profile: React.FC = () => {
             </UserInfoContainer>
           )}
         </ProfileContainer>
-        <WarningMessage>
-          <LuConstruction style={{ color: 'orange' }} />
-          This page is currently{' '}
-          <strong style={{ color: 'orange' }}>under construction</strong>. We
-          appreciate your patience as we work to bring you new features!
-          <br />
-          <br />
-          <img
-            src={Image404URL}
-            alt='404 Error'
-            style={{
-              borderRadius: 'var(--global-border-radius)',
-              maxWidth: '100%',
-            }}
-          />
-        </WarningMessage>
       </TopContainer>
       <EpisodeCard />
       <WatchingAnilist />

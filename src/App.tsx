@@ -36,7 +36,9 @@ function App() {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
   useEffect(() => {
-    ReactGA.initialize(measurementId);
+    if (measurementId) {
+      ReactGA.initialize(measurementId);
+    }
   }, [measurementId]);
 
   return (

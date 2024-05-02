@@ -12,7 +12,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     plugins: [react()], // Using React plugin from Vite
 
     build: {
-      chunkSizeWarningLimit: 1000, // Control the size before showing a warning for chunk size
+      chunkSizeWarningLimit: 2000, // Control the size before showing a warning for chunk size
       outDir: 'dist', // Specify your desired output directory
       rollupOptions: {
         output: {

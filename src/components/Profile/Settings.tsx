@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
-import { useSettings } from '../../index'; 
+import { useSettings } from '../../index';
 interface Preferences {
   defaultLanguage: string;
   titleLanguage: string;
@@ -101,7 +101,7 @@ const StyledSelect = styled.select`
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
   const { settings, setSettings } = useSettings();
-  
+
   const [preferences, setPreferences] = useState<Preferences>({
     defaultLanguage: settings.defaultLanguage,
     titleLanguage: 'Romaji',
@@ -123,7 +123,7 @@ export const Settings: React.FC = () => {
       defaultLanguage: settings.defaultLanguage,
       autoskipIntroOutro: settings.autoSkip ? 'Enabled' : 'Disabled',
       autoPlay: settings.autoPlay ? 'Enabled' : 'Disabled',
-      autoNext: settings.autoNext ? 'Enabled' : 'Disabled'
+      autoNext: settings.autoNext ? 'Enabled' : 'Disabled',
     }));
   }, [settings]);
 
@@ -154,10 +154,13 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const handlePreferenceChange = (preferenceName: keyof Preferences, value: string) => {
-    setPreferences(prev => ({
+  const handlePreferenceChange = (
+    preferenceName: keyof Preferences,
+    value: string,
+  ) => {
+    setPreferences((prev) => ({
       ...prev,
-      [preferenceName]: value
+      [preferenceName]: value,
     }));
 
     switch (preferenceName) {
@@ -178,7 +181,7 @@ export const Settings: React.FC = () => {
         break;
     }
   };
-  
+
   const formatPreferenceName = (key: string) => {
     return key
       .replace(/([A-Z])/g, ' $1')
@@ -222,9 +225,14 @@ export const Settings: React.FC = () => {
                   </StyledButton>
                 ) : (
                   <StyledSelect
-                  value={preferences[key as keyof Preferences]}
-                  onChange={(e) => handlePreferenceChange(key as keyof Preferences, e.target.value)}
-                >
+                    value={preferences[key as keyof Preferences]}
+                    onChange={(e) =>
+                      handlePreferenceChange(
+                        key as keyof Preferences,
+                        e.target.value,
+                      )
+                    }
+                  >
                     {getOptionsForPreference(key).map((option) => (
                       <option key={option} value={option}>
                         {option}
