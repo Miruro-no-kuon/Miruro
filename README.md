@@ -196,7 +196,7 @@ Got questions, suggestions, or just wanna say hi? Drop us a line at <miruro@prot
 
 - Join our **[Discord](https://discord.gg/zaqweEZZ)**
 
-[![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)](https://discord.com/invite/4kfypZ96K4)
+[![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)](https://discord.com/invite/zaqweEZZ)
 
 ## Support & Contributions 🤲
 
