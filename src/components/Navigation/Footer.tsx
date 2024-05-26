@@ -130,13 +130,6 @@ export function Footer() {
             <FooterLink to='/pptos' title='Privacy Policy and Terms of Service'>
               Privacy & ToS
             </FooterLink>
-            <FooterLink
-              to='https://ko-fi.com/yourdev'
-              target='_blank'
-              title='Donate to Us'
-            >
-              Donate {'<3'}
-            </FooterLink>
           </StyledLinkList>
         </FooterBaseContainer>
         <FooterBaseContainer aria-label='Sub Footer' $isSub={true}>
@@ -160,7 +153,7 @@ export function Footer() {
                   label: 'Reddit',
                 },
                 {
-                  href: 'https://discord.gg/4kfypZ96K4',
+                  href: 'https://discord.gg/zaqweEZZ',
                   Icon: FaDiscord,
                   label: 'Discord',
                 },
