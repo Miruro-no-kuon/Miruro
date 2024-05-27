@@ -153,7 +153,7 @@ export function Footer() {
                   label: 'Reddit',
                 },
                 {
-                  href: 'https://discord.gg/zaqweEZZ',
+                  href: 'https://discord.gg/dubRrtfpFn',
                   Icon: FaDiscord,
                   label: 'Discord',
                 },

@@ -194,9 +194,9 @@ Got questions, suggestions, or just wanna say hi? Drop us a line at <miruro@prot
 
 - Join our **[Subreddit](https://www.reddit.com/r/miruro)**
 
-- Join our **[Discord](https://discord.gg/zaqweEZZ)**
+- Join our **[Discord](https://discord.gg/dubRrtfpFn)**
 
-[![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)](https://discord.com/invite/zaqweEZZ)
+[![Discord Banner 2](https://discordapp.com/api/guilds/1199699127190167643/widget.png?style=banner2)](https://discord.com/invite/dubRrtfpFn)
 
 ## Support & Contributions 🤲
 
