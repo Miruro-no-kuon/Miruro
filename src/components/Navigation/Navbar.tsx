@@ -6,7 +6,7 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import { DropDownSearch, useAuth } from '../../index';
+import { DropDownSearch, useAuth, useTheme } from '../../index';
 import { fetchAdvancedSearch, type Anime } from '../..';
 import { FiSun, FiMoon, FiX /* FiMenu */ } from 'react-icons/fi';
 import { GoCommandPalette } from 'react-icons/go';
@@ -200,30 +200,6 @@ const SlashToggleBtn = styled.div<{ $isFocused: boolean }>`
   }
 `;
 
-const detectUserTheme = () => {
-  if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    return true;
-  }
-  return false;
-};
-
-const saveThemePreference = (isDarkMode: boolean) => {
-  localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
-};
-
-const getInitialThemePreference = () => {
-  const storedThemePreference = localStorage.getItem('themePreference');
-
-  if (storedThemePreference) {
-    return storedThemePreference === 'dark';
-  }
-
-  return detectUserTheme();
-};
-
 export const Navbar = () => {
   const { isLoggedIn, userData } = useAuth();
   const [isPaddingExtended, setIsPaddingExtended] = useState(false);
@@ -288,17 +264,7 @@ export const Navbar = () => {
     };
   });
 
-  const [isDarkMode, setIsDarkMode] = useState(getInitialThemePreference());
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark-mode', isDarkMode);
-  }, [isDarkMode]);
-
-  const toggleTheme = useCallback(() => {
-    const newIsDarkMode = !isDarkMode;
-    setIsDarkMode(newIsDarkMode);
-    saveThemePreference(newIsDarkMode);
-  }, [isDarkMode, setIsDarkMode]);
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
