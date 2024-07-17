@@ -32,20 +32,5 @@
     <div id="root"></div>
     <!-- Main JavaScript file -->
     <script type="module" src="/src/main.tsx"></script>
-    <!-- JavaScript to toggle dark mode -->
-    <script>
-      // Check user's theme preference or default to system preference
-      const themePreference =
-        localStorage.getItem('themePreference') ||
-        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      // Get the root HTML element
-      const rootElement = document.documentElement;
-      // Apply dark mode class if preferred theme is dark
-      if (themePreference === 'dark') {
-        rootElement.classList.add('dark-mode');
-      } else {
-        rootElement.classList.remove('dark-mode');
-      }
-    </script>
   </body>
 </html>
