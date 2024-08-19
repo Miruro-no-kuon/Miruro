@@ -48,7 +48,7 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@types/react-slick": "^0.23.13",
-    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^7.4.0",
     "@vercel/node": "^3.0.27",
     "@vitejs/plugin-react": "^4.2.1",
