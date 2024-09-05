@@ -1,0 +1,14 @@
+services:
+  miruro:
+    container_name: miruro
+    restart: unless-stopped
+    ports:
+      - 5173:5173
+    image:  ghcr.io/Miruro-no-kuon/Miruro:latest
+    links:
+      - consumet:consumet
+    volumes:
+      - .env:/usr/src/app/.env
+  consumet:
+    image: riimuru/consumet-api
+    restart: unless-stopped
