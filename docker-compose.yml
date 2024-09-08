@@ -4,11 +4,11 @@ services:
     restart: unless-stopped
     ports:
       - 5173:5173
-    image:  ghcr.io/Miruro-no-kuon/Miruro:latest
+    image: ghcr.io/Miruro-no-kuon/Miruro:latest
     links:
       - consumet:consumet
     volumes:
-      - .env:/usr/src/app/.env
+      - ./.env:/usr/src/app/.env
   consumet:
     image: riimuru/consumet-api
     restart: unless-stopped

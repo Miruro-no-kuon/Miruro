@@ -168,6 +168,38 @@ bun run dev
 bun start
 ```
 
+## Docker
+
+### 1. Clone this repository using
+
+```bash
+git clone https://github.com/Miruro-no-kuon/Miruro.git
+```
+
+```bash
+cd Miruro
+```
+
+### 2. Copy `.env.example` into `.env` in the root folder
+
+- You can use different nameing for `.env` but then you need to modify the run command or `docker-compose.yml`
+
+```bash
+cp .env.example .env
+```
+
+### 3. Run the containers
+
+- The `docker-compose.yml` will also host the consumet api, but you need to change the `VITE_BACKEND_URL` in the `.env` to `consumet:3000/`
+```bash
+docker compose up -d
+```
+
+- To only host the site use this command.
+```bash
+docker run -p 5173:5173 -v ./.env:/usr/src/app/.env ghcr.io/Miruro-no-kuon/Miruro:latest
+```
+
 ## Self-Hosting Notice
 
 > [!CAUTION]
