@@ -23,7 +23,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vidstack/react": "next",
     "axios": "^1.6.8",
-    "body-parser": "^1.20.2",
+    "body-parser": "^2.0.0",
     "eslint": "8.x",
     "express": "^4.19.2",
     "graphql": "^16.8.1",
