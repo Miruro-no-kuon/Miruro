@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "vite": "5.x"
+    "vite": "6.x"
   },
   "module": "index.ts",
   "peerDependencies": {
