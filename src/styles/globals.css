@@ -1,0 +1,60 @@
+@import url('animations.css');
+@import url('themes.css');
+
+/* Basic Styles for the App */
+body {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol,
+    Noto Color Emoji;
+  margin: 0 auto; /* Center the body content */
+  padding: 4.5rem 1rem 1.5rem; /* Top, Horizontal, Bottom padding */
+  max-width: 105rem; /* Max width to constrain content size */
+  background-color: var(
+    --global-primary-bg
+  ); /* Background color from variable */
+  color: var(--global-text); /* Text color from variable */
+  transition: 0.2s ease; /* Smooth transition for changes */
+}
+
+/* Responsive Styles */
+@media (max-width: 31.25rem) {
+  /* 500px */
+  body {
+    padding: 4rem 0.5rem 0.5rem; /* Adjust padding for small screens */
+  }
+}
+
+/* Text Selection Color */
+::selection {
+  background-color: var(
+    --primary-accent-bg
+  ); /* Background color when text is selected */
+  color: var(--primary-accent); /* Text color when selected */
+}
+
+/* Custom Scrollbar Styles */
+/* Main scrollbar styling */
+::-webkit-scrollbar {
+  width: 0.3125rem; /* 5px */
+}
+
+/* Track of the scrollbar, set to be transparent */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Gray color for the handle */
+  border-radius: 0.2rem; /* Rounded handle */
+}
+
+/* Handle color on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker gray when hovering */
+}

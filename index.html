@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Disable zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta
+      name="description"
+      content="Miruro no Kuon - Anime Streaming Website with minimal UI 🍜. Enjoy HD fast streaming of your favorite anime, manga reading, and explore anime-related forums on miruro.tv, miruro.online, miruro.com Discover a world of anime entertainment at Miruro no Kuon!"
+    />
+    <!-- Link to web app manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Main Favicon -->
+    <link rel="icon" type="image/png" href="/android-chrome-512x512.png" />
+    <!-- Apple touch Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Change appearance of status bar style for Apple devices -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Import Google Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Title of the website -->
+    <title>Miruro | Watch Anime Online, Free Anime Streaming</title>
+    <!-- Internal styles -->
+    <link rel="stylesheet" href="/src/styles/globals.css" />
+    <!-- Animations -->
+    <link rel="stylesheet" href="/src/styles/animations.css" />
+    <!-- Dark/Light themes -->
+    <link rel="stylesheet" href="/src/styles/themes.css" />
+  </head>
+  <body data-simplebar>
+    <!-- Root element for the React app -->
+    <div id="root"></div>
+    <!-- Main JavaScript file -->
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- JavaScript to toggle dark mode -->
+    <script>
+      // Check user's theme preference or default to system preference
+      const themePreference =
+        localStorage.getItem('themePreference') ||
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      // Get the root HTML element
+      const rootElement = document.documentElement;
+      // Apply dark mode class if preferred theme is dark
+      if (themePreference === 'dark') {
+        rootElement.classList.add('dark-mode');
+      } else {
+        rootElement.classList.remove('dark-mode');
+      }
+    </script>
+  </body>
+</html>
