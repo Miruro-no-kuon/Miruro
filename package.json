@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react-dom": "^19.0.1",
     "@types/react-slick": "^0.23.13",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
