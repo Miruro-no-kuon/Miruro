@@ -1,0 +1,112 @@
+name: 🐞 Oops, Found a Bug!
+description: Spotted something off with our app? Let us know and help us squash those bugs.
+title: '[Bug]: '
+labels: ['bug', 'triage']
+assignees:
+  - akionii
+  - trying559
+body:
+  - type: input
+    id: bug-description
+    attributes:
+      label: What went wrong?
+      description: Tell us about the bug like you're telling a friend. Keep it simple and clear.
+      placeholder: 'Like, when I try to play a video, it just won’t start...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: How'd you stumble upon it?
+      description: Walk us through how you found this bug, step by step.
+      placeholder: "1. I was on the homepage\n2. Clicked on the play button\n3. And boom, nothing happened"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: What you hoped for vs. What actually happened
+      description: Share what you were expecting and then what really went down.
+      placeholder: "Hoped for: A cool video starts playing.\nBut actually: Got a whole lot of nothing."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Anything else we should know?
+      description: Got more details or a screenshot? Throw them in here.
+      placeholder: 'FYI: This only happens in Chrome for me...'
+    validations:
+      required: false # This field remains optional as it may not always be applicable.
+
+  - type: markdown
+    attributes:
+      value: "Super thankful you're helping us out by flagging this issue!"
+
+  - type: input
+    id: contact-info
+    attributes:
+      label: How can we reach you? (Totally Optional)
+      description: Drop your email here if you're cool with us reaching out for more info.
+      placeholder: 'yourname@example.com'
+    validations:
+      required: false # Contact information remains optional for privacy reasons.
+
+  - type: dropdown
+    id: app-version
+    attributes:
+      label: Which version was acting up?
+      description: Pick the app version that was giving you grief.
+      options:
+        - 0.5.2
+        - 0.5.1
+        - 0.5.0
+        - 0.4.3
+        - 0.4.2
+        - 0.4.1
+        - 0.4.0
+        - 0.3.5
+        - 0.3.4
+        - 0.3.3
+        - 0.3.2
+        - 0.3.1
+        - 0.3.0
+        - 0.2.1
+        - 0.2.0
+        - 0.1.0
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browsers-affected
+    attributes:
+      label: Which browsers were a bummer?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Got logs?
+      description: If you've got some techy details or logs, we'd love to see them.
+      render: shell
+    validations:
+      required: false # While helpful, log data may not always be available or relevant.
+
+  - type: checkboxes
+    id: code-of-conduct
+    attributes:
+      label: Code of Conduct Agreement
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true
