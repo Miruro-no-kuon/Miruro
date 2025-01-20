@@ -31,7 +31,7 @@
     "lru-cache": "latest",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "react": "^18.2.0",
+    "react": "^19.0.0",
     "react-dom": "^18.2.0",
     "react-ga4": "^2.1.0",
     "react-icons": "^5.0.1",
